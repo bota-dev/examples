@@ -17,7 +17,7 @@ import {Stack, router} from 'expo-router';
 import {
   BotaClient,
   type DiscoveredDevice,
-} from '@bota/react-native-sdk';
+} from '@bota-dev/react-native-sdk';
 import {useBota} from '../src/context/BotaContext';
 import {useAuth} from '../src/context/AuthContext';
 import {registerDevice} from '../src/api/backend';

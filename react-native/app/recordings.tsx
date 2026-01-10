@@ -19,7 +19,7 @@ import {
   BotaClient,
   type DeviceRecording,
   type SyncProgress,
-} from '@bota/react-native-sdk';
+} from '@bota-dev/react-native-sdk';
 import {useBota} from '../src/context/BotaContext';
 import {getUploadInfo} from '../src/api/backend';
 

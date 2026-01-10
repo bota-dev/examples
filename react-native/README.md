@@ -101,7 +101,7 @@ The app demonstrates key SDK integration patterns:
 ### Initialization (app/_layout.tsx)
 
 ```tsx
-import { BotaClient } from '@bota/react-native-sdk';
+import { BotaClient } from '@bota-dev/react-native-sdk';
 
 // Configure SDK
 await BotaClient.configure({

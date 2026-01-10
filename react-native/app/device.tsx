@@ -17,7 +17,7 @@ import {Stack, router, useLocalSearchParams} from 'expo-router';
 import {
   BotaClient,
   type DeviceStatus,
-} from '@bota/react-native-sdk';
+} from '@bota-dev/react-native-sdk';
 import {useBota} from '../src/context/BotaContext';
 
 export default function DeviceScreen() {

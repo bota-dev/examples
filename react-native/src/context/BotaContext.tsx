@@ -15,7 +15,7 @@ import {
   type ConnectedDevice,
   type DeviceStatus,
   type BluetoothState,
-} from '@bota/react-native-sdk';
+} from '@bota-dev/react-native-sdk';
 
 interface BotaContextType {
   // Bluetooth state

@@ -14,7 +14,7 @@ import {
   View,
 } from 'react-native';
 
-import {BotaClient} from '@bota/react-native-sdk';
+import {BotaClient} from '@bota-dev/react-native-sdk';
 import {AuthProvider} from '../src/context/AuthContext';
 import {BotaProvider} from '../src/context/BotaContext';
 

@@ -5,7 +5,7 @@
  * The backend then calls the Bota API with your secret key.
  */
 
-import type {DeviceRecording, UploadInfo} from '@bota/react-native-sdk';
+import type {DeviceRecording, UploadInfo} from '@bota-dev/react-native-sdk';
 
 // Simulated API base URL
 const API_BASE = 'https://api.yourcompany.com';
