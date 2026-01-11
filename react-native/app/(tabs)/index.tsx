@@ -1,14 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
-import {
-  StyleSheet,
-  TouchableOpacity,
-  FlatList,
-  Alert,
-  ActivityIndicator,
-  RefreshControl,
-} from 'react-native';
+import { useState, useEffect } from 'react';
+import { FlatList, Alert, ActivityIndicator, RefreshControl, View } from 'react-native';
 import { router } from 'expo-router';
-import { Text, View } from '@/components/Themed';
+import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   BotaClient,
   type DiscoveredDevice,
@@ -26,7 +21,6 @@ export default function DevicesScreen() {
 
   useEffect(() => {
     initializeSdk();
-
     return () => {
       BotaClient.destroy();
     };
@@ -39,14 +33,12 @@ export default function DevicesScreen() {
         logLevel: 'debug',
       });
 
-      // Check bluetooth state
       if (!BotaClient.isBluetoothReady) {
         setSdkStatus('bluetooth_off');
       } else {
         setSdkStatus('ready');
       }
 
-      // Listen for Bluetooth state changes
       BotaClient.on('bluetoothStateChanged', (state) => {
         if (state === 'poweredOn') {
           setSdkStatus('ready');
@@ -55,7 +47,6 @@ export default function DevicesScreen() {
         }
       });
 
-      // Listen for discovered devices
       BotaClient.devices.on('deviceDiscovered', (device: DiscoveredDevice) => {
         setDevices((prev) => {
           const exists = prev.find((d) => d.id === device.id);
@@ -109,8 +100,6 @@ export default function DevicesScreen() {
       const connected = await BotaClient.devices.connect(device);
       setConnectedDevice(connected);
       stopScan();
-
-      // Navigate to device detail
       router.push({
         pathname: '/device/[id]',
         params: { id: device.id },
@@ -125,17 +114,17 @@ export default function DevicesScreen() {
   const renderStatusBanner = () => {
     if (sdkStatus === 'initializing') {
       return (
-        <View style={styles.banner}>
+        <View className="flex-row items-center justify-center gap-2 bg-blue-50 px-4 py-3">
           <ActivityIndicator size="small" color="#007AFF" />
-          <Text style={styles.bannerText}>Initializing SDK...</Text>
+          <Text className="text-sm text-foreground">Initializing SDK...</Text>
         </View>
       );
     }
 
     if (sdkStatus === 'bluetooth_off') {
       return (
-        <View style={[styles.banner, styles.bannerWarning]}>
-          <Text style={styles.bannerText}>
+        <View className="bg-yellow-50 px-4 py-3">
+          <Text className="text-center text-sm text-foreground">
             Bluetooth is off. Enable Bluetooth to scan for devices.
           </Text>
         </View>
@@ -144,8 +133,10 @@ export default function DevicesScreen() {
 
     if (sdkStatus === 'error') {
       return (
-        <View style={[styles.banner, styles.bannerError]}>
-          <Text style={styles.bannerText}>SDK initialization failed</Text>
+        <View className="bg-red-50 px-4 py-3">
+          <Text className="text-center text-sm text-destructive">
+            SDK initialization failed
+          </Text>
         </View>
       );
     }
@@ -158,43 +149,59 @@ export default function DevicesScreen() {
     const isConnected = connectedDevice?.id === item.id;
 
     return (
-      <TouchableOpacity
-        style={[styles.deviceCard, isConnected && styles.deviceCardConnected]}
-        onPress={() => connectDevice(item)}
-        disabled={isConnecting || isConnected}
+      <Card
+        className={`mb-3 ${isConnected ? 'border-green-500 bg-green-50' : ''}`}
       >
-        <View style={styles.deviceInfo}>
-          <Text style={styles.deviceName}>{item.name || 'Bota Device'}</Text>
-          <Text style={styles.deviceType}>{item.deviceType}</Text>
-          <Text style={styles.deviceId}>{item.id}</Text>
-        </View>
-        <View style={styles.deviceAction}>
-          {isConnecting ? (
-            <ActivityIndicator size="small" color="#007AFF" />
-          ) : isConnected ? (
-            <Text style={styles.connectedBadge}>Connected</Text>
-          ) : (
-            <Text style={styles.connectText}>Connect</Text>
-          )}
-        </View>
-      </TouchableOpacity>
+        <CardContent className="flex-row items-center justify-between py-4">
+          <View className="flex-1">
+            <Text className="text-base font-semibold">
+              {item.name || 'Bota Device'}
+            </Text>
+            <Text className="mt-1 text-sm text-muted-foreground">
+              {item.deviceType}
+            </Text>
+            <Text className="mt-0.5 font-mono text-xs text-muted-foreground">
+              {item.id}
+            </Text>
+          </View>
+          <View>
+            {isConnecting ? (
+              <ActivityIndicator size="small" color="#007AFF" />
+            ) : isConnected ? (
+              <Text className="text-sm font-semibold text-green-600">Connected</Text>
+            ) : (
+              <Button
+                variant="ghost"
+                size="sm"
+                onPress={() => connectDevice(item)}
+              >
+                <Text>Connect</Text>
+              </Button>
+            )}
+          </View>
+        </CardContent>
+      </Card>
     );
   };
 
   const renderEmpty = () => (
-    <View style={styles.emptyContainer}>
+    <View className="flex-1 items-center justify-center px-10">
       {scanning ? (
         <>
-          <ActivityIndicator size="large" color="#007AFF" style={styles.scanningIndicator} />
-          <Text style={styles.emptyTitle}>Scanning for devices...</Text>
-          <Text style={styles.emptySubtitle}>
+          <ActivityIndicator size="large" color="#007AFF" className="mb-5" />
+          <Text className="text-center text-lg font-semibold">
+            Scanning for devices...
+          </Text>
+          <Text className="mt-2 text-center text-muted-foreground">
             Make sure your Bota device is powered on and nearby
           </Text>
         </>
       ) : (
         <>
-          <Text style={styles.emptyTitle}>No devices found</Text>
-          <Text style={styles.emptySubtitle}>
+          <Text className="text-center text-lg font-semibold">
+            No devices found
+          </Text>
+          <Text className="mt-2 text-center text-muted-foreground">
             Tap "Scan" to search for nearby Bota devices
           </Text>
         </>
@@ -203,20 +210,19 @@ export default function DevicesScreen() {
   );
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 bg-background">
       {renderStatusBanner()}
 
-      <View style={styles.header}>
-        <Text style={styles.title}>Nearby Devices</Text>
-        <TouchableOpacity
-          style={[styles.scanButton, scanning && styles.scanButtonActive]}
+      <View className="flex-row items-center justify-between px-5 py-4">
+        <Text className="text-xl font-semibold">Nearby Devices</Text>
+        <Button
+          variant={scanning ? 'destructive' : 'default'}
+          size="sm"
           onPress={scanning ? stopScan : startScan}
           disabled={sdkStatus !== 'ready'}
         >
-          <Text style={styles.scanButtonText}>
-            {scanning ? 'Stop' : 'Scan'}
-          </Text>
-        </TouchableOpacity>
+          <Text>{scanning ? 'Stop' : 'Scan'}</Text>
+        </Button>
       </View>
 
       <FlatList
@@ -224,7 +230,10 @@ export default function DevicesScreen() {
         keyExtractor={(item) => item.id}
         renderItem={renderDevice}
         ListEmptyComponent={renderEmpty}
-        contentContainerStyle={devices.length === 0 ? styles.listEmpty : styles.list}
+        contentContainerStyle={{
+          flexGrow: 1,
+          paddingHorizontal: 20,
+        }}
         refreshControl={
           <RefreshControl
             refreshing={false}
@@ -236,127 +245,3 @@ export default function DevicesScreen() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  banner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    backgroundColor: '#E8F4FD',
-    gap: 8,
-  },
-  bannerWarning: {
-    backgroundColor: '#FFF3CD',
-  },
-  bannerError: {
-    backgroundColor: '#F8D7DA',
-  },
-  bannerText: {
-    fontSize: 14,
-    color: '#1A1A1A',
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: '600',
-  },
-  scanButton: {
-    backgroundColor: '#007AFF',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-  },
-  scanButtonActive: {
-    backgroundColor: '#FF3B30',
-  },
-  scanButtonText: {
-    color: '#FFFFFF',
-    fontWeight: '600',
-    fontSize: 15,
-  },
-  list: {
-    paddingHorizontal: 20,
-  },
-  listEmpty: {
-    flex: 1,
-  },
-  deviceCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8F9FA',
-    padding: 16,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  deviceCardConnected: {
-    backgroundColor: '#D4EDDA',
-    borderWidth: 1,
-    borderColor: '#28A745',
-  },
-  deviceInfo: {
-    flex: 1,
-    backgroundColor: 'transparent',
-  },
-  deviceName: {
-    fontSize: 17,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 4,
-  },
-  deviceType: {
-    fontSize: 14,
-    color: '#666666',
-    marginBottom: 2,
-  },
-  deviceId: {
-    fontSize: 12,
-    color: '#999999',
-    fontFamily: 'SpaceMono',
-  },
-  deviceAction: {
-    backgroundColor: 'transparent',
-  },
-  connectText: {
-    color: '#007AFF',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-  connectedBadge: {
-    color: '#28A745',
-    fontSize: 14,
-    fontWeight: '600',
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingHorizontal: 40,
-  },
-  scanningIndicator: {
-    marginBottom: 20,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  emptySubtitle: {
-    fontSize: 15,
-    color: '#666666',
-    textAlign: 'center',
-    lineHeight: 22,
-  },
-});

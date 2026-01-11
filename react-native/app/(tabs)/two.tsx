@@ -1,5 +1,7 @@
-import { StyleSheet, ScrollView, Linking } from 'react-native';
-import { Text, View } from '@/components/Themed';
+import { ScrollView, Linking, View } from 'react-native';
+import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AboutScreen() {
   const openDocs = () => {
@@ -11,52 +13,76 @@ export default function AboutScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-      <View style={styles.header}>
-        <Text style={styles.title}>Bota SDK Example</Text>
-        <Text style={styles.subtitle}>@bota-dev/react-native-sdk</Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>About This App</Text>
-        <Text style={styles.paragraph}>
-          This example app demonstrates how to integrate the Bota React Native SDK into your
-          mobile application.
-        </Text>
-        <Text style={styles.paragraph}>
-          The SDK enables communication with Bota wearable devices (Bota Pin, Bota Note) via
-          Bluetooth Low Energy (BLE).
-        </Text>
-      </View>
-
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>What This Example Shows</Text>
-        <View style={styles.bulletList}>
-          <Text style={styles.bullet}>• SDK initialization with BotaClient.configure()</Text>
-          <Text style={styles.bullet}>• Bluetooth device scanning</Text>
-          <Text style={styles.bullet}>• Connecting to Bota devices</Text>
-          <Text style={styles.bullet}>• Reading device info and status</Text>
-          <Text style={styles.bullet}>• Event-driven architecture patterns</Text>
+    <ScrollView className="flex-1 bg-background">
+      <View className="p-5 gap-6">
+        {/* Header */}
+        <View className="items-center py-6">
+          <Text variant="h3" className="text-center">
+            Bota SDK Example
+          </Text>
+          <Text className="mt-2 font-mono text-muted-foreground">
+            @bota-dev/react-native-sdk
+          </Text>
         </View>
-      </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>What Requires a Backend</Text>
-        <Text style={styles.paragraph}>
-          Some features require a backend server with a Bota API key:
-        </Text>
-        <View style={styles.bulletList}>
-          <Text style={styles.bullet}>• Device provisioning (needs device token)</Text>
-          <Text style={styles.bullet}>• Recording sync and upload</Text>
-          <Text style={styles.bullet}>• Transcription and summary retrieval</Text>
-        </View>
-      </View>
+        {/* About */}
+        <Card>
+          <CardHeader>
+            <CardTitle>About This App</CardTitle>
+          </CardHeader>
+          <CardContent className="gap-3">
+            <Text className="text-muted-foreground leading-6">
+              This example app demonstrates how to integrate the Bota React Native SDK into your
+              mobile application.
+            </Text>
+            <Text className="text-muted-foreground leading-6">
+              The SDK enables communication with Bota wearable devices (Bota Pin, Bota Note) via
+              Bluetooth Low Energy (BLE).
+            </Text>
+          </CardContent>
+        </Card>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Quick Start</Text>
-        <View style={styles.codeBlock}>
-          <Text style={styles.code}>
-            {`import { BotaClient } from '@bota-dev/react-native-sdk';
+        {/* What This Shows */}
+        <Card>
+          <CardHeader>
+            <CardTitle>What This Example Shows</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <View className="gap-2">
+              <BulletItem text="SDK initialization with BotaClient.configure()" />
+              <BulletItem text="Bluetooth device scanning" />
+              <BulletItem text="Connecting to Bota devices" />
+              <BulletItem text="Reading device info and status" />
+              <BulletItem text="Event-driven architecture patterns" />
+            </View>
+          </CardContent>
+        </Card>
+
+        {/* Backend Required */}
+        <Card>
+          <CardHeader>
+            <CardTitle>What Requires a Backend</CardTitle>
+          </CardHeader>
+          <CardContent className="gap-3">
+            <Text className="text-muted-foreground leading-6">
+              Some features require a backend server with a Bota API key:
+            </Text>
+            <View className="gap-2">
+              <BulletItem text="Device provisioning (needs device token)" />
+              <BulletItem text="Recording sync and upload" />
+              <BulletItem text="Transcription and summary retrieval" />
+            </View>
+          </CardContent>
+        </Card>
+
+        {/* Quick Start */}
+        <Card className="bg-zinc-900 border-zinc-800">
+          <CardHeader>
+            <CardTitle className="text-zinc-100">Quick Start</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Text className="font-mono text-xs text-zinc-300 leading-5">
+{`import { BotaClient } from '@bota-dev/react-native-sdk';
 
 // Initialize SDK
 await BotaClient.configure({
@@ -72,97 +98,34 @@ await BotaClient.devices.startScan();
 // Connect
 const connected = await BotaClient.devices.connect(device);
 console.log('Connected:', connected.serialNumber);`}
-          </Text>
+            </Text>
+          </CardContent>
+        </Card>
+
+        {/* Links */}
+        <View className="gap-3">
+          <Button variant="outline" onPress={openDocs}>
+            <Text>Documentation</Text>
+          </Button>
+          <Button variant="outline" onPress={openGitHub}>
+            <Text>GitHub Repository</Text>
+          </Button>
         </View>
-      </View>
 
-      <View style={styles.links}>
-        <Text style={styles.link} onPress={openDocs}>
-          Documentation
-        </Text>
-        <Text style={styles.link} onPress={openGitHub}>
-          GitHub Repository
+        {/* Footer */}
+        <Text className="text-center text-sm text-muted-foreground py-4">
+          Bota Inc.
         </Text>
       </View>
-
-      <Text style={styles.footer}>
-        Bota Inc.
-      </Text>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  header: {
-    alignItems: 'center',
-    marginBottom: 32,
-    paddingTop: 20,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: '#666666',
-    fontFamily: 'SpaceMono',
-  },
-  section: {
-    marginBottom: 28,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
-  },
-  paragraph: {
-    fontSize: 15,
-    color: '#444444',
-    lineHeight: 24,
-    marginBottom: 8,
-  },
-  bulletList: {
-    marginTop: 4,
-  },
-  bullet: {
-    fontSize: 15,
-    color: '#444444',
-    lineHeight: 28,
-  },
-  codeBlock: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    padding: 16,
-    marginTop: 8,
-  },
-  code: {
-    fontFamily: 'SpaceMono',
-    fontSize: 12,
-    color: '#E8E8E8',
-    lineHeight: 20,
-  },
-  links: {
-    marginTop: 16,
-    marginBottom: 32,
-    gap: 16,
-  },
-  link: {
-    fontSize: 16,
-    color: '#007AFF',
-    textAlign: 'center',
-  },
-  footer: {
-    fontSize: 13,
-    color: '#999999',
-    textAlign: 'center',
-    marginTop: 20,
-  },
-});
+function BulletItem({ text }: { text: string }) {
+  return (
+    <View className="flex-row gap-2">
+      <Text className="text-muted-foreground">•</Text>
+      <Text className="flex-1 text-muted-foreground">{text}</Text>
+    </View>
+  );
+}

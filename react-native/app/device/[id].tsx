@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  ScrollView,
-  TouchableOpacity,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
+import { ScrollView, Alert, ActivityIndicator, View } from 'react-native';
 import { useLocalSearchParams, router, Stack } from 'expo-router';
-import { Text, View } from '@/components/Themed';
+import { Text } from '@/components/ui/text';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   BotaClient,
   type ConnectedDevice,
@@ -23,7 +19,6 @@ export default function DeviceDetailScreen() {
 
   useEffect(() => {
     loadDevice();
-
     return () => {
       // Cleanup status subscription if any
     };
@@ -31,7 +26,6 @@ export default function DeviceDetailScreen() {
 
   const loadDevice = async () => {
     try {
-      // Find connected device
       const connectedDevices = BotaClient.devices.getConnectedDevices();
       const found = connectedDevices.find((d) => d.id === id);
 
@@ -54,7 +48,6 @@ export default function DeviceDetailScreen() {
       const deviceStatus = await BotaClient.devices.getStatus(dev);
       setStatus(deviceStatus);
 
-      // Subscribe to status updates
       BotaClient.devices.subscribeToStatus(dev, (newStatus) => {
         setStatus(newStatus);
       });
@@ -77,22 +70,17 @@ export default function DeviceDetailScreen() {
   };
 
   const handleProvision = () => {
-    // This shows the pattern - actual provisioning requires a device token from your backend
     Alert.alert(
       'Provisioning',
       'To provision this device, you need a device token from your backend.\n\n' +
-        'Example code:\n\n' +
-        '// Get token from your backend\n' +
-        'const token = await api.getDeviceToken(userId);\n\n' +
-        '// Provision device\n' +
-        "await BotaClient.devices.provision(device, token, 'production');",
+        'See the code example below for the pattern.',
       [{ text: 'OK' }]
     );
   };
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View className="flex-1 items-center justify-center bg-background">
         <ActivityIndicator size="large" color="#007AFF" />
       </View>
     );
@@ -110,77 +98,88 @@ export default function DeviceDetailScreen() {
           headerBackTitle: 'Devices',
         }}
       />
-      <ScrollView style={styles.container} contentContainerStyle={styles.content}>
-        {/* Device Info Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Device Information</Text>
-          <View style={styles.card}>
-            <InfoRow label="Serial Number" value={device.serialNumber} mono />
-            <InfoRow label="Device Type" value={device.deviceType} />
-            <InfoRow label="Firmware" value={device.firmwareVersion} />
-            {device.hardwareRevision && (
-              <InfoRow label="Hardware" value={device.hardwareRevision} />
-            )}
-            <InfoRow
-              label="Provisioned"
-              value={device.isProvisioned ? 'Yes' : 'No'}
-              valueColor={device.isProvisioned ? '#28A745' : '#FF9500'}
-            />
-          </View>
-        </View>
+      <ScrollView className="flex-1 bg-background">
+        <View className="p-5 gap-6">
+          {/* Device Info */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Device Information</CardTitle>
+            </CardHeader>
+            <CardContent className="gap-3">
+              <InfoRow label="Serial Number" value={device.serialNumber} mono />
+              <InfoRow label="Device Type" value={device.deviceType} />
+              <InfoRow label="Firmware" value={device.firmwareVersion} />
+              {device.hardwareRevision && (
+                <InfoRow label="Hardware" value={device.hardwareRevision} />
+              )}
+              <InfoRow
+                label="Provisioned"
+                value={device.isProvisioned ? 'Yes' : 'No'}
+                valueClassName={device.isProvisioned ? 'text-green-600' : 'text-orange-500'}
+              />
+            </CardContent>
+          </Card>
 
-        {/* Status Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Device Status</Text>
-          <View style={styles.card}>
-            {status ? (
-              <>
-                <InfoRow
-                  label="Battery"
-                  value={`${status.batteryLevel}%`}
-                  valueColor={status.batteryLevel < 20 ? '#FF3B30' : '#28A745'}
-                />
-                <InfoRow
-                  label="Recording"
-                  value={status.isRecording ? 'Yes' : 'No'}
-                  valueColor={status.isRecording ? '#FF9500' : undefined}
-                />
-                {status.storageUsed !== undefined && status.storageTotal !== undefined && (
+          {/* Status */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Device Status</CardTitle>
+            </CardHeader>
+            <CardContent className="gap-3">
+              {status ? (
+                <>
                   <InfoRow
-                    label="Storage"
-                    value={`${Math.round(status.storageUsed / 1024 / 1024)}MB / ${Math.round(status.storageTotal / 1024 / 1024)}MB`}
+                    label="Battery"
+                    value={`${status.batteryLevel}%`}
+                    valueClassName={status.batteryLevel < 20 ? 'text-red-500' : 'text-green-600'}
                   />
-                )}
-              </>
-            ) : (
-              <Text style={styles.noStatus}>Status not available</Text>
-            )}
-          </View>
-        </View>
+                  <InfoRow
+                    label="Recording"
+                    value={status.isRecording ? 'Yes' : 'No'}
+                    valueClassName={status.isRecording ? 'text-orange-500' : undefined}
+                  />
+                  {status.storageUsed !== undefined && status.storageTotal !== undefined && (
+                    <InfoRow
+                      label="Storage"
+                      value={`${Math.round(status.storageUsed / 1024 / 1024)}MB / ${Math.round(status.storageTotal / 1024 / 1024)}MB`}
+                    />
+                  )}
+                </>
+              ) : (
+                <Text className="text-muted-foreground italic">
+                  Status not available
+                </Text>
+              )}
+            </CardContent>
+          </Card>
 
-        {/* Provisioning Section */}
-        {!device.isProvisioned && (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Setup</Text>
-            <View style={styles.card}>
-              <Text style={styles.provisionText}>
-                This device is not provisioned. To complete setup, provision it with a device
-                token from your backend.
-              </Text>
-              <TouchableOpacity style={styles.provisionButton} onPress={handleProvision}>
-                <Text style={styles.provisionButtonText}>How to Provision</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        )}
+          {/* Provisioning */}
+          {!device.isProvisioned && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Setup Required</CardTitle>
+              </CardHeader>
+              <CardContent className="gap-4">
+                <Text className="text-muted-foreground">
+                  This device is not provisioned. To complete setup, provision it with a device
+                  token from your backend.
+                </Text>
+                <Button onPress={handleProvision}>
+                  <Text>How to Provision</Text>
+                </Button>
+              </CardContent>
+            </Card>
+          )}
 
-        {/* Code Example Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>SDK Code Example</Text>
-          <View style={styles.codeCard}>
-            <Text style={styles.codeText}>
-              {`// Connect to device
-const device = await BotaClient.devices.connect(discoveredDevice);
+          {/* Code Example */}
+          <Card className="bg-zinc-900 border-zinc-800">
+            <CardHeader>
+              <CardTitle className="text-zinc-100">SDK Code Example</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Text className="font-mono text-xs text-zinc-300 leading-5">
+{`// Connect to device
+const device = await BotaClient.devices.connect(discovered);
 
 // Read device status
 const status = await BotaClient.devices.getStatus(device);
@@ -193,23 +192,25 @@ BotaClient.devices.subscribeToStatus(device, (status) => {
 
 // Provision (requires backend token)
 // const token = await yourBackend.getDeviceToken();
-// await BotaClient.devices.provision(device, token, 'production');`}
-            </Text>
-          </View>
-        </View>
+// await BotaClient.devices.provision(device, token);`}
+              </Text>
+            </CardContent>
+          </Card>
 
-        {/* Disconnect Button */}
-        <TouchableOpacity
-          style={styles.disconnectButton}
-          onPress={handleDisconnect}
-          disabled={disconnecting}
-        >
-          {disconnecting ? (
-            <ActivityIndicator size="small" color="#FFFFFF" />
-          ) : (
-            <Text style={styles.disconnectButtonText}>Disconnect</Text>
-          )}
-        </TouchableOpacity>
+          {/* Disconnect Button */}
+          <Button
+            variant="destructive"
+            className="mt-2"
+            onPress={handleDisconnect}
+            disabled={disconnecting}
+          >
+            {disconnecting ? (
+              <ActivityIndicator size="small" color="#FFFFFF" />
+            ) : (
+              <Text>Disconnect</Text>
+            )}
+          </Button>
+        </View>
       </ScrollView>
     </>
   );
@@ -219,123 +220,21 @@ function InfoRow({
   label,
   value,
   mono,
-  valueColor,
+  valueClassName,
 }: {
   label: string;
   value: string;
   mono?: boolean;
-  valueColor?: string;
+  valueClassName?: string;
 }) {
   return (
-    <View style={styles.infoRow}>
-      <Text style={styles.infoLabel}>{label}</Text>
+    <View className="flex-row justify-between items-center py-2 border-b border-border">
+      <Text className="text-foreground">{label}</Text>
       <Text
-        style={[
-          styles.infoValue,
-          mono && styles.infoValueMono,
-          valueColor && { color: valueColor },
-        ]}
+        className={`text-muted-foreground ${mono ? 'font-mono text-sm' : ''} ${valueClassName || ''}`}
       >
         {value}
       </Text>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  section: {
-    marginBottom: 24,
-  },
-  sectionTitle: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#666666',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-    marginBottom: 8,
-    marginLeft: 4,
-  },
-  card: {
-    backgroundColor: '#F8F9FA',
-    borderRadius: 12,
-    padding: 16,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#E5E5EA',
-    backgroundColor: 'transparent',
-  },
-  infoLabel: {
-    fontSize: 15,
-    color: '#1A1A1A',
-  },
-  infoValue: {
-    fontSize: 15,
-    color: '#666666',
-  },
-  infoValueMono: {
-    fontFamily: 'SpaceMono',
-    fontSize: 13,
-  },
-  noStatus: {
-    fontSize: 15,
-    color: '#999999',
-    fontStyle: 'italic',
-  },
-  provisionText: {
-    fontSize: 15,
-    color: '#666666',
-    lineHeight: 22,
-    marginBottom: 16,
-  },
-  provisionButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  provisionButtonText: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  codeCard: {
-    backgroundColor: '#1A1A1A',
-    borderRadius: 12,
-    padding: 16,
-  },
-  codeText: {
-    fontFamily: 'SpaceMono',
-    fontSize: 12,
-    color: '#E8E8E8',
-    lineHeight: 20,
-  },
-  disconnectButton: {
-    backgroundColor: '#FF3B30',
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  disconnectButtonText: {
-    color: '#FFFFFF',
-    fontSize: 17,
-    fontWeight: '600',
-  },
-});
