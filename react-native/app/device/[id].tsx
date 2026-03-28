@@ -177,7 +177,7 @@ export default function DeviceDetailScreen() {
               <CardTitle className="text-zinc-100">SDK Code Example</CardTitle>
             </CardHeader>
             <CardContent>
-              <Text className="font-mono text-xs text-zinc-300 leading-5">
+              <Text className=" text-xs text-zinc-300 leading-5">
 {`// Connect to device
 const device = await BotaClient.devices.connect(discovered);
 
@@ -231,7 +231,7 @@ function InfoRow({
     <View className="flex-row justify-between items-center py-2 border-b border-border">
       <Text className="text-foreground">{label}</Text>
       <Text
-        className={`text-muted-foreground ${mono ? 'font-mono text-sm' : ''} ${valueClassName || ''}`}
+        className={`text-muted-foreground ${mono ? 'text-sm' : ''} ${valueClassName || ''}`}
       >
         {value}
       </Text>

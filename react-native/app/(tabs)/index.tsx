@@ -160,7 +160,7 @@ export default function DevicesScreen() {
             <Text className="mt-1 text-sm text-muted-foreground">
               {item.deviceType}
             </Text>
-            <Text className="mt-0.5 font-mono text-xs text-muted-foreground">
+            <Text className="mt-0.5 text-xs text-muted-foreground">
               {item.id}
             </Text>
           </View>
