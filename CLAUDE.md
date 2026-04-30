@@ -39,7 +39,7 @@ examples/
 - **Expo** ~50.0.0 with Expo Router
 - **React Native** 0.73.x
 - **@bota-dev/react-native-sdk** - Bota SDK from npm
-- **react-native-ble-plx** - BLE communication
+- **react-native-ble-plx** -Bluetoothcommunication
 
 ### Running Locally
 
@@ -55,7 +55,7 @@ npm run ios
 npm run android
 ```
 
-**Note:** This app uses native BLE modules, so Expo Go won't work. You need:
+**Note:** This app uses nativeBluetoothmodules, so Expo Go won't work. You need:
 - `expo prebuild` + native build, OR
 - EAS Build for development builds
 
