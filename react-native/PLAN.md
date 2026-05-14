@@ -1,6 +1,6 @@
 # Bota React Native SDK Example
 
-This example app demonstrates how to integrate the `@bota-dev/react-native-sdk` into a React Native app.
+This example app demonstrates how to integrate the `@bota.dev/react-native-sdk` into a React Native app.
 
 ## Purpose
 
@@ -29,7 +29,7 @@ Show developers how to:
 ## Implementation Tasks
 
 - [x] Set up Expo 54 with tabs template
-- [x] Install @bota-dev/react-native-sdk
+- [x] Install @bota.dev/react-native-sdk
 - [x] Basic device scanning on home tab
 - [ ] Improve Devices tab UI
 - [ ] Add Device Detail screen

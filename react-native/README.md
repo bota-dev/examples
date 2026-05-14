@@ -1,6 +1,6 @@
 # Bota React Native SDK Example
 
-This example app demonstrates how to integrate the [@bota-dev/react-native-sdk](https://www.npmjs.com/package/@bota-dev/react-native-sdk) into a React Native application.
+This example app demonstrates how to integrate the [@bota.dev/react-native-sdk](https://www.npmjs.com/package/@bota.dev/react-native-sdk) into a React Native application.
 
 ## Features Demonstrated
 
@@ -50,7 +50,7 @@ app/
 ### Initialize the SDK
 
 ```typescript
-import { BotaClient } from '@bota-dev/react-native-sdk';
+import { BotaClient } from '@bota.dev/react-native-sdk';
 
 await BotaClient.configure({
   environment: 'sandbox', // or 'production'
@@ -118,5 +118,5 @@ See [docs.bota.dev](https://docs.bota.dev) for the full integration guide.
 ## Learn More
 
 - [Bota Documentation](https://docs.bota.dev)
-- [React Native SDK on npm](https://www.npmjs.com/package/@bota-dev/react-native-sdk)
+- [React Native SDK on npm](https://www.npmjs.com/package/@bota.dev/react-native-sdk)
 - [GitHub Repository](https://github.com/bota-dev/react-native-sdk)

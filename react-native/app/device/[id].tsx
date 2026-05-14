@@ -8,7 +8,7 @@ import {
   BotaClient,
   type ConnectedDevice,
   type DeviceStatus,
-} from '@bota-dev/react-native-sdk';
+} from '@bota.dev/react-native-sdk';
 
 export default function DeviceDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

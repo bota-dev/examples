@@ -21,7 +21,7 @@ export default function AboutScreen() {
             Bota SDK Example
           </Text>
           <Text className="mt-2 text-muted-foreground">
-            @bota-dev/react-native-sdk
+            @bota.dev/react-native-sdk
           </Text>
         </View>
 
@@ -82,7 +82,7 @@ export default function AboutScreen() {
           </CardHeader>
           <CardContent>
             <Text className=" text-xs text-zinc-300 leading-5">
-{`import { BotaClient } from '@bota-dev/react-native-sdk';
+{`import { BotaClient } from '@bota.dev/react-native-sdk';
 
 // Initialize SDK
 await BotaClient.configure({

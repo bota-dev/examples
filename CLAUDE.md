@@ -38,7 +38,7 @@ examples/
 
 - **Expo** ~50.0.0 with Expo Router
 - **React Native** 0.73.x
-- **@bota-dev/react-native-sdk** - Bota SDK from npm
+- **@bota.dev/react-native-sdk** - Bota SDK from npm
 - **react-native-ble-plx** - BLE communication
 
 ### Running Locally
@@ -88,11 +88,11 @@ const API_BASE_URL = 'https://your-api.example.com';
 
 ```bash
 cd react-native
-npm update @bota-dev/react-native-sdk
+npm update @bota.dev/react-native-sdk
 ```
 
 ## Related Repositories
 
-- `bota-dev/react-native-sdk` - React Native SDK (npm: @bota-dev/react-native-sdk)
+- `bota-dev/react-native-sdk` - React Native SDK (npm: @bota.dev/react-native-sdk)
 - `bota-dev/docs` - API documentation (docs.bota.dev)
 - `bota-dev/bota` - Private backend/infrastructure

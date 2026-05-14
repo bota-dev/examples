@@ -8,7 +8,7 @@ import {
   BotaClient,
   type DiscoveredDevice,
   type ConnectedDevice,
-} from '@bota-dev/react-native-sdk';
+} from '@bota.dev/react-native-sdk';
 
 type SdkStatus = 'initializing' | 'ready' | 'error' | 'bluetooth_off';
 
