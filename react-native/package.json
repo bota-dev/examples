@@ -16,7 +16,7 @@
     "@rn-primitives/slot": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "expo": "~54.0.31",
+    "expo": "~56.0.9",
     "expo-constants": "~18.0.13",
     "expo-font": "~14.0.10",
     "expo-linking": "~8.0.11",
