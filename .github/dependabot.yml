@@ -1,0 +1,23 @@
+# Dependabot version-update configuration.
+# Security updates (vulnerability-driven PRs) are enabled separately in repo settings.
+version: 2
+
+registries:
+  bota-github:
+    type: npm-registry
+    url: https://npm.pkg.github.com
+    token: ${{secrets.DEPENDABOT_GHPR_TOKEN}}
+
+updates:
+  - package-ecosystem: npm
+    directory: /react-native
+    registries:
+      - bota-github
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    groups:
+      npm-minor-patch:
+        update-types:
+          - minor
+          - patch
