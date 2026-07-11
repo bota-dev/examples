@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Bota Example",
+    "slug": "bota-example",
+    "scheme": "botaexample",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "ios": {
+      "bundleIdentifier": "dev.bota.examples.mobile",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "This example connects to nearby Bota devices over Bluetooth."
+      }
+    },
+    "android": {
+      "package": "dev.bota.examples.mobile",
+      "permissions": [
+        "android.permission.BLUETOOTH_SCAN",
+        "android.permission.BLUETOOTH_CONNECT"
+      ]
+    },
+    "plugins": [
+      "expo-router"
+    ]
+  }
+}
