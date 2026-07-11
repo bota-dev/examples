@@ -8,29 +8,74 @@ This is the **Bota Examples** repository - a collection of example applications 
 
 GitHub: https://github.com/bota-dev/examples
 
+## Implementation Rule
+
+Examples should be reimplemented from public contracts and observed behavior, not copied from private Bota packages. It is fine to read `bota-one`, `demo`, `bota`, and `react-native-sdk` to understand route shapes, SDK APIs, and product flow, but example code must use its own simple structure and should not import, paste, or preserve private app helpers, comments, transforms, auth wrappers, or first-party-only architecture.
+
 ## Project Structure
 
 ```
 examples/
-├── react-native/             # React Native mobile app example
-│   ├── app/                  # Expo Router screens
-│   │   ├── _layout.tsx       # Root layout
-│   │   ├── index.tsx         # Entry/splash
-│   │   ├── login.tsx         # Authentication
-│   │   ├── home.tsx          # Dashboard
-│   │   ├── scan.tsx          # Device scanning
-│   │   ├── device.tsx        # Device details
-│   │   └── recordings.tsx    # Recordings list
-│   ├── src/
-│   │   ├── api/backend.ts    # Backend API client
-│   │   └── context/          # React contexts (Auth, Bota)
-│   ├── assets/               # App icons and splash
-│   ├── package.json
-│   └── tsconfig.json
-├── node-backend/             # (future) Node.js backend example
-├── python-backend/           # (future) Python backend example
+├── apps/
+│   ├── backend/              # Express backend example; keeps sk_* API keys server-side
+│   │   ├── src/index.ts      # Bota API proxy for devices, recording grants, uploads, transcription, summaries
+│   │   ├── .env.example
+│   │   └── package.json
+│   ├── react-native/         # Expo React Native SDK example
+│       ├── app/index.tsx     # Scan/connect/status/recording-control/provision/sync demo
+│       ├── src/api.ts        # Calls apps/backend, never Bota API directly
+│       └── package.json
+│   ├── ios/                  # Future native iOS example
+│   └── android/              # Future native Android example
+├── package.json              # npm workspace root
+├── package-lock.json
+├── README.md
 └── CLAUDE.md
 ```
+
+## Monorepo Example
+
+The current first-class example is an npm workspace with:
+
+- `apps/react-native` — Expo 54 / React Native 0.81 app using `@bota.dev/react-native-sdk`
+- `apps/backend` — Node 20+ / Express / TypeScript backend that proxies Bota `/v1/*`
+
+Future native client examples should live beside the React Native app as `apps/ios` and `apps/android`, using the same backend contract where possible.
+
+The backend demonstrates the customer-owned glue layer Bota One uses conceptually: mobile calls the customer backend, the backend holds the Bota API key, recording control gets backend-issued grants, and recording sync returns SDK `UploadInfo` with a backend completion URL.
+
+### Running Locally
+
+```bash
+cd examples
+npm install
+cp apps/backend/.env.example apps/backend/.env
+npm run dev:backend
+EXPO_PUBLIC_EXAMPLE_API_URL=http://localhost:4000 npm run dev:react-native
+```
+
+For physical devices, set `EXPO_PUBLIC_EXAMPLE_API_URL` to a LAN-reachable backend URL. Expo Go is not enough because BLE requires native modules; use a development build.
+
+### Verify
+
+```bash
+cd examples
+npm run typecheck -w @bota-dev/example-backend
+npm run typecheck -w @bota-dev/example-react-native
+```
+
+Use Node 20+ for install and verification. React Native 0.81 requires a current Node runtime.
+
+### Key Files
+
+- `apps/backend/src/index.ts` - Mobile-facing routes and Bota API proxy calls, including recording grants
+- `apps/backend/.env.example` - Required Bota API key and end-user configuration
+- `apps/react-native/app/index.tsx` - SDK configure, scan, connect, status read, recording start/stop, recording list, provisioning, sync
+- `apps/react-native/src/api.ts` - SDK upload-info provider and device registration client
+
+### Security Boundary
+
+Never put `sk_live_*`, `sk_test_*`, or `rk_*` keys in client apps. Clients only call `apps/backend`; `BOTA_API_KEY` lives in backend environment variables.
 
 ## React Native Example
 
