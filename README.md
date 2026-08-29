@@ -11,7 +11,7 @@ Example apps for integrating Bota devices, `@bota.dev/react-native-sdk`, and the
 
 ## Quick Start
 
-Use Node 20+.
+Use Node 20.19.4 or newer.
 
 ```bash
 cd examples
