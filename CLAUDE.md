@@ -66,6 +66,11 @@ npm run typecheck -w @bota-dev/example-react-native
 
 Use Node 20+ for install and verification. React Native 0.81 requires a current Node runtime.
 
+The root workspace lock pins transitive `@xmldom/xmldom` to patched 0.8.15
+and the nested `plist` copy to patched 0.9.12 within their existing parent
+ranges. This changes dependency resolution for a fresh install only; example
+source, API-key handling, and published SDK dependencies are unchanged.
+
 ### Key Files
 
 - `apps/backend/src/index.ts` - Mobile-facing routes and Bota API proxy calls, including recording grants
