@@ -70,6 +70,9 @@ The root workspace lock pins transitive `@xmldom/xmldom` to patched 0.8.15
 and the nested `plist` copy to patched 0.9.12 within their existing parent
 ranges. This changes dependency resolution for a fresh install only; example
 source, API-key handling, and published SDK dependencies are unchanged.
+The same root lock pins `js-yaml` 4.3.2 and the nested Istanbul 3.x copy to
+3.15.2 for GHSA-2883-xcg3-v3hh, within their existing parent ranges; no
+example source or workspace manifest changed.
 
 ### Key Files
 
