@@ -76,6 +76,8 @@ example source or workspace manifest changed.
 The root lock also uses patched `browserslist` 4.28.7 and
 `baseline-browser-mapping` 2.11.0 with their compatible browser-data entries;
 these are lock-only fixes for the browser-data advisories.
+The root lock pins transitive `nanoid` to patched 3.3.19 within its existing
+parent ranges; example source and workspace manifests are unchanged.
 
 ### Key Files
 
