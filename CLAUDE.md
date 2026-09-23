@@ -73,6 +73,9 @@ source, API-key handling, and published SDK dependencies are unchanged.
 The same root lock pins `js-yaml` 4.3.2 and the nested Istanbul 3.x copy to
 3.15.2 for GHSA-2883-xcg3-v3hh, within their existing parent ranges; no
 example source or workspace manifest changed.
+The root lock also uses patched `browserslist` 4.28.7 and
+`baseline-browser-mapping` 2.11.0 with their compatible browser-data entries;
+these are lock-only fixes for the browser-data advisories.
 
 ### Key Files
 
