@@ -80,4 +80,28 @@ remain separate verification gates; no native/device qualification is claimed.
 Remove the override when Xcode supports a patched UUID in its own dependency
 range, then repeat frozen install and the actual-consumer tests. An ESM-only
 UUID release must not be substituted without reviewing Xcode's CommonJS usage.
-decode-uri-component #69 and qs #72/#87 remain separate Medium findings.
+decode-uri-component #69 remains a separate Medium finding.
+
+## Express query parser follow-up (2026-09-26)
+
+Dependabot #72 / [GHSA-x5fp-wj9c-mxmx](https://github.com/advisories/GHSA-x5fp-wj9c-mxmx)
+and #87 / [GHSA-4mjr-xmp4-gh2g](https://github.com/advisories/GHSA-4mjr-xmp4-gh2g)
+both require **qs 6.16.0**. Supported patches Express **4.22.3** and body-parser
+**1.20.8** admit that version; exactly these three lock entries change within
+existing parent/workspace ranges. Their releases are September 14, September 8
+and August 29 respectively, beyond the seven-day age floor. Express/body-parser
+are MIT and qs is BSD-3-Clause. No override or application-source change is needed.
+
+The installed Express and body-parser consumers each reject bracketed comma
+arrays above the configured limit and safely stringify attacker-controlled
+`constructor.isBuffer` data. All four regressions fail before and pass after.
+A loopback HTTP test verifies nested query/form values, Unicode, repeated values
+and body-parser parameter-limit rejection before and after. The example app
+currently uses JSON middleware; the form check covers the installed parser's
+contract, not an additional application endpoint or a reachability claim.
+
+On Node 22.23.2, frozen install, all 19 tests, both typechecks and the backend
+build pass. The supported-parent update and exercised middleware contracts
+match the scoped acceptance criteria. Hosted CI/scanner closure and deployed
+backend behavior remain separate verification gates. Keep the lock and tests
+together on future dependency updates.

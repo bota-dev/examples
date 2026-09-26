@@ -59,7 +59,7 @@ For physical devices, set `EXPO_PUBLIC_EXAMPLE_API_URL` to a LAN-reachable backe
 ### Verify
 
 Run `npm ci`, `npm test`, `npm run typecheck` and `npm run build` for the
-bounded Metro parser and Xcode UUID fixes and both workspaces. The build covers the backend,
+bounded Metro, Xcode UUID and Express query-parser fixes and both workspaces. The build covers the backend,
 not native qualification. See [dependency evidence and known export gap](DEPENDENCY_SECURITY.md).
 
 ```bash
