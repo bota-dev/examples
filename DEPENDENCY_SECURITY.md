@@ -1,4 +1,4 @@
-# Metro image-parser remediation
+# Dependency security remediation
 
 ## Scope and choice (2026-09-26)
 
@@ -80,7 +80,6 @@ remain separate verification gates; no native/device qualification is claimed.
 Remove the override when Xcode supports a patched UUID in its own dependency
 range, then repeat frozen install and the actual-consumer tests. An ESM-only
 UUID release must not be substituted without reviewing Xcode's CommonJS usage.
-decode-uri-component #69 remains a separate Medium finding.
 
 ## Express query parser follow-up (2026-09-26)
 
@@ -105,3 +104,41 @@ build pass. The supported-parent update and exercised middleware contracts
 match the scoped acceptance criteria. Hosted CI/scanner closure and deployed
 backend behavior remain separate verification gates. Keep the lock and tests
 together on future dependency updates.
+
+## URL decoder follow-up (2026-09-26)
+
+Dependabot #69 / [GHSA-vcc3-ghjq-m6fr](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr)
+is addressed by a `query-string@7.1.3`-scoped **decode-uri-component 0.5.0**
+override. This MIT release was published June 29, 2026. Both Expo Router 56.2.15
+and React Navigation core 7.21.5 resolve the same query-string copy. The decoder
+is ESM, so `scripts/patch-query-string.mjs` adapts its single import to
+`require('decode-uri-component').default` at postinstall. Complete original and
+patched source SHA-256 hashes plus an exact consumer-version check reject
+unexpected source; repeated application is harmless. This uses no additional
+dependencies. The lock changes one package entry plus root install-script and
+engine metadata. Node >=20.19.4 matches the README's existing supported minimum
+and supports the synchronous ESM import; verification uses Node 22.23.2.
+
+Run normal `npm ci` with lifecycle scripts enabled. If installation intentionally
+disables scripts, run `npm run postinstall` before using the app or testing.
+Do not remove the override or adapter independently: an unadapted CommonJS
+consumer receives an ESM namespace rather than a callable decoder. Remove both
+when upstream query-string and both router consumers support a patched decoder,
+then rerun frozen install, router regressions and platform exports. A new nested
+query-string copy fails the lock test and requires a fresh compatibility review.
+
+Two deterministic regression checks previously required 258/259 native decoder
+calls for 36 malformed characters and failed their linear work budget. Both
+now pass through the actual Expo and React Navigation route parsers. Unicode,
+repeated/empty values, literal plus, malformed bytes and encode/decode behavior
+pass before and after. Patch repeatability/drift rejection and lock coverage are
+also checked. All **25 tests**, frozen install, both typechecks and backend build
+pass; `npm audit` reports **zero vulnerabilities** at this checkpoint.
+
+Metro exports JavaScript for iOS (1,425 modules) and Android (1,517 modules) with
+`expo export --platform ios --platform android --no-bytecode`. This establishes
+bundler compatibility, not Hermes bytecode/native/device qualification; the
+missing Hermes compiler noted above remains a separate baseline issue. The
+scoped decoder replacement, guarded interop and exercised route contracts match
+the acceptance criteria. Hosted CI and scanner closure must still be confirmed
+after push, independently of this source and local-audit evidence.

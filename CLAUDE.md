@@ -59,7 +59,7 @@ For physical devices, set `EXPO_PUBLIC_EXAMPLE_API_URL` to a LAN-reachable backe
 ### Verify
 
 Run `npm ci`, `npm test`, `npm run typecheck` and `npm run build` for the
-bounded Metro, Xcode UUID and Express query-parser fixes and both workspaces. The build covers the backend,
+bounded Metro, Xcode UUID, Express query-parser and URL-decoder fixes and both workspaces. The build covers the backend,
 not native qualification. See [dependency evidence and known export gap](DEPENDENCY_SECURITY.md).
 
 ```bash
@@ -68,7 +68,11 @@ npm run typecheck -w @bota-dev/example-backend
 npm run typecheck -w @bota-dev/example-react-native
 ```
 
-Use Node 20+ for install and verification. React Native 0.81 requires a current Node runtime.
+Use Node 20.19.4+ for install and verification (tested on 22.23.2).
+The guarded query-string decoder adapter runs at postinstall; if scripts were
+disabled, run `npm run postinstall` before using the app or testing. Keep its
+scoped decoder override and adapter together until both router paths support
+a patched decoder upstream; see `DEPENDENCY_SECURITY.md` for removal gates.
 
 The root workspace lock pins transitive `@xmldom/xmldom` to patched 0.8.15
 and the nested `plist` copy to patched 0.9.12 within their existing parent
