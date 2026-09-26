@@ -57,5 +57,27 @@ verified separately after the push. No tag, publication, OTA, app deployment,
 AWS mutation or compliance-control approval occurs.
 
 Keep the lock and tests together; rerun both consumer paths on future upgrades.
-Rollback restores affected dependencies and reopens review. UUID #56,
+Rollback restores affected dependencies and reopens review.
+
+## UUID / Xcode follow-up (2026-09-26)
+
+Dependabot #56 / [GHSA-w5hq-g745-h8pq](https://github.com/advisories/GHSA-w5hq-g745-h8pq)
+is addressed with an exact `xcode@3.0.1` override to UUID **11.1.1**. This is
+a deliberate cross-major resolution scoped to the only UUID consumer; Xcode
+uses CommonJS `uuid.v4()` without output buffers. The patched MIT release was
+published April 29, 2026, beyond the seven-day age floor. Exactly one lock entry
+changes, from UUID 7.0.3; workspace dependencies and application code stay fixed.
+
+`npm test` now includes the UUID suite in CI. Its lock/advisory check and
+undersized, negative-offset and overflowing-buffer regressions fail before the
+fix; Xcode project group generation and serialization pass before and after.
+The three UUID tests plus the eleven Metro tests pass after a frozen `npm ci`;
+both workspace typechecks, backend build and `npm ls uuid` pass on Node 22.23.2.
+These checks match the scoped remediation and actual Xcode consumer contracts.
+Native builds, the existing Hermes export gap, hosted CI and scanner closure
+remain separate verification gates; no native/device qualification is claimed.
+
+Remove the override when Xcode supports a patched UUID in its own dependency
+range, then repeat frozen install and the actual-consumer tests. An ESM-only
+UUID release must not be substituted without reviewing Xcode's CommonJS usage.
 decode-uri-component #69 and qs #72/#87 remain separate Medium findings.

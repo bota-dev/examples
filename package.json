@@ -6,12 +6,17 @@
     "apps/*"
   ],
   "scripts": {
-    "test": "node --test scripts/test-image-security.mjs",
+    "test": "node --test scripts/test-*-security.mjs",
     "dev": "npm run dev -w @bota-dev/example-backend",
     "dev:backend": "npm run dev -w @bota-dev/example-backend",
     "dev:react-native": "npm run start -w @bota-dev/example-react-native",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present"
+  },
+  "overrides": {
+    "xcode@3.0.1": {
+      "uuid": "11.1.1"
+    }
   },
   "engines": {
     "node": ">=20.0.0"
