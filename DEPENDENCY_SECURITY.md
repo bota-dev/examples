@@ -1,0 +1,61 @@
+# Metro image-parser remediation
+
+## Scope and choice (2026-09-26)
+
+Dependabot #100/#101 concern image-size 1.2.1 parser loops:
+[ICNS](https://github.com/advisories/GHSA-w3rx-r6r6-pgpr) and
+[JXL/HEIF](https://github.com/advisories/GHSA-5p2g-fcmc-qvqq).
+
+Supported patch updates replace React Native's Metro 0.83.3 with **0.83.8**
+within `^0.83.1`, and @expo/metro 56.0.0 with **56.0.2** within `~56.0.0`.
+The wrapper pins its aligned Metro family to **0.84.5**. Metro releases were
+published August 19, 2026; the wrapper August 21, beyond the seven-day age floor.
+These parents remove image-size rather than forcing its incompatible 2.x API
+under old Metro, which still passes file paths to the parser.
+
+The lock changes 74 entries, including Metro-family hoisting/nesting and their
+Hermes, HTTP content-negotiation and parser/helper dependencies. New/changed
+entries declare MIT. React Native 0.81.5, Expo 57.0.4, React 19.1.0, workspace
+dependency ranges and example source are unchanged. Expo Metro is now hoisted;
+the React Native CLI resolves its own nested 0.83.8 family. Tests resolve from
+the actual consumers so hoisting cannot silently hide an affected path.
+
+## Verification and boundaries
+
+On Node 22.23.2:
+
+```sh
+npm ci
+npm test
+npm run typecheck
+npm run build
+npm ls metro @expo/metro
+```
+
+All 11 checks pass: lock safety, each consumer's bounded ICNS/JXL rejection,
+malformed HEIF rejection, PNG/SVG dimensions, invalid/non-image handling and
+file-based @2x asset metadata. Five checks failed before (one lock check and
+four ICNS/JXL regressions); six compatibility checks passed before and after.
+The synchronous append budget safely bounds the old loops. Tests are original
+examples-repo fixtures against installed upstream consumers, not copied private
+application helpers. They are representative, not exhaustive format validation.
+
+Clean install, both workspace typechecks and the backend TypeScript build pass.
+The repository previously had no test script or CI workflow; the new read-only
+CI repeats frozen install, tests, typechecks and backend build on main/PRs.
+Its successful backend build is not a successful mobile build. iOS Hermes export
+fails before and after because `hermes-compiler/package.json` is absent, with
+1,427 modules processed. The existing mixed Expo/native baseline and deprecated
+SDK/tooling warnings remain separate; no dependency bypass or audit suppression
+is used. There is no lint or license-gate script; inspected MIT metadata is not
+a full transitive license-policy review. Android/native/device operation is
+unverified.
+
+Conformance: scoped supported-parent removal and exercised Metro asset contracts
+match the remediation requirements. Hosted CI and scanner closure must be
+verified separately after the push. No tag, publication, OTA, app deployment,
+AWS mutation or compliance-control approval occurs.
+
+Keep the lock and tests together; rerun both consumer paths on future upgrades.
+Rollback restores affected dependencies and reopens review. UUID #56,
+decode-uri-component #69 and qs #72/#87 remain separate Medium findings.

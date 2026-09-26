@@ -25,4 +25,6 @@ The React Native app expects `EXPO_PUBLIC_EXAMPLE_API_URL` to point at the backe
 
 ## Security Model
 
+Dependency maintenance and verification limits: [Metro parser security](DEPENDENCY_SECURITY.md).
+
 Client apps never store a `sk_*` Bota API key. They talk to `apps/backend`, and that backend calls the Bota API with `BOTA_API_KEY`.
