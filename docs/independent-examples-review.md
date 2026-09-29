@@ -7,17 +7,30 @@ Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow
 | Example | Public dependency / runtime | Evidence | Remaining verification |
 | --- | --- | --- | --- |
 | Node upload/transcribe | Node 22.23.2, no dependencies | 15 tests, live hash verification and transcription; [prior CI](https://github.com/bota-dev/examples/actions/runs/36524299811) | Other formats/providers and live outage recovery |
-| Python upload/transcribe | Python 3.12, standard library | Local contract tests; live synthetic WAV upload, server hash verification, completed transcription | Other formats/providers and live outage recovery |
-| Node webhook receiver | Node 22.23.2 built-in SQLite | Local HTTP/SQLite tests for authenticity, duplicates, restart, conflicts, limits | Actual Bota delivery to deployed HTTPS receiver; business worker intentionally outside scope |
-| React Native connect | npm beta.7, Expo 57, RN 0.86.3 | Public install, typecheck, identity tests, Android export, zero npm audit findings | Android arm64 debug APK built locally; iOS link and physical BLE checks unverified |
+| Python upload/transcribe | Python 3.12, standard library | Three local contract tests; live synthetic WAV upload, server hash verification, completed transcription; hosted CI passed | Other formats/providers and live outage recovery |
+| Node webhook receiver | Node 22.23.2 built-in SQLite | Local and hosted HTTP/SQLite tests for authenticity, duplicates, restart, conflicts, limits | Actual Bota delivery to deployed HTTPS receiver; business worker intentionally outside scope |
+| React Native connect | npm beta.7, Expo 57, RN 0.86.3 | Public install, typecheck, identity tests, Android export, local and hosted arm64 debug APK build, zero npm audit findings | iOS link and physical BLE checks unverified |
 | Web connect | npm beta.7, Vite | Public install, TypeScript and WASM production build; Vite updated to 7.3.6 and npm audit clean | Browser/firmware BLE session |
 | Apple connect | SwiftPM exact beta.7 tag and binary checksum | Public tag/manifest inspected; [macOS CI build passed](https://github.com/bota-dev/examples/actions/runs/36526849885) | macOS permissions and BLE session |
-| Android connect | Maven Central beta.7, Gradle 8.13 | Public artifact resolves; local debug APK assembly passed | Android permissions and BLE session |
-| Flutter connect | pub.dev beta.7, Flutter 3.47.5 | Public artifact verified; Android host implemented; CI configured | Hosted locked resolution and analyzer pass; APK build pending after adding required Android precache; Android permissions and BLE session |
+| Android connect | Maven Central beta.7, Gradle 8.13 | Public artifact resolves; local and hosted debug APK assembly passed, dependency lock committed | Android permissions and BLE session |
+| Flutter connect | pub.dev beta.7, Flutter 3.47.5 | Public artifact verified; Android host implemented; CI configured | Hosted locked resolution and analyzer pass; APK build pending after adding required Android precache and compile SDK 37; Android permissions and BLE session |
 
 The live Python run retained `rec_oYZSXYnJcj8Zt3poS4LrOkvC` / `txn_o60mEyL54AfOXb2etr24U2lG`, using the same reserved test key and dedicated end user as the Node verification. Effective auto-processing was disabled. The 333,326-byte fixture is synthetic speech. Secrets, audio, and transcript remain ignored local files. No physical devices were changed.
 
-Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against Flutter's `meta 1.18.0` pin. Flutter 3.47.5 is selected for hosted verification; Windows Application Control prevented its Dart tool from launching locally. Hosted locked resolution and analyzer pass after correcting missing braces. The initial APK build found the SDK requires the cached Android embedding JAR; documented `flutter precache --android` and added it to CI. No security policy was changed. Native build and dependency-resolution statuses will be updated from CI before completion is reported.
+Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against Flutter's `meta 1.18.0` pin. Flutter 3.47.5 is selected for hosted verification; Windows Application Control prevented its Dart tool from launching locally. Hosted locked resolution and analyzer pass after correcting missing braces. The initial APK build found the SDK requires the cached Android embedding JAR; documented `flutter precache --android` and added it to CI. The permission plugin also requires compile SDK 37, now explicit in the Android host; minimum device API remains 26. No security policy was changed. Native build and dependency-resolution statuses will be updated from CI before completion is reported.
+
+## Hosted checks
+
+| Example | Source revision | Passing run |
+| --- | --- | --- |
+| Webhook receiver | `cf88479` | [36526850006](https://github.com/bota-dev/examples/actions/runs/36526850006) |
+| Python | `fb792f6` | [36527086453](https://github.com/bota-dev/examples/actions/runs/36527086453) |
+| React Native Android | `cf88479` | [36526849896](https://github.com/bota-dev/examples/actions/runs/36526849896) |
+| Web (Vite 7.3.6) | `fb792f6` | [36527086420](https://github.com/bota-dev/examples/actions/runs/36527086420) |
+| Swift macOS | `cf88479` | [36526849885](https://github.com/bota-dev/examples/actions/runs/36526849885) |
+| Kotlin Android with dependency lock | `fb792f6` | [36527086509](https://github.com/bota-dev/examples/actions/runs/36527086509) |
+
+Workflows select their own example paths. A passing earlier revision remains applicable when subsequent commits change only other examples or this review. Legacy workspace CI is separate from these independent checks. Its source and dependency security coverage were retained.
 
 ## Design comparison
 
@@ -31,7 +44,7 @@ Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against F
 | §4: explicit failure/recovery scope | API examples print IDs, bound polling, preserve local source, never auto-retry creates | Matched; app restart journal intentionally outside API-only scope |
 | §4: durable authenticated webhook acceptance | Raw-byte HMAC, timestamp window, SQLite FULL commit, ID deduplication and conflict rejection | Matched in real local HTTP/DB tests; business effects are not implemented |
 | §5: full recording-sync migration | Public integration analysis below | Not implemented; retain legacy sample until replacement gates pass |
-| §6: isolated CI, no secrets/device actions | One path-filtered workflow per independent example; native runners where needed | Configured; hosted results pending |
+| §6: isolated CI, no secrets/device actions | One path-filtered workflow per independent example; native runners where needed | Six new workflows passed; Flutter locked resolution/analyzer passed, APK verification still pending |
 | §6: platform acceptance evidence | Per-example READMEs separate install/export/build/live/hardware levels | Partial; physical-device checks and RN iOS linking remain unverified |
 
 ## Recording-sync replacement

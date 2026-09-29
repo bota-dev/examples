@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "dev.bota.examples.bota_connect"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 37 // Required by permission_handler_android.
     ndkVersion = flutter.ndkVersion
 
     compileOptions {

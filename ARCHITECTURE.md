@@ -126,7 +126,7 @@ There is no synchronized release version for the examples collection. Update eac
 
 ## 5. Current baseline and migration
 
-Initial inspection used examples commit `7d817bb5b6c35902b7096c80b10085083eadd9d2`; the baseline below was reconciled with main `36684e0`, including the App SDK migration `64a9fd0`, before committing. This design changes documentation only. The existing workspace is legacy in layout and lifecycle scope, not in SDK package selection.
+Initial inspection used examples commit `7d817bb5b6c35902b7096c80b10085083eadd9d2`; the baseline below was reconciled with main `36684e0`, including the App SDK migration `64a9fd0`, before committing. The initial design changed documentation only. The existing workspace is legacy in layout and lifecycle scope, not in SDK package selection.
 
 | Current evidence | Consequence / migration gate |
 | --- | --- |

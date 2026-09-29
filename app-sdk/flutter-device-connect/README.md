@@ -4,7 +4,7 @@ An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.7` (bet
 
 ## Run
 
-Use Flutter **3.47.5**, JDK 17, Android SDK tooling, and an Android 8+ (API 26+) phone with Bluetooth. Flutter 3.44 cannot resolve this SDK's `meta` dependency. This example includes an Android host only; SDK iOS support is not an iOS example acceptance claim.
+Use Flutter **3.47.5**, JDK 17, Android SDK 37 tooling, and an Android 8+ (API 26+) phone with Bluetooth. Flutter 3.44 cannot resolve this SDK's `meta` dependency. This example includes an Android host only; SDK iOS support is not an iOS example acceptance claim.
 
 From this directory:
 
@@ -25,4 +25,4 @@ flutter analyze
 flutter build apk --debug
 ```
 
-The dependency lock was resolved by hosted Flutter 3.47.5. Run `flutter precache --android` first: beta.7 compiles against the cached Android embedding JAR; a fresh Git-based Flutter installation does not download it automatically during `flutter build`. See [implementation review](../../docs/independent-examples-review.md) for install, analyzer, and native build evidence. Windows Application Control blocked the newer Dart tool during local verification; hosted Linux CI supplies the Flutter checks. Physical Bluetooth permissions, correct/wrong serial, status, disconnect/reconnect, and firmware coverage remain unverified. [Public SDK reference](https://docs.bota.dev/api-reference/client-sdks).
+`permission_handler_android` requires compile SDK 37; the minimum device API stays 26. The dependency lock was resolved by hosted Flutter 3.47.5. Run `flutter precache --android` first: beta.7 compiles against the cached Android embedding JAR; a fresh Git-based Flutter installation does not download it automatically during `flutter build`. See [implementation review](../../docs/independent-examples-review.md) for install, analyzer, and native build evidence. Windows Application Control blocked the newer Dart tool during local verification; hosted Linux CI supplies the Flutter checks. Physical Bluetooth permissions, correct/wrong serial, status, disconnect/reconnect, and firmware coverage remain unverified. [Public SDK reference](https://docs.bota.dev/api-reference/client-sdks).
