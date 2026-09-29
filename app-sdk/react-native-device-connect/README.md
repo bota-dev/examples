@@ -4,7 +4,7 @@ Scan → select → verify the **GATT-read serial** against the serial you enter
 
 ## Run
 
-Prerequisites: Node 22.23.2+, npm, Android Studio/JDK 17 or macOS/Xcode, and a physical Bota device. This app uses Expo 57 / React Native 0.86.3, Android API 26+, and iOS 16.4+ (Expo's floor). Expo Go cannot load the native SDK.
+Prerequisites: Node 22.23.2+, npm, Android Studio/JDK 17 or macOS 26/Xcode 26.6, and a physical Bota device. This app uses Expo 57 / React Native 0.86.3, Android API 26+, and iOS 16.4+ (Expo's floor). Expo Go cannot load the native SDK.
 
 From this directory:
 
@@ -35,4 +35,4 @@ For hardware acceptance record OS, phone, device model, firmware, SDK version, p
 
 CI explicitly selects the installed CocoaPods gem (`pod _1.16.2_`) because the runner may also contain a newer version.
 
-The example workflow now also generates the iOS host on macOS, installs CocoaPods 1.16.2 dependencies, and builds the application against the published SDK using Xcode 26.3 and a generic iOS Simulator destination. The generated Xcode project, Pods, and local signing state remain untracked. Build evidence is preserved as a CI artifact; the [review](../../docs/independent-examples-review.md) records the result. This unsigned simulator build does not test Bluetooth or establish physical iPhone acceptance.
+The example workflow generates the iOS host on macOS 26, installs CocoaPods 1.16.2 dependencies, and builds the application against the published SDK using Xcode 26.6 and a generic iOS Simulator destination. Xcode 26.3 fails while compiling Expo's `RuntimeScheduler` ownership annotations ([upstream report](https://github.com/expo/expo/issues/50067)); use the documented toolchain without patching Expo's native memory ownership. The generated Xcode project, Pods, and local signing state remain untracked. Build evidence is preserved as a CI artifact; the [review](../../docs/independent-examples-review.md) records the result. This unsigned simulator build does not test Bluetooth or establish physical iPhone acceptance.
