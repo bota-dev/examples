@@ -60,6 +60,8 @@ The end-to-end directory is therefore not created as an empty scaffold or advert
 
 ## Completion boundary
 
+Continuation on 2026-09-29: npm still reports `beta: 2.0.0-beta.7` (`latest` remains beta.0), and the public beta.7 provisioning material still exposes raw `deviceToken`. No newly published contract closes the target-binding blocker. Added a macOS/Xcode 26.3/CocoaPods 1.16.2 iOS Simulator application build to the React Native example workflow; its result is pending. Public example catalog links and compatibility wording are being reconciled with the docs repository. Physical tests and the target recording-sync replacement remain separate gates.
+
 Implementation, public dependency installation, automated checks, native builds for the advertised macOS/Android hosts, API live verification, documentation, and push are complete for the eight independent examples. This is **partial completion of the broader migration plan**: the full recording-sync replacement, hardware acceptance, RN iOS linking, live webhook deployment, and legacy retirement are not complete. No production or hardware conformance is inferred from CI.
 
 ## Documentation propagation

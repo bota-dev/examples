@@ -30,3 +30,7 @@ npm run export
 2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Native build evidence is in the [implementation review](../../docs/independent-examples-review.md). iOS linking and physical BLE permission/scan/connect/status/reconnect checks remain unverified. A bundle export alone does not prove native module linkage.
 
 For hardware acceptance record OS, phone, device model, firmware, SDK version, permission grant/denial, correct and incorrect serial, status, radio-off/disconnect behavior, and reconnect result. [Public SDK docs](https://docs.bota.dev/api-reference/client-sdks).
+
+### iOS native build gate
+
+The example workflow now also generates the iOS host on macOS, installs CocoaPods 1.16.2 dependencies, and builds the application against the published SDK using Xcode 26.3 and a generic iOS Simulator destination. The generated Xcode project, Pods, and local signing state remain untracked. Build evidence is preserved as a CI artifact; the [review](../../docs/independent-examples-review.md) records the result. This unsigned simulator build does not test Bluetooth or establish physical iPhone acceptance.
