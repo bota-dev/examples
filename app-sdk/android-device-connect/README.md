@@ -41,6 +41,11 @@ missing radio-off event. Upgrade only after that release is publicly verified,
 then repeat the physical radio-off/reconnect check. Earlier phone results above
 are historical evidence for their recorded source, not this updated listener.
 
+The updated listener was phone-tested separately at `416d27c` with beta.7 on the
+same Samsung / firmware 1.0.19 pair: verified connection, status, explicit
+disconnect clearing the status, reconnect and final disconnect passed using
+the preserved CI APK. Automatic radio-loss recovery remains pending beta.8.
+
 The Kotlin GitHub Actions workflow preserves `app-debug.apk` as
 `kotlin-device-connect-<commit>`. Use that exact artifact for source-matched
 phone checks. CI debug signing keys can differ from local or previous builds;

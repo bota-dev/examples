@@ -139,7 +139,7 @@ This uses the same API already demonstrated by the SDK loss-recovery lab.
 | Requirement | Evidence | Status |
 | --- | --- | --- |
 | Public SDK consumption | Existing Flow API, still pinned to published beta.7 | matched in source |
-| UI observes connection and disconnect state | Activity-scoped collection; null replaces old status; native build passed at `fb0ae5c` | matched in source/build; physical adoption pending |
+| UI observes connection and disconnect state | Activity-scoped collection; null replaces old status; exact CI APK `416d27c` exercised on Samsung / firmware 1.0.19 | matched for verified connect, explicit disconnect and reconnect |
 | Automatic phone radio-loss recovery | Requires the SDK beta.8 fix to be published and adopted | unverified in this example revision |
 
 This source change does not upgrade any dependency or supersede the recorded
@@ -154,3 +154,16 @@ physical adoption check. Artifact creation does not establish device acceptance.
 [Kotlin CI 36645629255](https://github.com/bota-dev/examples/actions/runs/36645629255)
 passed at `fb0ae5c795b39bd23f8f0aff1fee8af438598891`. The subsequent artifact
 retention change leaves the app source and beta.7 dependency unchanged.
+
+Physical listener check at `416d27caad9771f9dbb597b2a841fdbad437e2de` used
+the preserved APK from [CI 36645931006](https://github.com/bota-dev/examples/actions/runs/36645931006),
+SHA-256 `b6d41c2e7cfc4218ac82e98fa7f7ab0753069d5c3e92de24cf124be4ab0c02e8`.
+On Samsung SM-A166U1 / Android 16 and exact SDK-verified Bota Pin
+`4KF6NOHWX0` / firmware 1.0.19: initial null, verified serial, fresh status
+(100% battery, Idle, zero pending recordings), explicit disconnect clearing
+status, verified reconnect and final disconnect all passed. The sample was
+stopped; Bluetooth remained on. Only this sample was reinstalled to resolve the
+CI debug-signature mismatch. No wearable binding, recording, reset or deletion
+occurred. Radio-off was not repeated with beta.7; automatic loss recovery still
+requires published beta.8 adoption. The exact main Kotlin build also passed in
+[CI 36646373292](https://github.com/bota-dev/examples/actions/runs/36646373292).
