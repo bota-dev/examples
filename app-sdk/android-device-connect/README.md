@@ -40,3 +40,9 @@ and is being prepared for beta.8; this listener alone does not fix beta.7's
 missing radio-off event. Upgrade only after that release is publicly verified,
 then repeat the physical radio-off/reconnect check. Earlier phone results above
 are historical evidence for their recorded source, not this updated listener.
+
+The Kotlin GitHub Actions workflow preserves `app-debug.apk` as
+`kotlin-device-connect-<commit>`. Use that exact artifact for source-matched
+phone checks. CI debug signing keys can differ from local or previous builds;
+uninstall only this sample if Android reports a signature mismatch, then
+install the verified new APK. Uninstalling the sample clears its local app data.

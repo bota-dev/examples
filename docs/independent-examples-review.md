@@ -139,7 +139,7 @@ This uses the same API already demonstrated by the SDK loss-recovery lab.
 | Requirement | Evidence | Status |
 | --- | --- | --- |
 | Public SDK consumption | Existing Flow API, still pinned to published beta.7 | matched in source |
-| UI observes connection and disconnect state | Activity-scoped collection; null replaces old status | implemented; build verification tracked by Kotlin workflow |
+| UI observes connection and disconnect state | Activity-scoped collection; null replaces old status; native build passed at `fb0ae5c` | matched in source/build; physical adoption pending |
 | Automatic phone radio-loss recovery | Requires the SDK beta.8 fix to be published and adopted | unverified in this example revision |
 
 This source change does not upgrade any dependency or supersede the recorded
@@ -147,3 +147,10 @@ beta.7 hardware results. SDK release preparation and the later exact-pin upgrade
 remain separate. Reviewed against examples architecture connection/lifecycle
 ownership; token search for `connectionUpdates` and the Kotlin example path
 found no changed wire/API contract requiring an external documentation update.
+
+The Kotlin workflow also preserves the exact-commit debug APK for the later
+physical adoption check. Artifact creation does not establish device acceptance.
+
+[Kotlin CI 36645629255](https://github.com/bota-dev/examples/actions/runs/36645629255)
+passed at `fb0ae5c795b39bd23f8f0aff1fee8af438598891`. The subsequent artifact
+retention change leaves the app source and beta.7 dependency unchanged.
