@@ -1,0 +1,192 @@
+# Bota Examples Architecture
+
+Status: target repository design with an inspected legacy baseline. This document does not claim that planned examples or migration gates are implemented.
+
+## 1. Purpose and scope
+
+Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
+
+Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
+
+Bota One is the internal reference application: it demonstrates a real customer application built on the SDK and backend API. It is a source of integration lessons, not a dependency or template to copy wholesale. Its private helpers, native modules, infrastructure, deployment accounts, branding, and application state do not become example prerequisites.
+
+Non-goals: a second SDK, a reusable example framework, a production SaaS starter, feature parity with Bota One, firmware implementations, and platform administration through `/dashboard/*`.
+
+## 2. Repository organization
+
+Target layout; create directories only when their example is implemented:
+
+```text
+examples/
+  README.md                         # Catalog, current status, entry points
+  ARCHITECTURE.md                    # Design and migration/acceptance gates
+  AGENTS.md                         # Canonical contributor/agent rules
+  CLAUDE.md                         # Claude entry point; refers to AGENTS.md
+  api/
+    upload-and-transcribe-node/
+    webhook-receiver-node/
+  app-sdk/
+    react-native-device-connect/
+  end-to-end/
+    react-native-recording-sync/
+      app/
+      backend/
+      README.md
+  .github/workflows/                # Checks selected by changed example
+  apps/                            # Existing legacy pair during migration
+    backend/
+    react-native/
+```
+
+Add Python, Apple, Android, Flutter, or Web examples when a concrete workflow and published support justify them. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
+
+### Independence and dependencies
+
+- The unit of installation is an example directory. A reader can copy that directory and follow its README without sibling repositories or other examples.
+- Each new example owns its dependency manifest and appropriate lockfile. An end-to-end example may own a local workspace joining its app and backend with one lockfile.
+- Do not add new examples to the legacy root `apps/*` npm workspace. Keep the existing root workspace and lockfile until its consumers migrate.
+- Avoid root runtime packages, shared authentication servers, cross-example source imports, Git submodules, unpublished artifacts, and local `file:` dependencies on Bota repositories.
+- Small teaching helpers may be repeated to keep examples self-contained. Substantial reusable protocol logic belongs in the SDK or platform, not an examples utility library.
+- Root automation can orchestrate checks; it must not become a runtime prerequisite.
+
+## 3. Integration and ownership
+
+```text
+API-only script (developer's server environment)
+  -> Bota public API -> upload storage / processing / results
+
+Physical device <-> App using published App SDK
+                      | authenticated application requests
+                      v
+                Customer-owned backend -> Bota public API
+                      |
+                      +-> scoped upload authorization -> App -> storage
+
+Bota webhook delivery -> customer receiver -> application processing
+```
+
+| Component | Owns |
+| --- | --- |
+| App SDK | Supported device transport, protocol, and device workflows exposed by its public release |
+| Example app | Permissions, selection, UI, SDK lifecycle, and documented host callbacks/persistence |
+| Customer backend | App-user authentication, project/end-user mapping, resource authorization, Bota API credentials and orchestration |
+| Bota platform | Authoritative device/recording resources, cloud audio, transcription, summaries, and platform processing |
+| API-only script | Explicit developer-selected inputs and credentials in a server/CLI environment |
+
+The customer backend may persist identity mappings and necessary recovery state. Do not mirror the platform's entire recording/transcription database merely to support an example.
+
+### Authentication and authorization
+
+Use public `/v1/*` contracts. App-facing backends must validate caller identity, derive project/end-user context from trusted server-side configuration or mappings, and check ownership for every resource operation. A request's workspace header, end-user ID, or device ID is not authorization. Constrain proxy routes and accepted fields; never expose a generic forwarder using a privileged API key.
+
+For an initial local end-to-end sample, a documented single-user mode is acceptable: the backend uses a fixed test identity and requires a separate developer-configured app access token, with no built-in default. This is a local test credential, not a Bota API key or a production identity system. Bind locally by default and document deliberate LAN access for physical phones. Hosted or multi-user variants must replace this mode with verified user authentication and per-user authorization. Do not imply that adding CORS provides authentication.
+
+Keep `sk_*` and `rk_*` credentials server-side. Redact authorization headers, device tokens, signed upload URLs, provisioning envelopes, and audio contents from logs. Clients may receive only the scoped grants, opaque material, and upload authorization required by the public workflow. Use HTTPS for hosted endpoints.
+
+### Device lifecycle and recording durability
+
+Apply these contracts only when an example includes the corresponding feature; a connect/status sample need not implement binding, reset, or upload.
+
+- Verify the selected physical device through SDK identity reads, including its exact serial number; advertised names are discovery hints.
+- Binding follows prepare -> physical-device provisioning -> confirm of the exact attempt. Abort unsuccessful attempts without deleting the stable device row. The target relays a device-bound opaque provisioning payload; raw-token provisioning is a tracked compatibility gap. Preserve binding-generation checks when reconciling late results.
+- Use backend-issued action authorization and the public SDK for protected recording control. Do not implement GATT opcodes or cryptography in examples.
+- Describe the selected upload profile and capability requirements. Preserve stable recording/session identity during recovery, handle unknown outcomes, and report transfer, cloud completion, transcription, and summary as distinct states.
+- Delete a device recording only after the selected protocol's required durable confirmation. A successful byte transfer or a transcription request alone is not deletion authority.
+- If supporting direct WiFi/4G upload plus BLE fallback, establish fresh evidence that device upload ownership is inactive before starting BLE. Disconnect/timeout does not establish inactivity.
+- Keep unbind and factory reset distinct. Reset examples, if later added, must preserve the durable exact-command completion flow and generation fencing; they are outside the initial catalog.
+
+If the installed public SDK/API/firmware combination cannot support a target requirement, mark the feature blocked or explicitly limited. Do not silently reproduce Bota One's workaround or downgrade a required security profile.
+
+### Asynchronous API workflows
+
+API upload examples must follow the public upload/finalization contract before requesting processing. Use bounded polling with terminal-error handling or documented webhooks to retrieve asynchronous results. Retry only when the operation's documented idempotency/recovery behavior makes it safe; do not create duplicate recordings or processing jobs blindly.
+
+The webhook example must use the public verification format, preserve the input bytes that verification requires, and handle duplicate events. It must document delivery/retry semantics and acknowledge only after the example's stated acceptance/durability step. Do not invent signature headers or claim exactly-once delivery.
+
+## 4. Example contract
+
+Every new example README must include:
+
+1. One-sentence learning objective, expected outcome, and explicit exclusions.
+2. Status: planned, implemented but unverified, verified for a stated combination, or legacy/deprecated. Distinguish mocked, live API, native-build, and physical-device evidence.
+3. Prerequisites: language/toolchain, OS, SDK exact version and release channel, API environment, project/end user, hardware/firmware/capabilities when relevant.
+4. Dependency installation and configuration from the example directory, with placeholder-only `.env.example` or platform equivalent. Explain each value and which component may see it.
+5. Exact run commands, expected visible result, failure/recovery behavior, and cleanup of any cloud resources or device recordings it creates.
+6. Local verification commands and a dated compatibility/evidence table; say `not run` for missing checks.
+7. Links to public contracts, known limitations, and instructions for adapting to a customer application.
+
+Keep one primary path through the example. Pin direct Bota SDK dependencies to an exact publicly installable version, including beta suffixes; preserve native lock/resolution files where supported. Select versions at implementation time after public installation verification, rather than inheriting whichever source version Bota One currently uses. Respect host callback obligations and platform support limits.
+
+There is no synchronized release version for the examples collection. Update each example's dependency pin and evidence together. Catalog rows identify support and status; tags are optional snapshots, not compatibility guarantees for every example.
+
+## 5. Current baseline and migration
+
+Initial inspection used examples commit `7d817bb5b6c35902b7096c80b10085083eadd9d2`; the baseline below was reconciled with main `36684e0`, including the App SDK migration `64a9fd0`, before committing. This design changes documentation only. The existing workspace is legacy in layout and lifecycle scope, not in SDK package selection.
+
+| Current evidence | Consequence / migration gate |
+| --- | --- |
+| Root `package.json` declares `apps/*`, one lockfile, security tests, typechecks and workspace builds | Retain current commands until replacement paths and CI are implemented |
+| App pins `@bota.dev/react-native-app-sdk@2.0.0-beta.6`; old standalone SDK packages and BLE PLX were removed | Preserve the published SDK migration and select/verify appropriate versions for new examples |
+| Expo 57 native matrix aligned; prior migration CI passed all-platform exports and Android native build | Historical Hermes export failure superseded; iOS native linking and physical-device acceptance remain open |
+| `apps/backend/src/index.ts` has open CORS, no caller auth, a fixed `BOTA_END_USER_ID`, and unscoped resource access | Legacy local-only sample; implement the new backend boundary before publishing a replacement |
+| Register/token routes call immediate `/bind` and return `device_token`; app provisions it directly | Does not implement the target prepare/provision/confirm lifecycle or opaque payload boundary |
+| Existing upload-complete handler separately attempts transcription and may return a nested error | Replacement must distinguish cloud completion from processing failure and document safe retry |
+| Root CI runs `npm ci`, regression tests, typechecks, backend build, all-platform exports, and a separate Android native build | Prior results are in [migration evidence](docs/app-sdk-migration.md); no live API or physical-device acceptance claim |
+
+Migration sequence:
+
+1. Implement `api/upload-and-transcribe-node` independently; verify with a disposable audio fixture and explicit project configuration.
+2. Add the webhook receiver and focused React Native connect/status sample. Verify their own contracts independently.
+3. Implement the end-to-end example with a contained app/backend workspace. Reimplement the workflow using current public packages/contracts; use the existing sample and Bota One for reference.
+4. Verify replacement native builds, binding recovery, upload completion/retry, and physical-device behavior for each advertised platform. Document any unsupported profile instead of claiming broad parity.
+5. Update catalog and external documentation links. Retire `apps/` and root workspace scripts only after replacement setup works from a clean checkout, existing dependency security coverage has been retained or superseded, and old links have migration guidance.
+
+No source moves, package upgrades, new workflows, device operations, or deployments are part of this design change.
+
+## 6. Validation and CI design
+
+New CI jobs should install and check only the affected independent examples; shared CI changes must select all impacted jobs. Use platform-appropriate runners for native builds. Keep the current legacy job until the legacy workspace is retired.
+
+Default PR checks require no live credentials or physical devices. Use meaningful unit/contract checks for request construction, authorization rejection, webhook verification, duplicate handling, or recovery as applicable. Mark mocks as mocks. Live API smoke tests are explicitly configured against disposable resources; hardware tests record device/firmware, OS, SDK version, scenario, date, and outcome. Never run destructive hardware actions or live deployments as incidental PR checks.
+
+Acceptance gates for a new example:
+
+| Gate | Required evidence |
+| --- | --- |
+| Independent setup | Clean install/run from its own directory, using no private Bota dependencies |
+| Public compatibility | Exact published package installs; used methods/endpoints exist in the selected contract |
+| Trust boundary | No client API keys; backend auth/ownership and malformed-input rejection exercised where applicable |
+| Workflow | Advertised success and relevant retry/failure paths demonstrated |
+| Platform claims | Native build and physical-device evidence for each claimed device workflow; missing checks explicitly labeled |
+| Documentation | Catalog, example instructions, version/status evidence, and design deviations agree |
+
+## 7. Reference basis and design review
+
+Maintainer reference map (private sibling paths are optional context, never reader prerequisites):
+
+| Source | Lesson / authority |
+| --- | --- |
+| Public Bota documentation and selected published SDK reference | Runnable example's external interface and compatibility contract |
+| `bota-one/amplify/functions/shared/workspace-context.ts` | Derive caller scope from verified identity, not a client workspace selector |
+| `bota-one/amplify/functions/shared/encrypted-upload-v2-proxy.ts` | Validate inputs and authorize owned devices/recordings before privileged calls |
+| `bota-one/app/lib/sync/deviceUploadHandoff.ts` | BLE fallback requires known inactive device upload ownership |
+| `bota-one/app/lib/sync/nativeEncryptedUploadV2Provider.ts` | Recovery and host-side responsibilities may exceed the SDK alone; private native modules are not public SDK features |
+| `internal-docs/App SDK Architecture.md` | App SDK/API SDK separation and SDK-local development examples |
+| `internal-docs/device/Device-Provisioning.md` | Normative binding, identity, generation, and reset lifecycle |
+| `internal-docs/device/Upload-Management.md` | Upload profile, durability, recovery, and confirmation requirements |
+
+Bota One source was inspected at local HEAD `5e2c276`; it is reference evidence, not proof of public release or deployed/hardware conformance. Internal target designs may precede public availability. Preserve that distinction when implementing examples.
+
+Documentation review, 2026-09-28:
+
+| Requirement | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Design one examples repo before implementation | Sections 1-2 and README catalog | Matched for design; example implementation not started |
+| Use Bota One as reference without private dependencies | Sections 3 and 7, contributor rules | Matched for design; clean public installs remain implementation gates |
+| Provide architecture and both agent entry points plus README | Four root documents with one canonical agent rule set | Matched for documentation |
+| Preserve concurrently merged App SDK migration | Baseline reconciled with `36684e0`; README and agent notes retain beta.6, Node floor, and migration evidence | Matched for documentation; no new runtime checks |
+| Preserve current source and distinguish legacy gaps | Section 5 and README existing-sample instructions | Matched by source/manifest inspection; native/API/device checks not run |
+| Honor current device lifecycle and durability requirements | Section 3, migration and acceptance gates | Matched as target requirements; legacy implementation remains partial |
+| Keep affected documentation coherent | Token search across public/internal docs and repo instruction/overview files | Existing paths/packages preserved; external runnable-example claims must be revisited during migration |
+
+The shared `bota-skills:compound-engineering` 1.2.5 workflow was used for this review. All four documents passed local-link and fenced-code checks; documented npm commands were checked against the current manifests. The tracked diff passed `git diff --check`. Dependency installs, builds, live API calls, hosted CI, and physical-device tests were not run for this documentation-only change. No runtime or production conformance is claimed.
