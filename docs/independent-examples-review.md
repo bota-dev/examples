@@ -9,21 +9,21 @@ Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow
 | Node upload/transcribe | Node 22.23.2, no dependencies | 15 tests, live hash verification and transcription; [prior CI](https://github.com/bota-dev/examples/actions/runs/36524299811) | Other formats/providers and live outage recovery |
 | Python upload/transcribe | Python 3.12, standard library | Local contract tests; live synthetic WAV upload, server hash verification, completed transcription | Other formats/providers and live outage recovery |
 | Node webhook receiver | Node 22.23.2 built-in SQLite | Local HTTP/SQLite tests for authenticity, duplicates, restart, conflicts, limits | Actual Bota delivery to deployed HTTPS receiver; business worker intentionally outside scope |
-| React Native connect | npm beta.7, Expo 57, RN 0.86.3 | Public install, typecheck, identity tests, Android export, zero npm audit findings | Native build pending; iOS link and physical BLE checks unverified |
-| Web connect | npm beta.7, Vite | Public install, TypeScript and WASM production build | Browser/firmware BLE session |
-| Apple connect | SwiftPM exact beta.7 tag and binary checksum | Public tag/manifest inspected; macOS CI configured | Native build pending; macOS permissions and BLE session |
-| Android connect | Maven Central beta.7, Gradle 8.13 | Public artifact resolves; native compilation in progress | Native build pending; Android permissions and BLE session |
-| Flutter connect | pub.dev beta.7, Flutter 3.47.5 | Public artifact verified; Android host implemented; CI configured | Hosted resolution/build pending; Android permissions and BLE session |
+| React Native connect | npm beta.7, Expo 57, RN 0.86.3 | Public install, typecheck, identity tests, Android export, zero npm audit findings | Android arm64 debug APK built locally; iOS link and physical BLE checks unverified |
+| Web connect | npm beta.7, Vite | Public install, TypeScript and WASM production build; Vite updated to 7.3.6 and npm audit clean | Browser/firmware BLE session |
+| Apple connect | SwiftPM exact beta.7 tag and binary checksum | Public tag/manifest inspected; [macOS CI build passed](https://github.com/bota-dev/examples/actions/runs/36526849885) | macOS permissions and BLE session |
+| Android connect | Maven Central beta.7, Gradle 8.13 | Public artifact resolves; local debug APK assembly passed | Android permissions and BLE session |
+| Flutter connect | pub.dev beta.7, Flutter 3.47.5 | Public artifact verified; Android host implemented; CI configured | Hosted resolution passed; analyzer/style fix and APK build pending; Android permissions and BLE session |
 
 The live Python run retained `rec_oYZSXYnJcj8Zt3poS4LrOkvC` / `txn_o60mEyL54AfOXb2etr24U2lG`, using the same reserved test key and dedicated end user as the Node verification. Effective auto-processing was disabled. The 333,326-byte fixture is synthetic speech. Secrets, audio, and transcript remain ignored local files. No physical devices were changed.
 
-Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against Flutter's `meta 1.18.0` pin. Flutter 3.47.5 is selected for hosted verification; Windows Application Control prevented its Dart tool from launching locally. No security policy was changed. Native build and dependency-resolution statuses will be updated from CI before completion is reported.
+Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against Flutter's `meta 1.18.0` pin. Flutter 3.47.5 is selected for hosted verification; Windows Application Control prevented its Dart tool from launching locally. Hosted resolution passed; analyzer found missing braces, corrected before the next run. No security policy was changed. Native build and dependency-resolution statuses will be updated from CI before completion is reported.
 
 ## Design comparison
 
 | Requirement | Implementation evidence | Status / acceptance limit |
 | --- | --- | --- |
-| §2: independent examples, no root runtime | Own manifests and lockfiles; Python standard library; native platform project files | Matched except Flutter resolution lock pending hosted toolchain |
+| §2: independent examples, no root runtime | Own manifests and lockfiles; Python standard library; native platform project files | Matched; Flutter lock resolved by hosted toolchain |
 | §3: public packages and API, no private Bota One helpers | npm/pub.dev/Maven Central beta.7; public Swift tag; public `/v1` HTTP | Matched for implemented workflows; no sibling dependencies |
 | §3: server credential boundary | API keys stay in ignored server config; tests assert no API bearer on storage PUT; device examples have no keys | Matched locally |
 | §3: identity from device read-back | RN verifies connected serial and disconnects on mismatch; other facades receive exact expected serial | Matched in source and RN unit test; physical verification unverified |

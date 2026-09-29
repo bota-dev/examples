@@ -29,11 +29,12 @@ class _ConnectPageState extends State<ConnectPage> {
     try {
       await action();
     } catch (_) {
-      if (mounted)
+      if (mounted) {
         setState(
           () => message =
               'Operation failed. Check Bluetooth, permissions, and exact serial.',
         );
+      }
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -46,10 +47,11 @@ class _ConnectPageState extends State<ConnectPage> {
         : [Permission.locationWhenInUse];
     final grants = await permissions.request();
     if (grants.values.any((status) => !status.isGranted)) {
-      if (mounted)
+      if (mounted) {
         setState(
           () => message = 'Grant Bluetooth access in Settings, then retry.',
         );
+      }
       return;
     }
     if (!mounted) return;
@@ -63,11 +65,12 @@ class _ConnectPageState extends State<ConnectPage> {
         if (mounted) setState(() => connected = device);
       },
       onError: (Object error) {
-        if (mounted)
+        if (mounted) {
           setState(() {
             connected = null;
             message = 'Connection lost. Scan to reconnect.';
           });
+        }
       },
     );
     setState(() {
@@ -88,14 +91,16 @@ class _ConnectPageState extends State<ConnectPage> {
         if (mounted) setState(() => devices[device.id] = device);
       },
       onError: (Object error) {
-        if (mounted)
+        if (mounted) {
           setState(
             () => message = 'Scan failed. Check Bluetooth and permissions.',
           );
+        }
       },
       onDone: () {
-        if (mounted)
+        if (mounted) {
           setState(() => message = 'Scan finished. Select a device.');
+        }
       },
     );
   }
@@ -152,11 +157,12 @@ class _ConnectPageState extends State<ConnectPage> {
                         candidate,
                         serialNumber: expected,
                       );
-                      if (mounted)
+                      if (mounted) {
                         setState(() {
                           connected = device;
                           message = 'Verified serial: ${device.serialNumber}';
                         });
+                      }
                     }),
               child: Text(
                 '${candidate.name ?? 'Bota device'} - ${candidate.rssi} dBm',
@@ -168,11 +174,12 @@ class _ConnectPageState extends State<ConnectPage> {
               ? null
               : () => run(() async {
                   final status = await client.devices.readStatus();
-                  if (mounted)
+                  if (mounted) {
                     setState(
                       () => message =
                           'Battery: ${status.batteryLevel}%\nState: ${status.state}\nPending recordings: ${status.pendingRecordings}',
                     );
+                  }
                 }),
           child: const Text('Read status'),
         ),
@@ -181,11 +188,12 @@ class _ConnectPageState extends State<ConnectPage> {
               ? null
               : () => run(() async {
                   await client.devices.disconnect();
-                  if (mounted)
+                  if (mounted) {
                     setState(() {
                       connected = null;
                       message = 'Disconnected.';
                     });
+                  }
                 }),
           child: const Text('Disconnect'),
         ),

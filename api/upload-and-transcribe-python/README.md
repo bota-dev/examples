@@ -32,6 +32,6 @@ Expected stdout: JSON with `recording_id`, `transcription_id`, and `text`; progr
 python -m unittest -v
 ```
 
-2026-09-29: two local contract tests pass (425 retry and credential boundary; failed creation is never retried). Live verification with the reserved test key, auto-processing disabled, and a 333,326-byte synthetic WAV passed server hash verification and returned a completed transcription: `rec_oYZSXYnJcj8Zt3poS4LrOkvC`, `txn_o60mEyL54AfOXb2etr24U2lG`. Other formats/providers and live outage recovery are unverified. See [implementation review](../../docs/independent-examples-review.md) for CI evidence.
+2026-09-29: three local contract tests pass (425 retry and credential boundary; failed creation is never retried; unverified completion blocks processing). Live verification with the reserved test key, auto-processing disabled, and a 333,326-byte synthetic WAV passed server hash verification and returned a completed transcription: `rec_oYZSXYnJcj8Zt3poS4LrOkvC`, `txn_o60mEyL54AfOXb2etr24U2lG`. Other formats/providers and live outage recovery are unverified. See [implementation review](../../docs/independent-examples-review.md) for CI evidence.
 
 Public contracts: [recordings](https://docs.bota.dev/api-reference/recordings/create), [Bota documentation](https://docs.bota.dev).

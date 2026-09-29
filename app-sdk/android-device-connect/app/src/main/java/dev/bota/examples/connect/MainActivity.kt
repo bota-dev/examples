@@ -1,4 +1,4 @@
-﻿package dev.bota.examples.connect
+package dev.bota.examples.connect
 
 import android.Manifest
 import android.app.Activity
@@ -39,7 +39,7 @@ class MainActivity : Activity() {
             val seen = mutableSetOf<String>()
             client.devices.startScan().collect { candidate ->
                 if (seen.add(candidate.id)) devices.addView(Button(this@MainActivity).apply {
-                    text = "${candidate.name ?: "Bota device"} Â· ${candidate.rssi} dBm"
+                    text = "${candidate.name ?: "Bota device"} · ${candidate.rssi} dBm"
                     setOnClickListener { perform {
                         val expected = serial.text.toString().trim()
                         require(expected.isNotEmpty())
@@ -92,4 +92,3 @@ class MainActivity : Activity() {
         super.onDestroy()
     }
 }
-

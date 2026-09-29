@@ -22,4 +22,4 @@ npm run typecheck
 npm run build
 ```
 
-2026-09-29: public package installation, TypeScript check, and Vite production build (including SDK WASM) pass locally. Actual browser Bluetooth pairing/status and supported-firmware coverage remain unverified. See [implementation review](../../docs/independent-examples-review.md) for CI evidence and the [SDK reference](https://docs.bota.dev/api-reference/client-sdks).
+2026-09-29: public package installation, TypeScript check, and Vite 7.3.6 production build (including SDK WASM) pass locally; npm audit reports zero vulnerabilities. Actual browser Bluetooth pairing/status and supported-firmware coverage remain unverified. See [implementation review](../../docs/independent-examples-review.md) for CI evidence and the [SDK reference](https://docs.bota.dev/api-reference/client-sdks).
