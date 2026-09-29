@@ -114,7 +114,7 @@ Tests cover upload bytes and credential isolation, ordered hash confirmation and
 | Standalone frozen install and syntax | Passed on Windows, Node 22.23.2; no external packages or sibling dependencies |
 | Local workflow/CLI tests | 15 passed, including real local HTTP transport with simulated API responses |
 | Public request/response contract | Reviewed against Bota's public OpenAPI source and upload/transcription docs; no SDK package is used |
-| Hosted CI | Workflow added for changes to this directory or its workflow; not run yet |
+| Hosted CI | [Run 36524299811](https://github.com/bota-dev/examples/actions/runs/36524299811) passed for source `fb06b1e`: standalone install, syntax, and all 15 tests on Ubuntu / Node 22.23.2 |
 | Live Bota upload, integrity verification, and ASR | Passed 2026-09-29 UTC: test key, dedicated end user, 333,326-byte synthetic WAV; matching SHA-256 verified at 05:00:13 UTC; one completed Deepgram job |
 
 Design review: standalone setup, secret isolation, upload-before-transcription ordering, bounded failure handling, and source preservation match the example architecture in local checks. The live run additionally verified storage upload, hash-only completion, and transcript retrieval with one completed job. The transcript recognized the synthetic sentence, rendering the brand name "Bota" as "Boda"; this is workflow evidence, not an ASR accuracy benchmark. Live outage/restart recovery and other audio formats/providers were not tested. The optional-size replay discrepancy above remains a platform follow-up.
