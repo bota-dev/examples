@@ -1,5 +1,10 @@
 # AGENTS.md - Bota Examples
 
+## Post-Implementation Design Review
+
+- Before reporting completion, use `bota-skills:compound-engineering` (1.2.5+) to compare results with the current authoritative design and acceptance criteria. See the [shared review workflow](../claude-code-plugins/plugins/bota-skills/skills/compound-engineering/SKILL.md).
+- If the skill/source is unavailable, perform the review directly: record each relevant requirement, evidence, conformance status, and remaining verification; update affected docs and report deviations or unavailable checks without claiming full conformance.
+
 ## Read first
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
