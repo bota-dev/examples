@@ -33,4 +33,6 @@ For hardware acceptance record OS, phone, device model, firmware, SDK version, p
 
 ### iOS native build gate
 
+CI explicitly selects the installed CocoaPods gem (`pod _1.16.2_`) because the runner may also contain a newer version.
+
 The example workflow now also generates the iOS host on macOS, installs CocoaPods 1.16.2 dependencies, and builds the application against the published SDK using Xcode 26.3 and a generic iOS Simulator destination. The generated Xcode project, Pods, and local signing state remain untracked. Build evidence is preserved as a CI artifact; the [review](../../docs/independent-examples-review.md) records the result. This unsigned simulator build does not test Bluetooth or establish physical iPhone acceptance.

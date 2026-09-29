@@ -59,10 +59,11 @@ jobs:
         run: |
           xcodebuild -version
           gem install --no-document cocoapods -v 1.16.2
-          test "$(pod --version)" = 1.16.2
+          echo "$(ruby -e 'print Gem.bindir')" >> "$GITHUB_PATH"
+          "$(ruby -e 'print Gem.bindir')/pod" _1.16.2_ --version
       - run: npm ci
       - run: npx expo prebuild --platform ios --no-install
-      - run: pod install --project-directory=ios
+      - run: pod _1.16.2_ install --project-directory=ios
       - name: Build application with the published native SDK
         shell: bash
         run: |
