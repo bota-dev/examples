@@ -6,7 +6,7 @@ Each new example will have its own setup, dependencies, verification steps, and 
 
 ## Current status
 
-The repository architecture is defined; the new catalog below is **planned, not implemented**. The existing React Native/backend pair remains at its original paths while it is evaluated for migration.
+The first independent API example is implemented and locally tested. The remaining catalog entries are planned. The existing React Native/backend pair remains at its original paths while it is evaluated for migration.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -17,13 +17,13 @@ The existing app pins `@bota.dev/react-native-app-sdk@2.0.0-beta.6` (beta), app 
 
 See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [SDK migration and verification](docs/app-sdk-migration.md) records successful all-platform exports and an Android native build, superseding the historical Hermes export failure. [Dependency security](DEPENDENCY_SECURITY.md) records required installation patches and regression checks. iOS native linking and physical-device acceptance remain unverified.
 
-## Planned example catalog
+## Example catalog
 
-Paths in this table are reserved names, not runnable directories.
+Linked entries are implemented; unlinked paths are planned. Each example documents its own verification limits.
 
 | Order | Planned path | What it teaches | Physical device |
 | --- | --- | --- | --- |
-| 1 | `api/upload-and-transcribe-node/` | Upload a local audio file, confirm completion, request transcription, retrieve the result | No |
+| 1 | [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Upload local audio, verify completion, request transcription, retrieve text; locally tested, live API verification pending | No |
 | 2 | `api/webhook-receiver-node/` | Verify webhook authenticity using the public contract and handle duplicate delivery | No |
 | 3 | `app-sdk/react-native-device-connect/` | Initialize the published SDK, select and verify a device, connect, read status, disconnect | Yes |
 | 4 | `end-to-end/react-native-recording-sync/` | App + customer backend: binding, device recording upload, transcription, summary | Yes |
@@ -89,4 +89,4 @@ These commands cover dependency and upload-completion regression checks, workspa
 - [Claude Code entry point](CLAUDE.md): shared instructions for Claude Code.
 - [Bota public documentation](https://docs.bota.dev): API and SDK integration contracts.
 
-Select one planned example and implement it through its acceptance gates before expanding the catalog.
+Start with [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.

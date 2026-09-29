@@ -9,7 +9,7 @@
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository currently contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The new `api/`, `app-sdk/`, and `end-to-end/` catalog is planned. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented and locally tested; its live API gate remains open. Other catalog entries are planned. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
 
@@ -39,6 +39,8 @@ Before editing, state scope and assumptions, inspect the relevant public API/SDK
 Implement only the requested example/change. Keep pending target requirements and compatibility limitations explicit. A source implementation, mock test, native build, live API test, and physical-device test are different evidence levels.
 
 For new examples, run their own documented install/check commands. Add meaningful checks for the changed behavior, especially authorization rejection, webhook verification, or retry/durability logic. Do not add tests that merely assert document text or mirror implementation details.
+
+For `api/upload-and-transcribe-node/`, run `npm ci`, `npm run check`, and `npm test` from that directory. It uses Node built-ins and its own lockfile; no root install is needed. Its path-filtered workflow uses no live credentials. Follow its README before live verification; the test end user's auto-transcription must be disabled because this example creates the job explicitly.
 
 Legacy workspace commands, from repository root:
 

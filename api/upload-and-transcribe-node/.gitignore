@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+transcript.json
+*.wav
+*.mp3
+*.m4a
+*.ogg
+*.opus
+*.flac
+*.webm
+*.aac

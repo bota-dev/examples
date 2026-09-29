@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: target repository design with an inspected legacy baseline. This document does not claim that planned examples or migration gates are implemented.
+Status: target repository design with an inspected existing-workspace baseline. The first independent Node API example is implemented and locally tested; its live API gate remains open. Other catalog entries and migration gates remain planned.
 
 ## 1. Purpose and scope
 
@@ -14,7 +14,7 @@ Non-goals: a second SDK, a reusable example framework, a production SaaS starter
 
 ## 2. Repository organization
 
-Target layout; create directories only when their example is implemented:
+Target layout; `api/upload-and-transcribe-node/` exists. Create other planned directories only when their example is implemented:
 
 ```text
 examples/
@@ -141,7 +141,25 @@ Migration sequence:
 4. Verify replacement native builds, binding recovery, upload completion/retry, and physical-device behavior for each advertised platform. Document any unsupported profile instead of claiming broad parity.
 5. Update catalog and external documentation links. Retire `apps/` and root workspace scripts only after replacement setup works from a clean checkout, existing dependency security coverage has been retained or superseded, and old links have migration guidance.
 
-No source moves, package upgrades, new workflows, device operations, or deployments are part of this design change.
+The initial design change made no source moves, package upgrades, new workflows, device operations, or deployments. The subsequent first-example implementation is recorded below.
+
+### First independent example: upload and transcribe
+
+[`api/upload-and-transcribe-node/`](api/upload-and-transcribe-node/README.md) implements create recording -> scoped storage PUT -> SHA-256 completion (exact `425` retry until `200`) -> explicit transcription -> bounded result polling. It uses Node built-ins, owns its lockfile, and has a separate path-filtered CI workflow. It never deletes the local source or automatically retries creation requests. Effective auto-transcription must be disabled for the test end user to avoid a duplicate automatic job.
+
+The example intentionally has no restart journal or automatic recovery after ambiguous requests; its README explains reconciliation using recorded IDs and the generated recording name. It accepts local files up to 25 MiB, a teaching-example memory bound rather than an API service limit. It does not implement device workflows.
+
+| Requirement | Evidence | Review status |
+| --- | --- | --- |
+| Independent setup | Own manifest/lockfile, no dependencies; frozen install and CLI copied to temporary directory | Matched locally on Node 22.23.2 / Windows |
+| Public API contracts | Public OpenAPI source and upload/transcription pages; explicit `api_upload` / `import` recording | Matched by source review; deployed API behavior unverified |
+| Credential boundary | Tests assert API bearer is absent from storage PUT and secrets are absent from progress/errors | Matched in local tests |
+| Integrity before processing | Exact bytes/hash tests; repeated `425`; HTTP/hash failure prevents transcription | Matched in local tests |
+| Bounded failures and source preservation | Deadline, terminal-status, non-retry creation, and source-byte checks | Matched in local tests; live failure recovery unverified |
+| Verification and documentation | 15 tests pass, syntax check passes; example README, root catalog, agent entries updated | Matched locally; hosted CI not run |
+| Live acceptance | No disposable test project/credential configured for this task | Unverified; live upload, hash verification, and ASR remain required |
+
+The compound-engineering review uses the repository architecture and public contracts as its basis. Cross-repo searches for the new path, configuration variables, upload completion, SHA-256, and auto-transcription identified existing contract/reference docs; their semantics are unchanged. Updates are contained to this repository's example and contributor documentation. No production or hardware conformance is inferred from local tests.
 
 ## 6. Validation and CI design
 
