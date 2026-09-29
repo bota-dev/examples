@@ -20,6 +20,8 @@ The SDK verifies connected identity, not the advertised name. Selection cancels 
 
 ## Verify
 
+The example workflow preserves `flutter-connect-debug-apk` for on-device testing when a local Flutter build is unavailable. Download it from a successful run of the exact source revision, install with `adb install -r app-debug.apk`, and launch **Bota Connect**. This debug artifact is for testing, not distribution.
+
 ```sh
 flutter analyze
 flutter build apk --debug

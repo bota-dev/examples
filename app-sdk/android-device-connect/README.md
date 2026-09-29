@@ -13,6 +13,8 @@ Requires JDK 17, Android SDK 36/build tools, and an Android 8+ (API 26+) phone w
 
 On Windows use `gradlew.bat`. The wrapper pins Gradle 8.13 with a checksum; dependencies resolve from Google/Maven Central. Launch **Bota Connect**, enable Bluetooth access, enter the exact printed device serial, and scan. Wait for the ten-second scan to finish before selecting a candidate. Android 12+ uses Nearby Devices permissions; older versions use location permission (and may need system Location enabled for scanning). Read status after connection; disconnect when finished.
 
+The application ID is `dev.bota.examples.kotlinconnect`, distinct from the React Native and Flutter samples so they can be installed together.
+
 The SDK rejects a mismatching identity. Discovery names are display-only. Operations are serialized, and a failed status read after disconnection does not rebind or retry device operations. Teardown cancels UI jobs and destroys the SDK. This foreground sample has no background-service behavior.
 
 ## Verify
