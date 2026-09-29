@@ -9,6 +9,7 @@ Use Flutter **3.47.5**, JDK 17, Android SDK tooling, and an Android 8+ (API 26+)
 From this directory:
 
 ```sh
+flutter precache --android
 flutter pub get --enforce-lockfile
 flutter run
 ```
@@ -24,4 +25,4 @@ flutter analyze
 flutter build apk --debug
 ```
 
-The dependency lock was resolved by hosted Flutter 3.47.5. See [implementation review](../../docs/independent-examples-review.md) for install, analyzer, and native build evidence. Windows Application Control blocked the newer Dart tool during local verification; hosted Linux CI supplies the Flutter checks. Physical Bluetooth permissions, correct/wrong serial, status, disconnect/reconnect, and firmware coverage remain unverified. [Public SDK reference](https://docs.bota.dev/api-reference/client-sdks).
+The dependency lock was resolved by hosted Flutter 3.47.5. Run `flutter precache --android` first: beta.7 compiles against the cached Android embedding JAR; a fresh Git-based Flutter installation does not download it automatically during `flutter build`. See [implementation review](../../docs/independent-examples-review.md) for install, analyzer, and native build evidence. Windows Application Control blocked the newer Dart tool during local verification; hosted Linux CI supplies the Flutter checks. Physical Bluetooth permissions, correct/wrong serial, status, disconnect/reconnect, and firmware coverage remain unverified. [Public SDK reference](https://docs.bota.dev/api-reference/client-sdks).

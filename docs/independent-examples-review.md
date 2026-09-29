@@ -13,11 +13,11 @@ Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow
 | Web connect | npm beta.7, Vite | Public install, TypeScript and WASM production build; Vite updated to 7.3.6 and npm audit clean | Browser/firmware BLE session |
 | Apple connect | SwiftPM exact beta.7 tag and binary checksum | Public tag/manifest inspected; [macOS CI build passed](https://github.com/bota-dev/examples/actions/runs/36526849885) | macOS permissions and BLE session |
 | Android connect | Maven Central beta.7, Gradle 8.13 | Public artifact resolves; local debug APK assembly passed | Android permissions and BLE session |
-| Flutter connect | pub.dev beta.7, Flutter 3.47.5 | Public artifact verified; Android host implemented; CI configured | Hosted resolution passed; analyzer/style fix and APK build pending; Android permissions and BLE session |
+| Flutter connect | pub.dev beta.7, Flutter 3.47.5 | Public artifact verified; Android host implemented; CI configured | Hosted locked resolution and analyzer pass; APK build pending after adding required Android precache; Android permissions and BLE session |
 
 The live Python run retained `rec_oYZSXYnJcj8Zt3poS4LrOkvC` / `txn_o60mEyL54AfOXb2etr24U2lG`, using the same reserved test key and dedicated end user as the Node verification. Effective auto-processing was disabled. The 333,326-byte fixture is synthetic speech. Secrets, audio, and transcript remain ignored local files. No physical devices were changed.
 
-Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against Flutter's `meta 1.18.0` pin. Flutter 3.47.5 is selected for hosted verification; Windows Application Control prevented its Dart tool from launching locally. Hosted resolution passed; analyzer found missing braces, corrected before the next run. No security policy was changed. Native build and dependency-resolution statuses will be updated from CI before completion is reported.
+Local Flutter 3.44 cannot resolve the SDK's `meta ^1.19.0` requirement against Flutter's `meta 1.18.0` pin. Flutter 3.47.5 is selected for hosted verification; Windows Application Control prevented its Dart tool from launching locally. Hosted locked resolution and analyzer pass after correcting missing braces. The initial APK build found the SDK requires the cached Android embedding JAR; documented `flutter precache --android` and added it to CI. No security policy was changed. Native build and dependency-resolution statuses will be updated from CI before completion is reported.
 
 ## Design comparison
 
