@@ -6,7 +6,7 @@ Each new example will have its own setup, dependencies, verification steps, and 
 
 ## Current status
 
-The first independent API example is implemented and locally tested. The remaining catalog entries are planned. The existing React Native/backend pair remains at its original paths while it is evaluated for migration.
+The first independent API example is implemented, locally tested, and live-verified with a test key and synthetic speech. The remaining catalog entries are planned. The existing React Native/backend pair remains at its original paths while it is evaluated for migration.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -23,7 +23,7 @@ Linked entries are implemented; unlinked paths are planned. Each example documen
 
 | Order | Planned path | What it teaches | Physical device |
 | --- | --- | --- | --- |
-| 1 | [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Upload local audio, verify completion, request transcription, retrieve text; locally tested, live API verification pending | No |
+| 1 | [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Upload local audio, verify completion, request transcription, retrieve text; locally tested and live-verified with a test key | No |
 | 2 | `api/webhook-receiver-node/` | Verify webhook authenticity using the public contract and handle duplicate delivery | No |
 | 3 | `app-sdk/react-native-device-connect/` | Initialize the published SDK, select and verify a device, connect, read status, disconnect | Yes |
 | 4 | `end-to-end/react-native-recording-sync/` | App + customer backend: binding, device recording upload, transcription, summary | Yes |

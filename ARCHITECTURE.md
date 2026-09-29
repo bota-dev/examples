@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: target repository design with an inspected existing-workspace baseline. The first independent Node API example is implemented and locally tested; its live API gate remains open. Other catalog entries and migration gates remain planned.
+Status: target repository design with an inspected existing-workspace baseline. The first independent Node API example is implemented, locally tested, and live-verified with a test key and synthetic speech. Other catalog entries and migration gates remain planned.
 
 ## 1. Purpose and scope
 
@@ -152,14 +152,14 @@ The example intentionally has no restart journal or automatic recovery after amb
 | Requirement | Evidence | Review status |
 | --- | --- | --- |
 | Independent setup | Own manifest/lockfile, no dependencies; frozen install and CLI copied to temporary directory | Matched locally on Node 22.23.2 / Windows |
-| Public API contracts | Public OpenAPI source and upload/transcription pages; explicit `api_upload` / `import` recording | Matched by source review; deployed API behavior unverified |
+| Public API contracts | Public OpenAPI source and upload/transcription pages; explicit `api_upload` / `import` recording | Matched for the exercised live path; optional-size completion replay discrepancy documented in example README |
 | Credential boundary | Tests assert API bearer is absent from storage PUT and secrets are absent from progress/errors | Matched in local tests |
 | Integrity before processing | Exact bytes/hash tests; repeated `425`; HTTP/hash failure prevents transcription | Matched in local tests |
 | Bounded failures and source preservation | Deadline, terminal-status, non-retry creation, and source-byte checks | Matched in local tests; live failure recovery unverified |
 | Verification and documentation | 15 tests pass, syntax check passes; example README, root catalog, agent entries updated | Matched locally; hosted CI not run |
-| Live acceptance | No disposable test project/credential configured for this task | Unverified; live upload, hash verification, and ASR remain required |
+| Live acceptance | 2026-09-29 UTC: reserved test key, dedicated end user with auto-processing disabled, 333,326-byte synthetic WAV; matching server SHA-256 and one completed Deepgram job | Matched for live upload, hash-only completion, and transcription retrieval; other providers/formats and live outage recovery unverified |
 
-The compound-engineering review uses the repository architecture and public contracts as its basis. Cross-repo searches for the new path, configuration variables, upload completion, SHA-256, and auto-transcription identified existing contract/reference docs; their semantics are unchanged. Updates are contained to this repository's example and contributor documentation. No production or hardware conformance is inferred from local tests.
+The compound-engineering review uses the repository architecture and public contracts as its basis. Cross-repo searches for the new path, configuration variables, upload completion, SHA-256, and auto-transcription identified existing contract/reference docs. The live check found that optional numeric completion size conflicts with a stored string size on replay; the example now omits that optional field while retaining server hash verification and size on the upload-URL request. This is within the public schema, not a platform fix. Updates are contained to this repository's example and contributor documentation. No broader production or hardware conformance is inferred from these checks.
 
 ## 6. Validation and CI design
 

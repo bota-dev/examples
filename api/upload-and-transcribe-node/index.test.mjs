@@ -80,7 +80,8 @@ test('uploads exact bytes without API credentials, verifies hash before transcri
   }
   const completes = http.calls.filter(call => call.url.endsWith('/upload-complete'));
   assert.equal(completes.length, 3);
-  for (const call of completes) assert.deepEqual(JSON.parse(call.body), { file_size_bytes: audio.length, content_sha256: hash });
+  for (const call of completes) assert.deepEqual(JSON.parse(call.body), { content_sha256: hash });
+  assert.equal(JSON.parse(http.calls[1].body).file_size_bytes, audio.length);
   assert.ok(http.calls.findIndex(call => call.url.endsWith('/transcriptions')) > http.calls.lastIndexOf(completes.at(-1)));
   assert.deepEqual(await readFile(input.filePath), audio);
   assert.doesNotMatch(progress.join('\n'), /sk_test_mock_secret|signature=|Synthetic test result/);

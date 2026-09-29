@@ -60,7 +60,6 @@ export async function uploadAndTranscribe({ filePath, apiBaseUrl, apiKey, endUse
     throw new Error('Audio must be a readable, nonempty file of at most 25 MiB.');
   }
   const completion = {
-    file_size_bytes: audio.length,
     content_sha256: createHash('sha256').update(audio).digest('hex'),
   };
 

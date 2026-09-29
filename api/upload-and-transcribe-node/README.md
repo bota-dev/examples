@@ -2,7 +2,7 @@
 
 Upload a local audio file to Bota, wait for server-side integrity verification, request a transcription, and retrieve its text. This is a server/CLI example using public HTTP APIs and Node built-ins, with no SDK or third-party dependencies.
 
-**Status:** implemented and locally tested. Live Bota API/ASR verification is pending; the local HTTP tests use synthetic audio and simulated API responses. No physical device is needed.
+**Status:** implemented, locally tested, and verified against the live Bota API with a test key and synthetic speech. Local HTTP tests use simulated API responses; the live run used real storage, integrity verification, and Deepgram transcription. No physical device is needed.
 
 ## Prerequisites
 
@@ -68,7 +68,7 @@ The process exits nonzero on validation, HTTP, upload, verification, transcripti
 1. Validate configuration and file; compute the SHA-256 of the exact bytes to upload.
 2. [Create a recording](https://docs.bota.dev/api-reference/recordings/create) with `source: api_upload` and `upload_method: import`. No device identity is fabricated.
 3. [Request an upload URL](https://docs.bota.dev/api-reference/uploads/create-url), then PUT the audio directly to storage using the returned content type. The Bota API key is not forwarded to storage, and redirects are rejected.
-4. [Complete the upload](https://docs.bota.dev/api-reference/uploads/complete) with the byte count and SHA-256. Retry identical completion requests only on `425`, with delays of 2, 4, 8, then 10 seconds. Wait for HTTP `200` and matching recording/hash verification evidence.
+4. [Complete the upload](https://docs.bota.dev/api-reference/uploads/complete) with SHA-256. The server determines the stored object's byte count; the optional completion size field is omitted. Retry identical completion requests only on `425`, with delays of 2, 4, 8, then 10 seconds. Wait for HTTP `200` and matching recording/hash verification evidence.
 5. [Create a transcription](https://docs.bota.dev/api-reference/ai/transcriptions/create) once, after upload confirmation.
 6. [Poll that transcription](https://docs.bota.dev/api-reference/ai/transcriptions/get) until completed or failed, using the same bounded backoff. Return the text only for the expected recording/transcription IDs.
 
@@ -89,7 +89,9 @@ This intentionally small example has no automatic restart/resume journal. **A ne
 | Transcription fails | Inspect the printed `txn_...` through the API for provider/error details; no replacement job is created automatically |
 | Transcription polling deadline | Continue GET requests for that same `txn_...`; the job may still be running |
 
-If upload-complete's response was lost, its documented recovery is to retry the exact size/hash request for the same recording. Creation requests have different semantics; do not infer that a timeout means nothing was created. When recording creation itself has an unknown outcome, reconcile by the generated `API upload example <timestamp>` name in that project. See [idempotency limitations](https://docs.bota.dev/api-reference/idempotency).
+If upload-complete's response was lost, its documented recovery is to retry the exact hash request for the same recording. Creation requests have different semantics; do not infer that a timeout means nothing was created. When recording creation itself has an unknown outcome, reconcile by the generated `API upload example <timestamp>` name in that project. See [idempotency limitations](https://docs.bota.dev/api-reference/idempotency).
+
+The initial live check found that sending the optional numeric `file_size_bytes` on completion could produce `409` on an exact replay: the deployed API returned its stored size as a string. This example supplies size on upload-URL creation and uses hash-only completion, both supported by the public schema. Server-side SHA-256 verification remains mandatory here; this does not fix the platform's optional-size replay discrepancy.
 
 For customer applications, add durable operation tracking and reconciliation for your workflow. This example does not implement authentication for app users, device pairing/sync, encrypted device-upload v2, streaming, summaries, or webhooks.
 
@@ -113,6 +115,6 @@ Tests cover upload bytes and credential isolation, ordered hash confirmation and
 | Local workflow/CLI tests | 15 passed, including real local HTTP transport with simulated API responses |
 | Public request/response contract | Reviewed against Bota's public OpenAPI source and upload/transcription docs; no SDK package is used |
 | Hosted CI | Workflow added for changes to this directory or its workflow; not run yet |
-| Live Bota upload, integrity verification, and ASR | **Not run**; requires a configured disposable project, credential, and consented speech fixture |
+| Live Bota upload, integrity verification, and ASR | Passed 2026-09-29 UTC: test key, dedicated end user, 333,326-byte synthetic WAV; matching SHA-256 verified at 05:00:13 UTC; one completed Deepgram job |
 
-Design review: standalone setup, secret isolation, upload-before-transcription ordering, bounded failure handling, and source preservation match the example architecture in local checks. Deployed API compatibility and real transcription output remain unverified until the live gate passes.
+Design review: standalone setup, secret isolation, upload-before-transcription ordering, bounded failure handling, and source preservation match the example architecture in local checks. The live run additionally verified storage upload, hash-only completion, and transcript retrieval with one completed job. The transcript recognized the synthetic sentence, rendering the brand name "Bota" as "Boda"; this is workflow evidence, not an ASR accuracy benchmark. Live outage/restart recovery and other audio formats/providers were not tested. The optional-size replay discrepancy above remains a platform follow-up.
