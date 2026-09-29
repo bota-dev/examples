@@ -15,11 +15,11 @@ Node and Python upload/transcription examples are live-verified with a test key 
 
 The existing app pins `@bota.dev/react-native-app-sdk@2.0.0-beta.6` (beta), app version 0.2.0. Rebuild native apps after installing. Its immediate binding/raw-token provisioning flow remains a compatibility gap, not the current target lifecycle. The existing backend uses one configured end user. Use it only in an isolated local test environment; it is not a multi-user backend template.
 
-See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [SDK migration and verification](docs/app-sdk-migration.md) records successful all-platform exports and an Android native build, superseding the historical Hermes export failure. [Dependency security](DEPENDENCY_SECURITY.md) records required installation patches and regression checks. iOS native linking and physical-device acceptance remain unverified.
+See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [SDK migration and verification](docs/app-sdk-migration.md) records successful all-platform exports and an Android native build, superseding the historical Hermes export failure. [Dependency security](DEPENDENCY_SECURITY.md) records required installation patches and regression checks. For the legacy workspace, iOS native linking and physical-device acceptance remain unverified.
 
 ## Example catalog
 
-Each linked example installs independently. App SDK examples pin published beta **2.0.0-beta.7**; physical-device acceptance remains open.
+Each linked example installs independently. App SDK examples pin published beta **2.0.0-beta.7**. The independent React Native connection sample has passing Android and iOS Simulator native builds; physical-device acceptance remains open. The [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps) links all eight examples.
 
 | Example | What it teaches | Physical device |
 | --- | --- | --- |

@@ -27,7 +27,7 @@ npm test
 npm run export
 ```
 
-2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Native build evidence is in the [implementation review](../../docs/independent-examples-review.md). iOS linking and physical BLE permission/scan/connect/status/reconnect checks remain unverified. A bundle export alone does not prove native module linkage.
+2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Android debug APK assembly and iOS Simulator native application linking pass in [CI at source `9e33809`](https://github.com/bota-dev/examples/actions/runs/36608472277); see the [implementation review](../../docs/independent-examples-review.md). Physical BLE permission/scan/connect/status/reconnect checks remain unverified. A native build does not establish hardware acceptance.
 
 For hardware acceptance record OS, phone, device model, firmware, SDK version, permission grant/denial, correct and incorrect serial, status, radio-off/disconnect behavior, and reconnect result. [Public SDK docs](https://docs.bota.dev/api-reference/client-sdks).
 
