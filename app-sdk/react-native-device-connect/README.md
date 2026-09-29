@@ -17,6 +17,19 @@ npm run ios
 
 Grant Bluetooth permissions (location on Android 11 and older), turn Bluetooth on, enter the exact printed device serial, and scan. Stop other apps from holding the device connection. Select a candidate to connect. Advertised names are display hints, not identity; a mismatch disconnects. On success, read status and disconnect. No environment configuration is needed. Rebuild native apps after changing the SDK.
 
+### Android USB development on Windows
+
+A debug APK needs Metro running. If streamed installation stalls, use `adb install --no-streaming -r android/app/build/outputs/apk/debug/app-debug.apk`. For an isolated USB session, start Metro from this directory in PowerShell:
+
+```powershell
+$env:NODE_OPTIONS = '--dns-result-order=ipv4first'
+npm start -- --localhost --port 8083 --max-workers 2
+# In another terminal, target the intended phone:
+adb -s <phone-id> reverse tcp:8081 tcp:8083
+```
+
+Check that `http://127.0.0.1:8083/status` returns `packager-status:running`, then launch the app. On this Windows test host, `--localhost` otherwise bound only to `::1`, which the IPv4 USB forwarding could not reach. Remove the temporary forwarding with `adb -s <phone-id> reverse --remove tcp:8081` when finished. This does not make a debug APK standalone; a release build must bundle JavaScript.
+
 Operations are serialized. Unexpected disconnection clears selection. SDK teardown removes subscriptions when the app component unmounts. Permission denial requires granting access in system settings and reopening the app. This sample does not provision, unbind, reset, start recording, or delete files.
 
 ## Verify

@@ -59,6 +59,8 @@ Use Node 22.23.2 or newer. These commands are part of current CI, which also run
 
 The independent React Native example's iOS gate uses macOS 26, Xcode 26.6, and explicitly selected CocoaPods 1.16.2. Xcode 26.3 fails in Expo's native ownership annotations. The passing simulator build is evidence for this example only, not the legacy workspace or physical Bluetooth behavior.
 
+Keep Android example application IDs distinct so samples can coexist on a test phone. Kotlin uses `dev.bota.examples.kotlinconnect`, React Native uses `dev.bota.examples.connect`, and Flutter uses `dev.bota.examples.bota_connect`. For Windows USB RN tests, verify Metro answers on IPv4 loopback before launching the debug APK; see its README. Phone permission/discovery checks are partial evidence until the exact wearable serial, firmware, and remaining scenarios are recorded.
+
 Keep the changed example's README and root catalog accurate. Update `ARCHITECTURE.md` when boundaries, layout, or migration status change; update this file when contributor rules change. Keep `CLAUDE.md` a short entry point instead of duplicating architecture.
 
 Search changed tokens (paths, package names, environment variables, endpoints, symbols) across this repository's docs. In a full Bota workspace, also search `internal-docs/`, `docs/`, and every repo's `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, and `README.md`; inspect the internal-docs downstream impact matrix. Review each affected hit. If those repos are unavailable, record the missing cross-repo check; do not make private workspace access a prerequisite for public contributors.
