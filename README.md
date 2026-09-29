@@ -1,6 +1,10 @@
 # Bota Examples
 
-Example apps for integrating Bota devices, `@bota.dev/react-native-sdk`, and the Bota backend API.
+Example apps for integrating Bota devices, `@bota.dev/react-native-app-sdk`, and the Bota backend API.
+
+Current mobile dependency: `@bota.dev/react-native-app-sdk@2.0.0-beta.6` (beta), app 0.2.0.
+Rebuild native apps after installing; see [migration and verification](docs/app-sdk-migration.md).
+The existing backend is an unauthenticated local single-user demonstration, not a production service.
 
 ## Packages
 
@@ -11,7 +15,7 @@ Example apps for integrating Bota devices, `@bota.dev/react-native-sdk`, and the
 
 ## Quick Start
 
-Use Node 20.19.4 or newer.
+Use Node 22.23.2 or newer.
 
 ```bash
 cd examples

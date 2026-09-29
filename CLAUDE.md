@@ -37,7 +37,7 @@ examples/
 
 The current first-class example is an npm workspace with:
 
-- `apps/react-native` — Expo 54 / React Native 0.81 app using `@bota.dev/react-native-sdk`
+- `apps/react-native` — Expo 57 / React Native 0.86.3 app using `@bota.dev/react-native-app-sdk`
 - `apps/backend` — Node 20+ / Express / TypeScript backend that proxies Bota `/v1/*`
 
 Future native client examples should live beside the React Native app as `apps/ios` and `apps/android`, using the same backend contract where possible.
@@ -68,7 +68,7 @@ npm run typecheck -w @bota-dev/example-backend
 npm run typecheck -w @bota-dev/example-react-native
 ```
 
-Use Node 20.19.4+ for install and verification (tested on 22.23.2).
+Use Node 22.23.2+ for install and verification (tested on 22.23.2).
 The guarded query-string decoder adapter runs at postinstall; if scripts were
 disabled, run `npm run postinstall` before using the app or testing. Keep its
 scoped decoder override and adapter together until both router paths support
@@ -100,46 +100,13 @@ Never put `sk_live_*`, `sk_test_*`, or `rk_*` keys in client apps. Clients only 
 
 ## React Native Example
 
-### Tech Stack
-
-- **Expo** ~50.0.0 with Expo Router
-- **React Native** 0.73.x
-- **@bota.dev/react-native-sdk** - Bota SDK from npm
-- **react-native-ble-plx** - BLE communication
-
-### Running Locally
-
-```bash
-cd react-native
-npm install
-npm start           # Start Metro bundler
-
-# For iOS (requires Mac + Xcode)
-npm run ios
-
-# For Android (requires Android Studio)
-npm run android
-```
-
-**Note:** This app uses native BLE modules, so Expo Go won't work. You need:
-- `expo prebuild` + native build, OR
-- EAS Build for development builds
-
-### Key Files
-
-- `app/scan.tsx` - Device discovery using SDK
-- `app/device.tsx` - Device connection and status
-- `app/recordings.tsx` - Recording sync flow
-- `src/api/backend.ts` - Your backend API integration
-- `src/context/BotaContext.tsx` - SDK initialization
-
-### Configuration
-
-The example expects a backend API. Update `src/api/backend.ts` with your API URL:
-
-```typescript
-const API_BASE_URL = 'https://your-api.example.com';
-```
+The current app uses App SDK `2.0.0-beta.6`, Expo 57, React 19.2.3 and
+React Native 0.86.3. Android requires API 26 and runtime BLE permissions.
+Use `npm run android -w @bota-dev/example-react-native` or the corresponding
+`ios` command on macOS to build the native app. Expo Go cannot load the SDK.
+The host `UploadInfo.complete` callback waits for backend durability before
+native cleanup. See [migration review](docs/app-sdk-migration.md) for evidence
+and the retained local-backend/provisioning limitations.
 
 ## Common Tasks
 
@@ -154,11 +121,11 @@ const API_BASE_URL = 'https://your-api.example.com';
 
 ```bash
 cd react-native
-npm update @bota.dev/react-native-sdk
+npm update @bota.dev/react-native-app-sdk
 ```
 
 ## Related Repositories
 
-- `bota-dev/react-native-sdk` - React Native SDK (npm: @bota.dev/react-native-sdk)
+- `bota-dev/react-native-sdk` - React Native SDK (npm: @bota.dev/react-native-app-sdk)
 - `bota-dev/docs` - API documentation (docs.bota.dev)
 - `bota-dev/bota` - Private backend/infrastructure

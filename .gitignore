@@ -5,3 +5,5 @@ dist/
 .env.local
 *.log
 .DS_Store
+apps/react-native/android/
+apps/react-native/ios/

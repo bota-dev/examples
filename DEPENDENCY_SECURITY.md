@@ -1,5 +1,11 @@
 # Dependency security remediation
 
+Current migration checkpoint: the [App SDK migration](docs/app-sdk-migration.md)
+aligns Expo 57 with React Native 0.86.3 and React 19.2.3. The historical versions
+and export limitations below describe their dated checks. The decoder/Xcode
+overrides and guarded adapter remain required; the existing security tests
+must pass against the new consumer graph before release.
+
 ## Scope and choice (2026-09-26)
 
 Dependabot #100/#101 concern image-size 1.2.1 parser loops:

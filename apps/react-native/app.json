@@ -3,7 +3,7 @@
     "name": "Bota Example",
     "slug": "bota-example",
     "scheme": "botaexample",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "orientation": "portrait",
     "ios": {
       "bundleIdentifier": "dev.bota.examples.mobile",
@@ -15,11 +15,23 @@
       "package": "dev.bota.examples.mobile",
       "permissions": [
         "android.permission.BLUETOOTH_SCAN",
-        "android.permission.BLUETOOTH_CONNECT"
+        "android.permission.BLUETOOTH_CONNECT",
+        "android.permission.ACCESS_FINE_LOCATION"
       ]
     },
     "plugins": [
-      "expo-router"
-    ]
+      "expo-router",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          }
+        }
+      ]
+    ],
+    "runtimeVersion": {
+      "policy": "appVersion"
+    }
   }
 }

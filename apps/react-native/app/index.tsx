@@ -3,6 +3,8 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  PermissionsAndroid,
+  Platform,
   Pressable,
   SafeAreaView,
   ScrollView,
@@ -17,7 +19,7 @@ import {
   type DeviceStatus,
   type DiscoveredDevice,
   type SyncProgress,
-} from '@bota.dev/react-native-sdk';
+} from '@bota.dev/react-native-app-sdk';
 import { getUploadInfo, registerDevice, requestRecordingGrant } from '@/src/api';
 
 type SdkState = 'initializing' | 'ready' | 'bluetooth_off' | 'error';
@@ -39,6 +41,16 @@ export default function HomeScreen() {
 
     async function configure() {
       try {
+        if (Platform.OS === 'android') {
+          const permissions = Platform.Version >= 31
+            ? [PermissionsAndroid.PERMISSIONS.BLUETOOTH_SCAN, PermissionsAndroid.PERMISSIONS.BLUETOOTH_CONNECT]
+            : [PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION];
+          const grants = await PermissionsAndroid.requestMultiple(permissions);
+          if (permissions.some((permission) => grants[permission] !== PermissionsAndroid.RESULTS.GRANTED)) {
+            throw new Error('Bluetooth permissions are required to connect to a device.');
+          }
+        }
+        if (!mounted) return;
         await BotaClient.configure({ environment: 'development', logLevel: 'debug' });
         if (!mounted) return;
 

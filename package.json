@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "postinstall": "node scripts/patch-query-string.mjs",
-    "test": "node --test scripts/test-*-security.mjs",
+    "test": "node --test scripts/test-*.mjs",
     "dev": "npm run dev -w @bota-dev/example-backend",
     "dev:backend": "npm run dev -w @bota-dev/example-backend",
     "dev:react-native": "npm run start -w @bota-dev/example-react-native",
@@ -23,6 +23,6 @@
     }
   },
   "engines": {
-    "node": ">=20.19.4"
+    "node": ">=22.23.2"
   }
 }

@@ -1,4 +1,4 @@
-import type { DeviceRecording, UploadInfo } from '@bota.dev/react-native-sdk';
+import type { DeviceRecording, UploadInfo } from '@bota.dev/react-native-app-sdk';
 
 const API_URL = process.env.EXPO_PUBLIC_EXAMPLE_API_URL ?? 'http://localhost:4000';
 
@@ -76,6 +76,18 @@ export async function getUploadInfo(
     completeUrl: result.completeUrl,
     expiresAt: result.expiresAt ? new Date(result.expiresAt) : undefined,
     contentType: result.contentType,
+    // Native cleanup waits for this backend acknowledgment, including failures.
+    complete: async ({ fileSizeBytes, contentSha256, signal }) => {
+      await request(`/api/recordings/${encodeURIComponent(result.recordingId)}/upload-complete`, {
+        method: 'POST',
+        signal,
+        body: JSON.stringify({
+          file_size_bytes: fileSizeBytes,
+          content_sha256: contentSha256,
+          ...(recording.durationMs > 0 ? { duration_seconds: recording.durationMs / 1000 } : {}),
+        }),
+      });
+    },
   };
 }
 
