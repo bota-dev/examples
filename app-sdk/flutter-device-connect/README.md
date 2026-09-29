@@ -16,7 +16,7 @@ flutter run
 
 Enable Bluetooth access, enter the exact printed device serial, scan, and select a candidate. Android 12+ prompts for Nearby Devices access; earlier releases require location permission and may need Location enabled. Denied access can be granted in system Settings before retrying. Close other apps connected to the device. Read status and disconnect when done.
 
-The SDK verifies connected identity, not the advertised name. Selection cancels scanning before connecting. Connection events clear stale selection; teardown cancels subscriptions and destroys the SDK. This is a foreground development app; configure your own signing before distribution.
+The SDK verifies connected identity, not the advertised name. Selection cancels scanning before connecting. Connection events clear stale selection when delivered; teardown cancels subscriptions and destroys the SDK. On the tested Android phone, beta.7 did not report radio loss through the connection stream, leaving the selection visible. Tap Disconnect to clear it even when the SDK call fails, then restore Bluetooth and reconnect. Automatic radio-loss recovery remains a known limitation. This is a foreground development app; configure your own signing before distribution.
 
 ## Verify
 

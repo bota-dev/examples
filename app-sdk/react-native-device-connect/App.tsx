@@ -167,8 +167,11 @@ export default function App() {
             disabled={busy}
             onPress={() =>
               void run(async () => {
-                await BotaClient.devices.disconnect(device);
-                setDevice(null);
+                try {
+                  await BotaClient.devices.disconnect(device);
+                } finally {
+                  setDevice(null);
+                }
                 setMessage("Disconnected.");
               })
             }

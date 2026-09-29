@@ -30,7 +30,7 @@ adb -s <phone-id> reverse tcp:8081 tcp:8083
 
 Check that `http://127.0.0.1:8083/status` returns `packager-status:running`, then launch the app. On this Windows test host, `--localhost` otherwise bound only to `::1`, which the IPv4 USB forwarding could not reach. Remove the temporary forwarding with `adb -s <phone-id> reverse --remove tcp:8081` when finished. This does not make a debug APK standalone; a release build must bundle JavaScript.
 
-Operations are serialized. Unexpected disconnection clears selection. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
+Operations are serialized. Disconnection events clear selection when delivered. On the tested Android phone, beta.7 did not deliver the radio-off event to this facade, so the selection stayed visible and a status read reported "not connected". Tap Disconnect to clear the selection (including when the SDK disconnect call fails), turn Bluetooth back on, and reconnect. Automatic radio-loss recovery remains a known limitation. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
 
 ## Verify
 

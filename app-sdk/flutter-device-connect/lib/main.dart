@@ -187,13 +187,12 @@ class _ConnectPageState extends State<ConnectPage> {
           onPressed: busy || connected == null
               ? null
               : () => run(() async {
-                  await client.devices.disconnect();
-                  if (mounted) {
-                    setState(() {
-                      connected = null;
-                      message = 'Disconnected.';
-                    });
+                  try {
+                    await client.devices.disconnect();
+                  } finally {
+                    if (mounted) setState(() => connected = null);
                   }
+                  if (mounted) setState(() => message = 'Disconnected.');
                 }),
           child: const Text('Disconnect'),
         ),
