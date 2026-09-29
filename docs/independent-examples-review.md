@@ -127,3 +127,23 @@ Searched changed paths and tokens (`webhook-receiver-node`, `upload-and-transcri
 Affected runnable-example documentation is updated in this repository: root catalog, architecture status/layout, both agent entry points, and every example README. External hits describe unchanged SDK/API/target contracts; this change does not claim to implement those platform requirements. Private reference paths are not installation dependencies. Legacy links remain valid.
 
 The continuation also updates public `api-reference/client-sdks.mdx`, `quickstart.mdx`, `changelog.mdx`, and the docs README. Only the scoped examples commit was promoted to `prod`; unrelated `main` content was not merged. The local Mintlify preview emitted an OpenAPI auto-discovery warning for `/docs.json`, but the changed pages rendered successfully and the hosted deployment validated the actual OpenAPI file and site configuration. No API schema or navigation changes were needed.
+
+## Kotlin connection-stream preparation
+
+The native Kotlin sample now observes public `connectionUpdates()` and renders
+verified identity or a disconnected/reconnect instruction. It clears old status
+when the SDK emits null and cancels the observer with the Activity scope. The
+existing connect/disconnect actions no longer duplicate connection rendering.
+This uses the same API already demonstrated by the SDK loss-recovery lab.
+
+| Requirement | Evidence | Status |
+| --- | --- | --- |
+| Public SDK consumption | Existing Flow API, still pinned to published beta.7 | matched in source |
+| UI observes connection and disconnect state | Activity-scoped collection; null replaces old status | implemented; build verification tracked by Kotlin workflow |
+| Automatic phone radio-loss recovery | Requires the SDK beta.8 fix to be published and adopted | unverified in this example revision |
+
+This source change does not upgrade any dependency or supersede the recorded
+beta.7 hardware results. SDK release preparation and the later exact-pin upgrade
+remain separate. Reviewed against examples architecture connection/lifecycle
+ownership; token search for `connectionUpdates` and the Kotlin example path
+found no changed wire/API contract requiring an external documentation update.

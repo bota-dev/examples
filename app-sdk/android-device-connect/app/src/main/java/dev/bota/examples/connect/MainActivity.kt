@@ -43,8 +43,7 @@ class MainActivity : Activity() {
                     setOnClickListener { perform {
                         val expected = serial.text.toString().trim()
                         require(expected.isNotEmpty())
-                        val device = client.devices.connect(expected, candidate)
-                        output.text = "Verified serial: ${device.serialNumber}"
+                        client.devices.connect(expected, candidate)
                     } }
                 })
             }
@@ -52,7 +51,7 @@ class MainActivity : Activity() {
         } }
         content.addView(devices)
         button("Read status") { perform { output.text = client.devices.readStatus().toString() } }
-        button("Disconnect") { perform { client.devices.disconnect(); output.text = "Disconnected." } }
+        button("Disconnect") { perform { client.devices.disconnect() } }
         content.addView(output)
         setContentView(ScrollView(this).apply { addView(content) })
     }
@@ -61,7 +60,16 @@ class MainActivity : Activity() {
         if (ready || busy) return
         busy = true
         scope.launch {
-            try { client.configure(BotaConfiguration(applicationContext)); ready = true; output.text = "Ready. Enter a serial and scan." }
+            try {
+                client.configure(BotaConfiguration(applicationContext))
+                ready = true
+                scope.launch {
+                    client.devices.connectionUpdates().collect { device ->
+                        output.text = device?.let { "Verified serial: ${it.serialNumber}" }
+                            ?: "Disconnected. Enter a serial and scan to reconnect."
+                    }
+                }
+            }
             catch (_: Exception) { output.text = "Initialization failed. Check Bluetooth and permissions." }
             finally { busy = false }
         }
