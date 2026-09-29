@@ -30,7 +30,7 @@ adb -s <phone-id> reverse tcp:8081 tcp:8083
 
 Check that `http://127.0.0.1:8083/status` returns `packager-status:running`, then launch the app. On this Windows test host, `--localhost` otherwise bound only to `::1`, which the IPv4 USB forwarding could not reach. Remove the temporary forwarding with `adb -s <phone-id> reverse --remove tcp:8081` when finished. This does not make a debug APK standalone; a release build must bundle JavaScript.
 
-Operations are serialized. Unexpected disconnection clears selection. SDK teardown removes subscriptions when the app component unmounts. Permission denial requires granting access in system settings and reopening the app. This sample does not provision, unbind, reset, start recording, or delete files.
+Operations are serialized. Unexpected disconnection clears selection. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
 
 ## Verify
 
@@ -40,7 +40,7 @@ npm test
 npm run export
 ```
 
-2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Android debug APK assembly and iOS Simulator native application linking pass in [CI at source `9e33809`](https://github.com/bota-dev/examples/actions/runs/36608472277); see the [implementation review](../../docs/independent-examples-review.md). Physical BLE permission/scan/connect/status/reconnect checks remain unverified. A native build does not establish hardware acceptance.
+2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Android debug APK assembly and iOS Simulator native application linking pass in [CI at source `9e33809`](https://github.com/bota-dev/examples/actions/runs/36608472277); see the [implementation review](../../docs/independent-examples-review.md). On a Samsung SM-A166U1 (Android 16/API 36), the debug app loaded through IPv4 Metro, permission denial disabled scanning, and reopening/granting permission enabled scanning. Physical scan/connect/status/reconnect checks remain unverified. A native build does not establish hardware acceptance.
 
 For hardware acceptance record OS, phone, device model, firmware, SDK version, permission grant/denial, correct and incorrect serial, status, radio-off/disconnect behavior, and reconnect result. [Public SDK docs](https://docs.bota.dev/api-reference/client-sdks).
 
