@@ -1,0 +1,28 @@
+name: Swift device connect
+
+on:
+  push:
+    branches: [main]
+    paths: ['app-sdk/apple-device-connect/**', '.github/workflows/apple-device-connect.yml']
+  pull_request:
+    paths: ['app-sdk/apple-device-connect/**', '.github/workflows/apple-device-connect.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: macos-15
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: app-sdk/apple-device-connect
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - run: swift package resolve
+      - run: bash build.sh

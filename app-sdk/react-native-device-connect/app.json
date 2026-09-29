@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Bota Connect Example",
+    "slug": "bota-connect-example",
+    "version": "1.0.0",
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "dev.bota.examples.connect",
+      "infoPlist": {
+        "NSBluetoothAlwaysUsageDescription": "Connect to the Bota device you select.",
+        "NSBluetoothPeripheralUsageDescription": "Read your Bota device status."
+      }
+    },
+    "android": {
+      "package": "dev.bota.examples.connect",
+      "permissions": [
+        "BLUETOOTH_SCAN",
+        "BLUETOOTH_CONNECT",
+        "ACCESS_FINE_LOCATION"
+      ]
+    },
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "minSdkVersion": 26
+          },
+          "ios": {
+            "deploymentTarget": "16.4"
+          }
+        }
+      ]
+    ]
+  }
+}

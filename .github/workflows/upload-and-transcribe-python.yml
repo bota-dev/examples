@@ -1,0 +1,25 @@
+name: Python upload and transcribe
+
+on:
+  push:
+    branches: [main]
+    paths: ['api/upload-and-transcribe-python/**', '.github/workflows/upload-and-transcribe-python.yml']
+  pull_request:
+    paths: ['api/upload-and-transcribe-python/**', '.github/workflows/upload-and-transcribe-python.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: api/upload-and-transcribe-python
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest -v

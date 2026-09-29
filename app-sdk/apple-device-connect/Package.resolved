@@ -1,0 +1,14 @@
+{
+  "pins": [
+    {
+      "identity": "app-sdk",
+      "kind": "remoteSourceControl",
+      "location": "https://github.com/bota-dev/app-sdk.git",
+      "state": {
+        "revision": "e3fd104f2319a0632376b403248ee0838cb592e3",
+        "version": "2.0.0-beta.7"
+      }
+    }
+  ],
+  "version": 2
+}

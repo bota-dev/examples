@@ -2,11 +2,11 @@
 
 Examples for integrating the Bota backend API and Bota App SDK into your own applications. API examples demonstrate server-side workflows; App SDK examples demonstrate communication with physical Bota devices; end-to-end examples connect the two.
 
-Each new example will have its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
+Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
 
 ## Current status
 
-The first independent API example is implemented, locally tested, and live-verified with a test key and synthetic speech. The remaining catalog entries are planned. The existing React Native/backend pair remains at its original paths while it is evaluated for migration.
+Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver and five focused App SDK connection examples are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full recording-sync replacement is blocked on public SDK integration gaps. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -19,21 +19,25 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 ## Example catalog
 
-Linked entries are implemented; unlinked paths are planned. Each example documents its own verification limits.
+Each linked example installs independently. App SDK examples pin published beta **2.0.0-beta.7**; physical-device acceptance remains open.
 
-| Order | Planned path | What it teaches | Physical device |
-| --- | --- | --- | --- |
-| 1 | [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Upload local audio, verify completion, request transcription, retrieve text; locally tested and live-verified with a test key | No |
-| 2 | `api/webhook-receiver-node/` | Verify webhook authenticity using the public contract and handle duplicate delivery | No |
-| 3 | `app-sdk/react-native-device-connect/` | Initialize the published SDK, select and verify a device, connect, read status, disconnect | Yes |
-| 4 | `end-to-end/react-native-recording-sync/` | App + customer backend: binding, device recording upload, transcription, summary | Yes |
-| Later | Python API example; Apple, Android, Flutter, and Web SDK examples | Equivalent focused workflows for additional platforms with published support | Depends on workflow |
+| Example | What it teaches | Physical device |
+| --- | --- | --- |
+| [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Server-side upload, verified completion, transcription; live-verified | No |
+| [Webhook receiver (Node.js)](api/webhook-receiver-node/README.md) | Authenticate raw bytes; durably deduplicate receipts in SQLite | No |
+| [Upload and transcribe (Python)](api/upload-and-transcribe-python/README.md) | Same server-side workflow using the standard library; live-verified | No |
+| [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
+| [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
+| [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |
+| [Android connect](app-sdk/android-device-connect/README.md) | Kotlin Android application using Maven Central | Yes |
+| [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
+| Blocked: `end-to-end/react-native-recording-sync/` | Binding, encrypted upload, processing; [public integration gaps](docs/independent-examples-review.md#recording-sync-replacement) | Yes |
 
 Native SDK smoke samples used to develop the SDK itself belong in the SDK source repository. These customer-facing examples consume published artifacts.
 
 ## Run the existing sample
 
-These commands apply only to the current `apps/` workspace, not the planned examples.
+These commands apply only to the legacy `apps/` workspace. For an independent example, use its README instead.
 
 Prerequisites: Node 22.23.2 or newer, npm, a Bota API key and test end user in the intended project, and native Android/iOS development tooling for the mobile app. Android requires API 26 or newer; iOS builds require macOS and Xcode. BLE requires a native development build; Expo Go is insufficient.
 
@@ -73,7 +77,7 @@ npm run typecheck
 npm run build
 ```
 
-These commands cover dependency and upload-completion regression checks, workspace typechecks, and the backend build. CI also runs all-platform Expo exports and a separate Android native build. See [migration evidence](docs/app-sdk-migration.md) for prior results; pairing, iOS native linking, and live API/device workflows remain separate gates. Each new example will document its own checks and last verified SDK/platform combination.
+These commands cover dependency and upload-completion regression checks, workspace typechecks, and the backend build. CI also runs all-platform Expo exports and a separate Android native build. See [migration evidence](docs/app-sdk-migration.md) for prior results; pairing, iOS native linking, and live API/device workflows remain separate gates. Independent examples have their own path-filtered workflows and README commands; none need a root npm install. See [current evidence](docs/independent-examples-review.md).
 
 ## Integration boundary
 

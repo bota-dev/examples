@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: target repository design with an inspected existing-workspace baseline. The first independent Node API example is implemented, locally tested, and live-verified with a test key and synthetic speech. Other catalog entries and migration gates remain planned.
+Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). Full recording-sync replacement and legacy retirement remain blocked on public integration and hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -14,7 +14,7 @@ Non-goals: a second SDK, a reusable example framework, a production SaaS starter
 
 ## 2. Repository organization
 
-Target layout; `api/upload-and-transcribe-node/` exists. Create other planned directories only when their example is implemented:
+Implemented layout plus the explicitly planned `end-to-end/` subtree. No empty end-to-end scaffold is created:
 
 ```text
 examples/
@@ -24,10 +24,15 @@ examples/
   CLAUDE.md                         # Claude entry point; refers to AGENTS.md
   api/
     upload-and-transcribe-node/
+    upload-and-transcribe-python/
     webhook-receiver-node/
   app-sdk/
     react-native-device-connect/
-  end-to-end/
+    web-device-connect/
+    apple-device-connect/
+    android-device-connect/
+    flutter-device-connect/
+  end-to-end/                       # Blocked target; not yet created
     react-native-recording-sync/
       app/
       backend/
@@ -38,7 +43,7 @@ examples/
     react-native/
 ```
 
-Add Python, Apple, Android, Flutter, or Web examples when a concrete workflow and published support justify them. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
+Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android), Web, and React Native teach read-only connection/status using published beta.7 packages. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
 
 ### Independence and dependencies
 
@@ -141,7 +146,7 @@ Migration sequence:
 4. Verify replacement native builds, binding recovery, upload completion/retry, and physical-device behavior for each advertised platform. Document any unsupported profile instead of claiming broad parity.
 5. Update catalog and external documentation links. Retire `apps/` and root workspace scripts only after replacement setup works from a clean checkout, existing dependency security coverage has been retained or superseded, and old links have migration guidance.
 
-The initial design change made no source moves, package upgrades, new workflows, device operations, or deployments. The subsequent first-example implementation is recorded below.
+The initial design change made no source moves, package upgrades, new workflows, device operations, or deployments. The first-example implementation is recorded below. Subsequent expansion and unresolved end-to-end requirements are tracked in [the current review](docs/independent-examples-review.md). Legacy source is unchanged by this expansion.
 
 ### First independent example: upload and transcribe
 

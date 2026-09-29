@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>CFBundleIdentifier</key><string>dev.bota.examples.connect.macos</string>
+  <key>CFBundleName</key><string>BotaConnect</string>
+  <key>CFBundleExecutable</key><string>BotaConnect</string>
+  <key>CFBundlePackageType</key><string>APPL</string>
+  <key>CFBundleVersion</key><string>1</string>
+  <key>LSMinimumSystemVersion</key><string>13.0</string>
+  <key>NSBluetoothAlwaysUsageDescription</key><string>Connect to the Bota device you select and read its status.</string>
+  <key>NSBluetoothPeripheralUsageDescription</key><string>Read the status of your Bota device.</string>
+</dict></plist>
