@@ -19,7 +19,7 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 ## Example catalog
 
-Each linked example installs independently. App SDK examples pin published beta **2.0.0-beta.7**. The independent React Native connection sample has passing Android and iOS Simulator native builds; physical-device acceptance remains open. The [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps) links all eight examples.
+Each linked example installs independently. App SDK examples pin published beta **2.0.0-beta.7**. The independent React Native connection sample has passing Android and iOS Simulator native builds; Android connection tests now cover Bota Pin firmware 1.0.19, with radio-loss limitations recorded in the [review](docs/independent-examples-review.md#firmware-1019-physical-test-continuation). Other platform/device coverage remains open. The [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps) links all eight examples.
 
 | Example | What it teaches | Physical device |
 | --- | --- | --- |

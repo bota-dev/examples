@@ -23,6 +23,6 @@ The SDK rejects a mismatching identity. Discovery names are display-only. Operat
 ./gradlew :app:assembleDebug
 ```
 
-Build and partial phone-test evidence is in the [implementation review](../../docs/independent-examples-review.md). Matching/wrong serial, status, radio-off and reconnect checks remain unverified; APK assembly and discovery do not prove a verified BLE session. [Public SDK reference](https://docs.bota.dev/api-reference/client-sdks).
+Build and phone-test evidence is in the [implementation review](../../docs/independent-examples-review.md). APK assembly alone does not prove a verified BLE session. [Public SDK reference](https://docs.bota.dev/api-reference/client-sdks).
 
-2026-09-29 partial device check: Samsung SM-A166U1, Android 16/API 36, source `50ddf37`. Installation, launch, permission denial, blocked scan without permission, permission recovery, and discovery of nearby Bota advertisements passed. No exact wearable serial/firmware was established, so identity, status, disconnect/reconnect, and radio-loss checks remain open. See the review for the execution boundary.
+2026-09-29 device check: Samsung SM-A166U1, Android 16/API 36, source `50ddf37`, App SDK beta.7, Bota Pin `4KF6NOHWX0` / firmware `1.0.19`. Installation, permission denial/recovery, discovery, wrong-serial rejection, exact-serial connection, status, explicit disconnect/reconnect, and manual recovery after phone Bluetooth off/on passed. A status read while the radio was off failed; selecting the candidate after radio-on restored connection and a fresh status. The sample does not automatically update its output on radio loss. Out-of-range recovery, other phones, and other firmware remain unverified.

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). Full recording-sync replacement and legacy retirement remain blocked on public integration and hardware gates. Target requirements below remain unchanged.
+Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). Full recording-sync replacement and legacy retirement remain blocked on public integration and hardware gates. Android connection evidence now covers Samsung SM-A166U1 and Bota Pin firmware 1.0.19; automatic radio-loss delivery and broader hardware coverage remain separate gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
