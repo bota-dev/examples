@@ -4,6 +4,11 @@ Status: eight independent examples are implemented. Node/Python upload and trans
 
 ## 1. Purpose and scope
 
+The [adapter-off candidate review](docs/independent-examples-review.md#adapter-off-candidate)
+records a native SDK fix with repeated RN/Flutter phone recovery. It is isolated
+candidate evidence; published example pins and the beta.8 limits above remain
+unchanged until a new immutable SDK release is adopted.
+
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
 
 Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.

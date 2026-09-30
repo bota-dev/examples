@@ -63,6 +63,13 @@ Keep Android example application IDs distinct so samples can coexist on a test p
 
 Keep the changed example's README and root catalog accurate. Update `ARCHITECTURE.md` when boundaries, layout, or migration status change; update this file when contributor rules change. Keep `CLAUDE.md` a short entry point instead of duplicating architecture.
 
+The unreleased adapter-off candidate passed three radio-off/explicit-reconnect
+cycles per RN/Flutter lab on the recorded Android 16 / firmware 1.0.19 pair.
+One initial RN timeout recovered with a same-session retry. See
+[candidate evidence](docs/independent-examples-review.md#adapter-off-candidate).
+Do not copy the isolated Maven override into these public examples or describe
+the candidate result as public beta.8 behavior; a new release/adoption is pending.
+
 Search changed tokens (paths, package names, environment variables, endpoints, symbols) across this repository's docs. In a full Bota workspace, also search `internal-docs/`, `docs/`, and every repo's `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, and `README.md`; inspect the internal-docs downstream impact matrix. Review each affected hit. If those repos are unavailable, record the missing cross-repo check; do not make private workspace access a prerequisite for public contributors.
 
 Before reporting completion, use `bota-skills:compound-engineering` 1.2.5+ when available (shared workspace source: `claude-code-plugins/plugins/bota-skills/skills/compound-engineering/SKILL.md`). Otherwise review directly against the user's scope, this architecture, and the selected public contracts. Record requirement -> evidence -> verification -> status in the existing review section or a concise completion checklist. Use matched, intentionally diverged, partial, not implemented, or unverified; explain deviations and outstanding checks.

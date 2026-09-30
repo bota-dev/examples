@@ -275,3 +275,42 @@ source, regression/physical checks and a new immutable public release before
 examples can adopt it. Do not patch GATT or duplicate transport policy here.
 No wearable provisioning, recording, upload, reset, deletion or firmware flashing
 was performed in these read-only connection tests.
+
+<a id="adapter-off-candidate"></a>
+
+## Unreleased adapter-off candidate (2026-09-30)
+
+SDK source `4d36de598de1dbd2e573fca85e06724ac17abf15` closes exact GATT sessions
+when Android shuts down its adapter without a disconnect callback, releases
+cancelled connection attempts, and preserves replacement generations. Its
+[CI](https://github.com/bota-dev/app-sdk/actions/runs/36743986531) and
+[License Gate](https://github.com/bota-dev/app-sdk/actions/runs/36743990238)
+passed. The [SDK acceptance record](https://github.com/bota-dev/app-sdk/blob/3f02326/docs/parity/android-disconnection-events.md#exact-candidate-evidence)
+contains the source, artifact and APK checksums, design review and limitations.
+
+Isolated labs were exported from examples source `022edbb`. They retained the
+public beta.8 RN/Dart bindings, resolved only the exact candidate Android AAR
+from an isolated Maven repository, and used distinct application IDs. UI-only
+diagnostics showed transport identifiers and SDK-read firmware; the connection
+and recovery logic was unchanged. These overrides are not example dependencies.
+
+On Samsung SM-A166U1 / Android 16 with SDK-verified serial `4KF6NOHWX0` and
+firmware `1.0.19`, both labs passed three successive cycles: phone Bluetooth
+off automatically cleared connected/status UI; Bluetooth on, the existing scan
+and explicit connect verified identity/firmware and read fresh status. Neither
+app was restarted or manually disconnected between cycles. Logs show GATT
+closure on all six radio shutdowns without a disconnected callback. No GATT
+133 occurred. RN's initial connection timed out once (`Some(-408)`), closed its
+GATT client and then succeeded on a same-session retry without another radio cycle.
+
+| Requirement | Evidence | Status |
+| --- | --- | --- |
+| Architecture §4: native loss reaches example listeners | Automatic UI clearing on all six candidate radio-off checks, without app-side GATT/polling substitutes | matched for this candidate/phone pair |
+| Architecture §§4,6: explicit recovery and fresh status | 3/3 post-radio-off first reconnects per framework; verified identity and fresh status | matched for this bounded candidate check |
+| Architecture §§2–3: published independent dependencies | Example manifests/locks remain public beta.8; candidate override exists only in isolated labs | matched; new release/adoption pending |
+| General connection reliability and wider lifecycle coverage | Initial RN timeout recovered on retry; no new out-of-range, background, iPhone, Web or transfer-interruption evidence | partial; wider cases unverified |
+
+The native source fix and bounded phone acceptance are ready for a new release;
+the installed public beta.8 examples do not yet contain it. Bluetooth was left
+ON, both labs were disconnected/stopped, and no wearable data or firmware was
+changed. Full recording-sync replacement remains blocked as described above.
