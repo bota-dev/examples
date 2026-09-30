@@ -19,9 +19,8 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 ## Example catalog
 
-Each linked example installs independently. Kotlin, Apple, React Native and Web
-now pin published App SDK **2.0.0-beta.9**. Flutter remains at beta.8 until its
-matching pub.dev release is verified. The [adoption review](docs/independent-examples-review.md#beta9-adoption)
+Each linked example installs independently. All five App SDK examples now pin
+published **2.0.0-beta.9**. The [adoption review](docs/independent-examples-review.md#beta9-adoption)
 records exact dependency/build evidence and pending public-package phone checks.
 Beta.9 handles Android adapter shutdown even when GATT omits its disconnect
 callback; restore Bluetooth, scan and reconnect explicitly. The historical

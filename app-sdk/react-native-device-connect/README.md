@@ -56,12 +56,24 @@ npm run export
 2026-09-30 UTC, beta.9: public frozen install, TypeScript check, identity
 regression test (exact serial, mismatch disconnect, and empty input), and Android
 Metro export pass locally on Node 22.23.2 / Windows. npm audit reports no
-vulnerabilities. Native build and fresh physical recovery checks are tracked in
-the [beta.9 adoption review](../../docs/independent-examples-review.md#beta9-adoption);
+vulnerabilities. An isolated Android arm64 release-mode build passes with the
+published npm package and Maven AAR; it bundles JavaScript and needs no Metro.
+The lab changes only its application ID and diagnostic identity text. Hosted
+native builds and fresh physical recovery checks are tracked in the
+[beta.9 adoption review](../../docs/independent-examples-review.md#beta9-adoption);
 the earlier candidate's phone results do not establish acceptance of this
 published package. Physical iOS and out-of-range recovery remain unverified.
 
 Historical beta.7 results, 2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Android debug APK assembly and iOS Simulator native application linking pass in [CI at source `9e33809`](https://github.com/bota-dev/examples/actions/runs/36608472277); see the [implementation review](../../docs/independent-examples-review.md). On a Samsung SM-A166U1 (Android 16/API 36), the debug app loaded through IPv4 Metro, permission denial disabled scanning, and reopening/granting permission enabled scanning. On Bota Pin `4KF6NOHWX0` / firmware `1.0.19`, discovery, wrong-serial rejection, exact identity, status, explicit disconnect/reconnect, and manual radio-off recovery passed. Automatic radio-loss notification failed in that beta.7 run; physical iOS and out-of-range recovery remain unverified. A native build alone does not establish hardware acceptance.
+
+Beta.9 final-package acceptance: [CI 36766071358](https://github.com/bota-dev/examples/actions/runs/36766071358)
+passed Android APK and iOS Simulator builds at `43a5bd3`. On the Samsung/firmware
+pair above, the public-package lab connected initially on the first attempt and
+passed three successive radio-off/explicit-reconnect cycles. Each loss cleared
+stale UI automatically; each first reconnect verified identity/firmware and read
+fresh status. No restart or manual disconnect occurred between cycles, and no
+GATT 133 occurred. See the [exact APK/native hashes and limits](../../docs/independent-examples-review.md#public-beta9-rn-phone-acceptance-2026-09-30).
+Physical iOS, background/out-of-range behavior and other hardware remain unverified.
 
 For hardware acceptance record OS, phone, device model, firmware, SDK version, permission grant/denial, correct and incorrect serial, status, radio-off/disconnect behavior, and reconnect result. [Public SDK docs](https://docs.bota.dev/api-reference/client-sdks).
 

@@ -327,11 +327,10 @@ The immutable tag binds that source, main CI run and candidate inventory SHA-256
 All 49 preserved release files passed promotion verification.
 
 [Protected release 36761509388](https://github.com/bota-dev/app-sdk/actions/runs/36761509388)
-published the exact Maven, RN and Web artifacts and verified public SwiftPM,
-CocoaPods and Android API 26/35 consumers. Flutter dependency verification and
-publication are still progressing. Kotlin, Apple, RN and Web pins/locks use beta.9;
-Flutter adoption follows pub.dev availability. This does not establish final
-public-package phone acceptance.
+completed synchronized publication, exact Maven/npm inventory verification,
+public SwiftPM/CocoaPods and Android API 26/35 consumers, Flutter public native
+dependencies and the complete pub.dev archive. All five example pins/locks now
+use beta.9. Publication does not establish final public-package phone acceptance.
 
 Acceptance remains bounded: use public packages without local SDK overrides;
 automatically clear connection/status when the phone radio turns off without
@@ -344,8 +343,43 @@ remain outside this recorded Android phone check.
 
 | Requirement / authority | Evidence | Status / remaining verification |
 | --- | --- | --- |
-| Architecture §§2–3: independent public dependencies | Exact beta.9 pins/locks for Kotlin, Apple, RN and Web; only Bota lock entries changed; no private overrides | Flutter publication/adoption pending |
-| Architecture §§4,6: visible loss and explicit recovery | Pre-version candidate checks above | final public beta.9 phone checks pending |
-| Architecture §6: appropriate isolated builds | Kotlin targeted lock and separate frozen build; RN frozen install/typecheck/identity test/Android export; Web frozen install/typecheck/Vite-WASM build passed | RN native lab build active; Apple/Flutter and hosted example checks pending |
+| Architecture §§2–3: independent public dependencies | Exact beta.9 pins/locks for all five examples; only Bota lock entries changed; no private overrides | matched |
+| Architecture §§4,6: visible loss and explicit recovery | RN public beta.9 passed all three radio-off/reconnect cycles below | matched for RN on the recorded pair; Flutter final-package checks pending |
+| Architecture §6: appropriate isolated builds | Kotlin targeted lock and separate frozen build; RN frozen install/typecheck/identity test/Android export and local native lab build; Web frozen install/typecheck/Vite-WASM build; hosted Kotlin/Swift/Web/RN passed at `43a5bd3`; Flutter enforced lock and analysis passed | Flutter native/hosted checks pending |
 | Architecture §6: separate build, publication and hardware claims | Exact source and release links; historical beta.8/candidate evidence retained | matched during preparation |
 | Architecture §5: full recording-sync replacement | Existing public lifecycle/material integration gaps above | not implemented by this bounded connection upgrade |
+
+First adoption source `43a5bd3521fdbc9d24dcfea7e8d714f08359f681` passed
+[Kotlin CI 36766071441](https://github.com/bota-dev/examples/actions/runs/36766071441),
+[Swift/macOS CI 36766071430](https://github.com/bota-dev/examples/actions/runs/36766071430)
+and [Web CI 36766071433](https://github.com/bota-dev/examples/actions/runs/36766071433).
+[RN CI 36766071358](https://github.com/bota-dev/examples/actions/runs/36766071358)
+also passed both Android APK and iOS Simulator native builds.
+The public Kotlin AAR's SHA-256 is
+`dc90f8815f38efeaed88b45e89bf5bcd8991efff7b8f6e8453f90fc58b8eb4a1`,
+matching the exact SDK main-CI release inventory. These builds do not establish
+new physical Kotlin/macOS/browser acceptance.
+
+### Public beta.9 RN phone acceptance (2026-09-30)
+
+The isolated RN lab used the exact public dependencies from examples `43a5bd3`.
+Only its application ID and UI diagnostics (selection transport ID and SDK-read
+firmware) differ from the example; there is no local SDK override, GATT workaround
+or recovery-logic change. Its resolved public AAR matches the SHA-256 above.
+The self-contained, debug-signed release-mode APK SHA-256 is
+`c06c72759c63cb13511cc11ba093d165fb47d31c17b9d911675cbb12febc7319`.
+
+On Samsung SM-A166U1 / Android 16, the SDK verified serial `4KF6NOHWX0` and
+firmware `1.0.19`. Initial connection and status succeeded on the first attempt.
+All three consecutive phone-radio-off checks automatically cleared the verified
+connection and status UI. After each restore, the existing scan and first
+explicit reconnect verified identity/firmware and read fresh status. There was
+no app restart or manual disconnect between cycles. Scoped logs show native GATT
+closure on all three adapter shutdowns without a disconnected callback, plus
+the expected callback/close on final explicit Disconnect. No GATT 133 occurred.
+
+The app was disconnected and stopped, with phone Bluetooth left ON. This is
+bounded foreground connection evidence, not universal first-connect reliability
+or automatic reconnect. No wearable flash, provisioning, recording, upload,
+reset or deletion was performed. Flutter public-package acceptance follows
+its own publication and build gates.

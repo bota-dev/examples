@@ -63,9 +63,9 @@ Keep Android example application IDs distinct so samples can coexist on a test p
 
 Keep the changed example's README and root catalog accurate. Update `ARCHITECTURE.md` when boundaries, layout, or migration status change; update this file when contributor rules change. Keep `CLAUDE.md` a short entry point instead of duplicating architecture.
 
-The SDK adapter-off fix is published in the native/RN/Web beta.9 artifacts.
-Four example pins are updated; Flutter publication/adoption and final-package
-phone checks remain pending in the [adoption review](docs/independent-examples-review.md#beta9-adoption).
+The SDK adapter-off fix is published across the synchronized beta.9 artifacts.
+All five example pins are updated. RN final-package phone recovery passed;
+Flutter native build/phone checks remain pending in the [adoption review](docs/independent-examples-review.md#beta9-adoption).
 Earlier candidate labs passed three radio-off/explicit-reconnect cycles per
 framework, with one initial RN timeout recovered on retry. Keep those results
 separate from public-package acceptance. Never copy isolated Maven overrides

@@ -6,8 +6,8 @@ Status: eight independent examples are implemented. Node/Python upload and trans
 
 The [beta.9 adoption review](docs/independent-examples-review.md#beta9-adoption)
 records the SDK adapter-off fix and independent public dependency upgrades.
-Kotlin, Apple, RN and Web pins are updated; Flutter publication/adoption and
-final-package phone acceptance remain pending. Earlier beta.8 failures and
+All five public pins are updated. RN public-package phone recovery passed;
+Flutter's native build and phone checks are pending. Earlier beta.8 failures and
 isolated candidate checks remain historical evidence.
 
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
