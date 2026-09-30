@@ -63,6 +63,11 @@ Keep Android example application IDs distinct so samples can coexist on a test p
 
 Keep the changed example's README and root catalog accurate. Update `ARCHITECTURE.md` when boundaries, layout, or migration status change; update this file when contributor rules change. Keep `CLAUDE.md` a short entry point instead of duplicating architecture.
 
+In the Flutter connection sample, preserve newer connection notifications when
+an older connect/status Future settles. Run `flutter test` as well as analysis
+and the native build after changing this lifecycle. Widget regressions establish
+UI ordering only; they do not establish a fix for native GATT reconnect failures.
+
 The SDK adapter-off fix is published across the synchronized beta.9 artifacts.
 All five pins and hosted builds are verified. Public-package phone tests cleared
 stale UI on all three radio losses per framework. RN passed all first reconnects;

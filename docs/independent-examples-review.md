@@ -426,3 +426,52 @@ RN native log SHA-256 `4219422c2f6dcbde39af1c068bd65426cac12d51ac218ff3720016538
 Flutter native log SHA-256 `00e60bbd66da3dd756ba994c35978ba40c0b4dd2e0b382411fdd4bd077fba14b`.
 Physical iPhone/macOS/Web, other phone/firmware pairs, background/out-of-range,
 automatic reconnect and interrupted transfers remain unverified here.
+
+## Flutter UI completion ordering (2026-09-30)
+
+Review of the remaining reconnect limitation found a separate example UI race:
+the connection stream and connect/status Futures can complete independently.
+Previously, a late successful connect could restore a selection after a newer
+disconnect notification, and a late status result could replace the loss message.
+This is a UI ordering defect, not evidence of the cause of the native GATT 8/133
+failures above. Both failed clients in that phone log closed promptly.
+
+The example now fences operation results against newer loss notifications and
+keeps explicit reconnect available. It continues to use public beta.9 without
+transport overrides or an app-owned retry loop. Widget tests control the order
+of SDK events and pending Futures through the published package's test boundary;
+the production example imports only the public SDK entry point.
+
+Reviewed against this repository's Architecture sections 3 (UI versus SDK
+ownership), 4 (visible failure/recovery) and 6 (scoped evidence), plus App SDK
+Architecture sections 5.2, 5.4 and 6.4 (native transport and Flutter delegation).
+Before the behavior fix, four regressions failed (late connect/status success
+and failure), while normal connection and explicit recovery passed. After the
+fix, all six widget tests passed, including the additional stream-error case.
+Locked installation, Flutter analysis and Dart analysis with the original lint
+configuration passed. Existing package versions and the beta.9 archive hash are
+unchanged; only `flutter_test` and its testing dependencies were added. The
+[Flutter workflow](../.github/workflows/flutter-device-connect.yml) now runs
+the widget suite before its existing Android APK build. Independent code review
+found no blocking issue. No new physical-device test was performed for this UI fix.
+
+| Requirement | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Architecture section 3: loss invalidates older UI results | Loss epoch guards connect/status results and operation errors; controlled-order widget regressions pass | matched in widget tests |
+| Architecture section 4: explicit recovery remains usable | Normal connection, disconnect event, explicit reconnect and fresh status control passes | matched in widget tests |
+| App SDK Architecture sections 5.2, 5.4, 6.4: native transport ownership | Public beta.9 pin/hash unchanged; no GATT, protocol, retry or native implementation added | matched by source/dependency review |
+| Architecture section 6: evidence limits | UI regressions distinguished from the previous phone logs and physical acceptance | matched; new physical behavior unverified |
+| First-attempt native reconnect reliability | Original 2/3 Flutter first reconnects and prompt native client cleanup retained above | partial; root cause and broader hardware checks remain open |
+
+Changed-token searches covered internal/public documentation and repository
+README, ARCHITECTURE, AGENTS and CLAUDE files. This example-only UI change does
+not alter the public SDK API or authoritative transport design. The example
+README, root catalog, architecture and contributor guidance were updated; the
+CLAUDE entry point's stale beta.7 sample note was reconciled to beta.9.
+
+Separate native follow-up: source review identified a possible explicit-disconnect
+timeout gap when the adapter remains on and Android never delivers its callback.
+Driver ownership can be cleared while the platform GATT remains until replacement
+or SDK close. This was not reproduced and is not the observed GATT 8/133 path.
+It requires a separate API 26/35 regression with the callback withheld, checking
+exact-client closure, pending work, loss delivery and late-callback isolation.

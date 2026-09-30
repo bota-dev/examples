@@ -7,13 +7,14 @@ import 'package:permission_handler/permission_handler.dart';
 void main() => runApp(const MaterialApp(home: ConnectPage()));
 
 class ConnectPage extends StatefulWidget {
-  const ConnectPage({super.key});
+  const ConnectPage({super.key, this.client});
+  final BotaDeviceClient? client;
   @override
   State<ConnectPage> createState() => _ConnectPageState();
 }
 
 class _ConnectPageState extends State<ConnectPage> {
-  final client = BotaDeviceClient();
+  late final client = widget.client ?? BotaDeviceClient();
   final serial = TextEditingController();
   final devices = <String, BotaDiscoveredDevice>{};
   StreamSubscription<BotaConnectedDevice?>? connection;
@@ -21,15 +22,17 @@ class _ConnectPageState extends State<ConnectPage> {
   BotaConnectedDevice? connected;
   bool ready = false;
   bool busy = false;
+  int connectionEpoch = 0;
   String message = 'Read-only discovery and status. No API key required.';
 
   Future<void> run(Future<void> Function() action) async {
     if (busy) return;
+    final epoch = connectionEpoch;
     setState(() => busy = true);
     try {
       await action();
     } catch (_) {
-      if (mounted) {
+      if (mounted && epoch == connectionEpoch) {
         setState(
           () => message =
               'Operation failed. Check Bluetooth, permissions, and exact serial.',
@@ -64,6 +67,7 @@ class _ConnectPageState extends State<ConnectPage> {
       (device) {
         if (mounted) {
           setState(() {
+            if (device == null) connectionEpoch++;
             if (connected != null && device == null) {
               message = 'Disconnected. Restore Bluetooth and reconnect.';
             }
@@ -74,6 +78,7 @@ class _ConnectPageState extends State<ConnectPage> {
       onError: (Object error) {
         if (mounted) {
           setState(() {
+            connectionEpoch++;
             connected = null;
             message = 'Connection lost. Scan to reconnect.';
           });
@@ -160,11 +165,12 @@ class _ConnectPageState extends State<ConnectPage> {
                       }
                       await scan?.cancel();
                       if (!mounted) return;
+                      final epoch = connectionEpoch;
                       final device = await client.devices.connect(
                         candidate,
                         serialNumber: expected,
                       );
-                      if (mounted) {
+                      if (mounted && epoch == connectionEpoch) {
                         setState(() {
                           connected = device;
                           message = 'Verified serial: ${device.serialNumber}';
@@ -180,8 +186,9 @@ class _ConnectPageState extends State<ConnectPage> {
           onPressed: busy || connected == null
               ? null
               : () => run(() async {
+                  final epoch = connectionEpoch;
                   final status = await client.devices.readStatus();
-                  if (mounted) {
+                  if (mounted && epoch == connectionEpoch) {
                     setState(
                       () => message =
                           'Battery: ${status.batteryLevel}%\nState: ${status.state}\nPending recordings: ${status.pendingRecordings}',

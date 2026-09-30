@@ -21,7 +21,14 @@ The SDK verifies connected identity, not the advertised name. Selection cancels 
 ## Verify
 
 The connection listener replaces old status text on a connected-to-null event.
-Initial null events retain the setup instruction. Beta.9's public pub.dev archive was downloaded and verified against its registry SHA-256, and its Android and Apple dependencies select the same exact beta.9 version. The lock changes only the direct SDK version and archive hash; other dependency constraints remain unchanged. See the [current review](../../docs/independent-examples-review.md#beta9-adoption) for installation, analysis, build, and physical-device evidence as those checks complete.
+Initial null events retain the setup instruction. A connection epoch prevents a
+pending connect or status request from restoring stale UI after a loss event;
+late errors also preserve the loss message. Six widget tests cover stale
+successes and failures, a connection stream error, and explicit reconnect with
+fresh status. These tests use a fake SDK platform; they do not establish the cause of the
+physical GATT 8/133 failures below or fix their first-attempt reliability.
+
+Beta.9's public pub.dev archive was downloaded and verified against its registry SHA-256, and its Android and Apple dependencies select the same exact beta.9 version. The beta.9 adoption changed only the direct SDK version and archive hash. The widget suite adds `flutter_test` and its locked testing dependencies without changing existing package versions. See the [current review](../../docs/independent-examples-review.md#beta9-adoption) for installation, analysis, build, and physical-device evidence.
 
 Beta.9 verification, 2026-09-30 UTC: locked installation, original-config
 analysis, and the isolated local APK build passed; [CI 36768188319](https://github.com/bota-dev/examples/actions/runs/36768188319)
@@ -43,6 +50,7 @@ The example workflow preserves `flutter-connect-debug-apk` for on-device testing
 
 ```sh
 flutter analyze
+flutter test
 flutter build apk --debug
 ```
 

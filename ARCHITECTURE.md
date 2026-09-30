@@ -86,6 +86,11 @@ Bota webhook delivery -> customer receiver -> application processing
 
 The customer backend may persist identity mappings and necessary recovery state. Do not mirror the platform's entire recording/transcription database merely to support an example.
 
+Connection notifications take precedence over older UI operations. A delayed
+connect or status result must not restore a disconnected selection or display
+status from a retired connection. Test event/result ordering separately from
+physical Bluetooth reliability; UI guards do not change SDK transport policy.
+
 ### Authentication and authorization
 
 Use public `/v1/*` contracts. App-facing backends must validate caller identity, derive project/end-user context from trusted server-side configuration or mappings, and check ownership for every resource operation. A request's workspace header, end-user ID, or device ID is not authorization. Constrain proxy routes and accepted fields; never expose a generic forwarder using a privileged API key.

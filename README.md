@@ -32,6 +32,10 @@ Physical acceptance for other platforms and devices remains open. The
 [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps)
 links all eight examples.
 
+The Flutter sample also guards against delayed connect/status results overwriting
+a newer disconnect. Its [UI ordering review](docs/independent-examples-review.md#flutter-ui-completion-ordering-2026-09-30)
+separates widget regression evidence from the remaining native reconnect limitation.
+
 | Example | What it teaches | Physical device |
 | --- | --- | --- |
 | [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Server-side upload, verified completion, transcription; live-verified | No |
