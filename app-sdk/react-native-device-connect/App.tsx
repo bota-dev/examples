@@ -57,7 +57,10 @@ export default function App() {
             setDevices((old) => [...old.filter((x) => x.id !== d.id), d]);
         });
         BotaClient.devices.on("connectionStateChanged", (_id, state) => {
-          if (active && state === "disconnected") setDevice(null);
+          if (active && state === "disconnected") {
+            setDevice(null);
+            setMessage("Disconnected. Restore Bluetooth and reconnect.");
+          }
         });
         BotaClient.on("bluetoothStateChanged", (state) => {
           if (active) {

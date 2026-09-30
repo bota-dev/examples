@@ -42,6 +42,10 @@ Operations are serialized. Disconnection events clear selection when delivered. 
 The beta.8 dependency upgrade is undergoing fresh build and device checks;
 previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
+The connection-loss listener also replaces the previous status text with a
+reconnect instruction, so an old battery or recording state is not left visible
+after the SDK invalidates the connection.
+
 ## Verify
 
 ```sh
