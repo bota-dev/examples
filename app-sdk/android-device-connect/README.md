@@ -1,6 +1,6 @@
 # Connect to a device with Kotlin
 
-A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.7` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
+A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.8` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
 
 ## Run
 
@@ -16,6 +16,9 @@ On Windows use `gradlew.bat`. The wrapper pins Gradle 8.13 with a checksum; depe
 The application ID is `dev.bota.examples.kotlinconnect`, distinct from the React Native and Flutter samples so they can be installed together.
 
 The SDK rejects a mismatching identity. Discovery names are display-only. Operations are serialized, and a failed status read after disconnection does not rebind or retry device operations. Teardown cancels UI jobs and destroys the SDK. This foreground sample has no background-service behavior.
+
+The beta.8 dependency upgrade is undergoing fresh build and device checks;
+previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 
@@ -34,12 +37,9 @@ A verified connection displays its serial; a null event clears old status and
 shows the reconnect instruction. Activity teardown cancels observation before
 SDK destruction. Reconnect remains an explicit user action.
 
-Published beta.7 remains pinned here. The Android SDK loss-delivery fix is on
-[SDK main](https://github.com/bota-dev/app-sdk/commit/0eaba2a72bb74a81e9afa766dd5df4e5649d6584)
-and is being prepared for beta.8; this listener alone does not fix beta.7's
-missing radio-off event. Upgrade only after that release is publicly verified,
-then repeat the physical radio-off/reconnect check. Earlier phone results above
-are historical evidence for their recorded source, not this updated listener.
+Beta.8 includes the Android loss-delivery fix. The listener clears stale status
+on a confirmed disconnect; reconnect remains explicit. Fresh beta.8 physical
+acceptance is tracked in the review.
 
 The updated listener was phone-tested separately at `416d27c` with beta.7 on the
 same Samsung / firmware 1.0.19 pair: verified connection, status, explicit
