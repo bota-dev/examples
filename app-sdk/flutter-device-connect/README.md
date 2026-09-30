@@ -23,6 +23,18 @@ The SDK verifies connected identity, not the advertised name. Selection cancels 
 The connection listener replaces old status text on a connected-to-null event.
 Initial null events retain the setup instruction. Beta.9's public pub.dev archive was downloaded and verified against its registry SHA-256, and its Android and Apple dependencies select the same exact beta.9 version. The lock changes only the direct SDK version and archive hash; other dependency constraints remain unchanged. See the [current review](../../docs/independent-examples-review.md#beta9-adoption) for installation, analysis, build, and physical-device evidence as those checks complete.
 
+Beta.9 verification, 2026-09-30 UTC: locked installation, original-config
+analysis, and the isolated local APK build passed; [CI 36768188319](https://github.com/bota-dev/examples/actions/runs/36768188319)
+also passed at `a5c36b08`. On Samsung SM-A166U1 / Android 16 and SDK-verified
+serial `4KF6NOHWX0` / firmware `1.0.19`, all three radio shutdowns cleared stale
+UI automatically. Two first reconnects passed. The third dropped with GATT 8,
+an immediate retry failed with 133, and a fresh scan/reconnect recovered identity
+and status in the same app session without another Bluetooth cycle. Initial
+connection and final disconnect passed. First-attempt reliability remains
+partial; see [exact public-package evidence and limits](../../docs/independent-examples-review.md#public-beta9-flutter-acceptance-2026-09-30).
+The lab changes only its app ID and identity diagnostics; it uses public packages
+without a native override or recovery workaround.
+
 Historical beta.8 checks: on 2026-09-30 UTC, locked installation, analysis and APK assembly passed in [CI 36661667401](https://github.com/bota-dev/examples/actions/runs/36661667401). Its exact APK connected and read fresh status after an additional phone Bluetooth cycle, but automatic radio-off cleanup failed and later reconnect remained unsuccessful. Android logs showed cleanup without a disconnect callback. Those failures motivated the beta.9 native transport fix; see the [beta.8 review](../../docs/independent-examples-review.md#beta8-adoption).
 
 2026-09-29 device check: Samsung SM-A166U1 (Android 16/API 36), Bota Pin `4KF6NOHWX0` / firmware `1.0.19`, App SDK beta.7. The original source `50ddf37` passed permission denial/recovery, discovery, wrong-serial rejection, exact identity, status, and explicit disconnect/reconnect. The updated APK from source `61a7471` passed connection, Bluetooth-off failed-disconnect cleanup, radio-on reconnect, fresh status, and final explicit disconnect; see the [review](../../docs/independent-examples-review.md#firmware-1019-physical-test-continuation). Automatic radio-loss notification failed as described above; other phones/firmware and out-of-range recovery remain unverified.

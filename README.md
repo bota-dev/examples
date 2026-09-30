@@ -21,7 +21,10 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 Each linked example installs independently. All five App SDK examples now pin
 published **2.0.0-beta.9**. The [adoption review](docs/independent-examples-review.md#beta9-adoption)
-records exact dependency/build evidence and pending public-package phone checks.
+records exact dependency/build and public-package phone evidence. RN passed
+three first reconnects; Flutter passed two, then recovered the third after GATT
+8/133 with a fresh scan in the same app session. Both cleared stale UI on all
+three radio shutdowns. First-attempt connection reliability remains partial.
 Beta.9 handles Android adapter shutdown even when GATT omits its disconnect
 callback; restore Bluetooth, scan and reconnect explicitly. The historical
 beta.8 failures and earlier isolated candidate results remain in the review.

@@ -344,8 +344,9 @@ remain outside this recorded Android phone check.
 | Requirement / authority | Evidence | Status / remaining verification |
 | --- | --- | --- |
 | Architecture §§2–3: independent public dependencies | Exact beta.9 pins/locks for all five examples; only Bota lock entries changed; no private overrides | matched |
-| Architecture §§4,6: visible loss and explicit recovery | RN public beta.9 passed all three radio-off/reconnect cycles below | matched for RN on the recorded pair; Flutter final-package checks pending |
-| Architecture §6: appropriate isolated builds | Kotlin targeted lock and separate frozen build; RN frozen install/typecheck/identity test/Android export and local native lab build; Web frozen install/typecheck/Vite-WASM build; hosted Kotlin/Swift/Web/RN passed at `43a5bd3`; Flutter enforced lock and analysis passed | Flutter native/hosted checks pending |
+| Architecture §§4,6: visible loss and stale-state clearing | RN and Flutter public beta.9 each cleared UI on all three radio shutdowns | matched on the recorded phone/device pair |
+| Architecture §§4,6: explicit recovery and fresh status | RN first reconnects 3/3; Flutter 2/3, third recovered after GATT 8/133 with a fresh scan in the same app session | matched for same-session recovery; first-attempt reliability partial |
+| Architecture §6: appropriate isolated builds | Kotlin targeted lock and separate frozen build; RN frozen install/typecheck/identity test/Android export and local native lab build; Web frozen install/typecheck/Vite-WASM build; hosted Kotlin/Swift/Web/RN passed at `43a5bd3`; Flutter enforced lock, analysis, native lab build and hosted CI passed | matched for documented build targets; wider physical coverage unverified |
 | Architecture §6: separate build, publication and hardware claims | Exact source and release links; historical beta.8/candidate evidence retained | matched during preparation |
 | Architecture §5: full recording-sync replacement | Existing public lifecycle/material integration gaps above | not implemented by this bounded connection upgrade |
 
@@ -381,5 +382,47 @@ the expected callback/close on final explicit Disconnect. No GATT 133 occurred.
 The app was disconnected and stopped, with phone Bluetooth left ON. This is
 bounded foreground connection evidence, not universal first-connect reliability
 or automatic reconnect. No wearable flash, provisioning, recording, upload,
-reset or deletion was performed. Flutter public-package acceptance follows
-its own publication and build gates.
+reset or deletion was performed. Flutter public-package acceptance is recorded below.
+
+### Public beta.9 Flutter acceptance (2026-09-30)
+
+[Flutter CI 36768188319](https://github.com/bota-dev/examples/actions/runs/36768188319)
+passed locked installation, analysis and Android APK assembly at source
+`a5c36b08a67b28a07efd1a40b4bcfd76a6a4bfca`. The public pub.dev archive SHA-256 is
+`004cbeb2d1b3c3d104bc5baf90ea5ab77f28f772cbc909a718ca6e333f08e313`.
+Only the direct SDK version/hash changed in the lock; Android and Apple native
+pins match beta.9. Local Flutter 3.47.5 / Dart 3.13.4 locked resolution, analysis
+with the original lint configuration and Android build also passed.
+
+The isolated debug lab uses that exact source/dependency set, with only a distinct
+application ID, selection transport ID and SDK-read firmware diagnostics. Local
+build settings bound Gradle memory/workers and select installed toolchain paths;
+there is no Maven override or protocol/recovery change. Its public AAR SHA-256
+matches the release inventory above. APK SHA-256:
+`5d16ac2753177051ad396f33bf839490e96dfa68b5c7d2d2a3cd68f0b6317e60`.
+
+On the same Samsung / SDK-verified serial `4KF6NOHWX0` / firmware `1.0.19`,
+initial connection and status succeeded on the first attempt. All three radio
+shutdowns cleared stale connection/status UI automatically and disabled status
+actions. The first two reconnects verified identity and read fresh status.
+The third connected and discovered services, then dropped with GATT status 8.
+The loss event cleared the UI, and the SDK closed the native client. An immediate
+retry failed with status 133 and closed its client. A fresh scan and selection
+then verified the same identity/firmware and read fresh status, without an app
+restart, manual Disconnect or additional Bluetooth cycle.
+
+This is **3/3 loss notifications, 2/3 first reconnects**, with the third recovered
+in the same app session after a fresh scan. Do not describe it as three flawless
+reconnect cycles or a general GATT 133 fix. The controller recorded disconnect
+reason 8 and connection-failure reason 62; these logs alone do not identify the
+root cause. Remaining first-attempt reliability requires separate diagnosis
+across the phone/controller and firmware, not an app-side transport workaround.
+
+Final explicit Disconnect succeeded; the lab was stopped, phone Bluetooth left
+ON and no USB reverse forwarding remained. Temporary device UI output was
+removed. No wearable firmware, provisioning, recording, upload, reset or data
+deletion was performed. Exact UI snapshots and scoped native logs were audited:
+RN native log SHA-256 `4219422c2f6dcbde39af1c068bd65426cac12d51ac218ff372001653818af306`;
+Flutter native log SHA-256 `00e60bbd66da3dd756ba994c35978ba40c0b4dd2e0b382411fdd4bd077fba14b`.
+Physical iPhone/macOS/Web, other phone/firmware pairs, background/out-of-range,
+automatic reconnect and interrupted transfers remain unverified here.

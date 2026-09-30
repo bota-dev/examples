@@ -1,13 +1,13 @@
 # Bota Examples Architecture
 
-Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). Full recording-sync replacement and legacy retirement remain blocked on public integration and hardware gates. Android connection evidence now covers Samsung SM-A166U1 and Bota Pin firmware 1.0.19; beta.8 Kotlin radio-off/reconnect passed, RN loss delivery passed with reconnect failures, and Flutter radio-off delivery failed. Full cross-facade recovery and broader hardware coverage remain open. Target requirements below remain unchanged.
+Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK examples pin public beta.9 and passed their hosted workflows. On Samsung SM-A166U1 / Bota Pin firmware 1.0.19, RN and Flutter automatically cleared stale UI on three radio losses each. RN passed all first reconnects; Flutter passed two and recovered the third after GATT 8/133 with a fresh scan in the same app session. First-attempt reliability and wider physical coverage remain partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
 The [beta.9 adoption review](docs/independent-examples-review.md#beta9-adoption)
 records the SDK adapter-off fix and independent public dependency upgrades.
-All five public pins are updated. RN public-package phone recovery passed;
-Flutter's native build and phone checks are pending. Earlier beta.8 failures and
+All five public pins and hosted builds are verified. The review records bounded
+RN/Flutter phone recovery and the remaining connection-reliability limit. Earlier beta.8 failures and
 isolated candidate checks remain historical evidence.
 
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
