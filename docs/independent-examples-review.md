@@ -167,3 +167,10 @@ CI debug-signature mismatch. No wearable binding, recording, reset or deletion
 occurred. Radio-off was not repeated with beta.7; automatic loss recovery still
 requires published beta.8 adoption. The exact main Kotlin build also passed in
 [CI 36646373292](https://github.com/bota-dev/examples/actions/runs/36646373292).
+
+React Native's workflow now also retains its exact-commit arm64 debug APK for
+the later beta.8 physical check. The matching source must serve Metro for that
+APK. This changes artifact retention only; SDK pins, current radio-off limits
+and the historical hardware acceptance claims remain unchanged. Review against
+the architecture's reproducible-build and physical-evidence boundary is matched
+in source; hosted upload verification remains a CI gate.
