@@ -310,7 +310,42 @@ GATT client and then succeeded on a same-session retry without another radio cyc
 | Architecture §§2–3: published independent dependencies | Example manifests/locks remain public beta.8; candidate override exists only in isolated labs | matched; new release/adoption pending |
 | General connection reliability and wider lifecycle coverage | Initial RN timeout recovered on retry; no new out-of-range, background, iPhone, Web or transfer-interruption evidence | partial; wider cases unverified |
 
-The native source fix and bounded phone acceptance are ready for a new release;
-the installed public beta.8 examples do not yet contain it. Bluetooth was left
+At this candidate checkpoint, the native source fix and bounded phone acceptance
+were ready for a new release; the installed public beta.8 examples did not yet
+contain it. Bluetooth was left
 ON, both labs were disconnected/stopped, and no wearable data or firmware was
 changed. Full recording-sync replacement remains blocked as described above.
+
+## Beta.9 adoption
+
+The owner approved synchronized `2.0.0-beta.9` publication and parallel example
+adoption. SDK source `89cb6f14eb0ea6327c196ac2cbeb8215df3423bd` passed exact-main
+[CI 36758872839](https://github.com/bota-dev/app-sdk/actions/runs/36758872839)
+and [License Gate 36758872776](https://github.com/bota-dev/app-sdk/actions/runs/36758872776).
+The immutable tag binds that source, main CI run and candidate inventory SHA-256
+`1674536aa8496220e5aeb2fe3d0df08ecc5b6ac72ee9d590b1e5c49410d69f92`.
+All 49 preserved release files passed promotion verification.
+
+[Protected release 36761509388](https://github.com/bota-dev/app-sdk/actions/runs/36761509388)
+published the exact Maven, RN and Web artifacts and verified public SwiftPM,
+CocoaPods and Android API 26/35 consumers. Flutter dependency verification and
+publication are still progressing. Kotlin, Apple, RN and Web pins/locks use beta.9;
+Flutter adoption follows pub.dev availability. This does not establish final
+public-package phone acceptance.
+
+Acceptance remains bounded: use public packages without local SDK overrides;
+automatically clear connection/status when the phone radio turns off without
+Read status or Disconnect; restore Bluetooth, scan and explicitly reconnect;
+verify the exact serial and firmware and read fresh status. Repeat three times
+for RN and Flutter without restarting the app or manual cleanup between cycles.
+No app-side GATT, polling workaround or automatic reconnect loop is added.
+Physical iPhone/macOS/Web, background/out-of-range behavior and other hardware
+remain outside this recorded Android phone check.
+
+| Requirement / authority | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Architecture §§2–3: independent public dependencies | Exact beta.9 pins/locks for Kotlin, Apple, RN and Web; only Bota lock entries changed; no private overrides | Flutter publication/adoption pending |
+| Architecture §§4,6: visible loss and explicit recovery | Pre-version candidate checks above | final public beta.9 phone checks pending |
+| Architecture §6: appropriate isolated builds | Kotlin targeted lock and separate frozen build; RN frozen install/typecheck/identity test/Android export; Web frozen install/typecheck/Vite-WASM build passed | RN native lab build active; Apple/Flutter and hosted example checks pending |
+| Architecture §6: separate build, publication and hardware claims | Exact source and release links; historical beta.8/candidate evidence retained | matched during preparation |
+| Architecture §5: full recording-sync replacement | Existing public lifecycle/material integration gaps above | not implemented by this bounded connection upgrade |

@@ -4,10 +4,11 @@ Status: eight independent examples are implemented. Node/Python upload and trans
 
 ## 1. Purpose and scope
 
-The [adapter-off candidate review](docs/independent-examples-review.md#adapter-off-candidate)
-records a native SDK fix with repeated RN/Flutter phone recovery. It is isolated
-candidate evidence; published example pins and the beta.8 limits above remain
-unchanged until a new immutable SDK release is adopted.
+The [beta.9 adoption review](docs/independent-examples-review.md#beta9-adoption)
+records the SDK adapter-off fix and independent public dependency upgrades.
+Kotlin, Apple, RN and Web pins are updated; Flutter publication/adoption and
+final-package phone acceptance remain pending. Earlier beta.8 failures and
+isolated candidate checks remain historical evidence.
 
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
 
@@ -48,7 +49,7 @@ examples/
     react-native/
 ```
 
-Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android), Web, and React Native teach read-only connection/status using published beta.8 packages. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
+Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android), Web, and React Native teach read-only connection/status using exact published SDK packages; the adoption review records the current versions. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
 
 ### Independence and dependencies
 

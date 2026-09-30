@@ -5,8 +5,8 @@
       "kind": "remoteSourceControl",
       "location": "https://github.com/bota-dev/app-sdk.git",
       "state": {
-        "revision": "8ad1328c8456ee73b98869a6800f137a6f5a8c25",
-        "version": "2.0.0-beta.8"
+        "revision": "89cb6f14eb0ea6327c196ac2cbeb8215df3423bd",
+        "version": "2.0.0-beta.9"
       }
     }
   ],

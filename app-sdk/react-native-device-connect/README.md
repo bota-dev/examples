@@ -1,6 +1,6 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.8`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.9`. No API key, backend, binding, recording, or upload is needed.
 
 ## Run
 
@@ -37,9 +37,9 @@ sample, uninstall only `dev.bota.examples.connect` before installing the APK;
 this clears the sample's local app data. Artifact creation is build evidence,
 not physical Bluetooth acceptance.
 
-Operations are serialized. Disconnection events clear selection when delivered. Beta.8 delivered radio-off loss and cleared selection/status on the tested Android phone, but subsequent reconnect failed with GATT error 133. If no loss event arrives, Disconnect still clears the local selection even when the SDK call fails. Restore Bluetooth before explicitly reconnecting; successful recovery is not guaranteed by the notification fix. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
+Operations are serialized. Disconnection events clear selection and stale status. Beta.9 adds Android adapter-off handling in the native SDK, including cases where Android omits the GATT disconnect callback. Restore Bluetooth, scan, and explicitly reconnect; this sample does not reconnect automatically. If no loss event arrives, Disconnect still clears the local selection even when the SDK call fails. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
 
-2026-09-30 UTC, beta.8: Android and iOS Simulator builds passed in [CI 36661341921](https://github.com/bota-dev/examples/actions/runs/36661341921). On Samsung SM-A166U1 / Android 16 and Bota Pin firmware 1.0.19, exact-serial connection, status, and automatic radio-off UI cleanup passed. Explicit reconnect failed twice with GATT error 133, including after a fresh scan. Full recovery is therefore **partial**. See the [current review](../../docs/independent-examples-review.md#beta8-adoption); the dated beta.7 checks below remain historical.
+Historical beta.8 results, 2026-09-30 UTC: Android and iOS Simulator builds passed in [CI 36661341921](https://github.com/bota-dev/examples/actions/runs/36661341921). On Samsung SM-A166U1 / Android 16 and Bota Pin firmware 1.0.19, exact-serial connection, status, and automatic radio-off UI cleanup passed. Explicit reconnect failed twice with GATT error 133, including after a fresh scan. Full recovery was therefore **partial**. See the [beta.8 review](../../docs/independent-examples-review.md#beta8-adoption); the dated beta.7 checks below also remain historical.
 
 The connection-loss listener also replaces the previous status text with a
 reconnect instruction, so an old battery or recording state is not left visible
@@ -52,6 +52,14 @@ npm run typecheck
 npm test
 npm run export
 ```
+
+2026-09-30 UTC, beta.9: public frozen install, TypeScript check, identity
+regression test (exact serial, mismatch disconnect, and empty input), and Android
+Metro export pass locally on Node 22.23.2 / Windows. npm audit reports no
+vulnerabilities. Native build and fresh physical recovery checks are tracked in
+the [beta.9 adoption review](../../docs/independent-examples-review.md#beta9-adoption);
+the earlier candidate's phone results do not establish acceptance of this
+published package. Physical iOS and out-of-range recovery remain unverified.
 
 Historical beta.7 results, 2026-09-29: public frozen install, typecheck, exact-serial/mismatch tests, and Android Metro export pass locally. `xcode`'s UUID dependency is overridden to 11.1.1 to address its transitive advisory; npm audit reports no vulnerabilities. Android debug APK assembly and iOS Simulator native application linking pass in [CI at source `9e33809`](https://github.com/bota-dev/examples/actions/runs/36608472277); see the [implementation review](../../docs/independent-examples-review.md). On a Samsung SM-A166U1 (Android 16/API 36), the debug app loaded through IPv4 Metro, permission denial disabled scanning, and reopening/granting permission enabled scanning. On Bota Pin `4KF6NOHWX0` / firmware `1.0.19`, discovery, wrong-serial rejection, exact identity, status, explicit disconnect/reconnect, and manual radio-off recovery passed. Automatic radio-loss notification failed in that beta.7 run; physical iOS and out-of-range recovery remain unverified. A native build alone does not establish hardware acceptance.
 

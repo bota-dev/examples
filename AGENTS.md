@@ -9,7 +9,7 @@
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples pin published beta.8. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples consume exact public packages. Beta.9 adoption is progressing as recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
 
@@ -42,7 +42,7 @@ For new examples, run their own documented install/check commands. Add meaningfu
 
 For `api/upload-and-transcribe-node/`, run `npm ci`, `npm run check`, and `npm test` from that directory. It uses Node built-ins and its own lockfile; no root install is needed. Its path-filtered workflow uses no live credentials. Follow its README before live verification; the test end user's auto-transcription must be disabled because this example creates the job explicitly.
 
-The webhook receiver uses Node built-in SQLite and commits before acknowledgment; do not replace its durable inbox with an in-memory Set. Python uses no third-party packages (`python -m unittest -v`). React Native uses Expo 57's iOS 16.4 floor and a scoped `xcode` ? `uuid@11.1.1` override. Web needs browser user activation and Bota Identity service support. Apple is a macOS app; Flutter includes an Android host only. Use each README and workflow for native checks. Published beta.8 provisioning still returns raw `deviceToken` through the React Native provider; it is not the target opaque prepare/provision/confirm flow. Encrypted sync requires application-native material handling. Do not bypass these boundaries to mark the replacement complete.
+The webhook receiver uses Node built-in SQLite and commits before acknowledgment; do not replace its durable inbox with an in-memory Set. Python uses no third-party packages (`python -m unittest -v`). React Native uses Expo 57's iOS 16.4 floor and a scoped `xcode` ? `uuid@11.1.1` override. Web needs browser user activation and Bota Identity service support. Apple is a macOS app; Flutter includes an Android host only. Use each README and workflow for native checks. The current published provisioning API still returns raw `deviceToken` through the React Native provider; it is not the target opaque prepare/provision/confirm flow. Encrypted sync requires application-native material handling. Do not bypass these boundaries to mark the replacement complete.
 
 Legacy workspace commands, from repository root:
 
@@ -63,12 +63,13 @@ Keep Android example application IDs distinct so samples can coexist on a test p
 
 Keep the changed example's README and root catalog accurate. Update `ARCHITECTURE.md` when boundaries, layout, or migration status change; update this file when contributor rules change. Keep `CLAUDE.md` a short entry point instead of duplicating architecture.
 
-The unreleased adapter-off candidate passed three radio-off/explicit-reconnect
-cycles per RN/Flutter lab on the recorded Android 16 / firmware 1.0.19 pair.
-One initial RN timeout recovered with a same-session retry. See
-[candidate evidence](docs/independent-examples-review.md#adapter-off-candidate).
-Do not copy the isolated Maven override into these public examples or describe
-the candidate result as public beta.8 behavior; a new release/adoption is pending.
+The SDK adapter-off fix is published in the native/RN/Web beta.9 artifacts.
+Four example pins are updated; Flutter publication/adoption and final-package
+phone checks remain pending in the [adoption review](docs/independent-examples-review.md#beta9-adoption).
+Earlier candidate labs passed three radio-off/explicit-reconnect cycles per
+framework, with one initial RN timeout recovered on retry. Keep those results
+separate from public-package acceptance. Never copy isolated Maven overrides
+into these public examples.
 
 Search changed tokens (paths, package names, environment variables, endpoints, symbols) across this repository's docs. In a full Bota workspace, also search `internal-docs/`, `docs/`, and every repo's `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, and `README.md`; inspect the internal-docs downstream impact matrix. Review each affected hit. If those repos are unavailable, record the missing cross-repo check; do not make private workspace access a prerequisite for public contributors.
 

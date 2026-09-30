@@ -1,6 +1,6 @@
 # Connect to a device with Swift
 
-A macOS SwiftUI app using the published Bota App SDK **2.0.0-beta.8** through Swift Package Manager. It scans, verifies the exact serial you supply through the SDK, reads status, and disconnects. No backend/API key or device mutation.
+A macOS SwiftUI app using the published Bota App SDK **2.0.0-beta.9** through Swift Package Manager. It scans, verifies the exact serial you supply through the SDK, reads status, and disconnects. No backend/API key or device mutation.
 
 ## Run
 
@@ -15,7 +15,9 @@ The script builds an app bundle with Bluetooth usage descriptions and an ad-hoc 
 
 The package pins the public Git tag exactly; its binary framework is downloaded by SwiftPM with the upstream checksum. No sibling checkout is required. This is a macOS example, not an iOS project; the SDK's broader platform support does not establish example coverage.
 
-2026-09-30 UTC, beta.8: public SwiftPM resolution and the macOS application build passed in [CI 36660143425](https://github.com/bota-dev/examples/actions/runs/36660143425). Physical macOS Bluetooth acceptance remains unverified. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
+2026-09-30 UTC, beta.9: the manifest and lock pin public tag `2.0.0-beta.9`, revision `89cb6f14eb0ea6327c196ac2cbeb8215df3423bd`. The Windows host cannot run SwiftPM/macOS builds; the new version's hosted build and physical Bluetooth checks remain pending. See the [current review](../../docs/independent-examples-review.md).
+
+Historical beta.8 evidence, 2026-09-30 UTC: public SwiftPM resolution and the macOS application build passed in [CI 36660143425](https://github.com/bota-dev/examples/actions/runs/36660143425). Physical macOS Bluetooth acceptance remains unverified. See the [beta.8 review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 

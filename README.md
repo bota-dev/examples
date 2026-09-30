@@ -19,9 +19,16 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 ## Example catalog
 
-Each linked example installs independently. App SDK examples pin published beta **2.0.0-beta.8**. The independent React Native connection sample has passing Android and iOS Simulator native builds; Android connection tests now cover Bota Pin firmware 1.0.19, with radio-loss limitations recorded in the [review](docs/independent-examples-review.md#beta8-adoption). In beta.8 phone checks, Kotlin passed the full radio-off/reconnect cycle; React Native cleared stale state but reconnect failed, and Flutter missed a radio-off event. Full cross-facade recovery and other platform/device coverage remain open. The [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps) links all eight examples.
-
-An [unreleased Android SDK candidate](docs/independent-examples-review.md#adapter-off-candidate) passed three radio-off/reconnect cycles each through RN and Flutter on that phone/device pair. These examples still use public beta.8; adoption awaits a new SDK release.
+Each linked example installs independently. Kotlin, Apple, React Native and Web
+now pin published App SDK **2.0.0-beta.9**. Flutter remains at beta.8 until its
+matching pub.dev release is verified. The [adoption review](docs/independent-examples-review.md#beta9-adoption)
+records exact dependency/build evidence and pending public-package phone checks.
+Beta.9 handles Android adapter shutdown even when GATT omits its disconnect
+callback; restore Bluetooth, scan and reconnect explicitly. The historical
+beta.8 failures and earlier isolated candidate results remain in the review.
+Physical acceptance for other platforms and devices remains open. The
+[public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps)
+links all eight examples.
 
 | Example | What it teaches | Physical device |
 | --- | --- | --- |
