@@ -182,11 +182,21 @@ exact public `2.0.0-beta.8` artifacts. Earlier sections retain their beta.7
 evidence. The SDK release source is `8ad1328c8456ee73b98869a6800f137a6f5a8c25`;
 [protected release 36652271187](https://github.com/bota-dev/app-sdk/actions/runs/36652271187)
 promotes the verified main-CI candidates without rebuilding them. Native/npm
-publication and public SwiftPM/Maven consumers have passed; synchronized
-Flutter completion, example CI and fresh phone checks remain pending.
+publication, public SwiftPM/Maven/CocoaPods consumers, Flutter publication and
+public archive verification all passed. Example CI and fresh phone checks are
+recorded below as they complete.
 
 Acceptance: a confirmed phone-radio disconnect clears selection/status through
 the existing SDK connection listener without Read status or Disconnect; after
 radio restoration, an explicit exact-serial reconnect yields fresh status.
 No automatic reconnect loop, provisioning, recording, reset or deletion is added.
 Physical macOS/iOS/Web, out-of-range and background behavior remain unverified.
+
+The public Flutter beta.8 archive SHA-256 is
+`7354fa6f8c53a07ded252dc6419b96b9aa921126ab65a4d664ef927d343647f1`.
+The archive was downloaded and verified against pub.dev metadata. Its dependency
+and environment constraints equal beta.7; the lock changes only the direct
+package version/hash. Windows Flutter tool startup remained suspended, so
+hosted Flutter 3.47.5 must enforce the lock, analyze and build the APK. No security
+policy was changed. RN/Flutter listeners now replace stale status text on loss;
+initial Flutter null events preserve setup instructions.

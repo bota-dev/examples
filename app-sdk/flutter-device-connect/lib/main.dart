@@ -62,7 +62,14 @@ class _ConnectPageState extends State<ConnectPage> {
     }
     connection = client.devices.connections.listen(
       (device) {
-        if (mounted) setState(() => connected = device);
+        if (mounted) {
+          setState(() {
+            if (connected != null && device == null) {
+              message = 'Disconnected. Restore Bluetooth and reconnect.';
+            }
+            connected = device;
+          });
+        }
       },
       onError: (Object error) {
         if (mounted) {

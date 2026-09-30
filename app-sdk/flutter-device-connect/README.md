@@ -1,6 +1,6 @@
 # Connect to a device with Flutter
 
-An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.7` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
+An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.8` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
 
 ## Run
 
@@ -19,6 +19,10 @@ Enable Bluetooth access, enter the exact printed device serial, scan, and select
 The SDK verifies connected identity, not the advertised name. Selection cancels scanning before connecting. Connection events clear stale selection when delivered; teardown cancels subscriptions and destroys the SDK. On the tested Android phone, beta.7 did not report radio loss through the connection stream, leaving the selection visible. Tap Disconnect to clear it even when the SDK call fails, then restore Bluetooth and reconnect. Automatic radio-loss recovery remains a known limitation. This is a foreground development app; configure your own signing before distribution.
 
 ## Verify
+
+The connection listener replaces old status text on a connected-to-null event.
+Initial null events retain the setup instruction. Fresh beta.8 adoption and
+physical acceptance are tracked in the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 2026-09-29 device check: Samsung SM-A166U1 (Android 16/API 36), Bota Pin `4KF6NOHWX0` / firmware `1.0.19`, App SDK beta.7. The original source `50ddf37` passed permission denial/recovery, discovery, wrong-serial rejection, exact identity, status, and explicit disconnect/reconnect. The updated APK from source `61a7471` passed connection, Bluetooth-off failed-disconnect cleanup, radio-on reconnect, fresh status, and final explicit disconnect; see the [review](../../docs/independent-examples-review.md#firmware-1019-physical-test-continuation). Automatic radio-loss notification failed as described above; other phones/firmware and out-of-range recovery remain unverified.
 

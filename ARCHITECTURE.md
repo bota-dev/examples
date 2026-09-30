@@ -43,7 +43,7 @@ examples/
     react-native/
 ```
 
-Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android), Web, and React Native teach read-only connection/status using published beta.7 packages. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
+Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android), Web, and React Native teach read-only connection/status using published beta.8 packages. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
 
 ### Independence and dependencies
 
