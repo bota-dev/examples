@@ -1,6 +1,6 @@
 # Connect to a device from the browser
 
-A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.7` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
+A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.8` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
 
 ## Run
 
@@ -14,6 +14,9 @@ npm start
 Open the local URL printed by Vite. Enter the exact serial printed on your device, click Connect, and choose it in the browser picker. The SDK verifies identity before accepting the connection. The picker starts directly from the click handler; moving it behind an awaited request can lose browser user activation. Use Read status and Disconnect after connecting. No recording or provisioning operations are performed.
 
 If Bluetooth is unsupported, permission is denied, or identity verification fails, the page shows an error. Close other applications using the device. The browser owns permission prompts; inspect site permissions to retry. The SDK is destroyed when the page unloads.
+
+The beta.8 dependency upgrade is undergoing fresh build and device checks;
+previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 

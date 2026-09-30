@@ -1,6 +1,6 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.7`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.8`. No API key, backend, binding, recording, or upload is needed.
 
 ## Run
 
@@ -38,6 +38,9 @@ this clears the sample's local app data. Artifact creation is build evidence,
 not physical Bluetooth acceptance.
 
 Operations are serialized. Disconnection events clear selection when delivered. On the tested Android phone, beta.7 did not deliver the radio-off event to this facade, so the selection stayed visible and a status read reported "not connected". Tap Disconnect to clear the selection (including when the SDK disconnect call fails), turn Bluetooth back on, and reconnect. Automatic radio-loss recovery remains a known limitation. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
+
+The beta.8 dependency upgrade is undergoing fresh build and device checks;
+previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 

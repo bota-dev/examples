@@ -1,6 +1,6 @@
 # Connect to a device with Swift
 
-A macOS SwiftUI app using the published Bota App SDK **2.0.0-beta.7** through Swift Package Manager. It scans, verifies the exact serial you supply through the SDK, reads status, and disconnects. No backend/API key or device mutation.
+A macOS SwiftUI app using the published Bota App SDK **2.0.0-beta.8** through Swift Package Manager. It scans, verifies the exact serial you supply through the SDK, reads status, and disconnects. No backend/API key or device mutation.
 
 ## Run
 
@@ -14,6 +14,9 @@ open BotaConnect.app
 The script builds an app bundle with Bluetooth usage descriptions and an ad-hoc signature. Run the bundle so macOS can associate its permission prompt with the application. Grant Bluetooth permission, enter the exact printed serial, scan for ten seconds, select a candidate, then read status or disconnect. If access is denied, grant it in System Settings → Privacy & Security → Bluetooth and reopen. Advertised names do not establish identity.
 
 The package pins the public Git tag exactly; its binary framework is downloaded by SwiftPM with the upstream checksum. No sibling checkout is required. This is a macOS example, not an iOS project; the SDK's broader platform support does not establish example coverage.
+
+The beta.8 dependency upgrade is undergoing fresh build and device checks;
+previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 

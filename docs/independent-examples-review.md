@@ -174,3 +174,19 @@ APK. This changes artifact retention only; SDK pins, current radio-off limits
 and the historical hardware acceptance claims remain unchanged. Review against
 the architecture's reproducible-build and physical-evidence boundary is matched
 in source; hosted upload verification remains a CI gate.
+
+## Beta.8 adoption
+
+2026-09-30 UTC: upgrading the five independent connection examples to the
+exact public `2.0.0-beta.8` artifacts. Earlier sections retain their beta.7
+evidence. The SDK release source is `8ad1328c8456ee73b98869a6800f137a6f5a8c25`;
+[protected release 36652271187](https://github.com/bota-dev/app-sdk/actions/runs/36652271187)
+promotes the verified main-CI candidates without rebuilding them. Native/npm
+publication and public SwiftPM/Maven consumers have passed; synchronized
+Flutter completion, example CI and fresh phone checks remain pending.
+
+Acceptance: a confirmed phone-radio disconnect clears selection/status through
+the existing SDK connection listener without Read status or Disconnect; after
+radio restoration, an explicit exact-serial reconnect yields fresh status.
+No automatic reconnect loop, provisioning, recording, reset or deletion is added.
+Physical macOS/iOS/Web, out-of-range and background behavior remain unverified.
