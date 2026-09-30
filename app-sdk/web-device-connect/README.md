@@ -15,8 +15,7 @@ Open the local URL printed by Vite. Enter the exact serial printed on your devic
 
 If Bluetooth is unsupported, permission is denied, or identity verification fails, the page shows an error. Close other applications using the device. The browser owns permission prompts; inspect site permissions to retry. The SDK is destroyed when the page unloads.
 
-The beta.8 dependency upgrade is undergoing fresh build and device checks;
-previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
+2026-09-30 UTC, beta.8: public frozen install, TypeScript check and Vite/WASM build passed locally and in [CI 36660143423](https://github.com/bota-dev/examples/actions/runs/36660143423). Physical browser Bluetooth acceptance remains unverified. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 

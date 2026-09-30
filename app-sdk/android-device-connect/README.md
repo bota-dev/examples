@@ -17,8 +17,7 @@ The application ID is `dev.bota.examples.kotlinconnect`, distinct from the React
 
 The SDK rejects a mismatching identity. Discovery names are display-only. Operations are serialized, and a failed status read after disconnection does not rebind or retry device operations. Teardown cancels UI jobs and destroys the SDK. This foreground sample has no background-service behavior.
 
-The beta.8 dependency upgrade is undergoing fresh build and device checks;
-previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
+2026-09-30 UTC, beta.8: [CI 36660614376](https://github.com/bota-dev/examples/actions/runs/36660614376) passed. Its preserved APK passed exact-serial connection, status, automatic radio-off UI cleanup without Read status or Disconnect, explicit reconnect after radio restoration, fresh status, and final disconnect on Samsung SM-A166U1 / Android 16 and Bota Pin firmware 1.0.19. See the [current review](../../docs/independent-examples-review.md#beta8-adoption); earlier dated beta.7 checks below remain historical.
 
 ## Verify
 
@@ -38,13 +37,12 @@ shows the reconnect instruction. Activity teardown cancels observation before
 SDK destruction. Reconnect remains an explicit user action.
 
 Beta.8 includes the Android loss-delivery fix. The listener clears stale status
-on a confirmed disconnect; reconnect remains explicit. Fresh beta.8 physical
-acceptance is tracked in the review.
+on a confirmed disconnect; reconnect remains explicit. The beta.8 foreground radio-off and explicit-reconnect check passed on the recorded phone/firmware pair; other loss modes remain unverified.
 
 The updated listener was phone-tested separately at `416d27c` with beta.7 on the
 same Samsung / firmware 1.0.19 pair: verified connection, status, explicit
 disconnect clearing the status, reconnect and final disconnect passed using
-the preserved CI APK. Automatic radio-loss recovery remains pending beta.8.
+the preserved CI APK. That historical beta.7 run did not test automatic radio-loss delivery; the beta.8 result above supersedes that pending gate for this phone/firmware pair.
 
 The Kotlin GitHub Actions workflow preserves `app-debug.apk` as
 `kotlin-device-connect-<commit>`. Use that exact artifact for source-matched

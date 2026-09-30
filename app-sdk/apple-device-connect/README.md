@@ -15,8 +15,7 @@ The script builds an app bundle with Bluetooth usage descriptions and an ad-hoc 
 
 The package pins the public Git tag exactly; its binary framework is downloaded by SwiftPM with the upstream checksum. No sibling checkout is required. This is a macOS example, not an iOS project; the SDK's broader platform support does not establish example coverage.
 
-The beta.8 dependency upgrade is undergoing fresh build and device checks;
-previous dated results below describe beta.7. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
+2026-09-30 UTC, beta.8: public SwiftPM resolution and the macOS application build passed in [CI 36660143425](https://github.com/bota-dev/examples/actions/runs/36660143425). Physical macOS Bluetooth acceptance remains unverified. See the [current review](../../docs/independent-examples-review.md#beta8-adoption).
 
 ## Verify
 

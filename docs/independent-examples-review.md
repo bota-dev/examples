@@ -2,7 +2,7 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
-## Evidence by example
+## Initial beta.7 evidence by example
 
 | Example | Public dependency / runtime | Evidence | Remaining verification |
 | --- | --- | --- | --- |
@@ -177,14 +177,13 @@ in source; hosted upload verification remains a CI gate.
 
 ## Beta.8 adoption
 
-2026-09-30 UTC: upgrading the five independent connection examples to the
+2026-09-30 UTC: upgraded the five independent connection examples to the
 exact public `2.0.0-beta.8` artifacts. Earlier sections retain their beta.7
 evidence. The SDK release source is `8ad1328c8456ee73b98869a6800f137a6f5a8c25`;
 [protected release 36652271187](https://github.com/bota-dev/app-sdk/actions/runs/36652271187)
 promotes the verified main-CI candidates without rebuilding them. Native/npm
 publication, public SwiftPM/Maven/CocoaPods consumers, Flutter publication and
-public archive verification all passed. Example CI and fresh phone checks are
-recorded below as they complete.
+public archive verification all passed. Example CI passed; fresh phone checks below leave recovery partially accepted.
 
 Acceptance: a confirmed phone-radio disconnect clears selection/status through
 the existing SDK connection listener without Read status or Disconnect; after
@@ -197,6 +196,82 @@ The public Flutter beta.8 archive SHA-256 is
 The archive was downloaded and verified against pub.dev metadata. Its dependency
 and environment constraints equal beta.7; the lock changes only the direct
 package version/hash. Windows Flutter tool startup remained suspended, so
-hosted Flutter 3.47.5 must enforce the lock, analyze and build the APK. No security
+hosted Flutter 3.47.5 enforced the lock, analyzed and built the APK successfully. No security
 policy was changed. RN/Flutter listeners now replace stale status text on loss;
 initial Flutter null events preserve setup instructions.
+
+
+### Published-package and build evidence
+
+| Example / gate | Source revision | Successful hosted run |
+| --- | --- | --- |
+| React Native Android and iOS Simulator | `0995c479ec1dc1885ecb201bc23a66f6780393dc` | [36661341921](https://github.com/bota-dev/examples/actions/runs/36661341921) |
+| Web typecheck and Vite/WASM build | `cd5605eb30b11bd4fb820586c5947e2d62b00cb8` | [36660143423](https://github.com/bota-dev/examples/actions/runs/36660143423) |
+| Apple SwiftPM/macOS application | `cd5605eb30b11bd4fb820586c5947e2d62b00cb8` | [36660143425](https://github.com/bota-dev/examples/actions/runs/36660143425) |
+| Kotlin Android locked dependency/build | `f2d35eb18c29c1c7b7ca9318fa22125fd2c70e94` | [36660614376](https://github.com/bota-dev/examples/actions/runs/36660614376) |
+| Flutter frozen pub resolution, analysis, Android APK | `e3041211c956d6058326bea799aefd4dbe53d050` | [36661667401](https://github.com/bota-dev/examples/actions/runs/36661667401) |
+| Root legacy regression/export/native build | `e3041211c956d6058326bea799aefd4dbe53d050` | [36661667436](https://github.com/bota-dev/examples/actions/runs/36661667436) |
+
+Later revisions changed other examples or documentation only; each listed source
+remains the applicable build for its example. RN local typecheck, identity tests
+and Android export passed; Web typecheck/build passed. The Kotlin lock was updated
+through Gradle dependency resolution. Flutter's independently verified public hash
+was confirmed by hosted frozen resolution. No sibling SDK build is installed by
+these examples. SDK publication passed all public consumer gates; npm `beta`
+selects beta.8 while `latest` remains beta.0.
+
+### Beta.8 phone acceptance
+
+Tests used the preserved CI APKs below on Samsung SM-A166U1, Android 16/API 36,
+with exact SDK-verified Bota Pin `4KF6NOHWX0`, firmware 1.0.19. Each successful
+status read showed 100% battery, Idle and zero pending recordings. No status
+subscription was used to manufacture a loss event. Only these test samples were
+reinstalled where CI debug signatures differed. RN used source-matched Metro;
+Windows file-watcher startup timed out, so `CI=1` disabled watching for this run.
+No security policy was disabled.
+
+| Sample | Initial verified connection/status | Bluetooth-off without Read status or Disconnect | Explicit reconnect after radio restoration | Acceptance |
+| --- | --- | --- | --- | --- |
+| Kotlin | Passed | Selection/status cleared and reconnect instruction shown | Passed exact-serial reconnect and fresh status, then final disconnect | matched for this foreground cycle |
+| React Native | Passed | Selection/status cleared and reconnect instruction shown | Failed twice with GATT error 133, including after a fresh scan | partial; loss notification passed, recovery failed |
+| Flutter | First attempt timed out; an additional phone Bluetooth cycle allowed verified connection/status | Failed: selected device and stale status remained visible after more than 30 seconds | Fresh app launch and scan also failed to reconnect | partial; connection/status passed, loss delivery and recovery failed |
+
+| Sample | GitHub artifact ID | APK SHA-256 |
+| --- | --- | --- |
+| Kotlin, run `36660614376` | `11073584488` | `d7d1d50bc4c0b935ff260b56ea1689b7e4280d137fd88f9e4859ac8b5bee4265` |
+| React Native, run `36661341921` | `11074463817` | `b27b428b7cb83caeeb0f8bd523b1d3ce6c8f022099e71559e04728d8ab942f00` |
+| Flutter, run `36661667401` | `11074861430` | `a64d86597c36ef8489e3e09632041da9a14188fdf67f1b198eb27a5698085b8d` |
+
+Downloaded ZIP digests were independently checked against GitHub metadata before
+installation. Local evidence retains connected/status and radio-off UI XML plus
+artifact metadata; Kotlin also retains reconnected/status XML.
+
+During Flutter radio-off, Android logged `onClientRegistered(100)` and GATT client
+cleanup, without `onConnectionStateChange(DISCONNECTED)`. The phone adapter was
+confirmed off while the UI stayed connected. Beta.8's
+`FrameworkAndroidBluetoothPlatform` emits loss from that GATT callback and has no
+adapter-state receiver. This identifies an unhandled adapter-off path; it does
+not prove the cause of the separate GATT 133 reconnect failures. RN logs showed
+failed client registration/connection followed by SDK GATT cleanup. Do not infer
+wearable identity from the candidate name or attribute these failures to firmware
+without further evidence.
+
+### Final design comparison and remaining work
+
+| Requirement / authority | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Architecture §§2–3: independent public integrations | Five exact published beta.8 pins and locks; successful isolated consumer builds | matched |
+| Architecture §§3–4: exact identity and visible stale-state cleanup | Exact-serial phone reads; all three listeners clear selection/status when notified | partial: native adapter-off event missing in the Flutter run |
+| Architecture §§4,6: explicitly recover and verify fresh status | Kotlin full cycle; RN GATT 133 and Flutter timeout/loss failures retained above | partial; repeat RN/Flutter after native adapter-off handling and reconnect diagnosis |
+| Architecture §6: separate build and hardware claims | Exact CI source/artifact identities and scenario-specific outcomes | matched; physical Apple/iOS/Web, out-of-range, background and other hardware unverified |
+| Public catalog/setup accuracy | All five package pins updated; docs `main` `f81b7b1`, scoped `prod` `3232cce`; successful exact-prod Mintlify deployment and live SDK/changelog pages | matched for publication; recovery limitations linked here |
+| Architecture §5: full recording-sync replacement | Opaque provisioning/native encrypted-material integration gaps above | not implemented; legacy workspace retained |
+
+The approved beta.8 publication/adoption is complete. Full Bluetooth-loss recovery
+is **not** complete. The SDK follow-up must handle adapter shutdown even when
+Android omits the GATT callback, preserving generation fencing and observer
+teardown; reconnect failures need separate diagnosis. That requires new SDK
+source, regression/physical checks and a new immutable public release before
+examples can adopt it. Do not patch GATT or duplicate transport policy here.
+No wearable provisioning, recording, upload, reset, deletion or firmware flashing
+was performed in these read-only connection tests.
