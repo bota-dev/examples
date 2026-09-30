@@ -469,9 +469,17 @@ not alter the public SDK API or authoritative transport design. The example
 README, root catalog, architecture and contributor guidance were updated; the
 CLAUDE entry point's stale beta.7 sample note was reconciled to beta.9.
 
-Separate native follow-up: source review identified a possible explicit-disconnect
-timeout gap when the adapter remains on and Android never delivers its callback.
-Driver ownership can be cleared while the platform GATT remains until replacement
-or SDK close. This was not reproduced and is not the observed GATT 8/133 path.
-It requires a separate API 26/35 regression with the callback withheld, checking
-exact-client closure, pending work, loss delivery and late-callback isolation.
+The separate native explicit-disconnect timeout gap was subsequently reproduced
+with the adapter on and its disconnect callback withheld. The unchanged SDK
+failed four regressions: exact-client closure on API 26/35, delayed driver loss,
+and delayed facade cleanup. SDK source
+[`2ef8580`](https://github.com/bota-dev/app-sdk/commit/2ef85809e395a9675345f3aece0b967bb305d4cb)
+closes the captured GATT and retains one-shot delayed loss delivery without
+cancelling queued replacement work. All 61 affected framework, driver, manager
+and runtime tests passed locally. See the
+[native design review](https://github.com/bota-dev/app-sdk/blob/2ef85809e395a9675345f3aece0b967bb305d4cb/docs/parity/android-disconnection-events.md#explicit-disconnect-without-an-android-callback)
+and exact-source [CI](https://github.com/bota-dev/app-sdk/actions/runs/36790626474)
+and [License Gate](https://github.com/bota-dev/app-sdk/actions/runs/36790628943),
+which gate main integration. This is an **unreleased source fix**; public beta.9
+and these examples' dependency pins remain unchanged. It is not the observed
+GATT 8/133 path and adds no physical reconnect reliability claim.
