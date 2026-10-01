@@ -1,6 +1,6 @@
 # Connect to a device from the browser
 
-A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.9` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
+A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.10` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
 
 ## Run
 
@@ -14,6 +14,15 @@ npm start
 Open the local URL printed by Vite. Enter the exact serial printed on your device, click Connect, and choose it in the browser picker. The SDK verifies identity before accepting the connection. The picker starts directly from the click handler; moving it behind an awaited request can lose browser user activation. Use Read status and Disconnect after connecting. No recording or provisioning operations are performed.
 
 If Bluetooth is unsupported, permission is denied, or identity verification fails, the page shows an error. Close other applications using the device. The browser owns permission prompts; inspect site permissions to retry. The SDK is destroyed when the page unloads.
+
+2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
+integrity. Frozen install, TypeScript check, and Vite 7.3.6/WASM production build
+pass locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities.
+Hosted build evidence is tracked separately in the
+[adoption review](../../docs/independent-examples-review.md). Physical browser
+Bluetooth acceptance remains unverified. This synchronized SDK version includes
+an Android native disconnect cleanup fix; it does not change this browser
+example's connection workflow.
 
 2026-09-30 UTC, beta.9: public frozen install, TypeScript check, and Vite 7.3.6/WASM production build passed locally on Node 22.23.2 and in [CI 36766071433](https://github.com/bota-dev/examples/actions/runs/36766071433) at source `43a5bd3521fdbc9d24dcfea7e8d714f08359f681`; local npm audit reports zero vulnerabilities. Physical browser Bluetooth acceptance remains unverified. See the [current review](../../docs/independent-examples-review.md).
 

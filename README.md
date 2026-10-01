@@ -19,15 +19,18 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 ## Example catalog
 
-Each linked example installs independently. All five App SDK examples now pin
-published **2.0.0-beta.9**. The [adoption review](docs/independent-examples-review.md#beta9-adoption)
-records exact dependency/build and public-package phone evidence. RN passed
-three first reconnects; Flutter passed two, then recovered the third after GATT
-8/133 with a fresh scan in the same app session. Both cleared stale UI on all
-three radio shutdowns. First-attempt connection reliability remains partial.
-Beta.9 handles Android adapter shutdown even when GATT omits its disconnect
-callback; restore Bluetooth, scan and reconnect explicitly. The historical
-beta.8 failures and earlier isolated candidate results remain in the review.
+Each linked example installs independently. React Native, Web, Android and
+Apple (SwiftPM) pin published **2.0.0-beta.10**; Flutter retains published
+**2.0.0-beta.9**. Beta.10 publication is partial: CocoaPods publication is blocked
+by an upstream GitHub API timeout, and Flutter beta.10 is not available on
+pub.dev. The [adoption review](docs/independent-examples-review.md#beta10-adoption)
+separates verified public dependencies, local checks, pending hosted builds and
+physical evidence. On the recorded Samsung/Bota Pin pair, RN beta.10 passed
+three radio-loss/first-reconnect cycles and graceful disconnect/reconnect.
+Beta.10 adds Android explicit-disconnect timeout cleanup and retains beta.9
+adapter-off handling. Restore Bluetooth, scan and reconnect explicitly.
+The earlier Flutter GATT 8/133 reconnect issue is not established as fixed;
+its beta.9 results and six UI ordering tests remain in the review.
 Physical acceptance for other platforms and devices remains open. The
 [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps)
 links all eight examples.

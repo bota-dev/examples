@@ -1,6 +1,6 @@
 # Connect to a device with Kotlin
 
-A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.9` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
+A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.10` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
 
 ## Run
 
@@ -17,7 +17,9 @@ The application ID is `dev.bota.examples.kotlinconnect`, distinct from the React
 
 The SDK rejects a mismatching identity. Discovery names are display-only. Operations are serialized, and a failed status read after disconnection does not rebind or retry device operations. Teardown cancels UI jobs and destroys the SDK. This foreground sample has no background-service behavior.
 
-2026-09-30 UTC, beta.9: public Maven resolution, a targeted Bota-only lock update, and a separate frozen-lock Android build passed locally with JDK 17 and Android SDK 36. The resolved AAR SHA-256 is `dc90f8815f38efeaed88b45e89bf5bcd8991efff7b8f6e8453f90fc58b8eb4a1`, matching the released artifact. Hosted APK assembly passed in [CI 36766071441](https://github.com/bota-dev/examples/actions/runs/36766071441) at source `43a5bd3521fdbc9d24dcfea7e8d714f08359f681`. This sample's beta.9 physical-device checks remain pending; see the [current review](../../docs/independent-examples-review.md).
+2026-10-01 UTC, beta.10: public Maven resolution, a targeted Bota-only lock update, and a separate frozen-lock Android build passed locally with JDK 17 and Android SDK 36. The resolved AAR SHA-256 is `a8fffe299c6ba02e1ac5a808785c68e5c85c093b1ab093e78bb923a2461514de` and POM SHA-256 is `2c980d25bbadfc7721549eaaa09125feb2af015f468d3abd47083aa8ee625e75`, matching the published artifacts from SDK source `f5c6482ac4378a2f35e902ade172a5cb779dffa6`. Hosted APK assembly and beta.10 physical-device checks are pending. See the [current review](../../docs/independent-examples-review.md).
+
+Historical beta.9 evidence, 2026-09-30 UTC: public Maven resolution, a targeted Bota-only lock update, and a separate frozen-lock Android build passed locally with JDK 17 and Android SDK 36. The resolved AAR SHA-256 was `dc90f8815f38efeaed88b45e89bf5bcd8991efff7b8f6e8453f90fc58b8eb4a1`, matching the released artifact. Hosted APK assembly passed in [CI 36766071441](https://github.com/bota-dev/examples/actions/runs/36766071441) at source `43a5bd3521fdbc9d24dcfea7e8d714f08359f681`. This sample's beta.9 physical-device checks were not performed.
 
 Historical beta.8 evidence, 2026-09-30 UTC: [CI 36660614376](https://github.com/bota-dev/examples/actions/runs/36660614376) passed. Its preserved APK passed exact-serial connection, status, automatic radio-off UI cleanup without Read status or Disconnect, explicit reconnect after radio restoration, fresh status, and final disconnect on Samsung SM-A166U1 / Android 16 and Bota Pin firmware 1.0.19. See the [beta.8 review](../../docs/independent-examples-review.md#beta8-adoption); earlier dated beta.7 checks below remain historical.
 
@@ -38,11 +40,12 @@ A verified connection displays its serial; a null event clears old status and
 shows the reconnect instruction. Activity teardown cancels observation before
 SDK destruction. Reconnect remains an explicit user action.
 
-Beta.9 retains confirmed-disconnect delivery and adds Android adapter-off cleanup
-when Android omits the GATT disconnect callback. The listener clears stale status;
-reconnect remains explicit. The historical beta.8 foreground radio-off and
-explicit-reconnect check passed on the recorded phone/firmware pair. It does not
-establish this example's beta.9 physical acceptance or other loss modes.
+Beta.10 retains confirmed-disconnect and Android adapter-off cleanup, and adds
+cleanup when an explicit disconnect times out or is cancelled without a GATT
+callback. The listener clears stale status; reconnect remains explicit. The
+historical beta.8 foreground radio-off and explicit-reconnect check passed on
+the recorded phone/firmware pair. It does not establish this example's beta.10
+physical acceptance or a fix for native reconnect failures.
 
 The updated listener was phone-tested separately at `416d27c` with beta.7 on the
 same Samsung / firmware 1.0.19 pair: verified connection, status, explicit

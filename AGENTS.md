@@ -9,7 +9,7 @@
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples consume exact public packages. All five pin public beta.9; exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples consume exact public packages. React Native, Web, Android and Apple (SwiftPM) pin public beta.10; Flutter retains public beta.9 pending beta.10 publication. Exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
 
@@ -68,8 +68,8 @@ an older connect/status Future settles. Run `flutter test` as well as analysis
 and the native build after changing this lifecycle. Widget regressions establish
 UI ordering only; they do not establish a fix for native GATT reconnect failures.
 
-The SDK adapter-off fix is published across the synchronized beta.9 artifacts.
-All five pins and hosted builds are verified. Public-package phone tests cleared
+The earlier SDK adapter-off fix was published across synchronized beta.9 artifacts.
+At that checkpoint all five pins and hosted builds were verified. Beta.9 phone tests cleared
 stale UI on all three radio losses per framework. RN passed all first reconnects;
 Flutter passed two and recovered the third after GATT 8/133 with a fresh scan,
 without an app restart or additional radio cycle. Preserve this reliability
@@ -78,6 +78,18 @@ Earlier candidate labs passed three radio-off/explicit-reconnect cycles per
 framework, with one initial RN timeout recovered on retry. Keep those results
 separate from public-package acceptance. Never copy isolated Maven overrides
 into these public examples.
+
+Beta.10 adds exact-generation cleanup when explicit disconnect times out or
+is cancelled without a native callback. Its late event must not cancel queued
+replacement work. React Native, Web, Android and Apple (SwiftPM) examples use
+exact public beta.10 dependencies. Flutter stays on beta.9: beta.10 CocoaPods
+publication hit an upstream GitHub API timeout and pub.dev publication remains
+blocked. Preserve the six Flutter UI completion-ordering tests and the public
+package boundary; do not use a private or candidate override to align versions.
+See [current adoption](docs/independent-examples-review.md#beta10-adoption) for
+local, hosted and phone evidence. Do not claim this fixes the distinct GATT
+8/133 issue or proves physical missing-callback behavior from simulated native
+regressions.
 
 Search changed tokens (paths, package names, environment variables, endpoints, symbols) across this repository's docs. In a full Bota workspace, also search `internal-docs/`, `docs/`, and every repo's `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, and `README.md`; inspect the internal-docs downstream impact matrix. Review each affected hit. If those repos are unavailable, record the missing cross-repo check; do not make private workspace access a prerequisite for public contributors.
 

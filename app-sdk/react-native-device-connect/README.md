@@ -1,6 +1,6 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.9`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.10`. No API key, backend, binding, recording, or upload is needed.
 
 ## Run
 
@@ -39,6 +39,13 @@ not physical Bluetooth acceptance.
 
 Operations are serialized. Disconnection events clear selection and stale status. Beta.9 adds Android adapter-off handling in the native SDK, including cases where Android omits the GATT disconnect callback. Restore Bluetooth, scan, and explicitly reconnect; this sample does not reconnect automatically. If no loss event arrives, Disconnect still clears the local selection even when the SDK call fails. SDK teardown removes subscriptions when the app component unmounts. After permission denial, reopen the app to retry the system prompt; if Android no longer offers it, grant access in system settings and reopen. This sample does not provision, unbind, reset, start recording, or delete files.
 
+Beta.10 also retires an Android connection when an explicit disconnect times out
+without a GATT callback, keeping late loss events from retiring a replacement
+connection. This native cleanup fix does not establish a fix for the historical
+GATT 8/133 reconnect failures. The dated beta.9 phone results below remain evidence
+for beta.9 only; current build and hardware checks are tracked in the
+[adoption review](../../docs/independent-examples-review.md).
+
 Historical beta.8 results, 2026-09-30 UTC: Android and iOS Simulator builds passed in [CI 36661341921](https://github.com/bota-dev/examples/actions/runs/36661341921). On Samsung SM-A166U1 / Android 16 and Bota Pin firmware 1.0.19, exact-serial connection, status, and automatic radio-off UI cleanup passed. Explicit reconnect failed twice with GATT error 133, including after a fresh scan. Full recovery was therefore **partial**. See the [beta.8 review](../../docs/independent-examples-review.md#beta8-adoption); the dated beta.7 checks below also remain historical.
 
 The connection-loss listener also replaces the previous status text with a
@@ -52,6 +59,27 @@ npm run typecheck
 npm test
 npm run export
 ```
+
+2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
+integrity. Frozen install, TypeScript check, the identity regression test (exact
+serial, mismatch disconnect, and empty input), and Android Metro export pass
+locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities. Hosted
+native builds are tracked separately in the
+[adoption review](../../docs/independent-examples-review.md).
+
+On 2026-10-01 UTC, the public beta.10 Android arm64 release-mode lab passed
+three radio-off/explicit-reconnect cycles on Samsung SM-A166U1 / Android 16.
+The SDK read serial `4KF6NOHWX0` and firmware `1.0.19`. All three radio losses
+cleared stale UI automatically; each first reconnect verified identity/firmware
+and read fresh status. A separate graceful Disconnect → fresh scan → first
+reconnect also verified identity/firmware and read status; final explicit
+disconnect passed. The lab changes only the application ID and diagnostic
+identity/firmware text, bundles JavaScript, and uses the verified public npm
+package and Maven AAR. Its APK SHA-256 is
+`e96ba9650ff74ef9c64063a7b8f4bd4f6e343abe6c81438ec504733401450f0e`.
+This bounded result does not establish a fix for GATT 8/133 or physically
+exercise a missing disconnect callback. Physical iOS, background/out-of-range
+behavior, and other hardware remain unverified.
 
 2026-09-30 UTC, beta.9: public frozen install, TypeScript check, identity
 regression test (exact serial, mismatch disconnect, and empty input), and Android
