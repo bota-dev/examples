@@ -491,11 +491,15 @@ The owner approved the exact [beta.10 release](https://github.com/bota-dev/app-s
 and direct pushes without a PR. SDK source is
 `f5c6482ac4378a2f35e902ade172a5cb779dffa6`. Publication is **partial**: the exact
 React Native and Web npm packages, Android Maven artifact and SwiftPM tag/archive
-are public and verified. CocoaPods publication failed twice when the server's
+are public and verified. CocoaPods publication failed repeatedly when the server's
 GitHub commit request timed out after local pod validation had passed; Flutter
 beta.10 remains unavailable on pub.dev. The
 [SDK publication record](https://github.com/bota-dev/app-sdk/blob/main/release/evidence/2.0.0-beta.10-publication.md)
-tracks the remaining release gates. This is not a completed synchronized release.
+tracks the remaining release gates. A further retry after fresh successful
+CocoaPodsBot publications also failed with the same commit API timeout in
+[attempt 8](https://github.com/bota-dev/app-sdk/actions/runs/36798449511/job/110476600809)
+at 16:47 UTC. Publication retries stopped; Flutter retains beta.9.
+This is not a completed synchronized release.
 
 React Native, Web, Android and Apple (SwiftPM) examples adopt exact public
 `2.0.0-beta.10`; Flutter retains exact public `2.0.0-beta.9`, its archive lock
@@ -512,14 +516,14 @@ These checks do not prove physical missing-callback behavior or resolve the
 separate beta.9 Flutter GATT 8/133 failure, whose native clients already closed
 promptly. Examples retain explicit reconnect and SDK-owned transport policy.
 
-### Public artifacts and local checks
+### Public artifacts and local/hosted checks
 
 | Example | Exact dependency and evidence | Remaining verification |
 | --- | --- | --- |
-| React Native | Public beta.10 tarball SHA-512 matches the lockfile; own-directory frozen install, TypeScript, identity regression and Android Metro export pass on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities; iOS podspec uses the public SwiftPM dependency | Hosted Android and iOS builds pending; physical iOS unverified |
-| Web | Public beta.10 tarball SHA-512 matches the lockfile; own-directory frozen install, TypeScript and Vite 7.3.6/WASM build pass on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities | Hosted build pending; physical browser Bluetooth unverified |
-| Android | Exact beta.10 Maven AAR/POM verified; Bota-only lock update and separate frozen-lock APK build pass with JDK 17 / Android SDK 36 | Hosted APK build pending; phone installation blocked by a signing-key mismatch, so no beta.10 Kotlin physical acceptance |
-| Apple (SwiftPM) | Exact public tag revision and downloaded archive checksum verified; manifest and resolved lock updated on Windows | SwiftPM resolution and macOS application build pending hosted CI; physical macOS Bluetooth unverified |
+| React Native | Public beta.10 tarball SHA-512 matches the lockfile; own-directory frozen install, TypeScript, identity regression and Android Metro export pass on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities; hosted Android APK and iOS Simulator builds pass; iOS podspec uses the public SwiftPM dependency | Physical iOS unverified |
+| Web | Public beta.10 tarball SHA-512 matches the lockfile; own-directory frozen install, TypeScript and Vite 7.3.6/WASM build pass locally and in hosted CI; local npm audit reports zero vulnerabilities | Physical browser Bluetooth unverified |
+| Android | Exact beta.10 Maven AAR/POM verified; Bota-only lock update and separate frozen-lock APK build pass with JDK 17 / Android SDK 36; hosted APK assembly passes | Phone installation blocked by a signing-key mismatch, so no beta.10 Kotlin physical acceptance |
+| Apple (SwiftPM) | Exact public tag revision and downloaded archive checksum verified; hosted SwiftPM resolution and macOS application build pass with the committed lock | Physical macOS Bluetooth unverified |
 | Flutter | Public beta.9 dependency/archive lock and six widget regressions retained unchanged | Beta.10 adoption blocked on publication; historical beta.9 build/phone evidence remains separate |
 
 Verified SHA-256 values:
@@ -533,8 +537,19 @@ Verified SHA-256 values:
 The SwiftPM tag resolves to the exact SDK source above. npm `beta` selects
 beta.10; `latest` remains beta.0. RN/Web lockfile changes are limited to the SDK
 version, public tarball URL and integrity; the RN `xcode` → `uuid@11.1.1` override
-is preserved. Hosted example results must be recorded against the final examples
-commit; prior beta.9 green builds do not establish beta.10 acceptance.
+is preserved. The following hosted workflows all passed at examples source
+`54237e14014f914270ec3c3b7648a82f2e97b9c5` on 2026-10-01 UTC. These results were
+recorded in a later documentation-only update; executable source and dependency
+locks remain those tested at `54237e1`. Prior beta.9 green builds remain historical.
+
+| Gate | Successful exact-source run |
+| --- | --- |
+| React Native frozen install, TypeScript, identity test, Android export, Android arm64 APK and iOS Simulator native application | [36893071799](https://github.com/bota-dev/examples/actions/runs/36893071799) |
+| Kotlin frozen Gradle resolution, APK assembly and preserved APK | [36893071809](https://github.com/bota-dev/examples/actions/runs/36893071809) |
+| Web frozen install, TypeScript and Vite/WASM production build | [36893071814](https://github.com/bota-dev/examples/actions/runs/36893071814) |
+| SwiftPM resolution and macOS application build | [36893071878](https://github.com/bota-dev/examples/actions/runs/36893071878) |
+| Legacy root verification, all-platform export and Android native build | [36893071904](https://github.com/bota-dev/examples/actions/runs/36893071904) |
+| CodeQL Actions and JavaScript/TypeScript analysis | [36893071267](https://github.com/bota-dev/examples/actions/runs/36893071267) |
 
 ### React Native public beta.10 phone acceptance
 
@@ -546,7 +561,7 @@ the example source before the later documentation-only phone-result updates.
 The APK bundles JavaScript and requires no Metro. Its SHA-256 is
 `e96ba9650ff74ef9c64063a7b8f4bd4f6e343abe6c81438ec504733401450f0e`.
 Native assembly, resolved public AAR integrity and bundled JS/arm64 inspection
-passed locally; this lab build is separate from the pending hosted example gate.
+passed locally; this lab build is separate from the successful hosted example gate.
 
 On Samsung SM-A166U1 / Android 16, the SDK verified device serial `4KF6NOHWX0`
 and firmware `1.0.19`. Three successive adapter-off cycles each cleared stale
@@ -577,11 +592,11 @@ retained beta.9 dependency, and current results from historical acceptance.
 
 | Requirement | Evidence | Status / remaining verification |
 | --- | --- | --- |
-| Sections 2 and 4: independent exact public dependencies | Four public beta.10 pins/locks verified; Flutter retains available beta.9; no private override | matched by dependency review and applicable local installs; Apple resolution pending |
+| Sections 2 and 4: independent exact public dependencies | Four public beta.10 pins/locks verified by local and hosted checks, including SwiftPM resolution; Flutter retains available beta.9; no private override | matched for the documented dependencies |
 | Section 3: native transport ownership | SDK-only dependency upgrades; example runtime unchanged | matched by source review |
 | Section 3: Flutter loss events supersede older operation results | Six beta.9 widget regressions and lifecycle guards retained unchanged | matched by existing regression evidence; no beta.10 Flutter claim |
 | Sections 4 and 6: visible loss and explicit recovery | RN beta.10 public lab: three loss/first-reconnect cycles plus graceful disconnect/reconnect | matched on recorded pair; physical missing-callback behavior unverified |
-| Section 6: per-platform native/build evidence | Local RN/Kotlin APK and Web checks; hosted example workflows pending | partial; Apple and RN iOS builds plus hosted gates remain open |
+| Section 6: per-platform native/build evidence | Local RN/Kotlin APK and Web checks; four beta.10 hosted example workflows pass at exact source `54237e1`, including Apple macOS and RN iOS | matched for documented build targets; physical acceptance remains scoped separately |
 | Section 4: honest publication and compatibility status | Mixed catalog, partial-release record and separate dated evidence | matched; synchronized beta.10 release remains incomplete |
 | General reconnect reliability | Earlier GATT 8/133 failure retained; no new Flutter phone run | partial; root cause/resolution not established |
 | Wider physical and recording workflows | No Apple/Web/Kotlin beta.10 physical or background/out-of-range/transfer-interruption acceptance added | unverified |

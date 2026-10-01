@@ -18,7 +18,9 @@ If Bluetooth is unsupported, permission is denied, or identity verification fail
 2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
 integrity. Frozen install, TypeScript check, and Vite 7.3.6/WASM production build
 pass locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities.
-Hosted build evidence is tracked separately in the
+[CI 36893071814](https://github.com/bota-dev/examples/actions/runs/36893071814)
+passed the same checks at examples source
+`54237e14014f914270ec3c3b7648a82f2e97b9c5`; see the
 [adoption review](../../docs/independent-examples-review.md). Physical browser
 Bluetooth acceptance remains unverified. This synchronized SDK version includes
 an Android native disconnect cleanup fix; it does not change this browser

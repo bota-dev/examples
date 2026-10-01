@@ -63,9 +63,12 @@ npm run export
 2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
 integrity. Frozen install, TypeScript check, the identity regression test (exact
 serial, mismatch disconnect, and empty input), and Android Metro export pass
-locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities. Hosted
-native builds are tracked separately in the
-[adoption review](../../docs/independent-examples-review.md).
+locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities.
+[CI 36893071799](https://github.com/bota-dev/examples/actions/runs/36893071799)
+passed the same checks, Android arm64 APK assembly and iOS Simulator native
+application linking at examples source `54237e14014f914270ec3c3b7648a82f2e97b9c5`.
+See the [adoption review](../../docs/independent-examples-review.md) for the
+separate build and physical acceptance evidence.
 
 On 2026-10-01 UTC, the public beta.10 Android arm64 release-mode lab passed
 three radio-off/explicit-reconnect cycles on Samsung SM-A166U1 / Android 16.
