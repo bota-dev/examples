@@ -11,7 +11,7 @@ test('app credentials only go to HTTPS or loopback, without URL credentials or p
 });
 
 test('invalid server binding scope is rejected before device work', () => {
-  const context = {deviceId:'dev_test',endUserId:'eu_test',projectId:'prj_test',serialNumber:'4KF6NOHWX0',bindingGeneration:1};
+  const context = {deviceId:'dev_test',endUserId:'eu_test',projectId:'prj_test',serialNumber:'TESTPIN0001',bindingGeneration:1};
   assert.deepEqual(validateContext(context), context);
   assert.throws(() => validateContext({...context,bindingGeneration:0}));
   assert.throws(() => validateContext({...context,deviceId:'other'}));

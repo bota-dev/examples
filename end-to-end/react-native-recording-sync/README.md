@@ -74,6 +74,10 @@ adb reverse tcp:8787 tcp:8787
 The fixed server device/end-user/project mapping authorizes the workflow;
 client-supplied IDs do not grant access. The application token is a local
 development credential, not a production user-authentication system.
+The backend reads the selected device's serial from its authorized API resource;
+the app does not embed a particular hardware serial. Test fixtures use synthetic
+identifiers. Device serials in dated verification notes identify only the tested
+hardware and are not application defaults.
 Use HTTPS and replace this fixed identity mode before hosting for multiple users.
 
 ## Run the Android application

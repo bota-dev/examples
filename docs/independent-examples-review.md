@@ -902,3 +902,15 @@ all four local renders passed; no OpenAPI schema changed. The exact-source
 [Mintlify deployment](https://github.com/bota-dev/docs/runs/110966597951) succeeded,
 and the SDK catalog, summary-create, idempotency and changelog pages returned
 HTTP 200 with the new guidance on `docs.bota.dev`.
+
+### Device selection review
+
+Application code contains no fixed physical-device serial. Connection samples
+accept operator input; recording sync receives the serial from the backend's
+authorized, environment-selected device resource. One unit-test fixture that
+used the physical test serial was changed to `TESTPIN0001`; its four scope/HTTP
+tests passed. TypeScript and the complete 15-test app suite also passed before
+that fixture-only substitution. Searches of tracked executable/configuration
+files found no remaining occurrence of the real test serial. Documentation
+references remain dated hardware evidence, not runtime defaults. This matches
+Architecture §§2–4's reusable-example and server-derived identity requirements.
