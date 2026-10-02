@@ -19,11 +19,9 @@ See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [
 
 ## Example catalog
 
-Each linked example installs independently. React Native, Web, Android and
-Apple (SwiftPM) pin published **2.0.0-beta.10**; Flutter retains published
-**2.0.0-beta.9**. Beta.10 publication is partial: CocoaPods publication is blocked
-by an upstream GitHub API timeout, and Flutter beta.10 is not available on
-pub.dev. The [adoption review](docs/independent-examples-review.md#beta10-adoption)
+Each linked example installs independently. All five App SDK connection examples
+pin published **2.0.0-beta.10**. The protected release completed successfully,
+including CocoaPods distribution and public Flutter archive verification. The [adoption review](docs/independent-examples-review.md#beta10-adoption)
 separates verified public dependencies, successful local/hosted builds and
 physical evidence. On the recorded Samsung/Bota Pin pair, RN beta.10 passed
 three radio-loss/first-reconnect cycles and graceful disconnect/reconnect.

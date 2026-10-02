@@ -485,28 +485,29 @@ public beta.9 and these examples' dependency pins remained unchanged. It is not 
 GATT 8/133 path and adds no physical reconnect reliability claim.
 
 <a id="beta10-adoption"></a>
-## Beta.10 adoption with Flutter retained on beta.9 (2026-10-01)
+## Beta.10 adoption (2026-10-01; Flutter completion 2026-10-02 UTC)
 
 The owner approved the exact [beta.10 release](https://github.com/bota-dev/app-sdk/actions/runs/36798449511)
 and direct pushes without a PR. SDK source is
-`f5c6482ac4378a2f35e902ade172a5cb779dffa6`. Publication is **partial**: the exact
-React Native and Web npm packages, Android Maven artifact and SwiftPM tag/archive
-are public and verified. CocoaPods publication failed repeatedly when the server's
-GitHub commit request timed out after local pod validation had passed; Flutter
-beta.10 remains unavailable on pub.dev. The
-[SDK publication record](https://github.com/bota-dev/app-sdk/blob/main/release/evidence/2.0.0-beta.10-publication.md)
-tracks the remaining release gates. A further retry after fresh successful
-CocoaPodsBot publications also failed with the same commit API timeout in
-[attempt 8](https://github.com/bota-dev/app-sdk/actions/runs/36798449511/job/110476600809)
-at 16:47 UTC. Publication retries stopped; Flutter retains beta.9.
-This is not a completed synchronized release.
+`f5c6482ac4378a2f35e902ade172a5cb779dffa6`. Protected publication completed
+successfully in attempt 10 on 2026-10-02 UTC (October 1 Pacific). All five public
+packages, native consumers and the full Flutter archive passed. Earlier
+CocoaPods commit API timeouts ended when attempt 9 registered the exact pod;
+its Flutter dependency check then reached the 30-minute CDN readiness limit.
+After the CDN index and exact specification became available, attempt 10
+resumed only the failed dependency verification and downstream Flutter stages.
+Published artifacts, tag, source and original approval were preserved.
+The [SDK publication record](https://github.com/bota-dev/app-sdk/blob/main/release/evidence/2.0.0-beta.10-publication.md)
+records those historical failures and final successful gates.
 
-React Native, Web, Android and Apple (SwiftPM) examples adopt exact public
-`2.0.0-beta.10`; Flutter retains exact public `2.0.0-beta.9`, its archive lock
-and six UI completion-ordering tests. Independent package selection follows
-Architecture section 4. No private source, candidate package, native override,
-example-owned GATT implementation or retry workaround was introduced to bypass
-publication. The legacy root workspace remains on beta.6.
+All five App SDK connection examples now adopt exact public `2.0.0-beta.10`.
+Flutter's pub.dev archive was independently checked against the registry hash
+and all 59 files of the preserved tagged candidate. Its Android Maven and Apple
+dependencies select exact beta.10. The Flutter pin/lock change affects only the
+SDK version and public archive hash; six UI completion-ordering tests and
+runtime source are retained. No private source, candidate package, native
+override, example-owned GATT implementation or retry workaround was introduced.
+The legacy root workspace remains on beta.6.
 
 Beta.10 retires the exact native Android session when explicit disconnect times
 out or is cancelled without a native callback. It clears facade/registry/presence
@@ -524,7 +525,7 @@ promptly. Examples retain explicit reconnect and SDK-owned transport policy.
 | Web | Public beta.10 tarball SHA-512 matches the lockfile; own-directory frozen install, TypeScript and Vite 7.3.6/WASM build pass locally and in hosted CI; local npm audit reports zero vulnerabilities | Physical browser Bluetooth unverified |
 | Android | Exact beta.10 Maven AAR/POM verified; Bota-only lock update and separate frozen-lock APK build pass with JDK 17 / Android SDK 36; hosted APK assembly passes | Phone installation blocked by a signing-key mismatch, so no beta.10 Kotlin physical acceptance |
 | Apple (SwiftPM) | Exact public tag revision and downloaded archive checksum verified; hosted SwiftPM resolution and macOS application build pass with the committed lock | Physical macOS Bluetooth unverified |
-| Flutter | Public beta.9 dependency/archive lock and six widget regressions retained unchanged | Beta.10 adoption blocked on publication; historical beta.9 build/phone evidence remains separate |
+| Flutter | Exact public beta.10 archive verified against registry SHA-256 and all 59 preserved files; native dependencies pin beta.10 | Current example build and phone checks are recorded below; historical beta.9 evidence remains separate |
 
 Verified SHA-256 values:
 
@@ -533,6 +534,8 @@ Verified SHA-256 values:
 - Android AAR: `a8fffe299c6ba02e1ac5a808785c68e5c85c093b1ab093e78bb923a2461514de`.
 - Android POM: `2c980d25bbadfc7721549eaaa09125feb2af015f468d3abd47083aa8ee625e75`.
 - SwiftPM XCFramework archive: `169cc4bc27270447bd159c64b715a278e9877ab656172859e1bf6ecb58d1e425`.
+- Flutter public pub.dev archive: `6525ccdb08fb4f53af1d2cc55a432e0d59590770cd00c0e1a7d54ff6de3e8c9c`.
+- Flutter normalized archive: `8545b816a7f241420a245f707b9a2c894038d8ee77b67b5c39a1c81deee1ee52`.
 
 The SwiftPM tag resolves to the exact SDK source above. npm `beta` selects
 beta.10; `latest` remains beta.0. RN/Web lockfile changes are limited to the SDK
@@ -579,7 +582,20 @@ missing-disconnect-callback fault was not induced. It does not establish general
 GATT 8/133 recovery, automatic reconnect, background/out-of-range behavior,
 interrupted transfer handling or acceptance on other platforms/hardware. The
 earlier beta.9 Flutter 2/3 first-reconnect result and eventual same-session
-recovery remain the latest Flutter phone evidence.
+recovery remain historical evidence; beta.10 Flutter checks are recorded below.
+
+### Flutter public beta.10 adoption checks
+
+The independently downloaded pub.dev archive matches its registry SHA-256 and
+all 59 tagged candidate files. The exact beta.10 native dependency constraints
+were also inspected. Locked installation, Flutter analysis, direct Dart analysis
+with the original analysis configuration, and all six widget regressions passed
+locally with Flutter 3.47.5 / Dart 3.13.4 on Windows. The CLI's automatic analysis
+configuration edit was reverted; no runtime or test-source changes are included.
+
+Hosted APK assembly and a fresh isolated public-package phone run are pending
+at this source checkpoint. These checks must not be inferred from the successful
+SDK release, earlier Flutter beta.9 tests, or the other four examples' CI runs.
 
 ### Design and acceptance review
 
@@ -587,16 +603,16 @@ The compound-engineering review uses Architecture sections 2–4 and 6 plus the
 SDK native cleanup review linked above. Changed-token searches covered example
 paths, SDK package names and versions across internal/public documentation and
 repository README, ARCHITECTURE, AGENTS and CLAUDE files. Catalog and contributor
-docs now distinguish the four available beta.10 distributions from Flutter's
-retained beta.9 dependency, and current results from historical acceptance.
+docs distinguish completed beta.10 publication from each example's build and
+physical acceptance, and keep current results separate from historical evidence.
 
 | Requirement | Evidence | Status / remaining verification |
 | --- | --- | --- |
-| Sections 2 and 4: independent exact public dependencies | Four public beta.10 pins/locks verified by local and hosted checks, including SwiftPM resolution; Flutter retains available beta.9; no private override | matched for the documented dependencies |
+| Sections 2 and 4: independent exact public dependencies | All five public beta.10 pins/locks; Flutter archive/native constraints independently verified; no private override | matched for the documented dependencies |
 | Section 3: native transport ownership | SDK-only dependency upgrades; example runtime unchanged | matched by source review |
-| Section 3: Flutter loss events supersede older operation results | Six beta.9 widget regressions and lifecycle guards retained unchanged | matched by existing regression evidence; no beta.10 Flutter claim |
+| Section 3: Flutter loss events supersede older operation results | Six unchanged widget regressions pass with public beta.10 | matched for simulated UI ordering |
 | Sections 4 and 6: visible loss and explicit recovery | RN beta.10 public lab: three loss/first-reconnect cycles plus graceful disconnect/reconnect | matched on recorded pair; physical missing-callback behavior unverified |
 | Section 6: per-platform native/build evidence | Local RN/Kotlin APK and Web checks; four beta.10 hosted example workflows pass at exact source `54237e1`, including Apple macOS and RN iOS | matched for documented build targets; physical acceptance remains scoped separately |
-| Section 4: honest publication and compatibility status | Mixed catalog, partial-release record and separate dated evidence | matched; synchronized beta.10 release remains incomplete |
+| Section 4: honest publication and compatibility status | All five exact public pins, successful protected release and separate dated acceptance evidence | matched; synchronized publication complete |
 | General reconnect reliability | Earlier GATT 8/133 failure retained; no new Flutter phone run | partial; root cause/resolution not established |
 | Wider physical and recording workflows | No Apple/Web/Kotlin beta.10 physical or background/out-of-range/transfer-interruption acceptance added | unverified |

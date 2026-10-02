@@ -1,11 +1,11 @@
 # Bota Examples Architecture
 
-Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). React Native, Web, Android and Apple (SwiftPM) pin public beta.10; Flutter retains public beta.9 while beta.10 CocoaPods publication and pub.dev publication remain blocked. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
 The [beta.10 adoption review](docs/independent-examples-review.md#beta10-adoption)
-tracks four verified public package upgrades while Flutter stays on beta.9.
+tracks all five exact public package upgrades, including Flutter after completed publication.
 Each example selects an available public version independently, as required by
 section 4. Native SDK cleanup owns connection loss; examples add no GATT or
 retry workaround. The earlier beta.8/beta.9 failures, hosted builds and isolated

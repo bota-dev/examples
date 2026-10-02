@@ -9,7 +9,7 @@
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples consume exact public packages. React Native, Web, Android and Apple (SwiftPM) pin public beta.10; Flutter retains public beta.9 pending beta.10 publication. Exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples consume exact public packages. All five App SDK connection examples pin public beta.10 after completed protected publication. Exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
 
@@ -81,11 +81,11 @@ into these public examples.
 
 Beta.10 adds exact-generation cleanup when explicit disconnect times out or
 is cancelled without a native callback. Its late event must not cancel queued
-replacement work. React Native, Web, Android and Apple (SwiftPM) examples use
-exact public beta.10 dependencies. Flutter stays on beta.9: beta.10 CocoaPods
-publication hit an upstream GitHub API timeout and pub.dev publication remains
-blocked. Preserve the six Flutter UI completion-ordering tests and the public
-package boundary; do not use a private or candidate override to align versions.
+replacement work. All five connection examples use exact public beta.10
+dependencies. Protected publication and public native/Flutter verification
+completed after CocoaPods registration and CDN propagation recovered. Preserve
+the six Flutter UI completion-ordering tests and the public package boundary;
+example builds and physical checks remain separate from publication evidence.
 See [current adoption](docs/independent-examples-review.md#beta10-adoption) for
 local, hosted and phone evidence. Do not claim this fixes the distinct GATT
 8/133 issue or proves physical missing-callback behavior from simulated native
