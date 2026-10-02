@@ -1,0 +1,30 @@
+name: Summarize transcription Node example
+
+on:
+  push:
+    branches: [main]
+    paths: ['api/summarize-transcription-node/**', '.github/workflows/summarize-transcription-node.yml']
+  pull_request:
+    paths: ['api/summarize-transcription-node/**', '.github/workflows/summarize-transcription-node.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: api/summarize-transcription-node
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22.23.2'
+      - run: npm ci
+      - run: npm run check
+      - run: npm test

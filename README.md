@@ -6,7 +6,7 @@ Each independent example has its own setup, dependencies, verification steps, an
 
 ## Current status
 
-Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver, five focused App SDK connection examples, and an Android encrypted-recording-sync example for an already-provisioned device are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+The catalog contains eleven independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver, five focused App SDK connection examples, Android encrypted recording sync, Node structured summaries, and Android recording metadata listing are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -45,10 +45,12 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Upload and transcribe (Node.js)](api/upload-and-transcribe-node/README.md) | Server-side upload, verified completion, transcription; live-verified | No |
 | [Webhook receiver (Node.js)](api/webhook-receiver-node/README.md) | Authenticate raw bytes; durably deduplicate receipts in SQLite | No |
 | [Upload and transcribe (Python)](api/upload-and-transcribe-python/README.md) | Same server-side workflow using the standard library; live-verified | No |
+| [Structured summaries (Node.js)](api/summarize-transcription-node/README.md) | Summarize a completed transcription; retain creation intent and resume the saved job | No |
 | [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
 | [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
 | [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |
 | [Android connect](app-sdk/android-device-connect/README.md) | Kotlin Android application using Maven Central | Yes |
+| [Android recording catalog](app-sdk/android-recording-catalog/README.md) | Verify exact serial and list legacy/encrypted-v2 metadata without audio transfer | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [React Native encrypted recording sync](end-to-end/react-native-recording-sync/README.md) | Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; [scope and evidence](docs/independent-examples-review.md#pre-provisioned-recording-sync) | Yes |
 

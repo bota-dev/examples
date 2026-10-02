@@ -5,11 +5,13 @@ public App SDK's encrypted-v2 workflow, and request a transcription after cloud
 publication. This independent example has an Android Expo application and a
 local, authenticated Node backend. Install each from its own directory.
 
-**Status:** implemented with 18 backend, 10 native adapter and nine app tests
+**Status:** implemented with 18 backend, 10 native adapter and 15 app tests
 passing. The local Android APK built and installed; phone startup, backend
 authorization and Bluetooth scanning passed. Hosted backend tests and Android
 tests/assembly also [passed at `1145dff`](https://github.com/bota-dev/examples/actions/runs/37038166401).
-Exact-device connection/catalog and physical upload checks remain unverified.
+An earlier phone run verified the exact device serial and an empty catalog;
+that run predates the fresh pairing guard below. Physical acceptance of the
+new guard and upload checks remain unverified.
 Do not treat the earlier connection examples' phone tests as upload acceptance.
 Current evidence and remaining checks are recorded in
 [the implementation review](../../docs/independent-examples-review.md).
@@ -19,7 +21,8 @@ Expo's Node signing tools retain an [open node-forge security advisory](../../DE
 ## Scope
 
 - One server-configured project, end user and already-bound device. The app
-  verifies the exact SDK-read serial against the authorized backend context.
+  verifies the exact SDK-read serial against the authorized backend context,
+  then requires a fresh SDK pairing-state check before enabling device access.
 - Encrypted-v2 recordings only. The SDK checks fresh device capabilities before
   requesting upload material; unsupported devices fail without a legacy fallback.
 - SDK-owned Bluetooth transfer, native files/checkpoints and signed-receipt
@@ -89,10 +92,12 @@ an unrelated application if a debug signing key differs.
 1. Enter `http://127.0.0.1:8787` and the separate backend application token.
    Credentials stay in memory. Restart the app to change identity or environment.
 2. Authorize, allow Bluetooth permission, scan and select the expected device.
-   Its connected serial must match the server-authorized serial.
+   Its connected serial must match the server-authorized serial, and a fresh
+   `BotaDeviceSDK.controls.isProvisioned(device)` read must confirm paired state.
 3. List encrypted recordings. Legacy recordings are counted but excluded.
 4. Choose a consented recording and select **Sync selected recording**. A fresh
-   status must report idle and no active device upload. Signed material, staging headers,
+   pairing check must succeed again, and fresh status must report idle and no
+   active device upload. Signed material, staging headers,
    receipts and recording bytes remain native; only metadata crosses JavaScript.
 5. Wait for the SDK operation to finish. It obtains the signed publication
    receipt and performs device confirmation before the app reports completion.
@@ -101,6 +106,15 @@ an unrelated application if a debug signing key differs.
 
 No progress message or successful PUT is authority to delete the source. The
 app never issues its own recording-confirm or recording-delete command.
+
+The public Android beta.10 `ConnectedDevice.isProvisioned` snapshot defaults to
+false; it is not a live provisioning observation. This app uses the public
+`controls.isProvisioned` read after connection and before each catalog or sync
+operation. False or failed reads block access and attempt disconnect, with no
+reset or rebind. A false result means paired state was not confirmed; it does
+not prove credential loss. Late results from a retired operation cannot enable
+access. Device pairing and the backend's current binding generation are separate
+checks, and neither replaces the SDK's encrypted capability/authorization gates.
 
 ## Recovery and cleanup
 
@@ -154,6 +168,19 @@ The locally assembled and installed APK has SHA-256
 Its startup/authorization/scan observations do not establish encrypted transfer,
 receipt validation, source deletion or live transcription. Physical upload awaits
 selection of a synthetic or explicitly consented test recording.
+
+### Fresh pairing guard review — 2026-10-02
+
+| Requirement | Evidence | Status |
+| --- | --- | --- |
+| Already-provisioned scope uses current device evidence | Public SDK `controls.isProvisioned` after verified serial and before catalog/sync; six added regressions cover default snapshot, rejected/failed reads, late results and cleanup failure | Matched in source and unit tests |
+| Connection loss wins over late checks | Operation epoch is checked before accepting pairing or changing access | Matched in unit tests; physical race unverified |
+| Ownership and encrypted protocol remain independently enforced | Existing backend scope comparison, fresh idle/no-active-upload status and SDK encrypted-v2 workflow remain in place | Matched in source; physical upload unverified |
+| Exact installed-app evidence | The earlier empty-catalog phone run used JavaScript without this guard; refresh the lab JavaScript before testing it | New guard physically unverified |
+
+This review follows the repository architecture's identity, lifecycle and
+verification requirements. Typecheck, all 15 app tests and Android Metro export
+pass; these checks are separate from the existing APK/native adapter evidence.
 
 Public references: [App SDK](https://docs.bota.dev/api-reference/client-sdks),
 [API reference](https://docs.bota.dev/api-reference/introduction).

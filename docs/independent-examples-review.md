@@ -768,3 +768,92 @@ environment names across example docs and the public/internal documentation
 surface. Catalog/contributor docs and public example guidance distinguish this
 subset from full replacement. No SDK/API/wire contract or authoritative design
 was changed to mark the example complete.
+
+<a id="summary-and-recording-catalog"></a>
+## Structured summaries and Android recording catalog (2026-10-02)
+
+These two independent examples extend the catalog to eleven. They add neither
+an API SDK nor private Bota One helpers. The summary CLI uses Node built-ins and
+public HTTP; the native catalog pins public Maven beta.10 with its own Gradle
+wrapper and lock. Both have path-filtered, credential-free CI workflows.
+
+### Summary evidence and recovery boundary
+
+`api/summarize-transcription-node` has 19 passing local tests, frozen installation,
+syntax checks and CLI help. Its SQLite journal commits a fixed scoped request
+and single-use key before POST. Unknown creation requires explicit inspection
+and validated attachment; normal resume reads the saved ID. Current processing
+configuration is an observation, not proof of historical settings or a lock
+against other writers. The summary service can replace a result on a new
+same-template POST, so the CLI does not use POST for status recovery.
+
+A live test on October 2 at 17:51 UTC used the earlier synthetic transcript
+`txn_AdJdzz5CAwyTPInJMEwcDmu2`. It was completed, its device-less recording matched
+the test project/end user, auto-summary was disabled, and the filtered summary
+list was empty. Exactly one POST created `sum_2p7CBziLiZEouPAVtaTgjHxi` with
+`tmpl_general_notes` and Gemini. Structured output included summary, overview,
+decisions, key points, action items and participants. Reopening the journal,
+including in a separate process, retrieved the same ID with zero new POSTs.
+No audio or configuration was changed; cloud results and local journal remain.
+This is workflow/shape evidence, not an accuracy benchmark. Other providers,
+live outages, power loss and external-writer races remain unverified.
+
+### Catalog and provisioning observations
+
+`app-sdk/android-recording-catalog` verifies the exact serial, checks fresh SDK
+pairing state, and displays pending recording metadata. Legacy and encrypted-v2
+entries remain distinct; legacy is not a synonym for plaintext. No app-side GATT,
+audio transfer, cloud upload, delete/confirm, pairing or recording control is added.
+Connection revisions prevent older reads from repopulating a retired selection.
+
+The initial phone pass exposed an invalid example assumption: public beta.10
+`DeviceManager` initializes the immutable connection snapshot's `isProvisioned`
+to false. A rejection based on that field did **not** establish that the Pin was
+unprovisioned. The catalog now uses a fresh public control read; the React Native
+sync example gains the equivalent fresh preflight. Unknown/false/error results
+block admission without implying that reset or rebinding is appropriate.
+Pairing state does not replace backend binding-generation/ownership checks or
+the SDK's fresh encrypted-capability, authorization and receipt requirements.
+
+The React Native change passed TypeScript, 15 app tests and an Android Metro
+export (609 modules). It checks fresh pairing after connection and before catalog
+and sync admission. False/error results block access and attempt disconnect;
+older probes cannot admit or disconnect a replacement connection. Native code
+and dependency pins are unchanged.
+
+The native catalog also waits for the SDK connect call to settle before its
+event-triggered pairing read: beta.10 publishes the connected event before
+releasing its operation slot. Regression tests cover this ordering and connection
+loss while waiting, as well as fresh-state denial and retired results.
+Ten catalog unit tests and frozen-lock debug APK assembly passed. The resulting
+APK SHA-256 is
+`28e6a2d628f220a70633d444ab4bdb86f6dd98f98688440a556855dee0707586`.
+This artifact supersedes the snapshot-based and premature-read builds; physical
+checks of it remain separate from those earlier attempts.
+
+Before that guard correction, the existing React Native sync app verified
+`4KF6NOHWX0` on the third connection attempt across two scans on Samsung SM-A166U1
+/ Android 16, returned an empty catalog (zero encrypted and zero legacy entries),
+and disconnected gracefully. This observation does not verify the new guard or
+audio transfer. The first native-catalog APK's startup/permission checks passed,
+but its snapshot-based rejection was invalid evidence and was corrected.
+No audio, provisioning, recording control or deletion was performed in this pass.
+
+### Design review
+
+The compound-engineering review compares repository Architecture §§2–4/6,
+public summary/idempotency contracts and the public beta.10 catalog/control APIs.
+Source-token searches covered public/internal docs and repository contributor,
+architecture and README files; target designs and SDK/API behavior are unchanged.
+
+| Requirement | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Independent public integration | Own manifests/locks, fixed public routes and public Maven facade | matched in source and local installs/builds |
+| Preserve summary identity through uncertainty | Durable intent/CAS, explicit attachment, exact scope checks, GET-only resume | matched in 19 tests and live known-ID resume; ambiguous live writes unverified |
+| Bounded processing and secret handling | Deadline/late-response/body-cancellation tests; server-only key, metadata-only journal | matched locally; no credentials or generated text committed |
+| Exact device and fresh observation | SDK serial contract plus fresh pairing read; connection-scoped admission | matched by source/regressions; final physical coverage recorded separately |
+| Metadata-only catalog and retired-result fencing | Public `PendingRecording` variants and state regressions | matched locally; populated physical catalogs and broader reconnect coverage unverified |
+| Honest acceptance and public guidance | Per-example README, catalog and summary re-run guidance | local/live/hosted/hardware evidence remain distinct |
+
+Hosted runs and final phone checks are recorded after their completion; neither
+initial source inspection nor an earlier APK establishes those results.

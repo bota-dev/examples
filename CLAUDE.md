@@ -10,6 +10,13 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+The [Node summary workflow](api/summarize-transcription-node/README.md) retains
+creation intent and resumes the saved job through GET. Preserve that behavior:
+another template-based POST can replace an existing summary. The
+[Android catalog](app-sdk/android-recording-catalog/README.md) lists SDK metadata
+only, with exact serial verification and connection-loss fencing; legacy catalog
+entries must not be described as necessarily plaintext.
+
 The ninth [encrypted recording-sync example](end-to-end/react-native-recording-sync/README.md)
 uses public beta.10 with an already-provisioned Android device, a native HTTP
 adapter and an authenticated local backend. Pairing, full automatic recovery and

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: nine independent examples are implemented; the ninth is the bounded already-provisioned Android recording-sync path described below. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: eleven independent examples are implemented, including the bounded already-provisioned Android recording-sync path, a Node summary workflow and an Android metadata catalog. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -39,11 +39,13 @@ examples/
     upload-and-transcribe-node/
     upload-and-transcribe-python/
     webhook-receiver-node/
+    summarize-transcription-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
     apple-device-connect/
     android-device-connect/
+    android-recording-catalog/
     flutter-device-connect/
   end-to-end/
     react-native-recording-sync/    # Already-provisioned Android, encrypted v2 only
@@ -131,6 +133,19 @@ Apply these contracts only when an example includes the corresponding feature; a
 If the installed public SDK/API/firmware combination cannot support a target requirement, mark the feature blocked or explicitly limited. Do not silently reproduce Bota One's workaround or downgrade a required security profile.
 
 ### Asynchronous API workflows
+
+The Node summary example starts from an existing completed transcription. It
+persists scoped creation intent before POST and the returned summary ID before
+polling. An ambiguous creation stops for explicit reconciliation; a repeated
+template-based POST can replace an existing result. A local journal does not
+serialize other applications or the platform's automatic processing. Keep those
+limits explicit instead of presenting local deduplication as exactly-once work.
+
+The Android recording catalog uses only public SDK identity/status/catalog calls.
+It renders `PendingRecording.Legacy` and `EncryptedV2` separately; legacy does not
+mean plaintext. Connection revisions fence late reads. Metadata listing does not
+authorize audio transfer or establish cloud commitment, and this example adds no
+binding, upload, recording control or cleanup operations.
 
 API upload examples must follow the public upload/finalization contract before requesting processing. Use bounded polling with terminal-error handling or documented webhooks to retrieve asynchronous results. Retry only when the operation's documented idempotency/recovery behavior makes it safe; do not create duplicate recordings or processing jobs blindly.
 

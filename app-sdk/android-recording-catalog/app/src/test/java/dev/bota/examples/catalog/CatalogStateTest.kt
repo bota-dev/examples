@@ -1,0 +1,154 @@
+package dev.bota.examples.catalog
+
+import dev.bota.sdk.EncryptedUploadV2Recording
+import dev.bota.sdk.PendingRecording
+import dev.bota.sdk.model.*
+import java.time.Instant
+import org.junit.Assert.*
+import org.junit.Test
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.yield
+
+class CatalogStateTest {
+    private fun device(serial: String = "EXPECTED") = ConnectedDevice(
+        id = "transport", serialNumber = serial, deviceType = DeviceType.BotaPin,
+        firmwareVersion = "test", isProvisioned = false,
+        connectionState = ConnectionState.Connected, mtu = 247,
+    )
+
+    @Test fun exactSerialGateDoesNotTrustSnapshotProvisioning() {
+        val state = CatalogState()
+        state.select(" EXPECTED ")
+        state.connectionChanged(device("expected"))
+        assertNull(state.device)
+        assertTrue(state.text.contains("Identity mismatch"))
+        state.connectionChanged(device())
+        assertNull(state.device)
+        state.pairingResult(state.revision, PairingState.Paired)
+        assertEquals("EXPECTED", state.device?.serialNumber)
+    }
+
+    @Test fun freshPairedReadEnablesMetadataDespiteFalseSnapshot() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        var reads = 0
+        checkPairing(state, read = { reads++; assertFalse(it.isProvisioned); PairingState.Paired },
+            disconnect = { fail("Paired device must remain connected") })
+        assertEquals(1, reads)
+        assertNotNull(state.device)
+    }
+
+    @Test fun freshUnpairedReadDisconnectsAndDeniesMetadata() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        var disconnects = 0
+        checkPairing(state, read = { PairingState.Unpaired }, disconnect = {
+            disconnects++
+            state.connectionChanged(null)
+        })
+        assertEquals(1, disconnects)
+        assertNull(state.device)
+        assertTrue(state.text.contains("Unpaired"))
+    }
+
+    @Test fun lostConnectionDuringProbeCannotEnableOrDisconnectReplacement() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        val started = CompletableDeferred<Unit>()
+        val response = CompletableDeferred<PairingState>()
+        val checking = launch {
+            checkPairing(state, read = { started.complete(Unit); response.await() },
+                disconnect = { fail("Old probe must not disconnect replacement") })
+        }
+        started.await()
+        state.connectionChanged(null)
+        state.connectionChanged(device())
+        response.complete(PairingState.Paired)
+        checking.join()
+        assertNull(state.device)
+        assertTrue(state.text.contains("Checking fresh"))
+    }
+
+    @Test fun failedFreshReadDeniesAndDisconnects() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        var disconnects = 0
+        checkPairing(state, read = { error("transport failure") }, disconnect = { disconnects++ })
+        assertEquals(1, disconnects)
+        assertNull(state.device)
+        assertTrue(state.text.contains("could not be verified"))
+    }
+
+    @Test fun connectedNotificationWaitsForConnectCompletionBeforeFreshRead() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        val finished = CompletableDeferred<Unit>()
+        var reads = 0
+        val checking = launch {
+            checkPairing(state, read = { reads++; PairingState.Paired },
+                disconnect = { fail("No disconnect expected") }, connectionFinished = finished)
+        }
+        yield()
+        assertEquals(0, reads)
+        assertNull(state.device)
+        finished.complete(Unit)
+        checking.join()
+        assertEquals(1, reads)
+        assertNotNull(state.device)
+    }
+
+    @Test fun lossWhileWaitingForConnectCompletionPreventsFreshRead() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        val finished = CompletableDeferred<Unit>()
+        val checking = launch {
+            checkPairing(state, read = { fail("Old connection must not be read"); PairingState.Paired },
+                disconnect = { fail("No disconnect of replacement") }, connectionFinished = finished)
+        }
+        yield()
+        state.connectionChanged(null)
+        state.connectionChanged(device())
+        finished.complete(Unit)
+        checking.join()
+        assertNull(state.device)
+    }
+
+    @Test fun emptySerialCannotStartSelection() {
+        val state = CatalogState()
+        assertThrows(IllegalArgumentException::class.java) { state.select("  ") }
+        assertNull(state.device)
+    }
+
+    @Test fun lateCatalogOrErrorCannotOverwriteLossOrReplacement() {
+        val state = CatalogState()
+        state.select("EXPECTED")
+        state.connectionChanged(device())
+        state.pairingResult(state.revision, PairingState.Paired)
+        val token = state.revision
+        state.connectionChanged(null)
+        state.catalog(token, emptyList())
+        state.display(token, "late failure")
+        assertTrue(state.text.startsWith("Disconnected"))
+        state.connectionChanged(device())
+        state.catalog(token, emptyList())
+        assertTrue(state.text.startsWith("Verified serial"))
+        state.pairingResult(state.revision, PairingState.Paired)
+        state.catalog(state.revision, emptyList())
+        assertEquals("No pending recordings reported by the device.", state.text)
+    }
+
+    @Test fun profilesStayDistinctAndLegacyEncryptionIsNotLost() {
+        val legacy = PendingRecording.Legacy(DeviceRecording(
+            "legacy-id", Instant.EPOCH, 5uL, 6uL, WireValue.Unknown(99uL), true,
+        ))
+        val encrypted = PendingRecording.EncryptedV2(EncryptedUploadV2Recording(
+            uuid = "v2-id", generation = 7u, ciphertextLength = 123uL,
+            ciphertextSha256 = byteArrayOf(0, 0x80.toByte(), 0xff.toByte()),
+            durationMs = 42uL, plaintextLength = 100uL,
+        ))
+        val text = formatCatalog(listOf(legacy, encrypted))
+        assertTrue(text.contains("2 pending recording(s)"))
+        assertTrue(text.contains("Legacy catalog profile"))
+        assertTrue(text.contains("Encrypted flag: true"))
+        assertTrue(text.contains("Encrypted-v2 catalog profile"))
+        assertTrue(text.contains("Generation: 7"))
+        assertTrue(text.contains("Ciphertext length: 123 bytes"))
+        assertTrue(text.contains("Ciphertext SHA-256: 0080ff"))
+    }
+}

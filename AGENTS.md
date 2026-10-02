@@ -23,6 +23,19 @@ export, `:recording-sync:testDebugUnitTest` and Android assembly. Never weaken t
 fresh idle/no-active-upload check or repeat uncertain writes to make the example
 look recoverable. Physical and full-replacement acceptance are separate gates.
 
+The catalog also includes `api/summarize-transcription-node` and
+`app-sdk/android-recording-catalog`. Summary POST can replace an existing result;
+keep durable pre-POST intent and GET-only resume, and never discard an uncertain
+journal to force another create. Its tests use Node built-ins and SQLite. The
+Android catalog calls public SDK metadata APIs only, labels legacy separately
+from encryption, and fences late results after connection loss. Run its own
+Gradle unit tests and APK build; neither mocks nor assembly prove physical reads.
+In public Android beta.10, the connection snapshot's `isProvisioned` defaults to
+false. Gate already-provisioned workflows with a fresh public SDK pairing-state
+read, fenced to that connection; false/error means paired state was not confirmed,
+not proof of missing credentials. A pairing read does not replace backend ownership
+or encrypted-upload capability/authorization checks.
+
 1. One example teaches one bounded workflow. Use the simplest structure that exposes the public integration clearly.
 2. New examples install independently, with their own manifest/lockfile and README. An end-to-end example may have a local app/backend workspace. Do not extend the legacy root workspace to all examples.
 3. Consume published Bota SDK packages and public `/v1/*` APIs. Pin direct SDK dependencies exactly and record the release channel. Verify availability and methods before choosing a version. Never assume private source HEAD is published.

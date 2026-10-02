@@ -1,0 +1,35 @@
+name: Kotlin recording catalog
+
+on:
+  push:
+    branches: [main]
+    paths: ['app-sdk/android-recording-catalog/**', '.github/workflows/android-recording-catalog.yml']
+  pull_request:
+    paths: ['app-sdk/android-recording-catalog/**', '.github/workflows/android-recording-catalog.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: app-sdk/android-recording-catalog
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: chmod +x gradlew
+      - run: ./gradlew :app:testDebugUnitTest :app:assembleDebug --no-daemon --max-workers=2
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: kotlin-recording-catalog-${{ github.sha }}
+          path: app-sdk/android-recording-catalog/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

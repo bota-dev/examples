@@ -7,7 +7,7 @@ import {
 } from '@bota.dev/react-native-app-sdk';
 import * as nativeUpload from './modules/recording-sync';
 import { backendOrigin, backendRequest, validateContext, type BackendContext, type Transcription } from './backend';
-import { connectVerified } from './identity';
+import { connectVerified, pairingNotConfirmed, verifyPaired } from './identity';
 import { OperationScope, waitForPoll, configureNativeScope } from './lifecycle';
 
 type CloudRecording = { id: string; status: string };
@@ -27,6 +27,7 @@ export default function App() {
   const scope = useRef(new OperationScope()).current;
   const active = useRef(true);
   const configured = useRef(false);
+  const connectionIssue = useRef<string | null>(null);
 
   useEffect(() => {
     active.current = true;
@@ -87,7 +88,7 @@ export default function App() {
           if (!active.current || state !== 'disconnected') return;
           scope.invalidate();
           setDevice(null); setRecordings([]);
-          setMessage('Disconnected. Upload state is retained. Restore Bluetooth, scan, reconnect and list recordings to resume.');
+          setMessage(connectionIssue.current ?? 'Disconnected. Upload state is retained. Restore Bluetooth, scan, reconnect and list recordings to resume.');
         });
         BotaClient.on('bluetoothStateChanged', state => {
           if (!active.current) return;
@@ -105,7 +106,18 @@ export default function App() {
     });
   }
 
+  async function checkPairing(operation: ReturnType<OperationScope['begin']>, selected: ConnectedDevice) {
+    return verifyPaired({
+      isProvisioned: device => BotaDeviceSDK.controls.isProvisioned(device),
+      disconnect: device => BotaClient.devices.disconnect(device),
+    }, selected, () => active.current && operation.current(), () => {
+      connectionIssue.current = pairingNotConfirmed;
+      setDevice(null); setRecordings([]); setMessage(pairingNotConfirmed);
+    });
+  }
+
   async function listRecordings(operation: ReturnType<OperationScope['begin']>, selected: ConnectedDevice) {
+    if (!await checkPairing(operation, selected) || !operation.current()) return;
     const pending = await BotaDeviceSDK.recordings.listPendingRecordings(selected);
     if (!operation.current()) return;
     const encrypted = pending.filter((r): r is BotaEncryptedUploadV2PendingRecording => 'storageFormat' in r && r.storageFormat === 3);
@@ -122,6 +134,7 @@ export default function App() {
         throw new SafeError('Device ownership changed. Restart the app and authorize again.');
       }
       if (!operation.current()) return;
+      if (!await checkPairing(operation, selected) || !operation.current()) return;
       const status = await BotaClient.devices.getStatus(selected);
       if (!operation.current()) return;
       if (status.flags.syncActive !== false) throw new SafeError('The device may be uploading directly. Wait for fresh inactive status before Bluetooth sync.');
@@ -184,9 +197,17 @@ export default function App() {
     })} />
     {!device && candidates.map(candidate => <View key={candidate.id}><Text>{candidate.name ?? 'Bota device'} · {candidate.rssi} dBm</Text><Button title="Connect and verify" disabled={busy || !context} onPress={() => void run(async operation => {
       BotaClient.devices.stopScan();
+      connectionIssue.current = null;
       const connected = await connectVerified(BotaClient.devices, candidate, context!.serialNumber);
       if (!operation.current()) { await BotaClient.devices.disconnect(connected); return; }
-      setDevice(connected); setCandidates([]); setMessage(`Verified ${connected.serialNumber}. List recordings next.`);
+      const paired = await checkPairing(operation, connected);
+      if (!operation.current()) {
+        // This operation still owns admission; rejected pairing already attempted cleanup.
+        if (!connectionIssue.current) await BotaClient.devices.disconnect(connected);
+        return;
+      }
+      if (!paired) return;
+      setDevice(connected); setCandidates([]); setMessage(`Verified ${connected.serialNumber} and fresh paired state. List recordings next.`);
     })} /></View>)}
     <Button title="List encrypted recordings" disabled={!device || busy} onPress={() => void run(op => listRecordings(op, device!))} />
     {recordings.map(recording => <View key={`${recording.uuid}:${recording.generation}`}><Text>{recording.uuid} · generation {recording.generation} · {recording.durationMs / 1000}s</Text><Button title="Sync selected recording" disabled={busy || !device} onPress={() => void sync(recording)} /></View>)}
