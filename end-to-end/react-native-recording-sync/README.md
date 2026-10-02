@@ -9,9 +9,9 @@ local, authenticated Node backend. Install each from its own directory.
 passing. The local Android APK built and installed; phone startup, backend
 authorization and Bluetooth scanning passed. Hosted backend tests and Android
 tests/assembly also [passed at `1145dff`](https://github.com/bota-dev/examples/actions/runs/37038166401).
-An earlier phone run verified the exact device serial and an empty catalog;
-that run predates the fresh pairing guard below. Physical acceptance of the
-new guard and upload checks remain unverified.
+A read-only phone retest with the fresh pairing guard verified the exact device
+serial, fresh paired state and an empty catalog. Physical upload and broader
+pairing-failure/recovery checks remain unverified.
 Do not treat the earlier connection examples' phone tests as upload acceptance.
 Current evidence and remaining checks are recorded in
 [the implementation review](../../docs/independent-examples-review.md).
@@ -173,14 +173,26 @@ selection of a synthetic or explicitly consented test recording.
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
-| Already-provisioned scope uses current device evidence | Public SDK `controls.isProvisioned` after verified serial and before catalog/sync; six added regressions cover default snapshot, rejected/failed reads, late results and cleanup failure | Matched in source and unit tests |
+| Already-provisioned scope uses current device evidence | Public SDK `controls.isProvisioned` after verified serial and before catalog/sync; six added regressions cover default snapshot, rejected/failed reads, late results and cleanup failure; successful read-only phone retest | Matched for tested connection/catalog path; physical rejection and sync unverified |
 | Connection loss wins over late checks | Operation epoch is checked before accepting pairing or changing access | Matched in unit tests; physical race unverified |
 | Ownership and encrypted protocol remain independently enforced | Existing backend scope comparison, fresh idle/no-active-upload status and SDK encrypted-v2 workflow remain in place | Matched in source; physical upload unverified |
-| Exact installed-app evidence | The earlier empty-catalog phone run used JavaScript without this guard; refresh the lab JavaScript before testing it | New guard physically unverified |
+| Exact installed-app evidence | Existing debug APK plus repository-matched Metro JavaScript with the fresh guard; one scan/first connection, paired check, empty catalog and graceful disconnect passed | Matched for this bounded phone run; no new native build claimed |
 
 This review follows the repository architecture's identity, lifecycle and
 verification requirements. Typecheck, all 15 app tests and Android Metro export
 pass; these checks are separate from the existing APK/native adapter evidence.
+The [recording-sync workflow](https://github.com/bota-dev/examples/actions/runs/37045526827)
+also passed backend and Android native adapter/build checks at source `daabf16`.
+
+The 2026-10-02 read-only retest used Samsung SM-A166U1 / Android 16 and SDK-read
+serial `4KF6NOHWX0`, with the same APK hash above and updated JavaScript from
+`daabf16`. The UI reported fresh paired state; listing performed another fresh
+pairing read and returned zero encrypted and zero legacy recordings. Graceful
+disconnect disabled listing. The app, backend and Metro were stopped, temporary
+forwarding removed, and Bluetooth left on. Firmware text was not displayed by
+this UI. No audio transfer, source confirmation, transcription, recording control
+or provisioning mutation was exercised. The earlier catalog observation without
+this guard remains separate evidence.
 
 Public references: [App SDK](https://docs.bota.dev/api-reference/client-sdks),
 [API reference](https://docs.bota.dev/api-reference/introduction).

@@ -831,6 +831,26 @@ APK SHA-256 is
 This artifact supersedes the snapshot-based and premature-read builds; physical
 checks of it remain separate from those earlier attempts.
 
+A second React Native read-only run refreshed the Metro JavaScript from
+`daabf16` while retaining the previously recorded native debug APK
+(`b0b817ef61890410d75e70839372fa838e179fc06ac34296d348b04157fc5f88`).
+It verified `4KF6NOHWX0` and fresh paired state on the first connection after one
+scan. Catalog listing performed another fresh pairing read and reported zero
+encrypted and zero legacy recordings. Graceful disconnect disabled listing.
+The phone was Samsung SM-A166U1 / Android 16; firmware was not exposed by this
+UI. This verifies the new guard's successful connection/catalog path, not physical
+denial races, upload, receipt/source cleanup or transcription.
+
+The final native-catalog APK then passed on the same Samsung/Android combination.
+After one scan, its first connection attempt failed before pairing; the second
+verified SDK serial `4KF6NOHWX0`, firmware `1.0.19` and fresh `Paired` state.
+Status reported idle, no active upload and zero pending recordings. Listing
+returned an empty catalog. Explicit disconnect cleared metadata and disabled
+reads. The app was stopped and Bluetooth left on; temporary port forwarding was
+absent. No recording, audio, firmware or provisioning mutation was performed.
+Populated legacy/encrypted catalogs, physical rejection/races and first-attempt
+connection reliability remain unverified.
+
 Before that guard correction, the existing React Native sync app verified
 `4KF6NOHWX0` on the third connection attempt across two scans on Samsung SM-A166U1
 / Android 16, returned an empty catalog (zero encrypted and zero legacy entries),
@@ -851,9 +871,34 @@ architecture and README files; target designs and SDK/API behavior are unchanged
 | Independent public integration | Own manifests/locks, fixed public routes and public Maven facade | matched in source and local installs/builds |
 | Preserve summary identity through uncertainty | Durable intent/CAS, explicit attachment, exact scope checks, GET-only resume | matched in 19 tests and live known-ID resume; ambiguous live writes unverified |
 | Bounded processing and secret handling | Deadline/late-response/body-cancellation tests; server-only key, metadata-only journal | matched locally; no credentials or generated text committed |
-| Exact device and fresh observation | SDK serial contract plus fresh pairing read; connection-scoped admission | matched by source/regressions; final physical coverage recorded separately |
-| Metadata-only catalog and retired-result fencing | Public `PendingRecording` variants and state regressions | matched locally; populated physical catalogs and broader reconnect coverage unverified |
+| Exact device and fresh observation | SDK serial contract plus fresh pairing read; connection-scoped admission; both phone apps admitted the exact Pin with fresh paired state | matched for bounded successful connection/catalog paths; physical denial races unverified |
+| Metadata-only catalog and retired-result fencing | Public `PendingRecording` variants, ten state/callback regressions, empty physical catalog and clean disconnect | matched for tested paths; populated physical catalogs and broader reconnect coverage unverified |
 | Honest acceptance and public guidance | Per-example README, catalog and summary re-run guidance | local/live/hosted/hardware evidence remain distinct |
 
 Hosted runs and final phone checks are recorded after their completion; neither
 initial source inspection nor an earlier APK establishes those results.
+
+The source was pushed directly to `main` as
+[`daabf16`](https://github.com/bota-dev/examples/commit/daabf16c0865afeb7a63279da9581092c80498dc).
+The standalone [summary workflow](https://github.com/bota-dev/examples/actions/runs/37045526764)
+passed for that exact source.
+The [catalog workflow](https://github.com/bota-dev/examples/actions/runs/37045526800)
+also passed its ten tests and Android assembly, and GitHub's
+[CodeQL run](https://github.com/bota-dev/examples/actions/runs/37045526997) passed
+Actions and JavaScript/TypeScript analyses. The
+[recording-sync workflow](https://github.com/bota-dev/examples/actions/runs/37045526827)
+passed backend tests, native adapter tests and Android assembly. The
+[root CI](https://github.com/bota-dev/examples/actions/runs/37045526669) passed
+verification and the legacy Android native build. All four expected workflows
+and the additional CodeQL run completed successfully at `daabf16`; none was rerun.
+
+Public guidance was pushed to docs `main` as `4096d51` and promoted selectively
+to `prod` through `ec200e2` and `a23b331`. The fourth promoted page corrected the
+older production idempotency guidance to match the already-reviewed main page:
+the current response cache is asynchronous, does not compare request bodies,
+and is not a durable job journal. The scoped promotion preserved unrelated
+production OTA/reset content. Mintlify validation with `--disable-openapi` and
+all four local renders passed; no OpenAPI schema changed. The exact-source
+[Mintlify deployment](https://github.com/bota-dev/docs/runs/110966597951) succeeded,
+and the SDK catalog, summary-create, idempotency and changelog pages returned
+HTTP 200 with the new guidance on `docs.bota.dev`.

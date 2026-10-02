@@ -61,7 +61,7 @@ and renders the SDK's `PendingRecording` variants:
 The SDK selects supported catalog paths and removes its documented legacy
 aliases for encrypted entries. The example does not merge raw catalogs, interpret
 GATT bytes, or fall back after a capability/integrity error. Firmware must support
-the public SDK's catalog contract; this sample has no verified firmware baseline.
+the public SDK's catalog contract; the empty-catalog check below used Pin 1.0.19.
 
 Operations are serialized. A disconnect event clears all displayed status/catalog
 metadata and disables reads. A late read success or failure cannot restore data
@@ -80,7 +80,7 @@ tests incorrectly treated the snapshot field as fresh provisioning evidence.
 The corrected fresh-pairing gate and connect-completion ordering passed ten unit
 tests and frozen-lock Android APK assembly on JDK 17 / Android SDK 36. The fresh
 read waits for connect to release the SDK operation slot; a newer connection
-event invalidates the waiting probe. Corrected physical checks remain pending.
+event invalidates the waiting probe. A bounded physical pass is recorded below.
 The exact-serial mismatch cleanup and ten-second scan
 default were inspected in the published SDK source; the example's unit tests
 exercise its display/lifecycle logic, not a Bluetooth transport.
@@ -88,14 +88,25 @@ exercise its display/lifecycle logic, not a Bluetooth transport.
 | Requirement / architecture authority | Evidence | Status |
 | --- | --- | --- |
 | §§2–3: independent public integration | Own Gradle wrapper, manifest and lock; exact public Maven pin; public facade calls only; frozen build passes | Matched for installation/build |
-| §3: identity and read-only scope | SDK exact-serial connect, fresh pairing-state gate, status and metadata listing only | Corrected implementation; physical acceptance unverified |
-| §§4,6: profiles and asynchronous failures | Ten passing tests cover false snapshot with fresh Paired success, non-Paired/error denial and disconnect, connect/read ordering, loss during the probe or wait, distinct profiles and late reads | Matched for tested state/callback flow; physical workflow unverified |
-| §6: platform evidence | Android workflow runs unit tests/assembly and preserves its APK | Hosted and physical checks unverified |
+| §3: identity and read-only scope | SDK exact-serial connect, fresh pairing-state gate, status and metadata listing only | Matched for the bounded physical success path below; physical denial cases unverified |
+| §§4,6: profiles and asynchronous failures | Ten passing tests cover false snapshot with fresh Paired success, non-Paired/error denial and disconnect, connect/read ordering, loss during the probe or wait, distinct profiles and late reads | Matched for tested state/callback flow; physical denial/races and populated profiles unverified |
+| §6: platform evidence | [Hosted CI](https://github.com/bota-dev/examples/actions/runs/37045526800) passed at `daabf16`; local APK exercised on Samsung SM-A166U1 / Android 16 and Pin firmware 1.0.19 | Matched for build and bounded phone coverage below |
+
+The October 2 physical pass used source `daabf16` and local APK SHA-256
+`28e6a2d628f220a70633d444ab4bdb86f6dd98f98688440a556855dee0707586`.
+One scan found the target; the first connection attempt failed before the pairing
+check, and the second succeeded. SDK-read serial `4KF6NOHWX0`, firmware `1.0.19`
+and fresh `Paired` state were displayed. Status reported idle, no active upload
+and zero pending recordings; catalog listing succeeded with an empty result.
+Explicit disconnect cleared metadata and disabled reads. The app was stopped,
+temporary forwarding was absent, and Bluetooth remained on. No audio, recording
+control, provisioning or firmware mutation was performed. This does not prove
+populated catalog decoding or consistently successful first-attempt connections.
 
 Tests of display state do not establish actual BLE behavior. Physical acceptance
-must cover permission denial/recovery, wrong and correct serial, unprovisioned
-rejection, empty and populated legacy/encrypted catalogs, disconnect during a
-read, stale-result rejection, explicit reconnect, and final disconnect. Record
+still needs permission denial/recovery, wrong-serial and non-Paired
+rejection, populated legacy/encrypted catalogs, disconnect during a
+read, stale-result rejection and explicit reconnect. Record
 phone OS/model, device model, firmware and exact APK/source. Other hardware,
 background operation and interrupted audio transfers are not covered.
 

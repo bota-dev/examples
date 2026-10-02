@@ -8,7 +8,7 @@ transcription, changes no processing configuration and deletes no resources.
 **Status:** implemented; frozen install, syntax checks, CLI help and 19 regression
 tests passed locally on Node 22.23.2. A live Gemini/general-notes run with the
 existing synthetic transcript passed on October 2, 2026, including GET-only
-resume in a new process. Exact-source hosted CI is pending at this checkpoint;
+resume in a new process. Exact-source hosted CI passed at `daabf16`;
 other providers and live failure recovery remain unverified.
 
 ## Requirements
@@ -129,7 +129,7 @@ Architecture §§2–4 and the public summary/idempotency contracts:
 | Durable intent and bounded concurrency | SQLite intent committed before POST; competing-connection and restart tests; matched locally, power-loss/network-filesystem behavior unverified. |
 | Honest recovery limits | Unknown creation needs explicit inspection/attachment; automatic recovery and exactly-once behavior across external writers are not implemented. |
 | Live/provider acceptance | Gemini with `tmpl_general_notes` returned structured output for a synthetic transcript; one POST, followed by same-ID GET-only resume, including a new process. Other providers, live outage recovery and external-writer races remain unverified. |
-| Hosted acceptance | Exact-source CI is pending at this checkpoint; no device workflow is involved. |
+| Hosted acceptance | [Standalone CI](https://github.com/bota-dev/examples/actions/runs/37045526764) passed at source `daabf16`; no device workflow is involved. |
 
 The live check created one summary for the earlier synthetic API-upload fixture,
 with auto-summary already disabled and no existing summaries. Its output contained
