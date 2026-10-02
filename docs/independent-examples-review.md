@@ -672,6 +672,8 @@ physical acceptance, and keep current results separate from historical evidence.
 <a id="pre-provisioned-recording-sync"></a>
 ## Already-provisioned Android recording sync (2026-10-02)
 
+The app's Expo Node signing tools retain an [open node-forge advisory](../DEPENDENCY_SECURITY.md#node-forge-open-advisory) with no published fix; source inspection found no direct use in the app/SDK upload path, but does not establish unreachability or remediation.
+
 The ninth example, `end-to-end/react-native-recording-sync`, implements the
 bounded device → encrypted cloud upload → transcription workflow. It has an
 independent Expo Android app and Node backend, using exact public beta.10.

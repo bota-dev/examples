@@ -14,6 +14,8 @@ Do not treat the earlier connection examples' phone tests as upload acceptance.
 Current evidence and remaining checks are recorded in
 [the implementation review](../../docs/independent-examples-review.md).
 
+Expo's Node signing tools retain an [open node-forge security advisory](../../DEPENDENCY_SECURITY.md#node-forge-open-advisory) with no published fix; passing application checks do not establish that this dependency is safe or unreachable.
+
 ## Scope
 
 - One server-configured project, end user and already-bound device. The app

@@ -148,3 +148,33 @@ missing Hermes compiler noted above remains a separate baseline issue. The
 scoped decoder replacement, guarded interop and exercised route contracts match
 the acceptance criteria. Hosted CI and scanner closure must still be confirmed
 after push, independently of this source and local-audit evidence.
+
+<a id="node-forge-open-advisory"></a>
+## Open node-forge advisory (2026-10-02)
+
+Dependabot [#108](https://github.com/bota-dev/examples/security/dependabot/108),
+[#109](https://github.com/bota-dev/examples/security/dependabot/109) and
+[#110](https://github.com/bota-dev/examples/security/dependabot/110) remain open for
+[GHSA-86w9-cpqp-85rv / CVE-2026-85393](https://github.com/advisories/GHSA-86w9-cpqp-85rv).
+This high-severity RSA signature-verification issue affects node-forge through
+1.4.0, including the latest version returned by the
+[npm registry](https://registry.npmjs.org/node-forge) on this date. The advisory
+lists no patched version; [upstream fix #1152](https://github.com/digitalbazaar/forge/pull/1152)
+is still unmerged. The earlier zero-vulnerability audit above is historical.
+
+The recording-sync app lock resolves `expo@57.0.4` → `@expo/cli@57.0.27` →
+`node-forge@1.4.0`, both directly and through
+`@expo/code-signing-certificates@0.0.6`. The current CLI is already the latest
+stable release. The newer certificates package 0.0.7 still uses node-forge 1.4.0
+and its verification functions, so that update does not fix this advisory.
+
+Inspected consumers are Expo's Node signing tools, including certificate/CSR
+verification. No direct node-forge use was found in the example app/backend,
+native upload adapter, or public RN SDK source. The app does not configure
+Expo update signing. These observations do not prove the vulnerability
+unreachable or qualify the dependency as safe.
+
+No lockfile override, local crypto patch, audit suppression or alert dismissal
+was applied. Keep the alerts open; adopt a reviewed patched upstream release
+when available, then verify the actual Expo signing consumers and scanner
+results. Current build/test success does not remediate this dependency finding.
