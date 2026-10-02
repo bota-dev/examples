@@ -723,6 +723,9 @@ so backend/native session identity is retained independently of that checkpoint.
   recording list. The device was `4KF6NOHWX0`, current binding generation 2.
   Effective automatic transcription was already disabled. No bind/config changes
   or upload/transcription writes were made by these checks.
+  After the final generation-fence fix, these read-only checks passed again;
+  cloud listing rejected a missing binding header (`400`) and a stale generation
+  (`409`), while the current generation succeeded.
 - Local full Android APK assembly and installation passed. The APK SHA-256 is
   `b0b817ef61890410d75e70839372fa838e179fc06ac34296d348b04157fc5f88`.
   Phone startup, backend authorization and Bluetooth scanning passed on Samsung
@@ -730,8 +733,14 @@ so backend/native session identity is retained independently of that checkpoint.
   scans returned no candidates. Exact-device connection and encrypted catalog
   checks remain unverified. The app/backend were stopped and temporary ADB port
   forwarding removed; Bluetooth remains on.
-- Exact-source hosted CI and physical encrypted-upload acceptance remain
-  unverified. Upload awaits selection of a synthetic or explicitly consented
+- Hosted [recording-sync CI](https://github.com/bota-dev/examples/actions/runs/37038166401)
+  passed both backend and Android jobs at `1145dffcc72d42dca1d87ecea9a5dc684d718e9b`,
+  including native adapter tests, app checks/export and APK assembly.
+- The public catalog and changelog were deployed from docs prod `278f577` after
+  validation; [Mintlify deployment](https://github.com/bota-dev/docs/runs/110942619161)
+  succeeded and both live pages returned the new example.
+- Physical encrypted-upload acceptance remains unverified.
+  Upload awaits selection of a synthetic or explicitly consented
   recording; no physical upload/receipt/deletion or live transcription result is
   claimed. Earlier RN/Flutter connection results do not establish those behaviors.
 
@@ -743,7 +752,7 @@ Upload Management §1.1, keeping target completeness separate from this subset.
 | Requirement | Evidence | Status / remaining verification |
 | --- | --- | --- |
 | Independent public dependencies and native ownership | Exact beta.10 pins; own app/backend locks; public material registry; no private runtime imports or GATT | matched in source/native compilation |
-| Runnable Android host | Local APK assembly/install and phone startup, backend authorization and scan; exact APK hash above | matched for these checks; exact-device catalog, hosted CI and physical upload unverified |
+| Runnable Android host | Local APK assembly/install and phone startup, backend authorization and scan; exact APK hash and passing hosted Android build above | matched for these checks; exact-device catalog and physical upload unverified |
 | Caller and resource authorization | Separate app token; fixed server scope; native operations and app cloud routes enforce the observed binding generation; exact capture/session checks | matched in 18 backend tests and read-only live scope checks |
 | Opaque native material and SDK-owned bytes | Native Kotlin callbacks and scalar-only JS profile decision | matched in source/native tests; physical profile acceptance pending |
 | Fresh upload admission and stale-result fencing | Fresh idle plus `syncActive === false`; operation epoch/abort; partial native configuration rollback | matched in source and nine app checks |
