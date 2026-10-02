@@ -25,6 +25,9 @@ including CocoaPods distribution and public Flutter archive verification. The [a
 separates verified public dependencies, successful local/hosted builds and
 physical evidence. On the recorded Samsung/Bota Pin pair, RN beta.10 passed
 three radio-loss/first-reconnect cycles and graceful disconnect/reconnect.
+Flutter's six widget tests and hosted APK build passed. Its phone run passed
+three loss/eventual-reconnect cycles, with delayed rediscovery in the first
+cycle; consistently prompt recovery remains unverified.
 Beta.10 adds Android explicit-disconnect timeout cleanup and retains beta.9
 adapter-off handling. Restore Bluetooth, scan and reconnect explicitly.
 The earlier Flutter GATT 8/133 reconnect issue is not established as fixed;

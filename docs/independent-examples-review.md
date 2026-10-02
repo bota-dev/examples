@@ -593,9 +593,56 @@ with the original analysis configuration, and all six widget regressions passed
 locally with Flutter 3.47.5 / Dart 3.13.4 on Windows. The CLI's automatic analysis
 configuration edit was reverted; no runtime or test-source changes are included.
 
-Hosted APK assembly and a fresh isolated public-package phone run are pending
-at this source checkpoint. These checks must not be inferred from the successful
-SDK release, earlier Flutter beta.9 tests, or the other four examples' CI runs.
+Hosted frozen installation, analysis, six widget tests and APK assembly passed
+in [Flutter CI 36956252674](https://github.com/bota-dev/examples/actions/runs/36956252674)
+at exact examples source `c8c7a896edb3153e0fdd08a7267f4deb6abb2b95`.
+[CodeQL 36956252291](https://github.com/bota-dev/examples/actions/runs/36956252291)
+and [root CI 36956252654](https://github.com/bota-dev/examples/actions/runs/36956252654)
+(legacy tests, types, build, all-platform export and Android APK) also passed
+at that source. These checks are separate from the SDK release and
+the other four examples' earlier CI runs.
+
+An isolated Android arm64 debug lab also built and installed successfully.
+Its runtime changes only the application ID (`dev.bota.lab.public10flutter`)
+and diagnostic display of transport ID and SDK-read firmware. Source reconciliation
+matched 25 tracked files, including runtime inputs, locks and tests, to `c8c7a89`
+before the named lab substitutions. The lab copied an earlier README and the
+Flutter CLI's automatic analysis-configuration edit; neither is claimed identical
+to the final example. Local paths and Gradle memory/worker limits are build-only
+changes. No private SDK, native dependency override or transport workaround is used.
+The APK SHA-256 is
+`be69ec6405578eb0d35a7a31d67881dbb0ad64ef33fc8344bb48bef46f9f323d`.
+Gradle resolved `dev.bota:bota-app-sdk:2.0.0-beta.10` with the public AAR hash
+recorded above.
+
+On 2026-10-02 UTC (October 1 Pacific), Samsung SM-A166U1 / Android 16 connected
+and verified serial `4KF6NOHWX0` and firmware `1.0.19`. Fresh status read 100%
+battery and one pending recording. The device initially reported `syncing`;
+the test waited for an observed `idle` before changing the phone adapter.
+All three Bluetooth shutdowns automatically displayed the loss message and
+disabled Read status and Disconnect. Scoped native logs show GATT close and
+unregister at shutdown. In the first cycle, two fresh ten-second scans found
+other devices but not the target transport `2B:71:BA:82:23:FF`. The scripted
+check stopped at discovery. A third scan several minutes later rediscovered
+the target without an app restart or additional Bluetooth toggle; the user
+confirmed the Pin remained powered and nearby. Its first subsequent connection
+attempt verified identity/firmware and read fresh status. Cycles two and three
+found the target in the first scan and also passed their first connection
+attempts and fresh status reads. Status sometimes reported `syncing`; the next
+radio cycle waited for an observed `idle` without requesting any transfer.
+
+The bounded result is **3/3 automatic-loss observations and 3/3 eventual
+reconnections**, with delayed discovery in the first cycle. It does not establish
+consistently prompt rediscovery, an SDK or firmware cause for the delay, or a fix
+for the historical GATT 8/133 failure. No wearable provisioning, firmware update,
+recording, upload, reset or deletion was requested.
+
+A separate graceful Disconnect → fresh scan → first reconnect verified the same
+identity/firmware and fresh idle status. Final explicit disconnect passed; the
+lab was stopped and phone Bluetooth left on. UI snapshots and scoped native
+logs support these observations. Background/out-of-range use, other hardware,
+interrupted transfers and forced missing-disconnect-callback behavior remain
+unverified.
 
 ### Design and acceptance review
 
@@ -611,8 +658,8 @@ physical acceptance, and keep current results separate from historical evidence.
 | Sections 2 and 4: independent exact public dependencies | All five public beta.10 pins/locks; Flutter archive/native constraints independently verified; no private override | matched for the documented dependencies |
 | Section 3: native transport ownership | SDK-only dependency upgrades; example runtime unchanged | matched by source review |
 | Section 3: Flutter loss events supersede older operation results | Six unchanged widget regressions pass with public beta.10 | matched for simulated UI ordering |
-| Sections 4 and 6: visible loss and explicit recovery | RN beta.10 public lab: three loss/first-reconnect cycles plus graceful disconnect/reconnect | matched on recorded pair; physical missing-callback behavior unverified |
-| Section 6: per-platform native/build evidence | Local RN/Kotlin APK and Web checks; four beta.10 hosted example workflows pass at exact source `54237e1`, including Apple macOS and RN iOS | matched for documented build targets; physical acceptance remains scoped separately |
+| Sections 4 and 6: visible loss and explicit recovery | RN beta.10 public lab: three loss/first-reconnect cycles plus graceful disconnect/reconnect; Flutter three loss/eventual-reconnect cycles with identity/status, first cycle required a third discovery scan | matched for bounded loss/recovery observations; prompt Flutter rediscovery remains partial; physical missing-callback behavior unverified |
+| Section 6: per-platform native/build evidence | Local RN/Kotlin/Flutter APK and Web checks; four beta.10 hosted example workflows pass at `54237e1`, including Apple macOS and RN iOS; Flutter hosted APK passes at `c8c7a89` | matched for documented build targets; physical acceptance remains scoped separately |
 | Section 4: honest publication and compatibility status | All five exact public pins, successful protected release and separate dated acceptance evidence | matched; synchronized publication complete |
-| General reconnect reliability | Earlier GATT 8/133 failure retained; no new Flutter phone run | partial; root cause/resolution not established |
+| General reconnect reliability | Earlier GATT 8/133 failure retained; beta.10 Flutter recovered all three cycles, with delayed first-cycle rediscovery | partial; general reliability and root cause/resolution not established |
 | Wider physical and recording workflows | No Apple/Web/Kotlin beta.10 physical or background/out-of-range/transfer-interruption acceptance added | unverified |

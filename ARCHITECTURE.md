@@ -6,6 +6,11 @@ Status: eight independent examples are implemented. Node/Python upload and trans
 
 The [beta.10 adoption review](docs/independent-examples-review.md#beta10-adoption)
 tracks all five exact public package upgrades, including Flutter after completed publication.
+Flutter's six widget tests and hosted APK build passed at source `c8c7a89`.
+Its public-package phone run passed three loss/eventual-reconnect cycles with
+verified identity/status, but the first cycle required a third scan several
+minutes later. This bounded observation does not establish prompt rediscovery
+or diagnose the delay's cause.
 Each example selects an available public version independently, as required by
 section 4. Native SDK cleanup owns connection loss; examples add no GATT or
 retry workaround. The earlier beta.8/beta.9 failures, hosted builds and isolated
