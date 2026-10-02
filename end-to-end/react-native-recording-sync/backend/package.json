@@ -1,0 +1,12 @@
+{
+  "name": "bota-recording-sync-backend-example",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.23.2" },
+  "scripts": {
+    "start": "node --env-file=.env server.mjs",
+    "check": "node --check server.mjs && node --check service.mjs && node --check service.test.mjs",
+    "test": "node --test service.test.mjs"
+  }
+}

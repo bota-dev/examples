@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: eight independent examples are implemented. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: nine independent examples are implemented; the ninth is the bounded already-provisioned Android recording-sync path described below. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -27,7 +27,7 @@ Non-goals: a second SDK, a reusable example framework, a production SaaS starter
 
 ## 2. Repository organization
 
-Implemented layout plus the explicitly planned `end-to-end/` subtree. No empty end-to-end scaffold is created:
+Implemented layout, including the scoped Android recording-sync example:
 
 ```text
 examples/
@@ -45,8 +45,8 @@ examples/
     apple-device-connect/
     android-device-connect/
     flutter-device-connect/
-  end-to-end/                       # Blocked target; not yet created
-    react-native-recording-sync/
+  end-to-end/
+    react-native-recording-sync/    # Already-provisioned Android, encrypted v2 only
       app/
       backend/
       README.md
@@ -68,6 +68,16 @@ Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android)
 - Root automation can orchestrate checks; it must not become a runtime prerequisite.
 
 ## 3. Integration and ownership
+
+The ninth example, `end-to-end/react-native-recording-sync`, implements a bounded
+already-provisioned-device path. Its app and backend install independently within
+the example. A public Kotlin material-registration adapter supplies authenticated
+HTTP callbacks; the SDK owns transfer, native bytes and signed-receipt confirmation.
+The backend fixes project/end-user/device scope, verifies binding generation and
+retains a SQLite journal. Uncertain creates/PUTs and expired or changed sessions
+stop for reconciliation. The example does not implement pairing, a second transport
+engine, full automatic restart recovery, or legacy retirement. Current verification
+is in the [scoped review](docs/independent-examples-review.md#pre-provisioned-recording-sync).
 
 ```text
 API-only script (developer's server environment)

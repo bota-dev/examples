@@ -13,6 +13,16 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+The ninth example is `end-to-end/react-native-recording-sync`: Android with an
+already-provisioned device and encrypted-v2 recordings only, using public beta.10.
+Its native module owns authenticated HTTP callbacks and scope/session metadata;
+SDK code owns recording bytes, transport and receipt confirmation. Keep the backend's
+fixed project/end-user/device checks, explicit app authentication, exact binding
+generation and durable uncertainty journal. Run backend tests, app tests/typecheck/
+export, `:recording-sync:testDebugUnitTest` and Android assembly. Never weaken the
+fresh idle/no-active-upload check or repeat uncertain writes to make the example
+look recoverable. Physical and full-replacement acceptance are separate gates.
+
 1. One example teaches one bounded workflow. Use the simplest structure that exposes the public integration clearly.
 2. New examples install independently, with their own manifest/lockfile and README. An end-to-end example may have a local app/backend workspace. Do not extend the legacy root workspace to all examples.
 3. Consume published Bota SDK packages and public `/v1/*` APIs. Pin direct SDK dependencies exactly and record the release channel. Verify availability and methods before choosing a version. Never assume private source HEAD is published.

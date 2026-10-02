@@ -106,6 +106,11 @@ These results supersede the earlier unverified Android connection rows. Apple/ma
 
 ## Recording-sync replacement
 
+Historical prerequisite review from 2026-09-29 follows. The scoped
+[already-provisioned Android implementation](#pre-provisioned-recording-sync)
+below supersedes the directory-not-created status without claiming full
+replacement or target secure pairing.
+
 The planned `end-to-end/react-native-recording-sync/` requires more than the compatibility demo's immediate bind and plaintext sync. Its blockers are concrete in the **published** `@bota.dev/react-native-app-sdk@2.0.0-beta.7` artifact:
 
 1. `src/client.ts` exposes `BotaProvisioningMaterial` with `apiEndpoint`, raw `deviceToken`, and `mtu`. `provision` passes this material through the bridge. That does not provide the target opaque, device-key-protected payload with exact prepare/provision/confirm/abort context. Implementing the repository's target with this contract would require SDK/platform work beyond a public consumer example.
@@ -663,3 +668,92 @@ physical acceptance, and keep current results separate from historical evidence.
 | Section 4: honest publication and compatibility status | All five exact public pins, successful protected release and separate dated acceptance evidence | matched; synchronized publication complete |
 | General reconnect reliability | Earlier GATT 8/133 failure retained; beta.10 Flutter recovered all three cycles, with delayed first-cycle rediscovery | partial; general reliability and root cause/resolution not established |
 | Wider physical and recording workflows | No Apple/Web/Kotlin beta.10 physical or background/out-of-range/transfer-interruption acceptance added | unverified |
+
+<a id="pre-provisioned-recording-sync"></a>
+## Already-provisioned Android recording sync (2026-10-02)
+
+The ninth example, `end-to-end/react-native-recording-sync`, implements the
+bounded device → encrypted cloud upload → transcription workflow. It has an
+independent Expo Android app and Node backend, using exact public beta.10.
+It does not implement first binding, recording control, reset, plaintext fallback,
+or the full legacy replacement. The architecture applies binding requirements
+when an example includes binding; this sample instead requires an already-bound
+device and verifies its current server owner/generation and SDK-read serial.
+
+The beta.10 npm archive contains the public native material-registration API;
+its audited source files match the registry tarball and lockfile integrity.
+The public Kotlin material constructor and RN registration bridge support an
+independently implemented host adapter. The SDK checks fresh encrypted-v2
+capability before the provider runs, retains native recording bytes and transfer
+checkpoints, and owns signed-receipt delivery and device confirmation. The app
+does not import a private Bota One helper or implement GATT/cryptography.
+
+The backend fixes the project, end user and device in server configuration,
+authenticates a separate app token, rechecks live ownership/binding, and rejects
+automatic transcription before the explicit-processing path. SQLite retains
+capture identity and uncertain creation intents. Native HTTP/journal callbacks
+keep signed documents, staging credentials, manifests and receipts off JavaScript.
+They persist intent before returning a PUT request; uncertain staging does not
+silently issue another PUT. Cloud publication, device cleanup and transcription
+remain separate outcomes. App scope epochs fence late UI updates and cancellation
+waits for the existing operation to settle before another starts.
+
+This is a conservative example, not complete automatic recovery: lost create
+responses, uncertain PUTs, missing native journal with retained SDK state, changed
+nonce and expired/replaced ownership require reconciliation. Journals are retained;
+the example does not generate replacement recordings/sessions merely to retry.
+The underlying beta.10 transfer checkpoint is removed before final device CONFIRM,
+so backend/native session identity is retained independently of that checkpoint.
+
+### Evidence
+
+- Own-directory frozen app install, TypeScript, nine app/HTTP/lifecycle tests and
+  Android Metro export passed on Node 22.23.2 / Windows.
+- Backend frozen install, syntax checks and 18 HTTP/SQLite regression tests passed.
+  Tests cover caller/resource authorization, generation races, manifest identity,
+  uncertain creates and reuse of the existing transcription.
+- The Android native module compiled against the public beta.10 Maven dependency
+  and packaged RN bridge; ten JVM tests passed, with zero skipped. Cases include
+  preparation cancellation, late response fencing, blocked-body cancellation,
+  journal state and uncertain PUT handling. These host tests do not exercise the
+  consumed SDK material registry's registration lifetime.
+- Live read-only checks rejected missing app authentication (`401`) and a
+  mismatched configured end user (`409`). Configuring the device's actual existing
+  owner returned `200` for authorized context and the empty example-owned cloud
+  recording list. The device was `4KF6NOHWX0`, current binding generation 2.
+  Effective automatic transcription was already disabled. No bind/config changes
+  or upload/transcription writes were made by these checks.
+- Local full Android APK assembly and installation passed. The APK SHA-256 is
+  `b0b817ef61890410d75e70839372fa838e179fc06ac34296d348b04157fc5f88`.
+  Phone startup, backend authorization and Bluetooth scanning passed on Samsung
+  SM-A166U1 / Android 16. The initial scan found other candidates, but two further
+  scans returned no candidates. Exact-device connection and encrypted catalog
+  checks remain unverified. The app/backend were stopped and temporary ADB port
+  forwarding removed; Bluetooth remains on.
+- Exact-source hosted CI and physical encrypted-upload acceptance remain
+  unverified. Upload awaits selection of a synthetic or explicitly consented
+  recording; no physical upload/receipt/deletion or live transcription result is
+  claimed. Earlier RN/Flutter connection results do not establish those behaviors.
+
+### Design review
+
+Compound-engineering review compares the source with Architecture §§2–4/6 and
+Upload Management §1.1, keeping target completeness separate from this subset.
+
+| Requirement | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Independent public dependencies and native ownership | Exact beta.10 pins; own app/backend locks; public material registry; no private runtime imports or GATT | matched in source/native compilation |
+| Runnable Android host | Local APK assembly/install and phone startup, backend authorization and scan; exact APK hash above | matched for these checks; exact-device catalog, hosted CI and physical upload unverified |
+| Caller and resource authorization | Separate app token; fixed server scope; native operations and app cloud routes enforce the observed binding generation; exact capture/session checks | matched in 18 backend tests and read-only live scope checks |
+| Opaque native material and SDK-owned bytes | Native Kotlin callbacks and scalar-only JS profile decision | matched in source/native tests; physical profile acceptance pending |
+| Fresh upload admission and stale-result fencing | Fresh idle plus `syncActive === false`; operation epoch/abort; partial native configuration rollback | matched in source and nine app checks |
+| Stable cloud identity and no unsafe repeat PUT | Durable backend/native journals; exact manifest/receipt identity checks; uncertain writes stop | matched for bounded host tests; broader automatic recovery partial |
+| Cloud commitment before source cleanup | SDK receipt/confirmation path; no app confirm/delete operation | source matched; physical receipt/deletion ordering unverified |
+| Separate processing and retained results | Published-session gate, effective auto-processing check, one transcription intent, scoped cloud list | matched in backend tests; live transcription unverified |
+| Full replacement/target protected first bind | Pairing excluded; existing raw-token contract unchanged; legacy app retained | not implemented by this example |
+
+Searches covered the new example path, native registration API, local route and
+environment names across example docs and the public/internal documentation
+surface. Catalog/contributor docs and public example guidance distinguish this
+subset from full replacement. No SDK/API/wire contract or authoritative design
+was changed to mark the example complete.

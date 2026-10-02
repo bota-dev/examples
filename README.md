@@ -6,7 +6,7 @@ Each independent example has its own setup, dependencies, verification steps, an
 
 ## Current status
 
-Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver and five focused App SDK connection examples are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full recording-sync replacement is blocked on public SDK integration gaps. The existing React Native/backend pair remains until replacement acceptance gates pass.
+Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver, five focused App SDK connection examples, and an Android encrypted-recording-sync example for an already-provisioned device are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -34,7 +34,7 @@ The earlier Flutter GATT 8/133 reconnect issue is not established as fixed;
 its beta.9 results and six UI ordering tests remain in the review.
 Physical acceptance for other platforms and devices remains open. The
 [public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps)
-links all eight examples.
+provides public installation and example guidance.
 
 The Flutter sample also guards against delayed connect/status results overwriting
 a newer disconnect. Its [UI ordering review](docs/independent-examples-review.md#flutter-ui-completion-ordering-2026-09-30)
@@ -50,7 +50,7 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |
 | [Android connect](app-sdk/android-device-connect/README.md) | Kotlin Android application using Maven Central | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
-| Blocked: `end-to-end/react-native-recording-sync/` | Binding, encrypted upload, processing; [public integration gaps](docs/independent-examples-review.md#recording-sync-replacement) | Yes |
+| [React Native encrypted recording sync](end-to-end/react-native-recording-sync/README.md) | Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; [scope and evidence](docs/independent-examples-review.md#pre-provisioned-recording-sync) | Yes |
 
 Native SDK smoke samples used to develop the SDK itself belong in the SDK source repository. These customer-facing examples consume published artifacts.
 

@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Bota Recording Sync",
+    "slug": "bota-recording-sync-example",
+    "version": "1.0.0",
+    "platforms": ["android"],
+    "newArchEnabled": true,
+    "android": {
+      "package": "dev.bota.examples.recordingsync",
+      "permissions": ["BLUETOOTH_SCAN", "BLUETOOTH_CONNECT", "ACCESS_FINE_LOCATION"]
+    },
+    "plugins": [["expo-build-properties", {"android": {"minSdkVersion": 26, "usesCleartextTraffic": true}}]]
+  }
+}
