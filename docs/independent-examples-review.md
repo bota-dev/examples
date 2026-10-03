@@ -988,3 +988,26 @@ establish atomic API-enforced generation fencing or new physical acceptance.
 | Metadata and credential boundary | Explicit field projection, fixed GET endpoint, redirect rejection | Source reviewed; no audio, names or credentials in verification output |
 | Current binding before releasing identity or writing — Architecture §3 | Four reproduced regressions and 22 passing backend tests | Matched for changes observed during those reads; atomic fence remains outside the example |
 | Synthetic physical recording and full upload recovery | No new device commands or upload performed | Unverified; positioning and fresh applied settings remain prerequisites |
+
+The new [recording-list workflow](https://github.com/bota-dev/examples/actions/runs/37081961622)
+passed at source `4511f40ac27c5989def8fc024725b6edc304bd3e`, including
+the independent install, syntax checks and all 12 tests.
+The [recording-sync workflow](https://github.com/bota-dev/examples/actions/runs/37081961685)
+also passed for the same source, including all 22 backend regressions and the
+Android native tests/application build. These hosted checks do not add physical
+upload, receipt or device-cleanup evidence.
+The same-source [root CI](https://github.com/bota-dev/examples/actions/runs/37081961621)
+passed verification and the legacy Android build, and
+[CodeQL](https://github.com/bota-dev/examples/actions/runs/37081961552) passed.
+All four workflows completed successfully without reruns.
+
+Public documentation was committed to docs `main` as `101f354` and promoted
+selectively to `prod` as `67d157f3f35037d107f7898db19c3e1a54c7da95`.
+Only the SDK catalog, recording-list reference, pagination guide and changelog
+changed. The guide's JavaScript now keeps its page variable in scope, checks
+HTTP failures and detects cursor cycles; the extracted snippet passed two-page,
+reserved-character cursor, HTTP failure and cycle checks. Mintlify validation
+with `--disable-openapi` and all four local renders passed; no schema changed.
+The exact [Mintlify deployment](https://github.com/bota-dev/docs/runs/111084329870)
+succeeded, and all four live pages returned HTTP 200 with the new example link.
+The rendered pagination page also contained the corrected loop and cursor guard.

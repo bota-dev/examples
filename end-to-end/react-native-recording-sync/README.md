@@ -8,7 +8,7 @@ local, authenticated Node backend. Install each from its own directory.
 **Status:** implemented with 22 backend, 10 native adapter and 15 app tests
 passing. The local Android APK built and installed; phone startup, backend
 authorization and Bluetooth scanning passed. Hosted backend tests and Android
-tests/assembly also [passed at `1145dff`](https://github.com/bota-dev/examples/actions/runs/37038166401).
+tests/assembly also [passed at `4511f40`](https://github.com/bota-dev/examples/actions/runs/37081961685).
 A read-only phone retest with the fresh pairing guard verified the exact device
 serial, fresh paired state and an empty catalog. Physical upload and broader
 pairing-failure/recovery checks remain unverified.

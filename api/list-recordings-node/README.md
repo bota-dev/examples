@@ -2,7 +2,7 @@
 
 Learn to follow the public recordings API's cursor pagination and print a bounded metadata list from your selected project. This server-side CLI uses only Node built-ins. It performs GET requests only; it does not download audio, request signed URLs, transcribe, summarize or mutate resources.
 
-**Status:** implemented; local contract/CLI tests pass with synthetic responses and a loopback fake API. A read-only live test verified cursor traversal, capped results and end-of-list completion in a dedicated test project. Hosted CI has not run. No device, firmware or App SDK is required.
+**Status:** implemented; local contract/CLI tests pass with synthetic responses and a loopback fake API. A read-only live test verified cursor traversal, capped results and end-of-list completion in a dedicated test project. The dedicated hosted workflow passed at `4511f40`. No device, firmware or App SDK is required.
 
 ## Setup
 
@@ -86,7 +86,7 @@ The public contract is documented in [List Recordings](https://docs.bota.dev/api
 | Local install/syntax/tests | 2026-10-02, Windows, Node 22.23.2: `npm ci`, `npm run check`, all **12 tests passed**, both in place and in a standalone clean copy outside the repository. |
 | Live capped traversal | 2026-10-03 00:20:37 UTC (October 2 local): protected test key, page size 1, maximum 3 pages. Optional end-user filter and project-wide runs each made 3 GETs, returned 3 unique IDs, and reported `complete: false` / `page_limit`. |
 | Live end of list | 2026-10-03 00:21:23 UTC: same configured test end user, page size 100, maximum 1 page. One GET returned 16 unique metadata rows and `complete: true` / `end_of_list`. |
-| Hosted workflow | Not run. |
+| Hosted workflow | [Passed at `4511f40`](https://github.com/bota-dev/examples/actions/runs/37081961622): independent frozen install, syntax checks and all 12 tests. |
 
 The three live runs made seven GET requests total and no mutations. Raw records, IDs, names and credentials were not printed in the verification evidence or committed. This proves the exercised test-project listing paths, not snapshot consistency or every possible response/failure condition.
 
@@ -99,7 +99,7 @@ Compound review against the examples architecture §§2–6:
 | Credential and data boundary | Server-only key, fixed endpoint, real redirect refusal, metadata projection and redacted errors | Matched in local tests |
 | Bounded failures | Page/time/body bounds, no write/retry path, no partial success after later-page failure | Page/body/error behavior matched in tests; deadlines source-reviewed; live outage handling unverified |
 | Runnable standalone CLI | Child-process test against a loopback fake API | Matched locally, including the clean copy |
-| Path-scoped CI | `.github/workflows/list-recordings-node.yml`, no live credentials | Prepared; hosted run not run |
+| Path-scoped CI | `.github/workflows/list-recordings-node.yml`, no live credentials | Matched in the exact-source hosted run above |
 
 Documentation impact review searched the new example path, configuration names and pagination tokens across the examples and available public/internal documentation. The affected catalog/contributor/review and public pagination guidance are integrated by the coordinating task. Existing unrelated cursor-based APIs and target designs require no behavioral changes for this GET-only example.
 
