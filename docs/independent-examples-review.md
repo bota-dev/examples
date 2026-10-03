@@ -914,3 +914,37 @@ that fixture-only substitution. Searches of tracked executable/configuration
 files found no remaining occurrence of the real test serial. Documentation
 references remain dated hardware evidence, not runtime defaults. This matches
 Architecture §§2–4's reusable-example and server-derived identity requirements.
+
+The fixture-only change was pushed as `dcb6571b51b142f36802b7554aba204f79c79cc9`.
+GitHub API checks confirmed successful completion for that exact source:
+[root CI](https://github.com/bota-dev/examples/actions/runs/37062121777)
+(verification and legacy Android native build),
+[recording-sync CI](https://github.com/bota-dev/examples/actions/runs/37062121865)
+(backend and Android), and
+[CodeQL](https://github.com/bota-dev/examples/actions/runs/37062121527)
+(Actions and JavaScript/TypeScript analyses). The summary and catalog workflow
+evidence remains the separate `daabf16` runs above. These hosted checks add no
+physical encrypted upload, receipt/source-cleanup or live transcription evidence.
+
+### Read-only phone continuation — 2026-10-02
+
+At 17:06:42 local time, a synthetic-fixture connection attempt timed out after
+ten seconds before reaching connected state; no device commands followed. The
+public example entrypoint was restored, with `App.tsx` SHA-256
+`3bff08ca3470050efe93739cd689114306ea6137179a8a3da1bb94ade17bd3ca`
+matching the repository, and the existing native APK remained
+`b0b817ef61890410d75e70839372fa838e179fc06ac34296d348b04157fc5f88`.
+After one phone Bluetooth OFF/ON cycle and one fresh scan, the first connection
+attempt began at 17:08:47, reached connected at 17:08:48.943, negotiated MTU 512
+at 17:08:50.974 and completed service discovery. The SDK accepted the exact
+serial and fresh `Paired` state; catalog listing returned zero encrypted and
+zero legacy recordings. This is a bounded recovery observation, not proof of
+the timeout's root cause or encrypted-upload acceptance.
+
+No audio capture, clock update, action grant, recording start/stop, upload,
+configuration or firmware change occurred. The synthetic clip had not started;
+device positioning confirmation remained pending. Explicit disconnect then
+succeeded, clearing the connection and disabling catalog access. The app was
+force-stopped, the original lab entrypoint restored and checked against its
+backup, and all five owned services stopped. Temporary 8787/8788/8081 forwarding
+was removed, phone Bluetooth remained on, and journals were retained.

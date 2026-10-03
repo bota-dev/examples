@@ -198,5 +198,17 @@ this UI. No audio transfer, source confirmation, transcription, recording contro
 or provisioning mutation was exercised. The earlier catalog observation without
 this guard remains separate evidence.
 
+A later October 2 continuation first encountered a ten-second connection timeout
+in the synthetic-fixture entrypoint, before connection or device commands. After
+restoring repository-matched `App.tsx` and cycling phone Bluetooth OFF/ON once,
+the public example connected on its first attempt after one fresh scan. Exact
+serial and fresh paired state passed; the catalog again contained zero encrypted
+and zero legacy recordings. The native APK was unchanged. No synthetic clip,
+clock/action grant, recording control, upload, configuration or firmware change
+was started. This recovery observation does not identify the timeout's cause or
+establish upload acceptance. See the [continuation evidence](../../docs/independent-examples-review.md#read-only-phone-continuation--2026-10-02)
+for the source hash and timing. Explicit disconnect and cleanup passed; journals
+were retained. The synthetic clip still awaits device-positioning confirmation.
+
 Public references: [App SDK](https://docs.bota.dev/api-reference/client-sdks),
 [API reference](https://docs.bota.dev/api-reference/introduction).
