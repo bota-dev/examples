@@ -1041,7 +1041,7 @@ exercise streamed limits, interrupted writes, trusted-hash mismatch and a
 destination created during transfer. Independent source/test review found no
 blocking issue.
 
-Live checks selected only the earlier synthetic, device-less Python API-upload
+Initial read-only live checks selected the earlier synthetic, device-less Python API-upload
 fixture. Fresh metadata confirmed its project, dedicated end user and completed
 transcription. On October 3 at 01:26:02 UTC (October 2 local), download made two
 API GETs and one storage GET, retrieved 333,326 bytes and matched the independently
@@ -1051,23 +1051,75 @@ hash. No cloud recording or device state changed.
 
 At 01:21:23 UTC, search made one POST with that exact recording allowlist and
 limit three. HTTP 200 returned an empty array, so no ownership GET or excerpt
-output occurred. This verifies only the bounded empty-result path. Nonempty live
-retrieval, timestamp correctness and live returned-recording ownership remain
-unverified. Automatic indexing requires effective `processing.auto_embedding.enabled`
+output occurred. This verifies only the bounded empty-result path.
+Automatic indexing requires effective `processing.auto_embedding.enabled`
 and an allowed provider route; completed transcription alone is not indexing
 evidence. The check did not change processing configuration or enqueue indexing.
 
+A second, isolated check at 01:49 UTC created one new synthetic end user and one
+device-less recording. Only this new identity enabled automatic embedding while
+automatic transcription, summary and enhancement stayed disabled. Original audio
+matched the trusted 333,326-byte fixture hash; server upload completion verified
+the same hash. One manual transcription completed with three timestamped segments.
+After a 60-second wait, one search POST (limit three, exact recording allowlist)
+returned one excerpt. Its recording/transcription IDs and timestamp field shapes
+passed validation; one recording ownership GET succeeded before returning it.
+No excerpt text or credential was retained in verification output. The new cloud
+fixture and private durable operation journal remain available for reconciliation.
+No existing identity, project/provider policy or physical device changed. This
+adds nonempty retrieval evidence for one fixture, not corpus search-quality,
+playback timestamp-alignment or indexing-latency guarantees.
+
 | Requirement / authority | Evidence | Conformance and limits |
 | --- | --- | --- |
-| Independent setup — Architecture §§2,4,6 | Clean-copy frozen installs and all 33 offline tests | Matched locally; hosted workflows pending |
+| Independent setup — Architecture §§2,4,6 | Clean-copy frozen installs and all 33 offline tests; both scoped workflows passed at `ccbdd422a540d361bc7a2818ffa83c5d19ec12b7` | Matched locally and in hosted CI |
 | Public contract — public recording GET/download/search schemas and services | Exact public routes, selected fields and bounded configuration | Matched in source/tests; no sibling runtime requirement |
 | Scope and credential boundary — Architecture §3 | Download scope/storage-header tests plus live download; search allowlist/ownership failure tests | Matched for stated checks; multi-user caller authentication remains the integrator's responsibility |
 | Complete original-file output | Live byte/hash match; existing-file and concurrent destination tests | Matched for synthetic original bytes; no decryption, crash-durability or upload-commitment claim |
-| Search citation correctness | Offline valid/malformed citation and scope tests | Matched in mocks; nonempty live results remain unverified |
-| Documentation and honest status | Catalog/contributor/architecture and per-example evidence updated | Public-page validation/render checks passed locally; publication pending |
+| Search citation correctness | Offline valid/malformed citation and scope tests; one live excerpt with exact fixture IDs, validated timestamps and ownership GET | Matched for tested metadata; playback alignment and corpus relevance unverified |
+| Documentation and honest status | Catalog/contributor/architecture and per-example evidence updated; public validation/render checks, exact deployment and four live page checks passed | Matched for the published pages; no broader API or hardware acceptance inferred |
+
+All four workflows passed at source
+`ccbdd422a540d361bc7a2818ffa83c5d19ec12b7` without reruns:
+[download](https://github.com/bota-dev/examples/actions/runs/37086235029),
+[search](https://github.com/bota-dev/examples/actions/runs/37086234980),
+[root CI](https://github.com/bota-dev/examples/actions/runs/37086234986), and
+[CodeQL](https://github.com/bota-dev/examples/actions/runs/37086235115).
+The two example workflows passed their independent install, syntax checks and
+21/12 tests respectively. Root CI passed verification and the legacy Android
+build; CodeQL passed JavaScript/TypeScript and Actions analysis. Hosted checks
+do not extend the live fixture or search-result coverage described above.
+
+Public documentation was committed to docs `main` as `fa75381` and promoted to
+`prod` as `f5b33fe`. The exact
+[Mintlify deployment](https://github.com/bota-dev/docs/runs/111097801346)
+succeeded. The SDK catalog, download reference, transcript-search reference and
+changelog all returned HTTP 200 in live checks. Local validation and rendering
+also passed for these four pages; no API schema changed.
 
 Changed-path, configuration and endpoint searches covered available internal and
-public docs and repository README/ARCHITECTURE/AGENTS/CLAUDE surfaces. Public
-catalog, download/search reference pages and changelog need the new runnable links;
-search guidance also needs the indexing-policy qualification. Existing target
+public docs and repository README/ARCHITECTURE/AGENTS/CLAUDE surfaces. The public
+catalog, download/search reference pages and changelog now include the new runnable
+links; search guidance includes the indexing-policy qualification. Existing target
 design and historical firmware download contracts are unchanged.
+
+### Related Android SDK source verification
+
+The Android connect/MTU handshake cleanup follow-up was pushed directly to SDK
+`main` at `14270786dc041e3c2a96dcda6ac3c61ae2fb5551`. It retires the failed
+handshake's exact generation and closes its native session, preserving the
+original failure and queued replacement work. Cleanup has a separate bounded
+settlement wait; it does not extend the connect deadline or add automatic retries.
+
+All 74 focused/facade tests passed locally. The Windows full-suite run passed
+268 of 270 tests; both transfer failures also reproduced on the unchanged base.
+The exact-source [SDK CI](https://github.com/bota-dev/app-sdk/actions/runs/37086421649)
+passed all eight jobs, including the full Linux Android suite, and the
+[License Gate](https://github.com/bota-dev/app-sdk/actions/runs/37086423029) passed.
+Its candidate release inventory artifact `11261450084` has SHA-256
+`4ec5e7290b90ca1d4eec7a1ce5dc5ec6acd69f6d17bf20e96598f3c2a12a0173`.
+
+This is source verification only. The fix is absent from public beta.10 and the
+published beta.11 release; these examples' beta.10 dependencies are unchanged.
+No physical test establishes that the follow-up fixes delayed connection/MTU
+behavior or the separate GATT 8/133 reconnect failures.

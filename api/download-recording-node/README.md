@@ -2,7 +2,7 @@
 
 Download a selected recording's original stored bytes to a new local file. This server-side CLI uses the public API and Node built-ins. It checks the recording's identity and status, requests a short-lived URL, streams the response to a temporary file, then publishes the completed file without overwriting an existing destination.
 
-**Status:** implemented with offline contract, file-system and loopback HTTP tests. An authorized synthetic live download passed with a trusted fixture hash and no-overwrite verification. The dedicated hosted workflow is pending. No device or App SDK is required.
+**Status:** implemented with offline contract, file-system and loopback HTTP tests. An authorized synthetic live download passed with a trusted fixture hash and no-overwrite verification. The dedicated hosted workflow passed at source `ccbdd422a540d361bc7a2818ffa83c5d19ec12b7`. No device or App SDK is required.
 
 ## Setup
 
@@ -78,9 +78,11 @@ The public contracts are [Get Recording](https://docs.bota.dev/api-reference/rec
 | Bounded original download | Size/body/deadline checks, interrupted and stalled streams, trusted-hash rejection; live original-byte hash match | Matched in offline tests and the stated live download; live outage behavior unverified |
 | Preserve files and clean partials | Existing-file check, concurrent destination race, partial cleanup assertions | Matched in offline tests; crash recovery intentionally outside scope |
 | Safe runnable CLI | Child process with isolated `.env`, metadata-only JSON, safe errors and help | Matched in offline tests |
-| Hosted acceptance | Workflow is path-scoped and uses no live credentials | Pending; local tests do not establish hosted success |
+| Hosted acceptance | Path-scoped workflow passed frozen installation, syntax checks and all 21 tests at `ccbdd422a540d361bc7a2818ffa83c5d19ec12b7`, without live credentials | Matched in hosted CI; live coverage remains limited to the stated fixture |
 
 Local checks on Windows with Node 22.23.2 passed **21 tests**, including loopback HTTP redirect refusal and timeouts. Frozen installation, syntax checks and the same suite also passed in a standalone copy outside the repository. These tests contain synthetic bytes only.
+
+The [download workflow](https://github.com/bota-dev/examples/actions/runs/37086235029) passed at source `ccbdd422a540d361bc7a2818ffa83c5d19ec12b7`. The same-source [search workflow](https://github.com/bota-dev/examples/actions/runs/37086234980), [root CI including the legacy Android build](https://github.com/bota-dev/examples/actions/runs/37086234986), and [CodeQL](https://github.com/bota-dev/examples/actions/runs/37086235115) also passed without reruns. These checks add no live download or physical-device coverage.
 
 At **2026-10-03 01:26:02 UTC** (October 2 local), an authorized live run downloaded a known synthetic fixture using two API GETs and one storage GET. Its **333,326 bytes** matched the independently known original SHA-256, and the storage request contained no API bearer. A second invocation with the same destination refused before making any request, preserving the file's hash. The run performed no cloud mutation, conversion, decryption or playback. This verifies the selected fixture, not the format or integrity of every stored object.
 

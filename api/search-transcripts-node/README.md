@@ -99,22 +99,35 @@ may already have reached its provider; the example does not repeat it automatica
 `npm ci`, `npm run check` and `npm test` pass locally on Node 22.23.2. The 12 test
 cases use synthetic responses and loopback servers, including real-fetch redirect
 rejection and a stalled response body. They make no Bota or provider calls.
-The path-filtered GitHub workflow runs the same checks without credentials.
+The [path-filtered GitHub workflow](https://github.com/bota-dev/examples/actions/runs/37086234980)
+passed the same checks without credentials at source
+`ccbdd422a540d361bc7a2818ffa83c5d19ec12b7`. The same-source root CI and CodeQL also passed.
 
 A bounded live check on 2026-10-03 at 01:21 UTC verified the known synthetic
 fixture's project/end-user scope and completed transcription first, then made one
 search POST with a one-recording allowlist and limit 3. The API returned HTTP 200
 with `results: []`; there were no ownership GETs, excerpts, retries or indexing
-changes. This verifies the empty-result path only. Nonempty retrieval, timestamped
-live excerpts, real ownership GETs and indexing completion remain unverified.
+changes. This verified the empty-result path only.
+
+A separate check at 01:49 UTC created a new isolated synthetic end user and
+device-less recording. Only that new identity enabled automatic embedding;
+automatic transcription, summary and enhancement were disabled. After one manual
+transcription completed with three timestamped segments and a 60-second indexing
+wait, one allowlisted search (limit 3) returned one excerpt. Its recording and
+transcription IDs matched the fixture, timestamp fields passed validation, and
+one recording ownership GET succeeded before returning the result. The fixture
+and private operation journal were retained. Existing identities, project/provider
+policies and devices were unchanged. This verifies nonempty retrieval for that
+fixture, not search relevance across a corpus, timestamp alignment against playback,
+or a guarantee that indexing finishes within 60 seconds.
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
 | Public retrieval contract and timestamped fields | Public search/get documentation, current API validation/service fields; request and projection tests | Matched in source and offline tests |
-| Fixed identity and recording scope | Required end user, allowlist validation and unique ownership GETs before output; mismatch and partial-result tests | Matched in offline tests; one scoped empty live response, ownership GETs unverified live |
+| Fixed identity and recording scope | Required end user, allowlist validation and unique ownership GETs before output; mismatch and partial-result tests; one successful live ownership GET | Matched in offline tests and the stated scoped live fixture |
 | Bounded execution and safe failures | Shared deadline, response/text limits, no retry, rejected redirects, sanitized HTTP/network failures | Matched in offline tests |
 | Customer-independent example | Own manifest/lockfile, Node built-ins, no private helpers or shared runtime | Matched by source review |
-| Search quality, indexing and provider behavior | One scoped synthetic live search returned HTTP 200 and no results | Empty-result path matched; nonempty retrieval and indexing unverified |
+| Search quality, indexing and provider behavior | Empty-result check plus one newly indexed synthetic fixture returning one validated excerpt | Nonempty retrieval matched for the fixture; corpus relevance and playback alignment unverified |
 
 Public contracts: [Search Recordings](https://docs.bota.dev/api-reference/recordings/search)
 and [Get Recording](https://docs.bota.dev/api-reference/recordings/get).
