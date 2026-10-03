@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: twelve independent examples are implemented, including the bounded already-provisioned Android recording-sync path, a Node summary workflow, a paginated API recording list and an Android metadata catalog. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: fourteen independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search workflows and an Android metadata catalog. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -41,6 +41,8 @@ examples/
     webhook-receiver-node/
     summarize-transcription-node/
     list-recordings-node/
+    download-recording-node/
+    search-transcripts-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -155,6 +157,19 @@ key and an optional end-user filter. It projects selected metadata, limits the
 number of pages and reports incomplete traversal explicitly. Listing is not a
 snapshot, a resource authorization check for a multi-user app, or permission to
 download or delete audio. This example performs no writes.
+
+The recording-download example retrieves original stored bytes, without format
+conversion, enhancement or decryption. It checks configured scope before URL
+issuance, isolates API credentials from storage, limits transfer size and time,
+and publishes a local file without overwriting an existing destination. A signed
+URL is not proof that an object exists or that its bytes match a trusted fixture.
+
+The transcript-search example fixes end-user scope and optionally narrows to a
+recording allowlist. It validates citations and checks each returned recording's
+owner before printing any excerpts. Search uses the provider's embedding path
+and may incur usage; it does not create an Ask session or generated answer.
+Empty results do not establish indexing readiness. Separate ownership reads do
+not provide an atomic snapshot or replace customer application authorization.
 
 The webhook example must use the public verification format, preserve the input bytes that verification requires, and handle duplicate events. It must document delivery/retry semantics and acknowledge only after the example's stated acceptance/durability step. Do not invent signature headers or claim exactly-once delivery.
 

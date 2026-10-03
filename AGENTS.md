@@ -8,6 +8,18 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+`api/download-recording-node` requests original stored bytes only. Keep API auth
+off storage requests, reject redirects, preserve existing destinations and remove
+incomplete files. Optional expected SHA-256 comes from a trusted caller fixture;
+the download URL response supplies no checksum. Do not add conversion/decryption
+or treat URL issuance as successful download.
+
+`api/search-transcripts-node` retrieves excerpts under a fixed server-configured
+end user and optional recording allowlist. Validate every result and check unique
+recording ownership before emitting text. Keep the single deadline, bounded
+responses and no automatic retry. Search may incur embedding-provider usage;
+empty results are not evidence that indexing or nonempty retrieval works.
+
 `api/list-recordings-node` teaches read-only cloud metadata pagination. Keep its
 project key server-side, preserve the optional end-user filter on every page,
 follow opaque cursors and enforce the page cap. Report incomplete traversal;

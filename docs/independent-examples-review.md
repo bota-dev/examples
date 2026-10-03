@@ -1011,3 +1011,63 @@ with `--disable-openapi` and all four local renders passed; no schema changed.
 The exact [Mintlify deployment](https://github.com/bota-dev/docs/runs/111084329870)
 succeeded, and all four live pages returned HTTP 200 with the new example link.
 The rendered pagination page also contained the corrected loop and cursor guard.
+
+## Recording download and transcript search — 2026-10-02
+
+The catalog now has fourteen independent examples. Two server-side Node CLIs use
+public APIs and Node built-ins, with their own manifests, lockfiles and scoped
+workflows. Neither needs a device or imports private application helpers.
+
+`api/download-recording-node` verifies a selected recording's configured project
+and optional end user, requests the original download URL and streams its stored
+bytes to an exclusive temporary file. It limits size/time, isolates the API key
+from storage, optionally compares a trusted SHA-256 and publishes without
+overwriting a destination. It performs no conversion, enhancement, decryption,
+playback or cloud mutation. Original stored bytes can be an encrypted container;
+URL issuance and MIME metadata do not prove playable audio or verified upload.
+
+`api/search-transcripts-node` sends one search POST for a configured end user and
+optional recording allowlist. Before emitting excerpts, it validates all citation
+fields and GETs each unique recording to verify ownership. It limits responses
+and overall time, rejects redirects and makes no automatic retry. This retrieves
+text through the embedding-provider path and may incur provider usage; it creates
+no Ask session or generated answer. Ownership reads are not an atomic snapshot.
+
+Frozen installs, syntax checks and the download's 21 tests and search's 12 tests
+passed on Node 22.23.2 / Windows, both in place and from separate clean copies
+outside the repository. Tests cover the real HTTP redirect/deadline behavior,
+authorization/scope failures and sanitized output. Download tests additionally
+exercise streamed limits, interrupted writes, trusted-hash mismatch and a
+destination created during transfer. Independent source/test review found no
+blocking issue.
+
+Live checks selected only the earlier synthetic, device-less Python API-upload
+fixture. Fresh metadata confirmed its project, dedicated end user and completed
+transcription. On October 3 at 01:26:02 UTC (October 2 local), download made two
+API GETs and one storage GET, retrieved 333,326 bytes and matched the independently
+known fixture SHA-256. The storage request had no bearer credential. A second
+invocation with the existing output refused before any request and preserved its
+hash. No cloud recording or device state changed.
+
+At 01:21:23 UTC, search made one POST with that exact recording allowlist and
+limit three. HTTP 200 returned an empty array, so no ownership GET or excerpt
+output occurred. This verifies only the bounded empty-result path. Nonempty live
+retrieval, timestamp correctness and live returned-recording ownership remain
+unverified. Automatic indexing requires effective `processing.auto_embedding.enabled`
+and an allowed provider route; completed transcription alone is not indexing
+evidence. The check did not change processing configuration or enqueue indexing.
+
+| Requirement / authority | Evidence | Conformance and limits |
+| --- | --- | --- |
+| Independent setup — Architecture §§2,4,6 | Clean-copy frozen installs and all 33 offline tests | Matched locally; hosted workflows pending |
+| Public contract — public recording GET/download/search schemas and services | Exact public routes, selected fields and bounded configuration | Matched in source/tests; no sibling runtime requirement |
+| Scope and credential boundary — Architecture §3 | Download scope/storage-header tests plus live download; search allowlist/ownership failure tests | Matched for stated checks; multi-user caller authentication remains the integrator's responsibility |
+| Complete original-file output | Live byte/hash match; existing-file and concurrent destination tests | Matched for synthetic original bytes; no decryption, crash-durability or upload-commitment claim |
+| Search citation correctness | Offline valid/malformed citation and scope tests | Matched in mocks; nonempty live results remain unverified |
+| Documentation and honest status | Catalog/contributor/architecture and per-example evidence updated | Public-page validation/render checks passed locally; publication pending |
+
+Changed-path, configuration and endpoint searches covered available internal and
+public docs and repository README/ARCHITECTURE/AGENTS/CLAUDE surfaces. Public
+catalog, download/search reference pages and changelog need the new runnable links;
+search guidance also needs the indexing-policy qualification. Existing target
+design and historical firmware download contracts are unchanged.
