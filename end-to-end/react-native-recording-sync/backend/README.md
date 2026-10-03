@@ -5,7 +5,7 @@ an already-provisioned device recording with the public encrypted-upload-v2 SDK.
 This component creates and retains the cloud identity, authorizes narrowly scoped
 HTTP operations, and starts transcription only after cloud publication.
 
-**Status (October 2, 2026):** implemented and locally tested with 18 passing
+**Status (October 2, 2026):** implemented and locally tested with 22 passing
 mocked public API tests on Node 22.23.2. Live API, Android native integration, and physical recording
 transfer/deletion are separate checks; see the enclosing example's evidence.
 This is a local, single-user test backend, not a deployed multi-user service.
@@ -122,7 +122,14 @@ a recovery procedure. Never switch its fixed scope to another account/project.
   override the generation check. Older-generation journal rows are retained but
   excluded from the cloud-results list. An app using an older generation cannot
   list or process a newer generation's recordings, even after a rebind to the
-  same end user; refresh authorization first.
+  same end user; refresh authorization first. The backend rechecks current
+  binding after reading a recording, after processing-config lookup before
+  recording/session creation, and after existing-job lookup before transcription
+  creation. These checks reject changes observed during those reads before
+  returning identity or sending the next write. They narrow the application
+  race window; separate public API reads and writes are not an atomic binding
+  fence. A rebind after the last read may still overlap a write, whose response
+  is checked again. Keep binding unchanged during a test run.
 - Transcription is an explicit later action. A durable known job is reused;
   a lost job-create response remains parked for inspection. No exactly-once
   claim applies to other applications or concurrently changed auto-processing.
@@ -147,7 +154,8 @@ npm test
 | --- | --- |
 | Fixed authenticated scope; no project key in phone | HTTP anonymous/wrong-token/Origin rejection; strict body and scope tests — matched locally. |
 | Stable identity before write; no duplicate create after uncertainty | SQLite restart, lost recording/session/transcription response and concurrent-call tests — matched for documented paths; lost session/context/job create is intentionally parked. |
-| Current generation before releasing session or cloud result state | Rebind-during-status and stale-caller/new-generation listing/transcription regressions — matched locally. |
+| Current generation before releasing session or cloud result state | Rebind-during-status/recording-read and stale-caller/new-generation listing/transcription regressions — matched locally. |
+| Recheck current ownership before recording/session/transcription writes | Rebind during config or existing-job lookup sends no POST and creates no new intent — matched in regression tests; atomic API-enforced generation fencing remains outside this example. |
 | Exact manifest/receipt; cloud commitment separate from deletion | Published conflicting-manifest replay, receipt corruption, pending-state/no-PUT tests — matched locally; SDK/device cryptographic validation and physical deletion unverified here. |
 | Explicit processing after publication | Disabled effective config, pending receipt rejection, known/existing job reuse and lost-job tests — matched locally, concurrent administrator/provider behavior outside this example. |
 | Public contract only | `/v1` fixed routes; no dashboard/private endpoint, sibling dependency, custom GATT or signing code — source reviewed. |

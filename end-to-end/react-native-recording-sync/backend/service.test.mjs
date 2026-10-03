@@ -39,13 +39,18 @@ function fixture(t, options = {}) {
     calls.push({ path, method, body, headers: init.headers });
     const json = value => Response.json(value);
     if (path === '/devices/dev_test') return json(device);
-    if (path === '/devices/dev_test/config/processing') return json({ value: { auto_transcription: { enabled: state.automatic } } });
+    if (path === '/devices/dev_test/config/processing') {
+      const response = json({ value: { auto_transcription: { enabled: state.automatic } } });
+      state.afterProcessing?.(); return response;
+    }
     if (path === '/recordings' && method === 'POST') {
       assert.equal(body.end_user_id, config.endUserId); assert.equal(body.encryption_version, 2);
       if (state.recordingLost) { state.recordingLost = false; throw new Error('secret signed response lost'); }
       return json(recording);
     }
-    if (path === '/recordings/rec_test' && method === 'GET') return json(recording);
+    if (path === '/recordings/rec_test' && method === 'GET') {
+      const response = json(recording); state.afterRecording?.(); return response;
+    }
     const base = '/recordings/rec_test/encrypted-upload-v2/sessions';
     if (path === base && method === 'POST') {
       if (state.sessionLost) throw new Error('session created but response lost');
@@ -60,7 +65,10 @@ function fixture(t, options = {}) {
       return json({ state: status.state === 'published' ? 'published' : 'ready' });
     }
     if (path === `${base}/${sessionId}` && method === 'DELETE') { status.state = 'cancelled'; return new Response(null, { status: 204 }); }
-    if (path === '/transcriptions?recording_id=rec_test&limit=2') return json({ data: state.transcriptionExists ? [transcription] : [], has_more: false });
+    if (path === '/transcriptions?recording_id=rec_test&limit=2') {
+      const response = json({ data: state.transcriptionExists ? [transcription] : [], has_more: false });
+      state.afterTranscriptionList?.(); return response;
+    }
     if (path === '/transcriptions' && method === 'POST') {
       state.transcriptionExists = true; if (state.transcriptionLost) throw new Error('created job response lost'); return json(transcription);
     }
@@ -141,6 +149,40 @@ test('generation and ownership changes fence all remembered operations', async t
 test('a rebind during a status request does not return old receipt material', async t => {
   const f = fixture(t); await f.prepare(); f.publish(); f.state.afterStatus = () => { f.device.binding_generation++; };
   await rejected(f.service.sessionOperation('rec_test', sessionId, '', 'GET', {}, 3), 'binding_changed');
+});
+
+test('a rebind during processing configuration stops recording creation before POST', async t => {
+  const f = fixture(t);
+  f.state.afterProcessing = () => { f.device.binding_generation++; };
+  await rejected(f.service.createRecording(capture), 'binding_changed');
+  assert.equal(f.calls.filter(c => c.method === 'POST').length, 0);
+  assert.equal(f.service.db.prepare('SELECT COUNT(*) AS count FROM captures').get().count, 0);
+});
+
+test('a rebind during a known recording read stops identity replay', async t => {
+  const f = fixture(t); await f.service.createRecording(capture);
+  f.state.afterRecording = () => { f.device.binding_generation++; };
+  await rejected(f.service.createRecording(capture), 'binding_changed');
+  assert.equal(f.calls.filter(c => c.path === '/recordings' && c.method === 'POST').length, 1);
+  assert.equal(f.service.db.prepare('SELECT recording_id FROM captures').get().recording_id, 'rec_test');
+});
+
+test('a rebind during session processing lookup stops before session intent and POST', async t => {
+  const f = fixture(t); await f.service.createRecording(capture);
+  f.state.afterProcessing = () => { f.device.binding_generation++; };
+  await rejected(f.service.createSession('rec_test', sessionBody, 3), 'binding_changed');
+  assert.equal(f.calls.filter(c => c.path.endsWith('/sessions') && c.method === 'POST').length, 0);
+  const row = f.service.db.prepare('SELECT recording_id,session_state,session_id FROM captures').get();
+  assert.equal(row.recording_id, 'rec_test');
+  assert.equal(row.session_state, null); assert.equal(row.session_id, null);
+});
+
+test('a rebind during the existing-job read stops transcription creation before POST', async t => {
+  const f = fixture(t); await f.prepare(); f.publish();
+  f.state.afterTranscriptionList = () => { f.device.binding_generation++; };
+  await rejected(f.service.transcribe('rec_test', 3), 'binding_changed');
+  assert.equal(f.calls.filter(c => c.path === '/transcriptions' && c.method === 'POST').length, 0);
+  assert.equal(f.service.db.prepare('SELECT transcription_state FROM captures').get().transcription_state, null);
 });
 
 test('a stale caller cannot list or transcribe a newer binding even for the same owner', async t => {

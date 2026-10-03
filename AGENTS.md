@@ -9,9 +9,17 @@
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Seven additional examples are implemented under `api/` and `app-sdk/`; Python is also live-verified, and five connection samples consume exact public packages. All five App SDK connection examples pin public beta.10 after completed protected publication. Exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All five App SDK connection examples pin public beta.10 after completed protected publication. Exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
+
+`api/list-recordings-node` teaches read-only cloud metadata pagination. Keep its
+project key server-side, preserve the optional end-user filter on every page,
+follow opaque cursors and enforce the page cap. Report incomplete traversal;
+never silently treat a capped list as complete. Print only selected metadata,
+not arbitrary API response fields, credentials, storage paths or signed URLs.
+Run its independent syntax checks and pagination/failure tests. No hardware is
+required; live API and mocked evidence remain separate.
 
 The ninth example is `end-to-end/react-native-recording-sync`: Android with an
 already-provisioned device and encrypted-v2 recordings only, using public beta.10.

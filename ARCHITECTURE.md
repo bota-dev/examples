@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: eleven independent examples are implemented, including the bounded already-provisioned Android recording-sync path, a Node summary workflow and an Android metadata catalog. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: twelve independent examples are implemented, including the bounded already-provisioned Android recording-sync path, a Node summary workflow, a paginated API recording list and an Android metadata catalog. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -40,6 +40,7 @@ examples/
     upload-and-transcribe-python/
     webhook-receiver-node/
     summarize-transcription-node/
+    list-recordings-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -148,6 +149,12 @@ authorize audio transfer or establish cloud commitment, and this example adds no
 binding, upload, recording control or cleanup operations.
 
 API upload examples must follow the public upload/finalization contract before requesting processing. Use bounded polling with terminal-error handling or documented webhooks to retrieve asynchronous results. Retry only when the operation's documented idempotency/recovery behavior makes it safe; do not create duplicate recordings or processing jobs blindly.
+
+The API recording-list example follows opaque cursors using a server-held project
+key and an optional end-user filter. It projects selected metadata, limits the
+number of pages and reports incomplete traversal explicitly. Listing is not a
+snapshot, a resource authorization check for a multi-user app, or permission to
+download or delete audio. This example performs no writes.
 
 The webhook example must use the public verification format, preserve the input bytes that verification requires, and handle duplicate events. It must document delivery/retry semantics and acknowledge only after the example's stated acceptance/durability step. Do not invent signature headers or claim exactly-once delivery.
 

@@ -121,6 +121,7 @@ export class SyncService {
     const recording = await this.upstream(`/recordings/${recordingId}`);
     const identity = JSON.parse(row.identity);
     if (recording?.id !== recordingId || recording.project_id !== this.config.projectId || recording.end_user_id !== this.config.endUserId || recording.device_id !== this.config.deviceId || recording.source !== 'device' || recording.deleted_at || recording.recording_uuid !== identity.recording_uuid || recording.recording_generation !== identity.recording_generation) fail(409, 'recording_scope_changed');
+    await this.device(row.generation);
     return row;
   }
   async createRecording(body) {
@@ -132,6 +133,7 @@ export class SyncService {
     const key = digest([body.recording_uuid, body.recording_generation]);
     return this.exclusive(`capture:${key}`, async () => {
       await this.device(body.binding_generation); await this.manualProcessing();
+      await this.device(body.binding_generation);
       const old = this.db.prepare('SELECT * FROM captures WHERE capture_key=?').get(key);
       if (old && old.identity !== JSON.stringify(identity)) fail(409, 'capture_identity_changed');
       if (old?.recording_id) { await this.capture(old.recording_id, body.binding_generation); return { id: old.recording_id, recording_id: old.recording_id }; }
@@ -163,6 +165,7 @@ export class SyncService {
       const row = await this.capture(recordingId, generation); const identity = JSON.parse(row.identity);
       valid(Object.entries(identity).every(([key, value]) => body[key] === value), 'capture_identity_changed');
       await this.manualProcessing();
+      await this.device(row.generation);
       const fingerprint = digest(required.map(key => body[key]));
       if (row.session_state === 'uncertain') fail(409, 'session_create_uncertain', 'Session creation may have succeeded. Keep the journal and inspect the existing operation; do not create another session.');
       if (row.session_id) {
@@ -255,6 +258,7 @@ export class SyncService {
         this.db.prepare("UPDATE captures SET transcription_state='known',transcription_id=? WHERE recording_id=?").run(item.id, recordingId);
         await this.device(row.generation); return item;
       }
+      await this.device(row.generation);
       const intent = this.db.prepare("UPDATE captures SET transcription_state='uncertain' WHERE recording_id=? AND transcription_state IS NULL").run(recordingId);
       if (intent.changes !== 1) fail(409, 'transcription_create_uncertain');
       const item = this.normalizeTranscription(await this.upstream('/transcriptions', 'POST', { recording_id: recordingId }), recordingId);

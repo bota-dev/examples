@@ -948,3 +948,43 @@ succeeded, clearing the connection and disabling catalog access. The app was
 force-stopped, the original lab entrypoint restored and checked against its
 backup, and all five owned services stopped. Temporary 8787/8788/8081 forwarding
 was removed, phone Bluetooth remained on, and journals were retained.
+
+## Recording-list example and binding-check review — 2026-10-02
+
+The twelfth independent example, `api/list-recordings-node`, reads public
+`GET /v1/recordings` with an optional end-user filter. It follows opaque cursors,
+projects selected metadata, limits pages and distinguishes an incomplete list
+from end-of-list. API keys stay server-side. It never requests audio or performs
+a write; it is not a snapshot export or a multi-user authorization service.
+
+Frozen installation, syntax checks and all 12 local tests passed both in the
+example directory and a standalone temporary copy. Coverage includes opaque
+cursor propagation, caps, empty lists, cycles, metadata projection, malformed
+responses, authorization/HTTP failures, redirect refusal and a child-process CLI
+against a local fake API. Independent review confirmed the projected nullable
+fields and seven status values against the public Recording schema.
+
+Live read-only checks used the reserved test-project key on October 3 UTC
+(October 2 local). With page size one and a three-page cap, both the configured
+end-user and project listing returned three distinct IDs and reported
+`complete: false` / `page_limit`. A separate end-user listing with page size 100
+returned 16 distinct IDs in one request and reported `complete: true` /
+`end_of_list`. Seven GET requests were made; only counts and completion metadata
+were retained in verification output. No recordings were created or changed.
+
+The recording-sync backend review reproduced four stale-binding paths:
+rebinding during processing-configuration lookup could precede recording or session POST;
+rebinding during existing-job lookup could precede transcription POST; and
+rebinding during a known recording GET could return old identity. Fresh checks
+at those boundaries now reject the observed change. All four regressions failed
+against the original implementation; all 22 backend tests pass with the fix.
+Separate API reads and writes still leave a race window. These checks do not
+establish atomic API-enforced generation fencing or new physical acceptance.
+
+| Requirement / authority | Evidence | Conformance and limits |
+| --- | --- | --- |
+| Independent example, public contract — Architecture §§2–4 | Own Node manifest/lockfile/workflow; public listing and pagination contract | Source matched; no sibling runtime dependencies |
+| Bounded read-only pagination | Live three-page caps and end-of-list checks | Matched for the test project; concurrent changes are not a snapshot |
+| Metadata and credential boundary | Explicit field projection, fixed GET endpoint, redirect rejection | Source reviewed; no audio, names or credentials in verification output |
+| Current binding before releasing identity or writing — Architecture §3 | Four reproduced regressions and 22 passing backend tests | Matched for changes observed during those reads; atomic fence remains outside the example |
+| Synthetic physical recording and full upload recovery | No new device commands or upload performed | Unverified; positioning and fresh applied settings remain prerequisites |

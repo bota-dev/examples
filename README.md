@@ -6,7 +6,7 @@ Each independent example has its own setup, dependencies, verification steps, an
 
 ## Current status
 
-The catalog contains eleven independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver, five focused App SDK connection examples, Android encrypted recording sync, Node structured summaries, and Android recording metadata listing are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+The catalog contains twelve independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The webhook receiver, paginated API recording list, five focused App SDK connection examples, Android encrypted recording sync, Node structured summaries, and Android recording metadata listing are implemented; exact build/test evidence and remaining hardware checks are recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -46,6 +46,7 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Webhook receiver (Node.js)](api/webhook-receiver-node/README.md) | Authenticate raw bytes; durably deduplicate receipts in SQLite | No |
 | [Upload and transcribe (Python)](api/upload-and-transcribe-python/README.md) | Same server-side workflow using the standard library; live-verified | No |
 | [Structured summaries (Node.js)](api/summarize-transcription-node/README.md) | Summarize a completed transcription; retain creation intent and resume the saved job; live-verified with Gemini | No |
+| [List recordings (Node.js)](api/list-recordings-node/README.md) | Follow cursor pagination with a page cap and print selected cloud recording metadata | No |
 | [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
 | [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
 | [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |

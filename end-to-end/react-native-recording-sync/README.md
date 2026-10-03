@@ -5,7 +5,7 @@ public App SDK's encrypted-v2 workflow, and request a transcription after cloud
 publication. This independent example has an Android Expo application and a
 local, authenticated Node backend. Install each from its own directory.
 
-**Status:** implemented with 18 backend, 10 native adapter and 15 app tests
+**Status:** implemented with 22 backend, 10 native adapter and 15 app tests
 passing. The local Android APK built and installed; phone startup, backend
 authorization and Bluetooth scanning passed. Hosted backend tests and Android
 tests/assembly also [passed at `1145dff`](https://github.com/bota-dev/examples/actions/runs/37038166401).
@@ -15,6 +15,11 @@ pairing-failure/recovery checks remain unverified.
 Do not treat the earlier connection examples' phone tests as upload acceptance.
 Current evidence and remaining checks are recorded in
 [the implementation review](../../docs/independent-examples-review.md).
+
+The backend rechecks binding after recording/configuration/job reads before
+releasing known identity or creating a recording/transcription. Four regression
+tests cover rebinding during those reads. Separate API reads and writes still
+leave a race window; this is not atomic generation fencing.
 
 Expo's Node signing tools retain an [open node-forge security advisory](../../DEPENDENCY_SECURITY.md#node-forge-open-advisory) with no published fix; passing application checks do not establish that this dependency is safe or unreachable.
 
