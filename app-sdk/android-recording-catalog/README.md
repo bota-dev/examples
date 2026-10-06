@@ -3,7 +3,8 @@
 An independent Android example using public Maven Central
 `dev.bota:bota-app-sdk:2.0.0-beta.10` (beta). Discover an already-provisioned
 device, verify its exact serial through the SDK, read status, and list pending
-recording metadata. No backend or API key is required.
+recording metadata. Optional read-only connection settings and bounded firmware
+log observations help diagnose the same device. No backend or API key is required.
 
 This sample never downloads audio, uploads, confirms/deletes recordings, binds,
 resets, or starts/stops recording. The SDK sends catalog-request protocol messages
@@ -69,6 +70,54 @@ from an older connection. Restore Bluetooth, scan, and reconnect explicitly;
 there is no automatic reconnect or background service. Destroying the activity
 cancels UI jobs/subscriptions and destroys the SDK. No recording cleanup is needed
 because the sample creates or deletes no recordings.
+
+## Read-only connection diagnostics
+
+After exact-serial verification and the fresh `Paired` gate, **Read connection
+settings** calls public beta.10 `client.provisioning.readConnectionSettings`.
+It displays SDK-decoded physical WiFi/cellular enablement separately from heartbeat settings,
+including unknown heartbeat bits, upload priority, idle timeouts and streaming
+policy. A failed or timed-out read shows unavailable; the example supplies no
+defaults and never writes settings. These are SDK-decoded fields, not a raw wire
+capture; the SDK may supply compatibility defaults for older protocol fields.
+The example does not establish the received wire version. Enabled policy does not establish LTE
+registration, an active route or backend heartbeat receipt.
+
+**Read firmware logs (15 seconds)** calls public beta.10
+`client.logs.streamLogs`. It displays at most 200 lines / 8,192 UTF-8 bytes,
+including the SDK backlog/live labels; reaching either cap omits later lines.
+The observation window ends after 15 seconds and awaits SDK stream cancellation
+and cleanup. Reads are serialized with all other actions. SDK failure or cleanup
+failure shows unavailable, rather than an empty successful capture. Disconnect
+invalidates late results. Firmware must expose its DEBUG log service; absence of
+lines does not prove inactivity. Retained backlog and device-provided timestamps
+are preserved; host UTC observation times are not firmware event times.
+
+The selectable output remains in memory. No upload, external sharing, log
+acknowledgment, clear, or persistent export is performed. Keep any manually
+captured diagnostics private: firmware text may contain device/network/customer
+data. This instrument observes the firmware ring; it cannot reveal a private
+production app checkpoint or impose an exact receipt/power-loss fault boundary.
+
+### Diagnostics design review (October 5, 2026)
+
+The cached public beta.10 AAR descriptors confirm both API methods and their
+typed models. The dependency and lock remain unchanged. Review against example
+architecture §§3–6:
+
+JDK 17 / Android SDK 36 local frozen-lock validation passed
+`:app:testDebugUnitTest :app:assembleDebug --offline`: 15 tests (the 10 existing
+tests plus five settings/log admission, stale-result, failure and capture-limit
+checks). The five new tests initially failed to compile against the unchanged
+main classes because the read helpers did not yet exist. No hosted or physical
+diagnostics pass is inferred from this local build.
+
+| Requirement | Evidence | Status |
+| --- | --- | --- |
+| Public SDK only; metadata observation | Settings read and bounded log Flow; no raw GATT, settings writes, log ACK or backend calls | Matched in source and local package build |
+| Exact serial, fresh pairing and connection lifetime | Both actions use the existing admission gate and revision fence; stale success/failure tests | Matched in local tests |
+| Honest failures and bounded sensitive output | No settings defaults, distinct failed log read, independent masks and UTF-8/line caps | Matched in local tests |
+| Physical diagnostics | No new phone installation or device read by this implementation task | Unverified until a separately recorded physical run |
 
 ## Verification and design review
 

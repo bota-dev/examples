@@ -24,6 +24,8 @@ class MainActivity : Activity() {
     private lateinit var scan: Button
     private lateinit var status: Button
     private lateinit var list: Button
+    private lateinit var settings: Button
+    private lateinit var logs: Button
     private lateinit var disconnect: Button
     private val permissions get() = if (Build.VERSION.SDK_INT >= 31)
         arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
@@ -73,6 +75,12 @@ class MainActivity : Activity() {
             val token = state.revision
             val rows = withTimeout(30_000) { client.recordings.listPendingRecordings(device) }
             state.catalog(token, rows)
+        } }
+        settings = button("Read connection settings") { perform(preserveConnectionEvents = true) {
+            readConnectionSettings(state) { client.provisioning.readConnectionSettings(it) }
+        } }
+        logs = button("Read firmware logs (15 seconds)") { perform(preserveConnectionEvents = true) {
+            readDeviceLogs(state) { client.logs.streamLogs(it) }
         } }
         disconnect = button("Disconnect") { perform {
             state.connectionChanged(null)
@@ -142,6 +150,8 @@ class MainActivity : Activity() {
         scan.isEnabled = ready && !busy && state.connection == null
         status.isEnabled = ready && !busy && state.device != null
         list.isEnabled = status.isEnabled
+        settings.isEnabled = status.isEnabled
+        logs.isEnabled = status.isEnabled
         disconnect.isEnabled = ready && !busy && state.connection != null
         for (index in 0 until devices.childCount) devices.getChildAt(index).isEnabled = scan.isEnabled
     }

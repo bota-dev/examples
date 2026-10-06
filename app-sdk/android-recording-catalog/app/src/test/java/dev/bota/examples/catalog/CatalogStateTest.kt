@@ -10,8 +10,100 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.yield
+import kotlinx.coroutines.flow.flow
 
 class CatalogStateTest {
+    private fun settings() = DeviceConnectionSettings(
+        enabledConnections = DeviceConnectionSettings.EnabledConnections(false, true),
+        heartbeatEnabledConnections = DeviceConnectionSettings.EnabledConnections(true, false),
+        heartbeatUnknownMask = 128u,
+        uploadNetworkPreference = listOf(DeviceConnectionSettings.ConnectionType.Cellular,
+            DeviceConnectionSettings.ConnectionType.Unknown(9u), DeviceConnectionSettings.ConnectionType.Ble),
+        powerManagement = DeviceConnectionSettings.PowerManagement(180, 240),
+        streamingEnabled = false, streamingFlushIntervalSeconds = 60,
+    )
+
+    @Test fun settingsReadRequiresFreshPairingAndPreservesIndependentMasks() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        var reads = 0
+        readConnectionSettings(state) { reads++; settings() }
+        assertEquals(0, reads)
+        state.pairingResult(state.revision, PairingState.Paired)
+        readConnectionSettings(state) { reads++; settings() }
+        assertEquals(1, reads)
+        assertTrue(state.text.contains("Physical WiFi enabled: false"))
+        assertTrue(state.text.contains("Physical cellular enabled: true"))
+        assertTrue(state.text.contains("Heartbeat WiFi enabled: true"))
+        assertTrue(state.text.contains("Heartbeat cellular enabled: false"))
+        assertTrue(state.text.contains("Unknown heartbeat bits: 0x80"))
+        assertTrue(state.text.contains("Cellular > Unknown(9) > BLE"))
+        assertTrue(state.text.contains("Cellular idle timeout: 240 s"))
+    }
+
+    @Test fun settingsFailureNeverDisplaysDefaultOrPreviouslyReadSettings() = runBlocking {
+        val state = CatalogState().apply {
+            select("EXPECTED"); connectionChanged(device()); pairingResult(revision, PairingState.Paired)
+        }
+        readConnectionSettings(state) { settings() }
+        readConnectionSettings(state) { error("sensitive transport details") }
+        assertTrue(state.text.contains("Connection settings unavailable"))
+        assertFalse(state.text.contains("enabled:"))
+        assertFalse(state.text.contains("sensitive"))
+    }
+
+    @Test fun settingsReplyCannotOverwriteReplacementConnection() = runBlocking {
+        val state = CatalogState().apply {
+            select("EXPECTED"); connectionChanged(device()); pairingResult(revision, PairingState.Paired)
+        }
+        readConnectionSettings(state) {
+            state.connectionChanged(null)
+            state.connectionChanged(device())
+            settings()
+        }
+        assertNull(state.device)
+        assertTrue(state.text.contains("Checking fresh"))
+        state.pairingResult(state.revision, PairingState.Paired)
+        readConnectionSettings(state) {
+            state.connectionChanged(null)
+            error("late read failure")
+        }
+        assertTrue(state.text.startsWith("Disconnected"))
+    }
+
+    @Test fun logsArePairedGatedBoundedAndKeepBacklogSeparate() = runBlocking {
+        val state = CatalogState().apply { select("EXPECTED"); connectionChanged(device()) }
+        var collections = 0
+        val lines = flow {
+            collections++
+            emit(DeviceLogLine("retained firmware uptime", true))
+            emit(DeviceLogLine("fresh firmware uptime", false))
+            repeat(100) { emit(DeviceLogLine("x".repeat(1000), false)) }
+        }
+        readDeviceLogs(state) { lines }
+        assertEquals(0, collections)
+        state.pairingResult(state.revision, PairingState.Paired)
+        readDeviceLogs(state) { lines }
+        assertEquals(1, collections)
+        assertTrue(state.text.contains("[backlog] retained firmware uptime"))
+        assertTrue(state.text.contains("[live] fresh firmware uptime"))
+        assertTrue(state.text.contains("Capture limit reached"))
+        assertTrue(state.text.length < 9000)
+    }
+
+    @Test fun logsFailureAndConnectionLossNeverBecomeEmptySuccess() = runBlocking {
+        val state = CatalogState().apply {
+            select("EXPECTED"); connectionChanged(device()); pairingResult(revision, PairingState.Paired)
+        }
+        readDeviceLogs(state) { flow { error("sensitive failure") } }
+        assertTrue(state.text.contains("Device logs unavailable"))
+        assertFalse(state.text.contains("sensitive"))
+        readDeviceLogs(state) { flow {
+            state.connectionChanged(null)
+            emit(DeviceLogLine("late", true))
+        } }
+        assertTrue(state.text.startsWith("Disconnected"))
+    }
+
     private fun device(serial: String = "EXPECTED") = ConnectedDevice(
         id = "transport", serialNumber = serial, deviceType = DeviceType.BotaPin,
         firmwareVersion = "test", isProvisioned = false,
