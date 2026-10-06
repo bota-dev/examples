@@ -172,7 +172,7 @@ internal suspend fun readDeviceLogs(
             read(device).takeWhile { line ->
                 val formatted = "[${if (line.isBacklog) "backlog" else "live"}] ${line.message}\n"
                 val size = formatted.toByteArray(Charsets.UTF_8).size
-                limited = count >= 200 || size > 8192 - bytes
+                limited = count >= 500 || size > 16384 - bytes
                 if (limited || token != state.revision) false else {
                     lines.append(formatted)
                     bytes += size

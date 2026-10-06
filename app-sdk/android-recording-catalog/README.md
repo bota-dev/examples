@@ -84,7 +84,7 @@ The example does not establish the received wire version. Enabled policy does no
 registration, an active route or backend heartbeat receipt.
 
 **Read firmware logs (15 seconds)** calls public beta.10
-`client.logs.streamLogs`. It displays at most 200 lines / 8,192 UTF-8 bytes,
+`client.logs.streamLogs`. It displays at most 500 lines / 16,384 UTF-8 bytes,
 including the SDK backlog/live labels; reaching either cap omits later lines.
 The observation window ends after 15 seconds and awaits SDK stream cancellation
 and cleanup. Reads are serialized with all other actions. SDK failure or cleanup
@@ -92,6 +92,11 @@ failure shows unavailable, rather than an empty successful capture. Disconnect
 invalidates late results. Firmware must expose its DEBUG log service; absence of
 lines does not prove inactivity. Retained backlog and device-provided timestamps
 are preserved; host UTC observation times are not firmware event times.
+The display budget includes labels and accommodates the 8 KiB retained firmware
+ring with short lines. The original 200-line cap truncated the October 5 physical
+read before its byte cap; the larger bounded budget addresses that observation.
+The follow-up passed 16 local tests and APK assembly; its added regression
+preserves a short-line backlog larger than 200 entries while retaining the cap.
 
 The selectable output remains in memory. No upload, external sharing, log
 acknowledgment, clear, or persistent export is performed. Keep any manually

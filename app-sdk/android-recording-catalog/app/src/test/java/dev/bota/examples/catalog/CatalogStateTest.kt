@@ -87,7 +87,21 @@ class CatalogStateTest {
         assertTrue(state.text.contains("[backlog] retained firmware uptime"))
         assertTrue(state.text.contains("[live] fresh firmware uptime"))
         assertTrue(state.text.contains("Capture limit reached"))
-        assertTrue(state.text.length < 9000)
+        assertTrue(state.text.length < 17000)
+    }
+
+    @Test fun firmwareBacklogFitsWithDisplayLabelsBeforeTheCaptureLimit() = runBlocking {
+        val state = CatalogState().apply {
+            select("EXPECTED"); connectionChanged(device()); pairingResult(revision, PairingState.Paired)
+        }
+        // An 8 KiB retained ring can contain more than 200 short lines.
+        readDeviceLogs(state) { flow {
+            repeat(250) { emit(DeviceLogLine("x".repeat(31), true)) }
+            emit(DeviceLogLine("last retained network diagnostic", true))
+        } }
+        assertTrue(state.text.contains("251 line(s)"))
+        assertTrue(state.text.contains("last retained network diagnostic"))
+        assertFalse(state.text.contains("Capture limit reached"))
     }
 
     @Test fun logsFailureAndConnectionLossNeverBecomeEmptySuccess() = runBlocking {
