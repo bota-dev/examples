@@ -122,7 +122,27 @@ diagnostics pass is inferred from this local build.
 | Public SDK only; metadata observation | Settings read and bounded log Flow; no raw GATT, settings writes, log ACK or backend calls | Matched in source and local package build |
 | Exact serial, fresh pairing and connection lifetime | Both actions use the existing admission gate and revision fence; stale success/failure tests | Matched in local tests |
 | Honest failures and bounded sensitive output | No settings defaults, distinct failed log read, independent masks and UTF-8/line caps | Matched in local tests |
-| Physical diagnostics | No new phone installation or device read by this implementation task | Unverified until a separately recorded physical run |
+| Physical diagnostics | Original `60bcadd7` settings/log read passed in run 08; expanded `14189f1` passed in run 09 after earlier admission failures | Bounded pass for both versions; failure history and observation limits retained below |
+
+The [October 5 diagnostic run](https://github.com/bota-dev/test/blob/main/runs/2026-10-05/demo-android-cellular-diagnostics-08.md)
+used the existing authorized Android phone and Pin. SDK-decoded physical radio
+settings matched the saved policy. Retained backlog included modem pause and
+heartbeat-policy messages, but the initial 200-line cap truncated later text.
+The expanded budget was built and installed in place; three bounded admission
+attempts failed before fresh pairing, so no expanded read was claimed. Raw logs,
+modem identifiers and device mappings remain private. Cached LTE status and a
+last-time-sync field are not proof of a fresh backend heartbeat.
+
+In [run 09](https://github.com/bota-dev/test/blob/main/runs/2026-10-05/demo-android-settings-fix-retest-09.md),
+after the separately authorized firmware installation, expanded source `14189f1`
+passed exact identity/fresh Paired admission, physical settings and logs reads.
+The 15-second log observation returned 267 lines / 9,764 display bytes without
+reaching the 500-line or 16,384-byte budget. Its retained backlog exposed an
+actual modem TLS failure; it did not capture initial TLS configuration or prove
+the failed certificate check. This successful read follows the failed run 08
+admission attempts rather than replacing them. Sixteen local tests, APK assembly
+and the [dedicated hosted workflow](https://github.com/bota-dev/examples/actions/runs/37396153577)
+passed for `14189f1`. Raw logs remain private.
 
 ## Verification and design review
 
