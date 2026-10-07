@@ -1,0 +1,26 @@
+{
+  "observed_at_utc": "2026-10-07T21:38:18.750352+00:00",
+  "package": "node-forge",
+  "version": "1.4.0",
+  "published_at": "2026-03-24T21:44:34.668Z",
+  "latest": "1.4.0",
+  "license": "(BSD-3-Clause OR GPL-2.0)",
+  "tarball": "https://registry.npmjs.org/node-forge/-/node-forge-1.4.0.tgz",
+  "integrity": "sha512-LarFH0+6VfriEhqMMcLX2F7SwSXeWwnEAJEsYm5QKWchiVYVvJyV9v7UDvUv+w5HO23ZpQTXDv/GxdDdMyOuoQ==",
+  "integrity_verified": true,
+  "tarball_sha256": "bf9d7ca0d774235354697bd4b5e642af6505e7ce2066762c3b855138cf870820",
+  "rsa_before_sha256": "fd4740238145ec26470eb3f06a627c72039538ce1307dbdce40521f94dfd0a50",
+  "rsa_after_sha256": "5a5be15860c0a10204075331e38a059d2d9675cc500d3f53ec8bf511d7e6c036",
+  "upstream_proposals": [
+    "https://github.com/digitalbazaar/forge/pull/1152",
+    "https://github.com/digitalbazaar/forge/pull/1157"
+  ],
+  "limits": [
+    "Upstream proposals still open; proposed local parser backport is not an official patched release",
+    "No deployed package or exploitability check"
+  ],
+  "upstream_proposal_heads": {
+    "1152": "ceba34402e329f0365134f23fe19898756527d65",
+    "1157": "683ab3344899cc08a581e4d5675a33e87aff7b04"
+  }
+}

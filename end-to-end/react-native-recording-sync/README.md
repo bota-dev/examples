@@ -217,3 +217,9 @@ were retained. The synthetic clip still awaits device-positioning confirmation.
 
 Public references: [App SDK](https://docs.bota.dev/api-reference/client-sdks),
 [API reference](https://docs.bota.dev/api-reference/introduction).
+## October 7 signing-tool dependency checkpoint
+
+The app's ordinary `npm ci` now applies a pinned node-forge parser guard;
+`npm test` includes nine Forge/Expo regressions. Keep install scripts enabled.
+See [qualification](../../docs/node-forge-parser-mitigation.md); scanner alerts,
+native delivery and physical acceptance remain separate.

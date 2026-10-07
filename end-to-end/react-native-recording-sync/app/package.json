@@ -8,8 +8,10 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test *.test.mjs",
-    "export": "expo export --platform android --max-workers 2"
+    "test": "node --experimental-strip-types --test *.test.mjs && npm run test:node-forge-security",
+    "export": "expo export --platform android --max-workers 2",
+    "postinstall": "node scripts/apply-node-forge-security-patch.mjs",
+    "test:node-forge-security": "node --test scripts/test-node-forge-security.mjs"
   },
   "engines": {
     "node": ">=22.23.2"

@@ -278,3 +278,10 @@ Documentation review, 2026-09-28:
 | Keep affected documentation coherent | Token search across public/internal docs and repo instruction/overview files | Existing paths/packages preserved; external runnable-example claims must be revisited during migration |
 
 The shared `bota-skills:compound-engineering` 1.2.5 workflow was used for this review. All four documents passed local-link and fenced-code checks; documented npm commands were checked against the current manifests. The tracked diff passed `git diff --check`. Dependency installs, builds, live API calls, hosted CI, and physical-device tests were not run for this documentation-only change. No runtime or production conformance is claimed.
+## October 7 signing-tool dependency checkpoint
+
+The legacy workspace, RN connection sample and recording-sync app each apply
+their own pinned node-forge parser guard during install. This retains independent
+example installation and existing public SDK/runtime interfaces; see
+[source qualification](docs/node-forge-parser-mitigation.md). Scanner closure,
+native binary delivery and hardware acceptance remain separate.

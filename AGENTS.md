@@ -8,6 +8,11 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+October 7 node-forge #108/#109/#110: each affected install root carries its
+own mandatory, hash/version-pinned postinstall parser guard and nine real
+Forge/Expo regressions. Keep package identity/locks unchanged; scanner and
+native/runtime acceptance remain separate. See [mitigation review](docs/node-forge-parser-mitigation.md).
+
 `api/download-recording-node` requests original stored bytes only. Keep API auth
 off storage requests, reject redirects, preserve existing destinations and remove
 incomplete files. Optional expected SHA-256 comes from a trusted caller fixture;

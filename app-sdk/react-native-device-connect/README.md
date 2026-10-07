@@ -15,6 +15,10 @@ npm run android
 npm run ios
 ```
 
+Keep install scripts enabled: this example applies a pinned node-forge parser
+guard for Expo signing tools. `npm test` includes nine Forge/Expo regressions;
+see [dependency review](../../docs/node-forge-parser-mitigation.md).
+
 Grant Bluetooth permissions (location on Android 11 and older), turn Bluetooth on, enter the exact printed device serial, and scan. Stop other apps from holding the device connection. Select a candidate to connect. Advertised names are display hints, not identity; a mismatch disconnects. On success, read status and disconnect. No environment configuration is needed. Rebuild native apps after changing the SDK.
 
 ### Android USB development on Windows

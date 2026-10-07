@@ -152,6 +152,11 @@ after push, independently of this source and local-audit evidence.
 <a id="node-forge-open-advisory"></a>
 ## Open node-forge advisory (2026-10-02)
 
+Subsequent October 7 checkpoint: a pinned downstream parser guard is now
+mandatory in all three affected install roots. See [mitigation and checks](docs/node-forge-parser-mitigation.md).
+The following October 2 investigation remains historical; all three alerts
+remain open on unchanged 1.4.0 with no official patched version.
+
 Dependabot [#108](https://github.com/bota-dev/examples/security/dependabot/108),
 [#109](https://github.com/bota-dev/examples/security/dependabot/109) and
 [#110](https://github.com/bota-dev/examples/security/dependabot/110) remain open for

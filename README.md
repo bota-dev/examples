@@ -17,6 +17,10 @@ The existing app pins `@bota.dev/react-native-app-sdk@2.0.0-beta.6` (beta), app 
 
 See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [SDK migration and verification](docs/app-sdk-migration.md) records successful all-platform exports and an Android native build, superseding the historical Hermes export failure. [Dependency security](DEPENDENCY_SECURITY.md) records required installation patches and regression checks. For the legacy workspace, iOS native linking and physical-device acceptance remain unverified.
 
+Keep install scripts enabled in the three affected React Native install roots;
+they apply a pinned [node-forge parser mitigation](docs/node-forge-parser-mitigation.md)
+for Expo signing tools. The unchanged 1.4.0 scanner alerts remain open.
+
 ## Example catalog
 
 Each linked example installs independently. All five App SDK connection examples
