@@ -1,5 +1,12 @@
 # AGENTS.md - Bota Examples
 
+October 7 braces #111/#112/#113: all three affected install roots own standalone
+mandatory postinstall source guards, MIT/provenance assets and 16-case suites.
+Keep public package/lock/SDK identities unchanged; do not import sibling helpers.
+Root `npm test` and both independent app test chains require the guard. Vendor
+bytes stay exact across checkouts; unknown source/identity fails. See
+[review](docs/braces-depth-mitigation.md).
+
 ## Read first
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.

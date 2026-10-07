@@ -223,3 +223,10 @@ The app's ordinary `npm ci` now applies a pinned node-forge parser guard;
 `npm test` includes nine Forge/Expo regressions. Keep install scripts enabled.
 See [qualification](../../docs/node-forge-parser-mitigation.md); scanner alerts,
 native delivery and physical acceptance remain separate.
+
+## October 7 build dependency guard
+
+Frozen app installation applies standalone Forge and scoped braces guards.
+`npm test` requires `npm run test:braces-security`; package/lock/public SDK identity
+is unchanged. See the [source review](../../docs/braces-depth-mitigation.md).
+Hosted assembly and physical device/install acceptance remain separate.

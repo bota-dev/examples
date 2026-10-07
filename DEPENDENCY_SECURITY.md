@@ -183,3 +183,12 @@ No lockfile override, local crypto patch, audit suppression or alert dismissal
 was applied. Keep the alerts open; adopt a reviewed patched upstream release
 when available, then verify the actual Expo signing consumers and scanner
 results. Current build/test success does not remediate this dependency finding.
+
+## October 7 scoped braces source guard
+
+The legacy root and both independent React Native apps retain their existing
+query-string/Forge hooks and add standalone mandatory guarded `braces` 3.0.3
+installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
+`npm test` and each independent app test chain require 16 installer/parser/actual
+micromatch controls. Source qualification, scanner identity, hosted native builds
+and physical installation remain separate. See [review](docs/braces-depth-mitigation.md).

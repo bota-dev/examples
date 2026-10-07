@@ -1,0 +1,79 @@
+{
+  "name": "braces",
+  "version": "3.0.3",
+  "integrity": "sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==",
+  "publishedAt": "2024-05-21T08:59:11.390Z",
+  "publicTarball": "https://registry.npmjs.org/braces/-/braces-3.0.3.tgz",
+  "publicTarballIntegrityVerified": true,
+  "manifestSha256": "56f08b888a4f30dc7cf8a7dbb36ffe92b737912ba36abe9d069d32167c957ac7",
+  "license": "MIT",
+  "upstreamProposal": "https://github.com/micromatch/braces/pull/82",
+  "upstreamHead": "1f11eb558be9ea0cda87861408bb766e2e714086",
+  "upstreamProposalDiffSha256": "87e685a2533405317a71c3d943951361d931b577c4aacd73089bd78318be6da3",
+  "scopedPatchSha256": "69e72afed3a85fa6688d294cacb10544ff0a930efe7334a9a0017cfac3125910",
+  "basis": "PR82 depth/cycle/visit/queue and shared-range marker retention hunks onto public3.0.3; utils and expansion-step range semantics omitted, preexisting master unmatchedquote/comma changes excluded; no graph/version/main changes",
+  "files": [
+    {
+      "path": "lib/compile.js",
+      "asset": "lib/compile.js.source",
+      "pristineSha256": "dc98f22eee3d511785d92a00758d5f0d48efed5f5813bdecc2de430c529b5c9f",
+      "patchedSha256": "160a973ee93ed866976cdd15a348a4123b22da5d9a264915b21e4bea5f11dbb0"
+    },
+    {
+      "path": "lib/depth-guard.js",
+      "asset": "lib/depth-guard.js.source",
+      "pristineSha256": null,
+      "patchedSha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e"
+    },
+    {
+      "path": "lib/expand.js",
+      "asset": "lib/expand.js.source",
+      "pristineSha256": "41ccc196ebfa7b7781a634e721eb744e4e7bcb54cba427a7e3d6806a1b9e58f7",
+      "patchedSha256": "d97836d2ca4b74b8a13029d254f9debe090e1ed57ee851c373fae177b8ee56c8"
+    },
+    {
+      "path": "lib/parse.js",
+      "asset": "lib/parse.js.source",
+      "pristineSha256": "e572166565f15fa6ad9865ae49d678218e32aabfd1b3720f6d0d43d39800d310",
+      "patchedSha256": "0d0c2059e33adf638cc22adb3fe26ee01109817955ff368ab1e28fcc915ecfe0"
+    },
+    {
+      "path": "lib/stringify.js",
+      "asset": "lib/stringify.js.source",
+      "pristineSha256": "379f22d77bfa1478341ccd49c5e4267464aabcbba03558bab332aac23fc6f23a",
+      "patchedSha256": "39ae1d04d5ccc5498a3a8d53821a6d3fcc683fa77db12c093f144ce1c04a1c5d"
+    }
+  ],
+  "unchanged": [
+    {
+      "path": "index.js",
+      "sha256": "332ea07c7b006361aad12aa994ca75dc1db8e8382b884909e2f38f10b85c88a4"
+    },
+    {
+      "path": "lib/constants.js",
+      "sha256": "c18ac5adb57308f1ce42a28552da3a31f5d83709743ebd9a636336813a744d4b"
+    },
+    {
+      "path": "lib/utils.js",
+      "sha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7"
+    },
+    {
+      "path": "LICENSE",
+      "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2"
+    }
+  ],
+  "compatibility": {
+    "officialPublishedTag": "74b2db2938fad48a2ea54a9c8bf27a37a62c350d",
+    "pristineExecutedPasses": 764,
+    "patchedExecutedPasses": 764,
+    "mochaPending": 0,
+    "mochaFailures": 0,
+    "scope": "Executed published-tag suite, not full1137case PR82 suite or allhistorical fixtures"
+  },
+  "limits": [
+    "Fixed128 parsercontainers/ASTchilddepth and65536visits; parsed128containers may exceedwalk depth withtextnodes.",
+    "Parentmetadata doesnot supply queues; shared/reusable ranges retained; malformedparent queue literal behavior corrected.",
+    "No total Cartesian expansion, generated-regex, getter/array-text or omittedrange/unsafe-endpoint protection claim.",
+    "Packageidentity/locks unchanged; source mitigation only, not official release/scanner/deployment closure."
+  ]
+}

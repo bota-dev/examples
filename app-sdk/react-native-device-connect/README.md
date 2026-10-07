@@ -117,3 +117,10 @@ For hardware acceptance record OS, phone, device model, firmware, SDK version, p
 CI explicitly selects the installed CocoaPods gem (`pod _1.16.2_`) because the runner may also contain a newer version.
 
 The example workflow generates the iOS host on macOS 26, installs CocoaPods 1.16.2 dependencies, and builds the application against the published SDK using Xcode 26.6 and a generic iOS Simulator destination. Xcode 26.3 fails while compiling Expo's `RuntimeScheduler` ownership annotations ([upstream report](https://github.com/expo/expo/issues/50067)); use the documented toolchain without patching Expo's native memory ownership. The generated Xcode project, Pods, and local signing state remain untracked. Build evidence is preserved as a CI artifact; the [review](../../docs/independent-examples-review.md) records the result. This unsigned simulator build does not test Bluetooth or establish physical iPhone acceptance.
+
+## October 7 build dependency guard
+
+Frozen app installation applies standalone Forge and scoped braces guards.
+`npm test` requires `npm run test:braces-security`; package/lock/public SDK identity
+is unchanged. See the [source review](../../docs/braces-depth-mitigation.md).
+Hosted assembly and physical device/install acceptance remain separate.

@@ -122,3 +122,12 @@ These commands cover dependency and upload-completion regression checks, workspa
 - [Bota public documentation](https://docs.bota.dev): API and SDK integration contracts.
 
 Start with [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
+
+## October 7 scoped braces source guard
+
+The legacy root and both independent React Native apps retain their existing
+query-string/Forge hooks and add standalone mandatory guarded `braces` 3.0.3
+installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
+`npm test` and each independent app test chain require 16 installer/parser/actual
+micromatch controls. Source qualification, scanner identity, hosted native builds
+and physical installation remain separate. See [review](docs/braces-depth-mitigation.md).

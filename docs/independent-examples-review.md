@@ -1123,3 +1123,11 @@ This is source verification only. The fix is absent from public beta.10 and the
 published beta.11 release; these examples' beta.10 dependencies are unchanged.
 No physical test establishes that the follow-up fixes delayed connection/MTU
 behavior or the separate GATT 8/133 reconnect failures.
+
+## Later October 7 braces dependency supplement
+
+[Scoped source mitigation](braces-depth-mitigation.md) adds mandatory local
+installer and CI regressions to both independent React Native apps and the
+legacy root. Earlier scanner/native/physical observations remain dated; no
+SDK, wire behavior, runtime distribution or scanner closure follows from this
+source guard.
