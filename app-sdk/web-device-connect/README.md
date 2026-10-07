@@ -33,8 +33,17 @@ Historical beta.8 evidence, 2026-09-30 UTC: public frozen install, TypeScript ch
 ## Verify
 
 ```sh
+npm test
 npm run typecheck
 npm run build
 ```
 
 2026-09-29: public package installation, TypeScript check, and Vite 7.3.6 production build (including SDK WASM) pass locally; npm audit reports zero vulnerabilities. Actual browser Bluetooth pairing/status and supported-firmware coverage remain unverified. See [implementation review](../../docs/independent-examples-review.md) for CI evidence and the [SDK reference](https://docs.bota.dev/api-reference/client-sdks).
+
+## October 7 new build-dependency fixes
+
+Four independent locks select source-map-js 1.2.2; the legacy root also selects
+shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
+Each install root has required public-consumer tests; Web CI now runs `npm test`.
+See the [source compatibility review](../../docs/build-dependency-remediation.md) for aged tarballs, tests and
+bundled-parser limits. Hosted/scanner and physical acceptance remain separate.

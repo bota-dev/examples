@@ -192,3 +192,11 @@ installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
 `npm test` and each independent app test chain require 16 installer/parser/actual
 micromatch controls. Source qualification, scanner identity, hosted native builds
 and physical installation remain separate. See [review](docs/braces-depth-mitigation.md).
+
+## October 7 new build-dependency fixes
+
+Four independent locks select source-map-js 1.2.2; the legacy root also selects
+shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
+Each install root has required public-consumer tests; Web CI now runs `npm test`.
+See the [source compatibility review](docs/build-dependency-remediation.md) for aged tarballs, tests and
+bundled-parser limits. Hosted/scanner and physical acceptance remain separate.

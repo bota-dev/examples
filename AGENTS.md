@@ -7,6 +7,12 @@ Root `npm test` and both independent app test chains require the guard. Vendor
 bytes stay exact across checkouts; unknown source/identity fails. See
 [review](docs/braces-depth-mitigation.md).
 
+October 7 new #114–#119 records: keep the four standalone source-map-js suites
+required by each root/app `npm test`, including Web CI. The root selector-parser
+7.1.6 overrides are scoped to two reviewed parents; do not widen them or claim
+the embedded Tailwind fallback was changed. Keep public SDK/native identities
+fixed. See [qualification and limits](docs/build-dependency-remediation.md).
+
 ## Read first
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.

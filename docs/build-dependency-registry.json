@@ -1,0 +1,44 @@
+{
+  "observedAtUtc": "2026-10-07T23:27:25.779341+00:00",
+  "verifiedPublicTarballs": [
+    {
+      "name": "source-map-js",
+      "version": "1.2.2",
+      "publishedAt": "2026-09-30T14:08:09.382Z",
+      "license": "BSD-3-Clause",
+      "engines": {
+        "node": ">=0.10.0"
+      },
+      "dependencies": {},
+      "verifiedIntegrity": "sha512-KGj/8Y43x35aZVDtt+J4mK1hoLGHULMYfSkODJNQjNDC3oW1PqPoxMwo0pLUsWM/UEGzON/NxeHywEfNXNP3Vw==",
+      "tarball": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.2.tgz"
+    },
+    {
+      "name": "shell-quote",
+      "version": "1.11.0",
+      "publishedAt": "2026-09-29T02:34:24.391Z",
+      "license": "MIT",
+      "engines": {
+        "node": ">= 0.4"
+      },
+      "dependencies": {},
+      "verifiedIntegrity": "sha512-JdxDPD0DBTyu08pq0kPC0xSNet/qsU07qT6IsX1AS8oO2ICNRY4ldNa8OAI6PuwAH8tG3lxEhbqmyp4Dw4036g==",
+      "tarball": "https://registry.npmjs.org/shell-quote/-/shell-quote-1.11.0.tgz"
+    },
+    {
+      "name": "postcss-selector-parser",
+      "version": "7.1.6",
+      "publishedAt": "2026-09-03T08:59:01.963Z",
+      "license": "MIT",
+      "engines": {
+        "node": ">=4"
+      },
+      "dependencies": {
+        "cssesc": "^3.0.0",
+        "util-deprecate": "^1.0.2"
+      },
+      "verifiedIntegrity": "sha512-7qASPzhKF2l2KLboRZux8CCTRMdGiV08vWmyKzPz22qZ7ZjQBOeY7rNzNoCLSUiftJ7HUq0GERHmxw/t0dCdMw==",
+      "tarball": "https://registry.npmjs.org/postcss-selector-parser/-/postcss-selector-parser-7.1.6.tgz"
+    }
+  ]
+}

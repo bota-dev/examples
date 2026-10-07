@@ -8,11 +8,12 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test *.test.mjs && npm run test:node-forge-security && npm run test:braces-security",
+    "test": "node --experimental-strip-types --test *.test.mjs && npm run test:node-forge-security && npm run test:braces-security && npm run test:source-map-security",
     "export": "expo export --platform android --max-workers 2",
     "postinstall": "node scripts/apply-node-forge-security-patch.mjs && node scripts/apply-braces-security.mjs",
     "test:node-forge-security": "node --test scripts/test-node-forge-security.mjs",
-    "test:braces-security": "node --test scripts/test-braces-security.mjs"
+    "test:braces-security": "node --test scripts/test-braces-security.mjs",
+    "test:source-map-security": "node --test scripts/test-source-map-security.mjs"
   },
   "engines": {
     "node": ">=22.23.2"

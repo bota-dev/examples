@@ -1131,3 +1131,11 @@ installer and CI regressions to both independent React Native apps and the
 legacy root. Earlier scanner/native/physical observations remain dated; no
 SDK, wire behavior, runtime distribution or scanner closure follows from this
 source guard.
+
+## October 7 new build-dependency fixes
+
+Four independent locks select source-map-js 1.2.2; the legacy root also selects
+shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
+Each install root has required public-consumer tests; Web CI now runs `npm test`.
+See the [source compatibility review](build-dependency-remediation.md) for aged tarballs, tests and
+bundled-parser limits. Hosted/scanner and physical acceptance remain separate.

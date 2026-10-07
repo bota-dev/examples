@@ -124,3 +124,11 @@ Frozen app installation applies standalone Forge and scoped braces guards.
 `npm test` requires `npm run test:braces-security`; package/lock/public SDK identity
 is unchanged. See the [source review](../../docs/braces-depth-mitigation.md).
 Hosted assembly and physical device/install acceptance remain separate.
+
+## October 7 new build-dependency fixes
+
+Four independent locks select source-map-js 1.2.2; the legacy root also selects
+shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
+Each install root has required public-consumer tests; Web CI now runs `npm test`.
+See the [source compatibility review](../../docs/build-dependency-remediation.md) for aged tarballs, tests and
+bundled-parser limits. Hosted/scanner and physical acceptance remain separate.
