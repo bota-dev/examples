@@ -1,7 +1,7 @@
 # List device recording metadata with Kotlin
 
 An independent Android example using public Maven Central
-`dev.bota:bota-app-sdk:2.0.0-beta.10` (beta). Discover an already-provisioned
+`dev.bota:bota-app-sdk:2.0.0-beta.13` (beta). Discover an already-provisioned
 device, verify its exact serial through the SDK, read status, and list pending
 recording metadata. Optional read-only connection settings and bounded firmware
 log observations help diagnose the same device. No backend or API key is required.
@@ -10,6 +10,16 @@ This sample never downloads audio, uploads, confirms/deletes recordings, binds,
 resets, or starts/stops recording. The SDK sends catalog-request protocol messages
 to retrieve metadata; “read-only” means no recording/data mutation, not zero BLE
 writes. Catalog data is shown in memory and is not saved or logged by the app.
+
+## Current beta.13 adoption
+
+The exact public Maven pin and dependency lock select beta.13. All 16 local unit
+tests and frozen-lock Android APK assembly pass with JDK 17 and Android SDK 36.
+Its public sources retain the separate fresh pairing read and false connection snapshot described
+below. No metadata, diagnostic or lifecycle logic changed. Hosted checks and
+physical beta.13 acceptance are separate gates; the historical phone runs below
+remain evidence only for their recorded versions. See the
+[adoption review](../../docs/independent-examples-review.md#beta13-adoption).
 
 ## Run
 
@@ -34,10 +44,10 @@ actions remain disabled until it reports `Paired`. A different state or failed
 read denies metadata access and attempts disconnect. Review that state in your
 existing application; an `Unpaired` response is not proof of a factory-clean device.
 
-Do not use `ConnectedDevice.isProvisioned` for this gate: public Android beta.10
+Do not use `ConnectedDevice.isProvisioned` for this gate: public Android beta.13
 hardcodes that snapshot field to `false`. The fresh read is separate and does not
 update the snapshot. It reports device-local pairing state, not backend ownership
-or complete provisioning/security conformance. Beta.10 maps an empty pairing
+or complete provisioning/security conformance. Beta.13 maps an empty pairing
 response to `Unpaired`; the example does not claim to distinguish those cases.
 
 Android 12+ asks for Nearby Devices permission; earlier Android versions need
@@ -187,4 +197,4 @@ background operation and interrupted audio transfers are not covered.
 The shared compound-engineering review uses the repository's
 [architecture](../../ARCHITECTURE.md) §§2–6. See the
 [SDK reference](https://docs.bota.dev/api-reference/client-sdks) and
-[public Android package](https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.10/).
+[public Android package](https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.13/).

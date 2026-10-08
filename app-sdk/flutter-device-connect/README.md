@@ -1,6 +1,17 @@
 # Connect to a device with Flutter
 
-An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.10` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
+An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.13` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
+
+## Current beta.13 adoption
+
+The exact pub.dev pin and archive lock select beta.13; its Android Maven and
+Apple CocoaPods dependencies select that same version. The dependency update
+changes only the SDK entry, leaving the existing six UI lifecycle regressions
+and application code unchanged. Frozen-lock installation, analysis and all six
+widget tests pass on Flutter 3.47.5. Native build and physical acceptance remain
+separate; no beta.13 phone test was performed. The beta.10/9/8 outcomes below
+retain their original versions and limits. See the
+[adoption review](../../docs/independent-examples-review.md#beta13-adoption).
 
 ## Run
 
@@ -28,12 +39,12 @@ successes and failures, a connection stream error, and explicit reconnect with
 fresh status. These tests use a fake SDK platform; they do not establish the cause of the
 physical GATT 8/133 failures below or fix their first-attempt reliability.
 
-Beta.10's public pub.dev archive matches its registry SHA-256 and all 59 files
+Historical beta.10's public pub.dev archive matches its registry SHA-256 and all 59 files
 in the preserved release inventory. Its Android and Apple dependencies select
 exact beta.10 artifacts. This adoption changes only the direct SDK version and
 archive hash; the six UI lifecycle regressions and runtime source are unchanged.
 See [beta.10 adoption](../../docs/independent-examples-review.md#beta10-adoption)
-for current local, hosted, and physical checks; earlier results below remain
+for its recorded local, hosted, and physical checks; earlier results below remain
 historical.
 
 Historical beta.9's public pub.dev archive was downloaded and verified against its registry SHA-256, and its Android and Apple dependencies select the same exact beta.9 version. The beta.9 adoption changed only the direct SDK version and archive hash. The widget suite adds `flutter_test` and its locked testing dependencies without changing existing package versions. See the [current review](../../docs/independent-examples-review.md#beta9-adoption) for installation, analysis, build, and physical-device evidence.

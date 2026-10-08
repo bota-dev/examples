@@ -2,6 +2,75 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="beta13-adoption"></a>
+## Public beta.13 adoption — 2026-10-08
+
+The seven independent device examples now select exact public
+`2.0.0-beta.13`: React Native, Web, Apple, Android and Flutter connection samples,
+Android recording catalog, and React Native encrypted recording sync. The legacy
+`apps/` workspace remains on beta.6. This is dependency adoption and validation;
+example workflow scope and host callback behavior are unchanged.
+
+The public tag resolves to SDK source `958696b603be0ff6b30adba95e499dc1b5bc05b7`.
+SDK [CI](https://github.com/bota-dev/app-sdk/actions/runs/37848944999),
+[License Gate](https://github.com/bota-dev/app-sdk/actions/runs/37848944972) and
+[protected publication](https://github.com/bota-dev/app-sdk/actions/runs/37851464527)
+succeeded. The [publication review](https://github.com/bota-dev/app-sdk/releases/download/v2.0.0-beta.13/beta13-publication-review.md)
+records npm, pub.dev, Maven Central, SwiftPM and CocoaPods verification. npm's
+`beta` tag points to beta.13; `latest` remains beta.0. Publication proves package
+availability, not acceptance of every consuming example.
+
+| Example | Beta.13 verification | Remaining check |
+| --- | --- | --- |
+| React Native connect | Frozen public install, typecheck, 30 tests (identity and existing security regressions), Android Metro export passed | Hosted Android/iOS builds; physical beta.13 session |
+| Web connect | Frozen public install, 4 tests, typecheck and Vite/WASM production build passed | Hosted checks; browser/firmware session |
+| Apple connect | Exact SwiftPM tag and source revision selected | Hosted macOS build; physical permissions/BLE |
+| Android connect | Public Maven resolution and debug APK build passed | Hosted checks; physical beta.13 session |
+| Android recording catalog | Public Maven resolution, 16 unit tests and debug APK build passed | Hosted checks; physical beta.13 catalog |
+| Flutter connect | Frozen pub.dev resolution, analysis and six widget tests passed | Native APK build and hosted checks; physical beta.13 session |
+| React Native recording sync | Frozen public install, typecheck, 44 app/security tests, Android Metro export, backend syntax check and 22 backend tests passed | Hosted native adapter tests/APK build; physical upload/receipt/cleanup/recovery |
+
+The existing standalone Forge/braces guards, source-map tests and non-SDK npm
+dependency entries are retained. Passing these suites does not close the existing
+scanner advisories or establish native runtime security. Native applications must
+be rebuilt after this upgrade.
+
+Public Android beta.13 still initializes the connection snapshot's `isProvisioned`
+to false (`DeviceManager.kt` at the tag). Catalog and sync retain fresh public
+pairing-state reads, exact connected-serial checks and connection ownership fences.
+No real device identifier or credential becomes a runtime default.
+
+Beta.13 includes the previously released Android failed-connect/MTU cleanup.
+Unpublished pending-425 recovery work is outside this immutable release and is
+not part of these examples. The sync adapter continues to retain uncertain
+creates/PUTs and stop for reconciliation; adoption does not establish automatic
+recovery or replace its existing HTTP/journal responsibilities.
+
+No example was installed or exercised on the shared test phone during this
+adoption. Its retained Demo recovery state belongs to a separate campaign.
+Earlier beta.10 and older physical results below remain dated evidence, and
+internal-app observations cannot establish these examples' beta.13 acceptance.
+
+### Design comparison
+
+Reviewed against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the immutable
+public SDK tag, using the compound-engineering workflow.
+
+| Requirement | Evidence and verification | Status |
+| --- | --- | --- |
+| §§2, 4: independent installs and exact public SDK dependencies | Own manifests/locks, public package resolutions, no sibling or local SDK override; legacy workspace unchanged | Matched |
+| §3: SDK owns transport, files and receipt confirmation | Dependency changes preserve existing public integrations and host callbacks; no GATT/crypto/transfer implementation added | Matched in source; physical behavior unverified |
+| §3: identity, authorization and uncertain-outcome boundaries | Fresh pairing reads, serial admission, backend binding checks, journals and app/native module interfaces retained; app/backend regressions pass | Matched for unchanged source/local tests; hardware and recovery remain partial |
+| §4: current pins and evidence distinguish verification levels | Catalog, agent docs and per-example READMEs identify beta.13; prior phone/build results retain exact versions | Matched |
+| §6: isolated platform checks | Local results above; existing path-filtered workflows retained | Partial until hosted gates complete |
+| §5: full replacement and legacy retirement | No new pairing or full recovery implementation; no new hardware acceptance | Not implemented by this adoption |
+
+Documentation search covered package/version and all seven example path tokens
+across public/internal docs and workspace README, architecture and agent files.
+The public SDK catalog requires a matching adoption update; dated security and
+hardware evidence stays unchanged. The internal-docs downstream matrix introduces
+no target-contract change for this dependency adoption.
+
 ## Initial beta.7 evidence by example
 
 | Example | Public dependency / runtime | Evidence | Remaining verification |

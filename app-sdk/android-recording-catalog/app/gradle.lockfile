@@ -4,7 +4,7 @@
 com.squareup.okhttp3:okhttp:4.12.0=debugCompileClasspath,debugRuntimeClasspath,debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
 com.squareup.okio:okio-jvm:3.6.0=debugCompileClasspath,debugRuntimeClasspath,debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
 com.squareup.okio:okio:3.6.0=debugCompileClasspath,debugRuntimeClasspath,debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
-dev.bota:bota-app-sdk:2.0.0-beta.10=debugCompileClasspath,debugRuntimeClasspath,debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
+dev.bota:bota-app-sdk:2.0.0-beta.13=debugCompileClasspath,debugRuntimeClasspath,debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
 junit:junit:4.13.2=debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
 org.hamcrest:hamcrest-core:1.3=debugUnitTestCompileClasspath,debugUnitTestRuntimeClasspath
 org.jetbrains.intellij.deps:trove4j:1.0.20200330=kotlinBuildToolsApiClasspath,kotlinCompilerClasspath

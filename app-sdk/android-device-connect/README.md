@@ -1,6 +1,16 @@
 # Connect to a device with Kotlin
 
-A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.10` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
+A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.13` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
+
+## Current beta.13 adoption
+
+The exact public Maven pin and dependency lock select beta.13. This release
+includes the SDK's Android connect/MTU failure cleanup; transport recovery remains
+the SDK's responsibility. The example adds no retries or GATT workaround.
+Local public-package resolution and frozen-lock Android APK assembly pass with
+JDK 17 and Android SDK 36. Hosted build and physical beta.13 acceptance are separate gates;
+the older device results below do not qualify this version. See the
+[adoption review](../../docs/independent-examples-review.md#beta13-adoption).
 
 ## Run
 

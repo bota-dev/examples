@@ -1,6 +1,6 @@
 # Connect to a device from the browser
 
-A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.10` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
+A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.13` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
 
 ## Run
 
@@ -15,7 +15,16 @@ Open the local URL printed by Vite. Enter the exact serial printed on your devic
 
 If Bluetooth is unsupported, permission is denied, or identity verification fails, the page shows an error. Close other applications using the device. The browser owns permission prompts; inspect site permissions to retry. The SDK is destroyed when the page unloads.
 
-2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
+2026-10-08, beta.13: public frozen installation, all four source-map regression
+tests, TypeScript check and Vite 7.3.6/WASM production build pass locally on
+Node 22.23.2 / Windows. The SDK version, URL and integrity are pinned in the
+lockfile; all other dependency entries are preserved. npm audit reports zero
+vulnerabilities. The [SDK publication review](https://github.com/bota-dev/app-sdk/releases/download/v2.0.0-beta.13/beta13-publication-review.md)
+and local build do not establish physical browser Bluetooth acceptance. Exact
+example CI and hardware evidence remain tracked in the
+[adoption review](../../docs/independent-examples-review.md).
+
+Historical 2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
 integrity. Frozen install, TypeScript check, and Vite 7.3.6/WASM production build
 pass locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities.
 [CI 36893071814](https://github.com/bota-dev/examples/actions/runs/36893071814)

@@ -1,11 +1,14 @@
 # Bota Examples Architecture
 
-Status: fourteen independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search workflows and an Android metadata catalog. Node/Python upload and transcription are live-verified. The webhook receiver and five read-only connection samples have the checks recorded in the [implementation review](docs/independent-examples-review.md). All five App SDK connection examples pin public beta.10 following its completed protected release. Flutter adoption checks are recorded separately below. Beta.10 adds exact-session explicit-disconnect timeout cleanup. RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect on Samsung SM-A166U1 / Bota Pin firmware 1.0.19; all four beta.10 example workflows passed at source 54237e1, including RN Android and iOS Simulator builds. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: fourteen independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search workflows and an Android metadata catalog. Node/Python upload and transcription are live-verified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
-The [beta.10 adoption review](docs/independent-examples-review.md#beta10-adoption)
-tracks all five exact public package upgrades, including Flutter after completed publication.
+The historical [beta.10 adoption review](docs/independent-examples-review.md#beta10-adoption)
+tracks the previous five public package upgrades, including Flutter after completed publication.
+RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect
+on Samsung SM-A166U1 / Bota Pin firmware 1.0.19. All four beta.10 example workflows
+passed at source `54237e1`, including RN Android and iOS Simulator builds.
 Flutter's six widget tests and hosted APK build passed at source `c8c7a89`.
 Its public-package phone run passed three loss/eventual-reconnect cycles with
 verified identity/status, but the first cycle required a third scan several

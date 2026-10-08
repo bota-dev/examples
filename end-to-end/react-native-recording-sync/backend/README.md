@@ -164,4 +164,4 @@ npm test
 Public contracts: [OpenAPI](https://docs.bota.dev/api-reference/openapi.json),
 [create recording](https://docs.bota.dev/api-reference/recordings/create),
 [automatic processing](https://docs.bota.dev/guides/auto-processing), and
-[SDK integration guides](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.10).
+[SDK integration guides](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.13).

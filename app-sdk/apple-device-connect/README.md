@@ -1,6 +1,15 @@
 # Connect to a device with Swift
 
-A macOS SwiftUI app using the published Bota App SDK **2.0.0-beta.10** through Swift Package Manager. It scans, verifies the exact serial you supply through the SDK, reads status, and disconnects. No backend/API key or device mutation.
+A macOS SwiftUI app using the published Bota App SDK **2.0.0-beta.13** through Swift Package Manager. It scans, verifies the exact serial you supply through the SDK, reads status, and disconnects. No backend/API key or device mutation.
+
+## Current beta.13 adoption
+
+The manifest pins version `2.0.0-beta.13`; `Package.resolved` selects public tag
+`v2.0.0-beta.13` at commit `958696b603be0ff6b30adba95e499dc1b5bc05b7`.
+The public tag was verified, but this Windows host cannot execute SwiftPM or the
+macOS application build. Hosted resolution/build and physical Bluetooth behavior
+must be verified separately. Historical beta.10/9/8 results below do not qualify
+beta.13. See the [adoption review](../../docs/independent-examples-review.md#beta13-adoption).
 
 ## Run
 

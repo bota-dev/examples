@@ -5,7 +5,11 @@ public App SDK's encrypted-v2 workflow, and request a transcription after cloud
 publication. This independent example has an Android Expo application and a
 local, authenticated Node backend. Install each from its own directory.
 
-**Status:** implemented with 22 backend, 10 native adapter and 15 app tests
+**Current SDK:** exact public beta.13. Its local and hosted checks are recorded
+in the [adoption review](../../docs/independent-examples-review.md#beta13-adoption).
+Beta.13 physical upload and recovery remain unverified for this example.
+
+**Historical beta.10 status:** implemented with 22 backend, 10 native adapter and 15 app tests
 passing. The local Android APK built and installed; phone startup, backend
 authorization and Bluetooth scanning passed. Hosted backend tests and Android
 tests/assembly also [passed at `4511f40`](https://github.com/bota-dev/examples/actions/runs/37081961685).
@@ -47,7 +51,7 @@ separate prerequisites. Android is the only included native host.
 - Node 22.23.2+, npm, JDK 17 and Android SDK tooling compatible with Expo 57.
 - Android 8+ (API 26+) phone with Bluetooth. Use a USB connection with `adb` for
   the loopback backend instructions below.
-- Exact public `@bota.dev/react-native-app-sdk@2.0.0-beta.10` and its matching
+- Exact public `@bota.dev/react-native-app-sdk@2.0.0-beta.13` and its matching
   Maven package, pinned by this example. No sibling repositories or unpublished
   SDK overrides are required.
 - A disposable project and end user, an already-provisioned/bound device, and a
@@ -116,7 +120,7 @@ an unrelated application if a debug signing key differs.
 No progress message or successful PUT is authority to delete the source. The
 app never issues its own recording-confirm or recording-delete command.
 
-The public Android beta.10 `ConnectedDevice.isProvisioned` snapshot defaults to
+The public Android beta.13 `ConnectedDevice.isProvisioned` snapshot defaults to
 false; it is not a live provisioning observation. This app uses the public
 `controls.isProvisioned` read after connection and before each catalog or sync
 operation. False or failed reads block access and attempt disconnect, with no
@@ -172,7 +176,7 @@ Mocked tests and native builds do not establish physical upload/receipt/deletion
 ordering. Acceptance must identify the exact device, firmware, public package,
 backend environment and recording, and preserve failures as well as successes.
 
-The locally assembled and installed APK has SHA-256
+The historical beta.10 locally assembled and installed APK has SHA-256
 `b0b817ef61890410d75e70839372fa838e179fc06ac34296d348b04157fc5f88`.
 Its startup/authorization/scan observations do not establish encrypted transfer,
 receipt validation, source deletion or live transcription. Physical upload awaits

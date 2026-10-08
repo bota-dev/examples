@@ -17,7 +17,7 @@ fixed. See [qualification and limits](docs/build-dependency-remediation.md).
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All five App SDK connection examples pin public beta.10 after completed protected publication. Exact build and physical results are recorded in the review. Read [current evidence and blockers](docs/independent-examples-review.md). The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All seven independent device examples pin public beta.13 after completed protected publication. Read [current evidence and blockers](docs/independent-examples-review.md#beta13-adoption); earlier phone results remain tied to their tested versions. The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
 
@@ -47,7 +47,7 @@ Run its independent syntax checks and pagination/failure tests. No hardware is
 required; live API and mocked evidence remain separate.
 
 The ninth example is `end-to-end/react-native-recording-sync`: Android with an
-already-provisioned device and encrypted-v2 recordings only, using public beta.10.
+already-provisioned device and encrypted-v2 recordings only, using public beta.13.
 Its native module owns authenticated HTTP callbacks and scope/session metadata;
 SDK code owns recording bytes, transport and receipt confirmation. Keep the backend's
 fixed project/end-user/device checks, explicit app authentication, exact binding
@@ -63,7 +63,7 @@ journal to force another create. Its tests use Node built-ins and SQLite. The
 Android catalog calls public SDK metadata APIs only, labels legacy separately
 from encryption, and fences late results after connection loss. Run its own
 Gradle unit tests and APK build; neither mocks nor assembly prove physical reads.
-In public Android beta.10, the connection snapshot's `isProvisioned` defaults to
+In public Android beta.13, the connection snapshot's `isProvisioned` defaults to
 false. Gate already-provisioned workflows with a fresh public SDK pairing-state
 read, fenced to that connection; false/error means paired state was not confirmed,
 not proof of missing credentials. A pairing read does not replace backend ownership
@@ -137,15 +137,22 @@ into these public examples.
 
 Beta.10 adds exact-generation cleanup when explicit disconnect times out or
 is cancelled without a native callback. Its late event must not cancel queued
-replacement work. All five connection examples use exact public beta.10
+replacement work. All five connection examples previously used exact public beta.10
 dependencies. Protected publication and public native/Flutter verification
 completed after CocoaPods registration and CDN propagation recovered. Preserve
 the six Flutter UI completion-ordering tests and the public package boundary;
 example builds and physical checks remain separate from publication evidence.
-See [current adoption](docs/independent-examples-review.md#beta10-adoption) for
+See [historical beta.10 adoption](docs/independent-examples-review.md#beta10-adoption) for
 local, hosted and phone evidence. Do not claim this fixes the distinct GATT
 8/133 issue or proves physical missing-callback behavior from simulated native
 regressions.
+
+The October 8 beta.13 adoption covers all seven independent device examples,
+using public artifacts from tag commit `958696b`. Keep the legacy beta.6 workspace
+and dependency guards unchanged. The [current review](docs/independent-examples-review.md#beta13-adoption)
+records local/hosted checks; beta.13 example physical acceptance remains unverified.
+Do not attribute unpublished SDK recovery work or internal-app test results to
+these examples. Recording-sync retains its existing bounded uncertainty behavior.
 
 Search changed tokens (paths, package names, environment variables, endpoints, symbols) across this repository's docs. In a full Bota workspace, also search `internal-docs/`, `docs/`, and every repo's `AGENTS.md`, `CLAUDE.md`, `ARCHITECTURE.md`, and `README.md`; inspect the internal-docs downstream impact matrix. Review each affected hit. If those repos are unavailable, record the missing cross-repo check; do not make private workspace access a prerequisite for public contributors.
 

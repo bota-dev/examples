@@ -21,7 +21,7 @@ test("uses post-connect identity and disconnects mismatches", async () => {
   await assert.rejects(connectVerified(manager, {}, " "), /Enter the serial/);
 });
 
-test("fresh pairing read admits a verified device despite beta.10's false snapshot", async () => {
+test("fresh pairing read admits a verified device despite the default false snapshot", async () => {
   const calls = [];
   const device = { serialNumber: "actual", isProvisioned: false };
   const access = {

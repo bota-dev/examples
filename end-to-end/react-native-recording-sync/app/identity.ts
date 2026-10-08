@@ -18,7 +18,7 @@ export async function connectVerified<D, C extends { serialNumber: string }>(
 
 export const pairingNotConfirmed = "Paired state was not confirmed. Access is blocked. Check the device and its existing application's setup, then reconnect; no reset or rebind was performed.";
 
-/** The beta.10 ConnectedDevice flag is a default, not a live pairing read. */
+/** The ConnectedDevice flag is a default, not a live pairing read. */
 export async function verifyPaired<C>(
   access: {
     isProvisioned(device: C): Promise<boolean>;

@@ -1,6 +1,6 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.10`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.13`. No API key, backend, binding, recording, or upload is needed.
 
 ## Run
 
@@ -50,6 +50,12 @@ GATT 8/133 reconnect failures. The dated beta.9 phone results below remain evide
 for beta.9 only; current build and hardware checks are tracked in the
 [adoption review](../../docs/independent-examples-review.md).
 
+The current beta.13 also includes failed Android connect/MTU handshake cleanup,
+first published in beta.12. The SDK retains responsibility for transport and
+connection recovery; the sample's explicit scan/connect workflow is unchanged.
+Its [public release verification](https://github.com/bota-dev/app-sdk/releases/download/v2.0.0-beta.13/beta13-publication-review.md)
+does not establish a new physical result for this example.
+
 Historical beta.8 results, 2026-09-30 UTC: Android and iOS Simulator builds passed in [CI 36661341921](https://github.com/bota-dev/examples/actions/runs/36661341921). On Samsung SM-A166U1 / Android 16 and Bota Pin firmware 1.0.19, exact-serial connection, status, and automatic radio-off UI cleanup passed. Explicit reconnect failed twice with GATT error 133, including after a fresh scan. Full recovery was therefore **partial**. See the [beta.8 review](../../docs/independent-examples-review.md#beta8-adoption); the dated beta.7 checks below also remain historical.
 
 The connection-loss listener also replaces the previous status text with a
@@ -64,7 +70,17 @@ npm test
 npm run export
 ```
 
-2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
+2026-10-08, beta.13: public frozen installation, TypeScript check, all 30 tests
+(identity plus Forge, braces and source-map regressions), and Android Metro
+export pass locally on Node 22.23.2 / Windows. The SDK version, URL and integrity
+are pinned in the lockfile; all other dependency entries and existing security
+guards are preserved. npm audit still reports 17 high package findings rooted
+in the guarded Forge/braces advisories; passing the mitigation tests is not a
+clean registry audit. New native Android/iOS builds and physical acceptance are
+separate gates tracked in the [adoption review](../../docs/independent-examples-review.md).
+The following dated beta.10 and earlier results remain historical.
+
+Historical 2026-10-01 UTC, beta.10: the public npm tarball matches its registry SHA-512
 integrity. Frozen install, TypeScript check, the identity regression test (exact
 serial, mismatch disconnect, and empty input), and Android Metro export pass
 locally on Node 22.23.2 / Windows; npm audit reports zero vulnerabilities.

@@ -21,10 +21,10 @@ packages:
     dependency: "direct main"
     description:
       name: bota_app_sdk
-      sha256: "6525ccdb08fb4f53af1d2cc55a432e0d59590770cd00c0e1a7d54ff6de3e8c9c"
+      sha256: bc9ffd6bcbd6fbeaefac5869cce07d5fbb337a4f3ebe9c657678627609b5baee
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0-beta.10"
+    version: "2.0.0-beta.13"
   characters:
     dependency: transitive
     description:

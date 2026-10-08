@@ -23,11 +23,15 @@ for Expo signing tools. The unchanged 1.4.0 scanner alerts remain open.
 
 ## Example catalog
 
-Each linked example installs independently. All five App SDK connection examples
-pin published **2.0.0-beta.10**. The protected release completed successfully,
-including CocoaPods distribution and public Flutter archive verification. The [adoption review](docs/independent-examples-review.md#beta10-adoption)
-separates verified public dependencies, successful local/hosted builds and
-physical evidence. On the recorded Samsung/Bota Pin pair, RN beta.10 passed
+Each linked example installs independently. All seven device examples (the five
+connection examples, Android catalog and encrypted recording sync) pin published
+**2.0.0-beta.13**. The [current adoption review](docs/independent-examples-review.md#beta13-adoption)
+records public package availability and example checks. Beta.13 physical-device
+acceptance has not been performed for these examples.
+
+The [historical beta.10 review](docs/independent-examples-review.md#beta10-adoption)
+retains the earlier native builds and phone evidence. On the recorded
+Samsung/Bota Pin pair, RN beta.10 passed
 three radio-loss/first-reconnect cycles and graceful disconnect/reconnect.
 Flutter's six widget tests and hosted APK build passed. Its phone run passed
 three loss/eventual-reconnect cycles, with delayed rediscovery in the first
