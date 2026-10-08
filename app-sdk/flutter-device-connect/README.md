@@ -17,6 +17,9 @@ retain their original versions and limits. See the
 
 Use Flutter **3.47.5**, JDK 17, Android SDK 37 tooling, and an Android 8+ (API 26+) phone with Bluetooth. Flutter 3.44 cannot resolve this SDK's `meta` dependency. This example includes an Android host only; SDK iOS support is not an iOS example acceptance claim.
 
+Android's `.gradle/` and `.kotlin/` directories are generated local build state
+and are excluded from version control.
+
 From this directory:
 
 ```sh
