@@ -22,18 +22,41 @@ availability, not acceptance of every consuming example.
 
 | Example | Beta.13 verification | Remaining check |
 | --- | --- | --- |
-| React Native connect | Frozen public install, typecheck, 30 tests (identity and existing security regressions), Android Metro export passed | Hosted Android/iOS builds; physical beta.13 session |
-| Web connect | Frozen public install, 4 tests, typecheck and Vite/WASM production build passed | Hosted checks; browser/firmware session |
-| Apple connect | Exact SwiftPM tag and source revision selected | Hosted macOS build; physical permissions/BLE |
-| Android connect | Public Maven resolution and debug APK build passed | Hosted checks; physical beta.13 session |
-| Android recording catalog | Public Maven resolution, 16 unit tests and debug APK build passed | Hosted checks; physical beta.13 catalog |
-| Flutter connect | Frozen pub.dev resolution, analysis and six widget tests passed | Native APK build and hosted checks; physical beta.13 session |
-| React Native recording sync | Frozen public install, typecheck, 44 app/security tests, Android Metro export, backend syntax check and 22 backend tests passed | Hosted native adapter tests/APK build; physical upload/receipt/cleanup/recovery |
+| React Native connect | Frozen public install, typecheck, 30 tests (identity and existing security regressions), Android Metro export passed locally; hosted Android APK and iOS Simulator builds passed | Physical beta.13 session |
+| Web connect | Frozen public install, 4 tests, typecheck and Vite/WASM production build passed locally and hosted | Browser/firmware session |
+| Apple connect | Exact SwiftPM tag/source revision; hosted package resolution and macOS app build passed | Physical permissions/BLE |
+| Android connect | Public Maven resolution and debug APK build passed locally and hosted | Physical beta.13 session |
+| Android recording catalog | Public Maven resolution, 16 unit tests and debug APK build passed locally and hosted | Physical beta.13 catalog |
+| Flutter connect | Frozen pub.dev resolution, original-config analysis, six widget tests and debug APK build passed locally and hosted | Physical beta.13 session |
+| React Native recording sync | Frozen public install, typecheck, 44 app/security tests, Android Metro export, backend syntax check and 22 backend tests passed locally; hosted backend, native adapter tests and APK build passed | Physical upload/receipt/cleanup/recovery |
+
+### Hosted example results
+
+All seven workflows completed successfully. Six ran at examples source
+`c1feec5fc46d80a31f8636602245a44da0c58bef`; Flutter's final run used
+`6a35e098042a894835dd187891609f1bc252a2ac`, which only excludes generated Kotlin
+build state and documents that exclusion. The remaining examples are unchanged
+between those revisions. Later edits to this review do not change their source.
+
+| Workflow | Passing run |
+| --- | --- |
+| React Native connect: Android and iOS Simulator | [37860425798](https://github.com/bota-dev/examples/actions/runs/37860425798) |
+| Web connect | [37860425682](https://github.com/bota-dev/examples/actions/runs/37860425682) |
+| Apple macOS connect | [37860425815](https://github.com/bota-dev/examples/actions/runs/37860425815) |
+| Kotlin connect | [37860425738](https://github.com/bota-dev/examples/actions/runs/37860425738) |
+| Kotlin recording catalog | [37860425752](https://github.com/bota-dev/examples/actions/runs/37860425752) |
+| Flutter connect | [37860502313](https://github.com/bota-dev/examples/actions/runs/37860502313) |
+| React Native recording sync: backend and native adapter/Android | [37860425725](https://github.com/bota-dev/examples/actions/runs/37860425725) |
 
 The existing standalone Forge/braces guards, source-map tests and non-SDK npm
 dependency entries are retained. Passing these suites does not close the existing
 scanner advisories or establish native runtime security. Native applications must
 be rebuilt after this upgrade.
+
+The local Flutter APK SHA-256 is
+`1dda1c081cb10b22353987b8f7acbe433e1384e89fa255daa50c6a55840f6f3d`.
+Local Gradle/Kotlin compiler state is ignored; no generated compiler session
+files are part of the final source tree.
 
 Public Android beta.13 still initializes the connection snapshot's `isProvisioned`
 to false (`DeviceManager.kt` at the tag). Catalog and sync retain fresh public
@@ -62,14 +85,18 @@ public SDK tag, using the compound-engineering workflow.
 | §3: SDK owns transport, files and receipt confirmation | Dependency changes preserve existing public integrations and host callbacks; no GATT/crypto/transfer implementation added | Matched in source; physical behavior unverified |
 | §3: identity, authorization and uncertain-outcome boundaries | Fresh pairing reads, serial admission, backend binding checks, journals and app/native module interfaces retained; app/backend regressions pass | Matched for unchanged source/local tests; hardware and recovery remain partial |
 | §4: current pins and evidence distinguish verification levels | Catalog, agent docs and per-example READMEs identify beta.13; prior phone/build results retain exact versions | Matched |
-| §6: isolated platform checks | Local results above; existing path-filtered workflows retained | Partial until hosted gates complete |
+| §6: isolated platform checks | Local results and seven successful hosted workflows above; existing path filters retained | Matched for build/test acceptance; hardware remains unverified |
 | §5: full replacement and legacy retirement | No new pairing or full recovery implementation; no new hardware acceptance | Not implemented by this adoption |
 
 Documentation search covered package/version and all seven example path tokens
 across public/internal docs and workspace README, architecture and agent files.
-The public SDK catalog requires a matching adoption update; dated security and
-hardware evidence stays unchanged. The internal-docs downstream matrix introduces
-no target-contract change for this dependency adoption.
+The public SDK catalog and changelog were updated on docs `main` at
+[`cdc625c`](https://github.com/bota-dev/docs/commit/cdc625c3ba110e1b77e4ea259bd33818762d5ab1).
+Mint validation and local rendering of both pages passed; live-site promotion
+is separate. Dated security and hardware evidence stays unchanged. The
+internal-docs downstream matrix introduces no target-contract change for this
+dependency adoption. Independent source review found no actionable compatibility,
+security, lockfile or documentation-link defects.
 
 ## Initial beta.7 evidence by example
 
