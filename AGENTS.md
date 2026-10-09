@@ -19,6 +19,12 @@ Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITEC
 
 The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All eight independent device examples pin public beta.13 after completed protected publication. Read [current evidence and blockers](docs/independent-examples-review.md#beta13-adoption); earlier phone results remain tied to their tested versions. The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
+## Example selection and package manager
+
+- Select by task/language/hardware in [examples.json](examples.json); follow the [AI guide](docs/using-examples-with-ai.md), then the selected README.
+- Install/check from the selected directory. Node uses its own npm manifest/lock; Python readers use the standard library. Native tooling is defined per example. Root npm commands are legacy-only.
+- Processing readers stop at project/end-user/device scope; resolution is not provider approval or job execution. Keep the [review](docs/independent-examples-review.md#agent-discovery-processing-october-9) evidence limits.
+- Update the index, root catalog and selected README together when adding or moving an example. Do not embed secrets or assume a recorded device identity is the caller's device.
 ## Implementation rules
 
 ### Command observation, policy and WebVTT

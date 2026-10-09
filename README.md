@@ -4,9 +4,28 @@ Examples for integrating the Bota backend API and Bota App SDK into your own app
 
 Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
 
+## Find an example
+
+Use the [machine-readable index](examples.json) to filter by task, language and
+hardware requirement. For Claude Code, Codex, Cursor, Copilot or another coding
+agent, start with the [AI quick-start guide](docs/using-examples-with-ai.md) and
+[AGENTS.md](AGENTS.md). Every entry points to its own setup and evidence.
+
+| Your task | Start here |
+| --- | --- |
+| Upload audio and get a transcript | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) |
+| Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python webhook](api/webhook-receiver-python/README.md) |
+| Connect to a physical device | Choose your platform under `app-sdk/` in the [catalog](#example-catalog) |
+| Inspect processing inheritance | [Project](api/project-processing-config-node/README.md), [end user](api/end-user-processing-config-python/README.md) or [device](api/processing-config-python/README.md) |
+| Export timestamped transcripts | [SRT](api/export-transcription-node/README.md) or [WebVTT](api/export-transcription-vtt-python/README.md) |
+
+1. Pick one example and read its README, including prerequisites and current evidence.
+2. Work inside that example directory; install only its dependencies. Root npm commands apply to the retained legacy sample.
+3. Configure your own authorized IDs and server-side secrets, then use its documented commands. Syntax, live API and physical-device checks are separate evidence.
+
 ## Current status
 
-The catalog contains fifty-seven independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, transcript search and recording pagination, original-file download, structured summaries, recording-scoped Ask and session/history listings, subtitle/plain-text/Markdown/JSON export, cloud device status, bounded device inventory, command history, existing transcription/summary monitoring and linked processing snapshots, end-user onboarding and directory traversal, custom prompts, firmware discovery, OTA history and assignment monitoring, transcription of existing uploads and configuration discovery/observations. Recent expansions add fleet counters, scoped job directories, transcript JSON export, durable empty Ask sessions/title changes, exact release metadata, private Ask Markdown, cloud device-name changes, exact external-ID lookup, ordinary-command observation, upload-security policy and WebVTT export. The recent forty-two API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android/macOS recording catalogs are implemented; the Apple catalog passed hosted macOS compilation; physical acceptance remains unverified. Exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+The catalog contains fifty-nine independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, transcript search and recording pagination, original-file download, structured summaries, recording-scoped Ask and session/history listings, subtitle/plain-text/Markdown/JSON export, cloud device status, bounded device inventory, command history, existing transcription/summary monitoring and linked processing snapshots, end-user onboarding and directory traversal, custom prompts, firmware discovery, OTA history and assignment monitoring, transcription of existing uploads and configuration discovery/observations. Recent expansions add fleet counters, scoped job directories, transcript JSON export, durable empty Ask sessions/title changes, exact release metadata, private Ask Markdown, cloud device-name changes, exact external-ID lookup, ordinary-command observation, upload-security policy, WebVTT export and project/end-user processing readers. The recent forty-four API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android/macOS recording catalogs are implemented; the Apple catalog passed hosted macOS compilation; physical acceptance remains unverified. Exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -99,6 +118,8 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Watch a device command (Node.js)](api/watch-device-command-node/README.md) | Observe one exact ordinary command without relaying, acknowledging or cancelling it | No |
 | [Upload-security policy (Python)](api/upload-security-config-python/README.md) | Read effective encrypted-upload policy without claiming applied protection or changing it | No |
 | [Export WebVTT (Python)](api/export-transcription-vtt-python/README.md) | Publish escaped timestamped transcript cues as a private WebVTT file without overwriting | No |
+| [Project processing settings (Node.js)](api/project-processing-config-node/README.md) | Observe project-resolved automation flags without applying child overrides or starting jobs | No |
+| [End-user processing settings (Python)](api/end-user-processing-config-python/README.md) | Observe one end user's resolved automation flags without device overrides or profile output | No |
 | [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
 | [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
 | [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |

@@ -2,6 +2,72 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="agent-discovery-processing-october-9"></a>
+## Coding-agent discovery and processing readers — 2026-10-09
+
+Two parallel creators added project/end-user processing readers; a third agent
+created a machine-readable discovery index and tool-neutral adaptation guide.
+The catalog now contains fifty-nine independent implemented cases. Review uses
+compound-engineering 1.2.9 against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4
+and §6, the public hierarchy/auto-processing/end-user contracts, the regulated
+processing amendment in the current hierarchy design, and read-only backend
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. The owner continues to request
+creation without runtime, functional, live API or physical-device testing.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §2: independent installation | Node built-ins with own manifest/lock; Python standard library; own config/ignore/README/workflows | Matched in source; exact local checks recorded below |
+| §2: agent discovery | Versioned `examples.json` points to implemented directories, README setup/evidence and workflows; guide supplies a task-selection prompt | Matched in source; path/schema/catalog inspection recorded below; tool-specific execution unverified |
+| §2/4: one canonical rule source | README task table/quick start; AGENTS links the index/guide; short CLAUDE points to AGENTS instead of repeating batch history | Matched by document review; no tool-specific plugin or shared runtime introduced |
+| §3: project authority | `project-processing-config-node` makes one key-derived processing GET, restricts source to default/organization/project and checks an optional project marker | Partial: tracked direct response omits project marker, so operator must independently verify key/project mapping |
+| §3: end-user lineage | `end-user-processing-config-python` surrounds config GET with exact end-user reads, checks optional project/deletion and available project-assignment generation stability | Matched in source; missing markers prove less and separate reads are non-atomic; deployed lineage enforcement unverified |
+| §3: narrow resolved intent | Both readers require four actual enabled booleans, direct section and merge_deep; emit selected flags/source only without defaults/providers/templates/profile fields | Matched in source; no local fallback, writes, model calls, jobs or device overrides |
+| §3: evidence boundaries | Section source is not field provenance; enabled intent does not approve provider routes/credentials or prove future job/device state | Matched against hierarchy amendment and auto-processing contract; live behavior unverified |
+| §3: bounded sanitized failures | Request/body bounds, strict UTF-8 and finite JSON, no redirect/retry or raw response/credential logging | Matched in source; failure/timer behavior unverified; parsing/DNS caveats in each README |
+| §4: affected documentation | Root catalog/architecture/agent pointers, selected READMEs, AI guide/index and public catalog/hierarchy/auto-processing/changelog | Matched by source review; final compilation evidence below |
+| §6: isolated checks | Full-SHA actions, contents:read, credential persistence disabled, main/path filters, five-minute install/compile only | Matched by YAML/manual review; hosted evidence recorded after delivery |
+| §6: behavioral acceptance | No unit/functional/CLI/API/device execution | Intentionally deferred at owner direction; runtime conformance unverified |
+
+The project route resolves through the authenticated key and does not take a
+project scope parameter. A configured expected project ID is an assertion,
+not an independently verified project identity when the response lacks a marker.
+The end-user resolver checks the authenticated expected project and server-side
+origin lineage. Available `project_assignment_generation` is checked across
+observations, distinct from Bluetooth `binding_generation`; this cannot prove
+continuous or historical assignment. Documented `end_users:read` remains required
+although the tracked end-user GET lacks explicit scope middleware. No local
+reader reconstructs server lineage or provider gates.
+
+Index entries are discovery metadata. Their presence, workflow path or a syntax
+pass never becomes live/device acceptance. Setup and verification pointers lead
+to the selected README rather than duplicated commands, scopes or SDK versions.
+Legacy `apps/` is excluded; native examples retain their exact public SDK pins
+and existing hardware gaps. No private app helper, sibling runtime dependency,
+credentials, recorded-device identity or tool-specific integration was added.
+
+Changed paths/index/configuration/assignment/automation tokens were searched
+across internal/public docs and workspace overview/agent files. The hierarchy
+amendment and downstream impact matrix were inspected. Owning example and public
+pages changed; platform implementation and historical conformance remain
+unchanged. Installed Actions-generator validation resources are absent; parsed
+YAML and manual inspection provide the recorded fallback.
+
+
+The project creator independently reviewed the end-user reader and discovery
+files without execution or edits; no concrete source blocker remained. Parent
+reviewed both full reader sources and all changed entry points. One README
+phrase was narrowed from profile lookup to external-ID lookup, since the exact
+entity GET returns profile fields that the reader intentionally omits.
+
+Local evidence: Node 22.23.2 `npm ci`/`npm run check` and Python 3.12.14
+`py_compile` passed. Static JSON/catalog inspection confirmed 59 unique,
+implemented entries in catalog order, all README/setup/evidence/workflow paths
+and eight hardware workflows. Root/guide local links, workflow permissions,
+filters/action pins and formatting passed. Mint 4.2.949
+`validate --disable-openapi` compiled the public docs after integrating three
+concurrent remote documentation commits. Only Markdown spacing changed afterward.
+No examples, functions, tests, APIs or physical devices were executed. Publication
+`prod` and SDK packages remain unchanged; public docs are delivered to `main`.
 <a id="command-policy-webvtt-october-8"></a>
 ## Command observation, upload policy and WebVTT — 2026-10-08
 
