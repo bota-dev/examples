@@ -46,6 +46,16 @@ installed Actions-generator references/validator are absent; YAML parsing and
 manual permission/pin/trigger review supply the fallback. Source and controlled
 metadata results do not establish example runtime or physical acceptance.
 
+Implementation `649cb6f96f4a24a60009fda036e204d65f84f177` was pushed directly to
+examples `main`. GitHub APIs confirmed the new
+[catalog run](https://github.com/bota-dev/examples/actions/runs/37992157457) and
+[validate job](https://github.com/bota-dev/examples/actions/runs/37992157457/job/114028834482)
+completed successfully at that exact source. Final local validation covered
+59 entries, 64 documents and 212 local file links. Push execution is verified;
+the pull-request trigger is configured and reviewed, not exercised through a
+new PR. This evidence update changes documentation only. Public docs `prod`,
+SDK packages and device state remain unchanged.
+
 <a id="agent-discovery-processing-october-9"></a>
 ## Coding-agent discovery and processing readers — 2026-10-09
 
