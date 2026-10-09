@@ -10,6 +10,13 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+New API examples cover [recording-scoped Ask](api/ask-recording-node/README.md),
+[SRT export](api/export-transcription-node/README.md), and a standard-library
+[Python webhook receiver](api/webhook-receiver-python/README.md). Preserve their
+request intent, recording ownership, exclusive-file and durable-inbox boundaries.
+Their current evidence is syntax checks and source review; live acceptance is
+unverified at the owner's request to focus on creating examples.
+
 The [Node summary workflow](api/summarize-transcription-node/README.md) retains
 creation intent and resumes the saved job through GET. Preserve that behavior:
 another template-based POST can replace an existing summary. The

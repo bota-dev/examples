@@ -21,6 +21,16 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+The October 8 API expansion adds `api/ask-recording-node`,
+`api/export-transcription-node` and `api/webhook-receiver-python`. Keep each
+independent. Ask retains durable pre-POST intent and uses GET-only reconciliation
+after uncertain outcomes; never resend automatically. Export checks completed
+transcription/recording/end-user identity and creates SRT without overwriting.
+Python webhook acceptance requires verified raw bytes and a durable SQLite
+commit before acknowledgment. The owner requested creation without testing for
+this batch: evidence is syntax checks and source review, with runtime/live
+acceptance unverified. Do not convert that limit into a verified workflow claim.
+
 October 7 node-forge #108/#109/#110: each affected install root carries its
 own mandatory, hash/version-pinned postinstall parser guard and nine real
 Forge/Expo regressions. Keep package identity/locks unchanged; scanner and

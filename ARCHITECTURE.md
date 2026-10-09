@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: fourteen independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search workflows and an Android metadata catalog. Node/Python upload and transcription are live-verified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: seventeen independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search/Ask/subtitle workflows, Node/Python webhook receivers and an Android metadata catalog. Node/Python upload and transcription are live-verified. The newest three API examples have syntax checks and source review; live behavior remains unverified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -46,6 +46,9 @@ examples/
     list-recordings-node/
     download-recording-node/
     search-transcripts-node/
+    ask-recording-node/
+    export-transcription-node/
+    webhook-receiver-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -175,6 +178,22 @@ Empty results do not establish indexing readiness. Separate ownership reads do
 not provide an atomic snapshot or replace customer application authorization.
 
 The webhook example must use the public verification format, preserve the input bytes that verification requires, and handle duplicate events. It must document delivery/retry semantics and acknowledge only after the example's stated acceptance/durability step. Do not invent signature headers or claim exactly-once delivery.
+
+The recording-scoped Ask example verifies a configured recording's owner, creates
+one empty session, and submits one question. Durable intent precedes each POST;
+uncertain outcomes retain the journal and subsequent runs reconcile through GET.
+Session scope and returned citations must stay within that recording. Model usage
+may be billed, and a local journal does not coordinate other applications.
+
+The subtitle export reads an existing completed transcription and checks its
+recording and end-user scope before producing SRT from second-based segments.
+It creates the local destination exclusively, preserves existing files and
+removes only its own partial output. It requests no new processing or audio.
+
+The Python webhook receiver uses only the standard library and the same public
+raw-byte HMAC/timestamp contract as the Node receiver. A SQLite commit precedes
+acknowledgment; conflicting reuse of an event ID is rejected. Downstream business
+processing and public API reconciliation remain application responsibilities.
 
 ## 4. Example contract
 

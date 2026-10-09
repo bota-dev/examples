@@ -2,6 +2,72 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="api-expansion-october-8"></a>
+## Ask, subtitles and Python webhooks — 2026-10-08
+
+Three independent API examples bring the catalog to seventeen. The owner asked
+to keep creating without testing; this pass uses independent installation,
+syntax/build checks and source review. Behavioral, failure-path and live API
+acceptance remain unverified. No credentials, cloud mutations or hardware were
+used during implementation.
+
+| Example | Public contract and implemented workflow | Evidence |
+| --- | --- | --- |
+| `api/ask-recording-node` | GET recording owner; POST empty recording-scoped Ask session; commit ID and message intent; POST one question; validate provider/answer/citations; existing journal uses GET-only reconciliation | Frozen `npm ci` and `npm run check` pass on Node 22.23.2 / Windows; source review |
+| `api/export-transcription-node` | GET recording owner and exact completed transcription; convert second-based segments to SRT; publish private completed bytes without overwriting | Frozen `npm ci` and `npm run check` pass on Node 22.23.2 / Windows; source review |
+| `api/webhook-receiver-python` | Timestamp + raw-body HMAC `v1=` verification; signed event ID; exact-byte duplicate/conflict handling; SQLite FULL commit before acknowledgment | `python -m py_compile server.py` passes on Python 3.12.14 / Windows; source review |
+
+Each example owns its configuration, README, ignore rules and path-filtered
+workflow. The Node examples use only built-ins and their own manifests/locks;
+Python uses the standard library. The new workflows perform syntax checks and
+require no credentials. Workflow YAML, trigger paths, least-privilege permissions
+and existing SHA-pinned actions were reviewed. The existing legacy/device
+dependencies, security guards and workflows were preserved.
+
+The Ask journal commits each non-idempotent request's intent before sending.
+Unknown session creation remains unresolved rather than adopting an arbitrary
+ID. Known sessions resume only by reading a complete single question/answer
+pair; reconciliation identifies roles independently of response ordering. The
+question hash, known answer ID, provider, recording scope and citations are still
+checked. A local journal cannot coordinate other applications, and separate
+ownership reads do not provide an atomic snapshot.
+
+The export validates all segments before output, rejects invalid UTF-8 JSON,
+normalizes cue text, rounds seconds to milliseconds and preserves original
+ordering/overlaps. An exclusive temporary file and no-overwrite hard-link
+publication preserve existing destinations; cleanup touches only this run's
+partial file. Subtitle-player behavior and filesystem failure paths are unverified.
+
+The Python receiver accepts only signed raw bytes within the timestamp window,
+rejects repeated headers and conflicting payloads, and retains a private SQLite
+inbox. Downstream processing, HTTPS deployment and authoritative API reconciliation
+remain customer responsibilities. Its standard-library HTTP server is a local
+teaching host; hosted platform delivery was not exercised.
+
+### Design comparison
+
+Review basis: [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, selected public
+[Ask](https://docs.bota.dev/api-reference/ask/create-session),
+[transcription](https://docs.bota.dev/api-reference/ai/transcriptions/get) and
+[webhook](https://docs.bota.dev/webhooks/overview) contracts, and the owner's
+October 8 instruction, “dont need testing. keep creating.”
+
+| Requirement | Implementation evidence | Status / verification limit |
+| --- | --- | --- |
+| §§2, 4: standalone setup and public contracts | Own directories, manifests/configuration, public routes and standard libraries; no sibling runtime | Matched by install/source review |
+| §3: credential and resource boundary | Server-only keys; fixed recording/end-user checks; bounded responses and sanitized failures; webhook signature before persistence | Matched in source; behavior unverified |
+| §3: uncertainty and durable acceptance | Pre-POST Ask intent; GET-only recovery; exclusive export; authenticated SQLite inbox commit before reply | Matched in source; crash/failure behavior unverified |
+| §4: documented setup, cleanup and actual status | Example READMEs, root catalog/agent docs and public catalog identify the three examples and their evidence limits | Matched |
+| §6: functional checks | No new functional test suites or live execution in this pass | Intentionally diverged under the owner's instruction; runtime acceptance unverified |
+| §6: isolated CI | Three path-filtered syntax workflows with read-only permissions and no live credentials | Matched in source; hosted outcomes are reported by their run checks |
+
+Independent review found and corrected the message-order dependency in Ask
+reconciliation. Documentation searches covered the three paths, Ask endpoints,
+new environment variables, SRT and inbox terms across workspace overview files,
+public docs and internal docs. Current catalog/changelog/agent owners were
+updated. Existing API designs and dated webhook/instrument evidence were not
+changed; the internal-docs downstream matrix introduces no contract change.
+
 <a id="beta13-adoption"></a>
 ## Public beta.13 adoption — 2026-10-08
 
