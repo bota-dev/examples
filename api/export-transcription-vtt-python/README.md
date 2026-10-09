@@ -151,7 +151,7 @@ deployed enforcement separately; this example does not fix platform authorizatio
 | Private no-overwrite publication | Exclusive partial, file fsync, trusted-directory check, hard link and invocation-only cleanup | Matched in source; filesystem/crash acceptance unverified |
 | Python syntax | `python -m py_compile main.py`, Python 3.12.14 / Windows | Passed; syntax only |
 | Runtime, API, failure paths and player rendering | Not run, per creation-only instruction | Unverified |
-| Hosted CI | Matching path-filtered compile-only workflow | Configured; run result recorded by repository review |
+| Hosted CI | [Path-filtered compile-only workflow](https://github.com/bota-dev/examples/actions/runs/37896123966) | Passed at implementation `50279b28e58e8cd385df93a740a7cbf1f3567c3c`; compilation only |
 
 To integrate, keep authorization in your server, choose private storage and
 retention appropriate to your users, and validate rendering in your intended

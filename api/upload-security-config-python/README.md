@@ -144,7 +144,7 @@ Compound-engineering 1.2.9 review, **2026-10-08**:
 | Strict bounded failures | UTF-8 JSON, duplicate/non-finite rejection, 1 MiB response, 10/30-second budgets, no redirects/retries | Matched by source review; runtime failures unverified; DNS limitation above |
 | Syntax | Bundled Python 3.12 `py_compile main.py` on Windows | Passed locally; compilation does not execute the program |
 | Formatting | `git diff --check` scoped to this directory/workflow | Passed locally |
-| Hosted CI | Separate syntax workflow | Not run at creation; integration evidence is recorded centrally |
+| Hosted CI | [Separate syntax workflow](https://github.com/bota-dev/examples/actions/runs/37896123514) | Passed at implementation `50279b28e58e8cd385df93a740a7cbf1f3567c3c`; compilation only |
 | Unit/functional/live/device acceptance | Owner's creation-only instruction | Not run; advertised success/failure behavior remains unverified |
 
 Public contract basis: [Hierarchical Configuration](https://docs.bota.dev/guides/hierarchical-config)

@@ -73,6 +73,22 @@ pins/filters, command GET response references and navigation. Mint 4.2.949
 manual/static operation review covered the OpenAPI addition separately. No functional or
 live checks were added or run. Public docs are delivered to `main` only; the
 publication branch and released SDK artifacts are outside this batch.
+
+Implementation `50279b28e58e8cd385df93a740a7cbf1f3567c3c` was pushed directly to
+examples `main`; docs `3cc7fe23d88783290aff09c679851bd266b784e4` was pushed to
+docs `main`. The publication branch remains at
+`8a6eff44631384ec724c6decebb26d2f339d3c56`. GitHub APIs confirmed all three
+workflows completed successfully at that implementation source:
+
+| Case | Hosted result |
+| --- | --- |
+| Exact ordinary-command watcher | [Install/syntax passed](https://github.com/bota-dev/examples/actions/runs/37896123606) |
+| Upload-security policy reader | [Syntax passed](https://github.com/bota-dev/examples/actions/runs/37896123514) |
+| WebVTT export | [Syntax passed](https://github.com/bota-dev/examples/actions/runs/37896123966) |
+
+These are compilation/install checks. Runtime/API/player/physical acceptance
+remains unverified. This evidence update changes documentation only.
+
 <a id="ask-export-device-name-lookup-october-8"></a>
 ## Ask export, cloud names and exact identity lookup — 2026-10-08
 

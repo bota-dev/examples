@@ -169,6 +169,6 @@ at installation or runtime.
 | Exact target and current-owner fencing | Source review: command `device_id` comparison and owner/generation checks around every read; runtime unverified |
 | Selected report with honest lifecycle limits | Source review: fixed projection and physical/historical/atomic/upload evidence flags false |
 | Bounded failure without command mutation | Source review: deadline/cap/body bounds, GET only, sanitized errors; failure-path runtime unverified |
-| Hosted workflow | Configured for frozen installation and syntax only; result recorded in the repository review after integration |
+| Hosted workflow | [Frozen install/syntax passed](https://github.com/bota-dev/examples/actions/runs/37896123606) at implementation `50279b28e58e8cd385df93a740a7cbf1f3567c3c`; no runtime tests |
 | Public exact GET contract | Existing public route; this batch documents GET in the source reference/OpenAPI after baseline omission; publication/deployed compatibility unverified |
 | Functional, live API and physical-device checks | Not run under the owner's creation-only instruction |
