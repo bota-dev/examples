@@ -92,6 +92,15 @@ An independent fourth agent reviewed the final sources, READMEs, public/backend
 contracts and workflows and found no actionable blockers. Its source review
 performed no CLI execution, tests, live requests or device operations.
 
+Hosted syntax evidence at source `13f07b501fee7ae39805ea0e46bce0b15aef4d72`:
+[Python original download](https://github.com/bota-dev/examples/actions/runs/37884747855),
+[summary watcher](https://github.com/bota-dev/examples/actions/runs/37884747886)
+and [OTA watcher](https://github.com/bota-dev/examples/actions/runs/37884747836)
+all passed. These jobs establish syntax and Node installation only, not example
+execution or functional/live/device acceptance. Public reference/catalog changes
+were integrated on docs `main` at `c730fb50a2f6da286f9121445b7d3036401f5dcb`;
+the separate `prod` publication branch was not updated by this batch.
+
 <a id="configuration-ask-directory-october-8"></a>
 ## Configuration discovery, processing observations and Ask directory — 2026-10-08
 
