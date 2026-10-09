@@ -6,7 +6,7 @@ Each independent example has its own setup, dependencies, verification steps, an
 
 ## Current status
 
-The catalog contains seventeen independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, paginated recording metadata, original-file download, transcript search, structured summaries, recording-scoped Ask and subtitle export. The three newest examples are implemented with syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android recording metadata listing are implemented; exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+The catalog contains twenty independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks and transcript search, paginated recording metadata, original-file download, structured summaries, recording-scoped Ask, subtitle export, cloud device status and command history. The recent six API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android recording metadata listing are implemented; exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -60,6 +60,9 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Ask about a recording (Node.js)](api/ask-recording-node/README.md) | Ask one question in a recording-scoped session and retain uncertain requests for reconciliation | No |
 | [Export subtitles (Node.js)](api/export-transcription-node/README.md) | Convert an existing completed transcription into a local SRT file | No |
 | [Webhook receiver (Python)](api/webhook-receiver-python/README.md) | Verify raw-byte signatures and commit events to a durable SQLite inbox using the standard library | No |
+| [Cloud device status (Node.js)](api/device-status-node/README.md) | Verify an owned device and read its last reported runtime snapshot | No |
+| [Device command history (Python)](api/list-device-commands-python/README.md) | Read bounded recent command metadata without sending commands or printing grants | No |
+| [Search transcript excerpts (Python)](api/search-transcripts-python/README.md) | Retrieve timestamped excerpts and check recording ownership using the standard library | No |
 | [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
 | [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
 | [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |

@@ -2,6 +2,66 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="device-readers-python-search-october-8"></a>
+## Cloud device readers and Python search — 2026-10-08
+
+Three agents independently implemented cloud device status (Node), command
+history (Python) and transcript search (Python), bringing the catalog to twenty.
+The owner's instruction to keep creating without testing remains in effect:
+this pass uses installation/syntax checks and source review only. No functional
+test suites, live API calls or hardware operations were performed.
+
+Review basis: [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, public
+[device details](https://docs.bota.dev/api-reference/devices/get),
+[state](https://docs.bota.dev/api-reference/devices/get-state),
+[command history](https://docs.bota.dev/api-reference/devices/list-commands) and
+[search](https://docs.bota.dev/api-reference/recordings/search) contracts.
+Backend source was used to compare public shapes, not imported into examples.
+
+| Requirement | Source evidence | Status / verification limit |
+| --- | --- | --- |
+| §§2, 4: independent setup | Own directories, READMEs, environment placeholders, ignore rules and workflows; Node manifest/lock; Python standard library | Matched in source; no sibling runtime/install dependencies |
+| §3: server credentials and owned resources | Fixed configured end-user/device; device detail gates; search checks all unique recordings before output | Matched in source; runtime authorization paths unverified |
+| §3: bounded requests and selected output | Response size/time budgets; no retries or redirected credentials; no arbitrary device/command objects | Matched in source; network/failure behavior unverified |
+| §3: honest device evidence | Status labels report age, excludes client reports/settings; command timestamps describe backend lifecycle records | Matched by source/doc review; no physical state or execution claim |
+| §3: search boundary | One end-user-scoped search with optional allowlist; validates all excerpts before output; documents embedding cost/index prerequisites | Matched in source; live indexing, retrieval and billing unverified |
+| §4: documentation | Root catalog, agent entry points and public catalog/endpoint links describe three workflows and their limits | Matched by source/doc review |
+| §6: functional acceptance | No functional/unit/live/device tests, as the owner explicitly requested | Intentionally diverged; runtime acceptance unverified |
+| §6: isolated CI | Three path-filtered syntax-only workflows, read-only permissions, pinned actions, no API credentials | Matched in source; hosted outcomes are separate |
+
+Local syntax evidence: Node 22.23.2 frozen installation and `npm run check`
+passed for device status; Python 3.12.14 `py_compile` passed for both Python
+CLIs. Workflow YAML/paths/actions and documentation markup/links were reviewed;
+the public MDX catalog and endpoint links passed Mint 4.2.949 build validation.
+Independent source review identified a trickling-header timeout gap in the
+command reader; the transport now shuts down headers/body at the remaining
+deadline after connection establishment. Network behavior remains unverified.
+
+Node device status makes three GETs: owner detail, state snapshot, then owner
+detail again. Exact IDs/bound owner are checked, and returned binding generations
+are compared when available. Missing generation cannot detect a bind/unbind back
+to the same owner, and separate HTTP reads do not create an atomic snapshot.
+Freshness uses local time and never becomes a connected/online assertion.
+
+Python command history uses a single bounded newest-first `data` list with a
+configured limit; the public endpoint has no cursor pagination. Output always
+labels history as incomplete and excludes grants, params, result and error
+payloads. Presence booleans do not verify the result's physical truth. No command
+creation, cancellation, acknowledgment, reset or provisioning endpoint is called.
+
+Python transcript search uses one POST and bounded GET owner checks. No excerpt
+is printed until all rows and owners have been validated. Empty results do not
+prove indexing, and the embedding provider may bill an interrupted request.
+Python network budgets have standard-library DNS/socket limits documented in
+the individual READMEs; syntax checks do not establish timed failure behavior.
+
+Documentation token searches covered the three paths, environment variables,
+state/command/search routes and heartbeat terms across internal docs, public
+docs and workspace overview/agent files. The downstream impact checklist was
+inspected; these examples consume existing contracts, so firmware, SDK, backend
+and authoritative internal designs remain unchanged. Public links/catalog and
+the current example instructions are updated together.
+
 <a id="api-expansion-october-8"></a>
 ## Ask, subtitles and Python webhooks — 2026-10-08
 

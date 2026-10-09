@@ -21,6 +21,17 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+The next October 8 creation batch adds `api/device-status-node`,
+`api/list-device-commands-python` and `api/search-transcripts-python`. Device
+readers use configured end-user ownership; snapshots and command timestamps are
+cloud reports, not physical connection/execution proof. Command history is a
+bounded newest-first list with no cursor support; exclude grants, parameters,
+results and arbitrary error payloads. Python search checks every returned
+recording's owner before printing excerpts, makes no automatic retries and
+documents embedding-provider usage. Preserve independent standard-library
+implementations. This batch also uses syntax/source review only under the owner's
+creation-without-testing instruction; functional and live acceptance are unverified.
+
 The October 8 API expansion adds `api/ask-recording-node`,
 `api/export-transcription-node` and `api/webhook-receiver-python`. Keep each
 independent. Ask retains durable pre-POST intent and uses GET-only reconciliation

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: seventeen independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search/Ask/subtitle workflows, Node/Python webhook receivers and an Android metadata catalog. Node/Python upload and transcription are live-verified. The newest three API examples have syntax checks and source review; live behavior remains unverified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: twenty independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search/Ask/subtitle/device-status workflows, Python command history, Node/Python search and webhook receivers, and an Android metadata catalog. Node/Python upload and transcription are live-verified. The recent six API examples have syntax checks and source review; live behavior remains unverified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -49,6 +49,9 @@ examples/
     ask-recording-node/
     export-transcription-node/
     webhook-receiver-python/
+    device-status-node/
+    list-device-commands-python/
+    search-transcripts-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -194,6 +197,19 @@ The Python webhook receiver uses only the standard library and the same public
 raw-byte HMAC/timestamp contract as the Node receiver. A SQLite commit precedes
 acknowledgment; conflicting reuse of an event ID is rejected. Downstream business
 processing and public API reconciliation remain application responsibilities.
+
+Cloud device-status and command-history examples authorize a configured device
+against its expected end user before emitting selected fields. Ownership reads
+cannot provide an atomic snapshot across requests. Reported heartbeat freshness
+does not establish current reachability; command delivery/result timestamps
+describe the backend record rather than independent physical verification.
+Command history has a bounded newest-first response, no pagination, and no
+credential, parameter or result-payload output. Both workflows use GET only.
+
+The Python search example uses the same configured end-user, recording allowlist
+and ownership boundaries as Node search. It makes one provider-backed retrieval
+request with no retry, validates all excerpts and checks each unique recording
+before printing text. It does not create an Ask session or start indexing.
 
 ## 4. Example contract
 

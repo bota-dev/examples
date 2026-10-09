@@ -17,6 +17,13 @@ request intent, recording ownership, exclusive-file and durable-inbox boundaries
 Their current evidence is syntax checks and source review; live acceptance is
 unverified at the owner's request to focus on creating examples.
 
+The next API batch adds [cloud device status](api/device-status-node/README.md),
+[Python command history](api/list-device-commands-python/README.md) and
+[Python transcript search](api/search-transcripts-python/README.md). Cloud
+snapshots do not prove live connectivity or physical execution. Keep command
+credentials out of output and validate excerpt ownership before printing text.
+These examples also have syntax/source evidence only.
+
 The [Node summary workflow](api/summarize-transcription-node/README.md) retains
 creation intent and resumes the saved job through GET. Preserve that behavior:
 another template-based POST can replace an existing summary. The
