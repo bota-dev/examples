@@ -21,6 +21,13 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Ten independent API cases
+
+- Keep fleet output aggregate and operator-scoped. Connection/upload/OTA readers report server resolution, never applied firmware, radio availability or upload integrity.
+- Transcription/summary directories retain exact source filters across bounded pages and recheck ownership; emit no content. JSON transcript export is separately authorized and private, with no overwrite.
+- Empty Ask session creation and title rename keep intent durable before a single write. Uncertainty permits GET reconciliation only; preserve owner membership, immutable scope and private title material.
+- Firmware detail is declared artifact metadata. Record source/syntax evidence and runtime limits in the [ten-case review](docs/independent-examples-review.md#ten-api-cases-october-8).
+
 ### Original downloads and existing-resource watchers
 
 - [Python download](api/download-recording-python/README.md) isolates storage credentials, uses trusted exact hosts and publishes private original bytes without overwriting. Recheck ownership; URL issuance is not integrity proof.

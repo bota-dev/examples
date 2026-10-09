@@ -1,0 +1,11 @@
+{
+  "name": "@bota-examples/list-transcriptions-node",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.23.2" },
+  "scripts": {
+    "start": "node --env-file-if-exists=.env index.mjs",
+    "check": "node --check index.mjs"
+  }
+}

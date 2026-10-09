@@ -10,6 +10,11 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+The [ten-case API expansion](docs/independent-examples-review.md#ten-api-cases-october-8)
+adds fleet/settings/job readers, private JSON export, durable Ask session metadata
+writes and exact release inspection. Preserve fixed ownership, bounded traversal
+and GET-only uncertain recovery; source/syntax evidence is separate from runtime.
+
 The [download/summary/OTA batch](docs/independent-examples-review.md#download-summary-ota-watchers-october-8)
 adds private Python original-byte downloads and bounded GET watchers for existing
 exact resources. Preserve storage credential isolation, owner/source checks and

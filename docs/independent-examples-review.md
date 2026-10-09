@@ -2,6 +2,91 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="ten-api-cases-october-8"></a>
+## Ten independent API cases — 2026-10-08
+
+Ten creator agents worked in waves of three within the available concurrency
+limit. This batch brings the independent catalog from forty-one to fifty-one.
+Review uses compound-engineering 1.2.9 against [ARCHITECTURE.md](../ARCHITECTURE.md)
+§§2–4 and §6, the selected public endpoint/schema contracts, current hierarchical
+configuration and OTA designs, and read-only backend source
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. The owner requested creation without
+unit, functional, example CLI, live API or device execution. Platform code,
+SDK pins, dependency guards and physical-device state are unchanged.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §2: independent setup | Six Node built-in examples with own manifests/locks and four standard-library Python examples, all with configuration, README, ignore files and individual workflows | Matched in source; local installs and syntax passed; standalone execution unverified |
+| §3: aggregate fleet observations | `fleet-health-node` makes one bounded statistics GET and emits three validated counters without device rows | Matched in source; counters describe stored reports, not live hardware or an atomic snapshot |
+| §3: effective configuration | `connection-config-python`, `upload-config-node`, `ota-config-python` validate bound owner before/after resolved section reads and project contradictions | Matched in source; applied firmware state, radio availability and enforcement unverified |
+| §3: source-filtered directories | `list-transcriptions-node` and `list-summaries-python` retain exact source filters across bounded opaque cursors, validate source/owner links and emit selected metadata only | Matched in source; pagination, concurrent ownership changes and deployed scope enforcement unverified |
+| §3: private transcript JSON | `export-transcription-json-node` selects completed text/segments, validates Unicode/time/size limits, rechecks ownership, fsyncs a private exclusive partial and publishes by no-overwrite hard link | Matched in source; filesystem, Windows ACLs, crash and failure-path acceptance unverified |
+| §3: empty Ask creation | `create-ask-session-python` retains intent before its only POST, saves a valid returned ID before further validation, requires exact recording scope and fixed-owner list membership | Matched in source; no initial message/model invocation; uncertain unknown IDs prevent another POST |
+| §3: title-only Ask change | `rename-ask-session-node` reads private canonical title input, commits a transactional SQLite claim before one PATCH and retains validated acknowledgment separately from later title observations | Matched in source; every retained intent permits GET-only recovery; no server CAS/distributed exactly-once claim |
+| §3: final ownership observation | Ask rename rechecks end user/recording after the final session read; export and empty creation also retain final owner gates | Matched in source; separate requests remain non-atomic |
+| §3: declared firmware metadata | `firmware-detail-node` reads one exact published release and validates declared hashes, safe numeric sizes and optional sequence/downgrade pair | Matched in source; no download, byte-integrity, compatibility, delivery or installation proof |
+| §4: discoverability | Ten READMEs, 51 catalog rows, four root entry points and nine public catalog/endpoint/guide/changelog files | Matched by source/document review and local MDX compilation |
+| §6: isolated checks | Ten read-permission/path-filtered workflows with full action SHA pins, credential persistence disabled and install/compile commands only | Matched by YAML parsing/manual review; hosted evidence recorded below after pushing |
+| §6: behavioral acceptance | No tests, sample execution, live API or hardware operations at owner direction | Intentionally deferred; runtime conformance unverified |
+
+Two completed creators performed peer review without edits or execution. Fleet's
+author reviewed the five other fleet/configuration/directory cases independently
+and self-reviewed fleet; the connection reader's author independently reviewed
+export, both Ask cases and firmware detail. No concrete source blocker remained.
+Parent review added a final ownership observation and optional membership-page
+scope checks to Ask rename, rejected URL backslash/control normalization in
+rename/firmware configuration, tightened the private export and empty creation
+configuration/identity checks, and recorded the summary scope-enforcement gap.
+Affected sources were syntax-checked after their final edits.
+
+Local evidence: six Node frozen installs and `node --check` passed using Node
+22.23.2; four Python `py_compile` checks passed using Python 3.12.14. Public docs
+compiled with Mint 4.2.949 `validate --disable-openapi`. These checks establish
+installation, syntax and MDX compilation only. YAML parsing, permissions, branch
+and path filters, action pins, independent package/lock identity and all catalog
+paths were inspected. The installed Actions generator's referenced validator
+resources are absent; YAML parsing and manual review supply the recorded fallback.
+
+Configuration `source` labels describe section resolution, not field provenance.
+Connection preference arrays can retain duplicate tails from index-based merge.
+Tracked firmware does not enforce every exposed upload setting: daily/roaming,
+battery/off-peak policy and configurable chunk size remain limited; zero/minimum
+semantics differ between numeric validation and prose. OTA selector values are
+not assignment approval or installation evidence. Fleet aggregate counters and
+individual rows use separate queries; the public row timestamps differ from the
+tracked serializer. This batch narrows the fleet introduction's real-time claim
+without rewriting undocumented deployed row behavior.
+
+Summary OpenAPI omits `project_id` although public GET documentation and backend
+rows include it; the summary directory deliberately requires it. Transcription,
+summary and end-user GET source routes lack some documented explicit scope
+guards. Project authentication/repository filtering remain present, and examples
+require documented permissions; deployed enforcement is unverified. These are
+platform follow-ups, not silently repaired or claimed conformant by the examples.
+
+Private local paths require trusted stable ancestry and separately verified
+Windows ACLs. Export file fsync does not establish directory-entry power-loss
+durability. Ask rename does not explicitly fsync its journal parent; SQLite FULL
+commits are not independent proof of new-directory-entry durability. A valid
+zero-row rename journal may claim its first attempt; any retained intent forbids
+repeat PATCH. The Python creator conservatively rejects an existing empty
+journal. Neither policy supplies distributed exactly-once behavior or authorizes
+discarding uncertain state. HTTP budgets and local filesystem operations have
+the limits documented in each README.
+
+Changed paths, configuration names and contract fields were searched across
+internal/public documentation and every workspace overview/agent file. The
+downstream impact matrix and current designs were inspected. Current example,
+catalog, endpoint and guide docs were updated; historical evidence and platform
+conformance remain unchanged. Remaining acceptance requires authorized runtime,
+permission, malformed-response, concurrency, crash and filesystem checks; none
+were performed or inferred from compilation.
+
+Delivery and hosted results are recorded after pushing the implementation to
+`main`. Public documentation is delivered to `main`, leaving the publication
+branch unchanged. No pull request, workflow rerun or package publication is part
+of this batch.
+
 <a id="download-summary-ota-watchers-october-8"></a>
 ## Original downloads and existing-resource watchers — 2026-10-08
 

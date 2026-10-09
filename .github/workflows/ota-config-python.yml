@@ -1,0 +1,26 @@
+name: OTA configuration Python example
+
+on:
+  push:
+    branches: [main]
+    paths: ['api/ota-config-python/**', '.github/workflows/ota-config-python.yml']
+  pull_request:
+    paths: ['api/ota-config-python/**', '.github/workflows/ota-config-python.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  syntax:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    defaults:
+      run:
+        working-directory: api/ota-config-python
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - run: python3 --version
+      - run: python3 -m py_compile main.py

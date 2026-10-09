@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: forty-one independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent twenty-six API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: fifty-one independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent thirty-six API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -72,6 +72,16 @@ examples/
     download-recording-python/
     watch-summary-node/
     watch-ota-node/
+    fleet-health-node/
+    connection-config-python/
+    upload-config-node/
+    ota-config-python/
+    list-transcriptions-node/
+    list-summaries-python/
+    export-transcription-json-node/
+    create-ask-session-python/
+    rename-ask-session-node/
+    firmware-detail-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -262,6 +272,28 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+The ten-case expansion adds aggregate fleet observation, three effective settings
+readers, transcription/summary directories, private transcript JSON export,
+empty Ask session creation, title renaming and exact firmware metadata.
+Fleet counters are project-operator observations derived from stored heartbeats;
+individual device rows are not emitted. Config readers preserve current bound
+ownership and distinguish section-level resolution from consumer enforcement,
+radio availability, upload integrity and firmware installation.
+
+Job directories preserve exact source filters across bounded cursor pages and
+recheck ownership before selected metadata is emitted. They create no jobs or
+content exports. Transcript JSON export separately authorizes completed content,
+validates selected segments and uses private publication without overwriting.
+Firmware details are declared release metadata, not artifact-byte verification
+or device compatibility/installation proof.
+
+Empty-session creation and title renaming retain durable intent before the single
+write. Existing intent permits GET-only reconciliation, even after a timeout or
+unconfirmed outcome. Session membership and exact immutable recording scope must
+be observed under the fixed owner. Neither workflow sends a message or calls a
+model. Separate reads are non-atomic, and other session writers require operator
+coordination; matching observed state alone does not prove which request caused it.
 
 Python original-file download keeps authenticated metadata requests separate from
 credential-free storage GETs. Storage origins must match an independently trusted

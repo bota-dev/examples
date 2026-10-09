@@ -1,0 +1,10 @@
+.env
+.env.*
+!.env.example
+.state/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+__pycache__/
+*.pyc
