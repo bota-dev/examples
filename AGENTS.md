@@ -29,6 +29,12 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Upload/session metadata and firmware inspection
+
+- Encrypted-session GET currently requires `recordings:write` for restricted keys; surrounding ownership GETs require their read scopes. Preserve exact revision and complete-observation fences; published status grants no receipt/cleanup authority.
+- Ask exact GET needs surrounding owner-filtered collection membership; undocumented optional owner fields alone are insufficient. Emit no titles, messages or provider metadata.
+- Firmware downloads compare API-declared original BIN bytes, isolate storage authorization and publish privately without overwrite. No signing, installation or physical-compatibility claim follows. Keep [source/syntax limits](docs/independent-examples-review.md#upload-session-ask-firmware-october-9).
+
 ### Command observation, policy and WebVTT
 
 - Preserve exact command/target and owner/generation observations; status reports do not prove physical execution. Never fetch pending delivery in the watcher.

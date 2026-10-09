@@ -2,6 +2,69 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="upload-session-ask-firmware-october-9"></a>
+## Upload/session metadata and firmware inspection — 2026-10-09
+
+Three parallel creators added exact encrypted-v2 session observation, a
+recording-scoped Ask metadata reader and a private BIN inspection downloader.
+The catalog contains sixty-two independent examples. Compound-engineering
+1.2.9 compares this batch with [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4,6,
+the public encrypted-v2/Ask/firmware contracts, current Upload Management and
+Encrypted Upload v2 completion boundaries, and Device-App-Backend OTA Design
+§§4–7. Backend `1ac67c92c6d72858e29dc264037cb82b6c449825` is read-only
+source evidence, not the claimed deployed version. Owner direction defers
+example execution, functional tests, live API/storage and device acceptance.
+
+| Requirement / authority | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §2 independent public installation | One built-in Node CLI with own manifest/lock; two Python stdlib readers; own configuration, README and workflow | Matched in source; frozen install and syntax checks passed locally |
+| §3 exact encrypted session | Existing UUID, known owner revision/profile, actual state/channel/policy; recording and bound-device gates around each observation; stable available generation | Matched in source; deployed authorization/recovery and rejection behavior unverified |
+| Upload Management / Encrypted v2 completion phases | Last complete observation only; selected status and dates; false integrity/receipt/cleanup flags; no authorization or receipt relay | Matched in source; published is backend report only, not physical cleanup or independent commitment verification |
+| Ask public GET/list scope | Before/after owner-filtered collection membership with exact recording filter on every bounded page; exact session GET and final recording ownership | Matched in source; current non-atomic snapshots cannot prove historical authorization or prevent concurrent changes |
+| Metadata confidentiality | Ask omits titles, history and provider/model; watcher omits authorization, receipts, hashes/content and raw terminal errors | Matched by full-source/peer review; runtime output/failure acceptance unverified |
+| OTA §§4–5 project-selected exact release | Owned-device filtered catalog, matching exact detail/URL version/BIN hash/size, final exact release/device checks | Matched in source; final detail is not a repeated device compatibility check or atomic uninterrupted selection |
+| OTA §6 / separate boot trust | Isolated HTTPS storage host allowlist, no API Bearer forwarding, original-byte SHA-256/size, exclusive partial and private no-overwrite hard link | Matched in source; API declarations are not independent signing authority, installation or physical compatibility evidence; filesystem/live acceptance unverified |
+| Bounded failures | Node 30 observations/90s/10s requests; Python Ask 60s/10s; firmware 90s/15s; 1 MiB JSON and 64 MiB image caps; no redirects/retries/raw errors | Matched in source; timers, DNS/filesystem waits, concurrency and crash behavior remain unverified |
+| §4 discovery/documentation | Root README/architecture/agent pointers, 62-entry JSON index, own READMEs and public catalog/reference/changelog links | Matched by metadata checks and documentation compilation recorded below |
+| §6 minimal CI | Three full-SHA checkout, contents:read, credentials=false, scoped main/path workflows; only frozen install/syntax or Python compilation | Matched by parsed YAML/manual review; exact-source hosted evidence recorded after delivery |
+| §6 behavioral acceptance | No example CLI/functions/tests/API/storage/device execution | Intentionally deferred at owner direction; syntax/source review is not runtime conformance |
+
+The watcher status GET currently requires `recordings:write` for restricted
+keys, plus `recordings:read`/`devices:read` for surrounding gates. Ask has no
+dedicated route-level read-scope middleware in the reviewed source; the example
+does not invent an `ask:read` scope. Its undocumented returned owner marker is
+optional, so direct GET alone is never the membership authorization proof.
+Current ownership reads cannot establish historical binding or uninterrupted
+authorization. Missing project markers rely on the independently established
+key/project mapping. Node JSON duplicate keys retain parser last-value semantics;
+Python rejects duplicates and nonfinite values. Both reject invalid UTF-8.
+
+Firmware inspection uses six API GETs and a separate credential-free storage
+GET. Release withdrawal, selection changes or metadata disagreements fail
+without choosing another version. Stop cannot revoke already delivered bytes;
+final read fences do not turn this download into OTA installation. Windows
+requires private operator-provisioned ACLs and trusted reparse-free ancestry;
+filesystem races, directory-entry durability and crash cleanup remain explicit
+limits. No firmware version is recommended or hardcoded.
+
+The device-token-only upload-task endpoint was considered and excluded from
+this server-key batch. No API, SDK, firmware or platform contract changed.
+The internal downstream-impact matrix was inspected; affected example and
+public documents are updated without rewriting platform conformance. Changed
+paths, configuration and endpoint tokens were searched across available internal
+and public docs and repository README/architecture/agent entry files. The
+installed Actions-generator validator/resources are absent; parsed YAML and
+manual permission/pin/trigger inspection provide the fallback.
+
+Independent creators cross-reviewed both metadata readers and the firmware
+downloader without execution; no concrete source blockers remained. Parent reviewed all three complete
+sources, selected contracts and documentation. Local Node 22.23.2 frozen
+install/syntax and Python 3.12.14 compilation passed. Runtime, interruption,
+filesystem, live authorization/storage and hardware checks remain unverified.
+Catalog validation passed for 62 entries, 67 documents and 221 local file
+links. Public documentation compilation and hosted evidence will be recorded
+with exact delivered source below.
+
 <a id="catalog-validation-ci-october-9"></a>
 ## Minimal catalog/documentation CI — 2026-10-09
 

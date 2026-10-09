@@ -667,6 +667,45 @@
       "workflow": ".github/workflows/end-user-processing-config-python.yml"
     },
     {
+      "id": "watch-encrypted-upload-node",
+      "path": "api/watch-encrypted-upload-node",
+      "title": "Watch encrypted upload (Node.js)",
+      "purpose": "Observe one exact existing encrypted-v2 session without verifying receipts or authorizing cleanup",
+      "category": "api",
+      "language": "JavaScript",
+      "physical_device_required": false,
+      "readme": "api/watch-encrypted-upload-node/README.md",
+      "setup_reference": "api/watch-encrypted-upload-node/README.md",
+      "verification_reference": "api/watch-encrypted-upload-node/README.md",
+      "workflow": ".github/workflows/watch-encrypted-upload-node.yml"
+    },
+    {
+      "id": "inspect-ask-session-python",
+      "path": "api/inspect-ask-session-python",
+      "title": "Inspect an Ask session (Python)",
+      "purpose": "Read selected exact recording-scoped session metadata with surrounding owner-filtered membership checks",
+      "category": "api",
+      "language": "Python",
+      "physical_device_required": false,
+      "readme": "api/inspect-ask-session-python/README.md",
+      "setup_reference": "api/inspect-ask-session-python/README.md",
+      "verification_reference": "api/inspect-ask-session-python/README.md",
+      "workflow": ".github/workflows/inspect-ask-session-python.yml"
+    },
+    {
+      "id": "download-firmware-python",
+      "path": "api/download-firmware-python",
+      "title": "Download firmware (Python)",
+      "purpose": "Inspect private BIN bytes against declared size and SHA-256 without installing firmware",
+      "category": "api",
+      "language": "Python",
+      "physical_device_required": false,
+      "readme": "api/download-firmware-python/README.md",
+      "setup_reference": "api/download-firmware-python/README.md",
+      "verification_reference": "api/download-firmware-python/README.md",
+      "workflow": ".github/workflows/download-firmware-python.yml"
+    },
+    {
       "id": "react-native-device-connect",
       "path": "app-sdk/react-native-device-connect",
       "title": "React Native connect",
