@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: twenty-nine independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, existing Ask history and linked processing snapshots, and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent fourteen API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: thirty-two independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, existing Ask history and linked processing snapshots, and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent seventeen API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -60,6 +60,9 @@ examples/
     read-ask-history-node/
     export-transcription-python/
     recording-pipeline-node/
+    create-end-user-node/
+    custom-summary-python/
+    list-firmware-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -250,6 +253,23 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+End-user onboarding stores intent before its one minimal `external_id` POST.
+An existing active mapping can be reused; unknown creates reconcile through GET
+without repeating the write. A saved end-user identity remains fixed even when
+soft deletion allows another active row to reuse the external ID. Local journals
+do not prove which concurrent caller created a row.
+
+Custom summarization uses the public `prompt` field, a completed source and a
+scoped durable journal. Known summary IDs resume through GET; unknown creation
+stops for explicit reconciliation. It invents no output schema or exactly-once
+generation guarantee. Provider/model execution and billing remain platform concerns.
+
+Firmware discovery performs one public device-filtered list between device owner
+observations. The API exposes neither a caller model filter nor pagination;
+bounded metadata does not prove exhaustive inventory or physical compatibility.
+Availability is subject to project release selection and can change after a read.
+The example requests no artifact URL, assignment, delivery or device mutation.
 
 The Ask-history reader uses bounded GETs for an existing recording-scoped
 session. Session membership, recording ownership and citation scope are checked

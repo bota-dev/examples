@@ -2,6 +2,76 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="onboarding-custom-firmware-october-8"></a>
+## End-user onboarding, custom summaries and firmware discovery — 2026-10-08
+
+Three parallel creators and an independent source reviewer added the next batch,
+bringing the catalog to thirty-two. The owner requested creation without unit,
+functional, live API or hardware tests. Installation, syntax, workflow parsing,
+public MDX compilation and static review remain distinct from runtime acceptance.
+
+Review basis: [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, the public
+end-user create/list/get, recording/transcription/summary and device/firmware
+contracts, and tracked backend `1ac67c92c6d72858e29dc264037cb82b6c449825`.
+Existing App SDK pins, firmware, platform behavior and upload-cleanup authority
+are unchanged.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §§2, 4: independent installation | Node built-in CLI with its own manifest/lock and two Python standard-library CLIs; own configuration, README and workflow | Matched in source and install/syntax checks; no sibling runtime dependency |
+| §3: exact application identity | Exact external-ID lookup, zero/one active result, minimal POST, final GET-by-ID; optional project metadata checked | Matched in source; deployed uniqueness, authorization and ownership observations unverified |
+| §3: durable onboarding intent | SQLite FULL synchronization, atomic ready-to-uncertain claim before POST, immutable known ID, GET-only uncertain recovery | Matched in source; storage, crash, concurrency and recovery behavior unverified |
+| §3: scoped custom summary | Completed source and owner checks, strict deletion marker, exact prompt digest, mandatory summary project/source/prompt/provider/template checks | Matched in source; billable provider and live authorization acceptance unverified |
+| §3: summary creation recovery | Durable pre-POST claim, saved-ID polling, explicit independently reconciled ID adoption; no automatic repeated POST | Matched in source; uncertain remote outcome remains a manual reconciliation boundary |
+| §3: bounded disclosure | Strict bounded JSON, controlled errors, selected output; no raw errors, keys or artifact URLs | Matched in source; runtime transport, filesystem privacy and disclosure acceptance unverified |
+| §3: firmware discovery | Owned-device reads before/after one public device-filtered metadata GET; no artifact or physical-device operation | Matched in source; public model filter/pagination absent, physical compatibility unverified |
+| §4: coherent documentation | Example/root docs, catalog and public endpoint links describe limits and recovery | Matched by source/doc review and MDX compilation |
+| §6: behavioral acceptance | No unit, functional, live or device checks, per owner instruction | Intentionally deferred; runtime acceptance unverified |
+| §6: isolated CI | Three path-filtered syntax workflows with pinned actions and read-only permissions | Matched in configuration; hosted results remain separate |
+
+Local evidence: Node 22.23.2 frozen installation and `npm run check` passed;
+both Python CLIs passed `py_compile` on Python 3.12.14 after final source edits.
+Workflow YAML parsed with manual trigger/path/pin/permission review. Public MDX
+passed Mint 4.2.949 compilation. The workflow-generator validator skill/resources
+are absent from the installed bundle; parser and manual review were used instead.
+The independent reviewer inspected pre-POST durability, concurrent claims,
+scope pinning, known-ID immutability and polling without additional blockers.
+Parent review tightened both Python deletion-marker checks; firmware JSON also
+rejects duplicate object keys and non-standard NaN/Infinity constants.
+
+End-user external-ID lookup establishes the current active mapping, not which
+writer created it. Backend active uniqueness permits reuse after soft deletion;
+unknown attempts cannot distinguish that history. A retained ID cannot silently
+change. The journal serializes callers sharing one local file, not other hosts
+or applications. Lookup, create and confirmation remain non-atomic, and an
+uncertain empty lookup cannot authorize another POST. `proj_*` expectations
+match the tracked backend ID generator and legacy-ID migration.
+
+Custom summaries use the public `prompt` request field and the returned
+`custom_prompt`; they select no template. The prompt is pinned by exact bytes
+and conservatively bounded against the backend's UTF-16 length validation.
+Known IDs resume by GET only. Unknown IDs require independent reconciliation
+before explicit adoption; no public summary-list route is invented. Each custom
+POST can create another billable job, so timeout is not permission to retry.
+The output is a generic untrusted object, not a verified schema or factual result.
+Recording/source checks before POST and completed output are observations,
+not atomic ownership locks. Windows directory ACL privacy is unverified.
+
+Firmware release responses omit model IDs, accept only the documented optional
+device filter and expose no public pagination. The reader reports
+`metadata_only: true`, `pagination_supported: false` and `list_complete: false`.
+It neither establishes physical/model compatibility nor chooses a recommended
+version. No artifact download, hash verification, grant, assignment, installation,
+recording change or device mutation occurs. Source and deployed availability are
+separate; project selections may change after the GET.
+
+New paths, configuration names, external-ID, custom-prompt, release-sequence,
+downgrade and output tokens were searched across internal/public docs and every
+workspace overview/agent file. The downstream matrix and current contract owners
+were reviewed. Changes update the example catalog and relevant public endpoint
+links; historical internal conformance and unrelated private model/provider
+designs remain unchanged. These examples introduce no API, SDK or firmware behavior.
+
 <a id="ask-history-text-pipeline-october-8"></a>
 ## Ask history, plain-text export and pipeline snapshots — 2026-10-08
 

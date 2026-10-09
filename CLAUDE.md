@@ -10,6 +10,10 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+The [onboarding/custom-summary/firmware batch](docs/independent-examples-review.md#onboarding-custom-firmware-october-8)
+records durable create intent, GET-only uncertain recovery and device-filtered
+metadata discovery. Keep saved identities stable; firmware discovery performs no OTA.
+
 The latest creation batch adds [Ask history](api/read-ask-history-node/README.md),
 [Python transcript text export](api/export-transcription-python/README.md) and
 [linked processing snapshots](api/recording-pipeline-node/README.md). Preserve

@@ -21,6 +21,13 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Onboarding, custom summaries and firmware discovery
+
+- Keep [end-user creation](api/create-end-user-node/README.md) pre-POST intent durable; uncertainty permits GET reconciliation only. Never replace a saved end-user ID after external-ID reuse.
+- Keep [custom summarization](api/custom-summary-python/README.md) scoped to its saved source/prompt/provider and known job ID; never repeat an uncertain create.
+- [Firmware discovery](api/list-firmware-python/README.md) uses public device filtering and owner observations only. Add no model filter, pagination, delivery or installation path.
+- Record source/syntax evidence and unverified runtime acceptance in the [batch review](docs/independent-examples-review.md#onboarding-custom-firmware-october-8).
+
 The next creation batch adds `api/read-ask-history-node`,
 `api/export-transcription-python` and `api/recording-pipeline-node`. Preserve
 fixed-owner session membership, recording ownership and exact citation scope
@@ -214,3 +221,7 @@ Search changed tokens (paths, package names, environment variables, endpoints, s
 Before reporting completion, use `bota-skills:compound-engineering` 1.2.5+ when available (shared workspace source: `claude-code-plugins/plugins/bota-skills/skills/compound-engineering/SKILL.md`). Otherwise review directly against the user's scope, this architecture, and the selected public contracts. Record requirement -> evidence -> verification -> status in the existing review section or a concise completion checklist. Use matched, intentionally diverged, partial, not implemented, or unverified; explain deviations and outstanding checks.
 
 Do not call an example verified until its claimed acceptance gates have evidence. Report exactly what ran and what remains unverified. New device examples must identify hardware/firmware/platform coverage; hosted CI success must not be inferred from local commands.
+
+## Commit attribution
+
+- Include the actual agent model's `Co-Authored-By` attribution on AI-authored commits.
