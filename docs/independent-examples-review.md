@@ -34,6 +34,15 @@ skill/resources are absent from this installed bundle; existing reviewed action
 pins, parser checks and manual trigger/permission/path review were used instead.
 These checks do not establish runtime acceptance.
 
+Hosted syntax evidence at source `5834667050b4b369a250d201f9872d96891ae6a1`:
+[Ask history](https://github.com/bota-dev/examples/actions/runs/37879188213),
+[Python transcript export](https://github.com/bota-dev/examples/actions/runs/37879188226)
+and [pipeline snapshot](https://github.com/bota-dev/examples/actions/runs/37879188264)
+all passed. The public documentation was rebased onto concurrent synchronized
+beta.14 publication notes; these API readers change no SDK dependency pins.
+Repository-wide legacy workflows were still running at this observation and
+are not acceptance evidence for these new workflows.
+
 Ask GET session/message shapes do not require owner/project metadata. The reader
 therefore establishes observed session membership through a fixed-owner filtered
 list, rather than treating recording ownership as session ownership. Optional
