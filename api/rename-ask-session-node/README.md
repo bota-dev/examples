@@ -194,8 +194,9 @@ GET contracts. Source inspection used tracked backend
 `api/src/routes/v1/ask/sessions/{validation,controller}.ts` and
 `api/src/services/ai-ask.service.ts` (`updateSession`, `serializeSession`). The
 public documentation source is the supplied docs migration checkout; these
-sources are evidence, not installation/runtime dependencies. Hosted execution
-of the exact committed workflow remains unverified. Token searches cover the
+sources are evidence, not installation/runtime dependencies. Hosted install and
+syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199913).
+Runtime acceptance remains unverified. Token searches cover the
 new path, configuration, title, scope and update contract; no API or platform
 behavior is changed.
 

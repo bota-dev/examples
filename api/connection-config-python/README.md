@@ -158,7 +158,8 @@ architecture with this implementation on **2026-10-08**:
 | Bounded strict reads and safe errors | 1 MiB caps, shared deadline, strict JSON hooks, GET-only/no retry, static errors/HTTP status | Matched by source review; runtime/network behavior unverified; DNS limit above |
 | Syntax | `py_compile main.py`, bundled Python 3.12 on Windows | Passed locally; compilation does not execute the program |
 | Formatting | Whitespace review of this directory and workflow | Passed locally |
-| Hosted CI; unit/functional/live/device checks | Creation-only instruction | Not run; success/failure runtime acceptance remains open |
+| Hosted CI | Syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199930) | Compilation only |
+| Unit/functional/live/device checks | Creation-only instruction | Not run; success/failure runtime acceptance remains open |
 
 Review basis: [repository architecture](../../ARCHITECTURE.md),
 [Hierarchical Configuration](https://docs.bota.dev/guides/hierarchical-config),

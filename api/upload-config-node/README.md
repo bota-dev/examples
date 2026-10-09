@@ -171,7 +171,8 @@ dependencies.
 | Bounded failures/no mutation | GET only, no retries/redirects, shared deadline, 1 MiB cap, selected output and static errors | Matched by source review; runtime/network failure paths unverified |
 | Install and syntax | `npm ci`, `npm run check` on Node 22.23.2 / Windows | Passed locally; no CLI functions executed |
 | Formatting | Scoped `git diff --check` | Passed locally |
-| Hosted CI; unit/functional/live/device acceptance | Creation-only instruction | Not run; advertised runtime success/failure remains unverified |
+| Hosted CI | Install/syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199914) | Installation/compilation only |
+| Unit/functional/live/device acceptance | Creation-only instruction | Not run; advertised runtime success/failure remains unverified |
 
 Token searches for upload fields, route/envelope semantics and the new example
 path covered internal/public docs and repository instruction/overview files.

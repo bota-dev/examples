@@ -160,7 +160,7 @@ credentials. Syntax success establishes parsing only.
 | Local Python `py_compile` | Passed using the bundled Windows runtime. |
 | Public contracts / backend source | Reviewed create/get/list-session and owner reads against backend `1ac67c92`. |
 | Unit / functional / live API / device tests | Not run, as requested. |
-| Hosted syntax workflow | Added; not run in this creation batch. |
+| Hosted syntax workflow | Syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199959); runtime acceptance unverified. |
 
 Post-implementation review follows `bota-skills:compound-engineering` 1.2.9
 against repository architecture and the public contracts:

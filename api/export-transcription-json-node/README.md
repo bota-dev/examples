@@ -161,7 +161,7 @@ source evidence, not deployed behavior or a dependency of this example.
 | Selected bounded JSON content | Full text and only start/end/text/optional speaker; Unicode validation; retained seconds/order/overlaps; null segments supported | Matched by contract/source review; serialization and malformed-response execution unverified |
 | Private no-overwrite publication | Existing trusted parent, POSIX owner/mode gate; exclusive 0600 partial, full write/fsync, final owner read, hard link, own-partial cleanup | Matched by source review; filesystem/collision/crash execution unverified; Windows ACL is operator responsibility |
 | Minimal disclosure and bounded failure | Single deadline, bounded body/output, no raw errors or content on stdout, no retries/writes/jobs/audio | Matched by source review; failure handling execution unverified |
-| Focused CI | Path-filtered workflow, pinned actions/Node, read-only permissions; install/syntax only | Configured; hosted result unverified |
+| Focused CI | Path-filtered workflow, pinned actions/Node, read-only permissions; install/syntax only | [Passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199918); runtime acceptance unverified |
 
 No functional tests, live API calls, content export, deployment or physical-device
 operations were run for this creation pass. Upload integrity and device cleanup

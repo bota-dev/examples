@@ -82,10 +82,29 @@ conformance remain unchanged. Remaining acceptance requires authorized runtime,
 permission, malformed-response, concurrency, crash and filesystem checks; none
 were performed or inferred from compilation.
 
-Delivery and hosted results are recorded after pushing the implementation to
-`main`. Public documentation is delivered to `main`, leaving the publication
-branch unchanged. No pull request, workflow rerun or package publication is part
-of this batch.
+Implementation `2752a79b369ddfaa72d7e27a1f3205c860a27ca1` was pushed directly to
+examples `main`. Public documentation `4d9a7e4cc1795d2c6c2f333cbe307a206297749e`
+was pushed to docs `main`; `prod` remains at `8a6eff44631384ec724c6decebb26d2f339d3c56`.
+GitHub APIs confirmed all ten new syntax workflows completed successfully at
+that implementation source:
+
+| Case | Hosted install/syntax result |
+| --- | --- |
+| Fleet health | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199899) |
+| Connection settings | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199930) |
+| Upload settings | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199914) |
+| OTA settings | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199952) |
+| Transcription directory | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199999) |
+| Summary directory | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199848) |
+| Transcript JSON export | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199918) |
+| Empty Ask session | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199959) |
+| Ask title rename | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199913) |
+| Firmware details | [Passed](https://github.com/bota-dev/examples/actions/runs/37887199936) |
+
+These results prove hosted installation/compilation only and do not close runtime
+or live permission/failure/crash acceptance. No pull request, workflow rerun or
+package publication was performed. This evidence update changes documentation
+only; the recorded source and workflow bytes remain those of `2752a79`.
 
 <a id="download-summary-ota-watchers-october-8"></a>
 ## Original downloads and existing-resource watchers — 2026-10-08

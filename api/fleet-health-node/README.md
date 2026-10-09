@@ -139,7 +139,7 @@ Fleet Status contract and the owner's creation-without-testing instruction.
 | Scope and counts | Expected project configured, optional contradiction rejected, three safe integer counts selected. Matched by inspection; runtime rejection unverified. |
 | Bounded metadata-only observation | One GET, 10-second timer, 1 MiB cap, no redirects/retry; device rows excluded from output. Matched by inspection; runtime behavior unverified. |
 | Accurate evidence labels | Output and this README identify backend-reported counts, key-derived project scope and physical/atomic evidence gaps. Matched by inspection. |
-| Hosted workflow | Path-filtered install/syntax only, Node 22.23.2, SHA-pinned actions and read permissions. Configured; hosted execution unverified. |
+| Hosted workflow | Install/syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199899); runtime acceptance remains unverified. |
 | Functional/live/device acceptance | Not run under the owner's creation-only instruction; no runtime or physical conformance claim. |
 
 Maintainer source references are `api/src/routes/v1/devices/index.ts`,

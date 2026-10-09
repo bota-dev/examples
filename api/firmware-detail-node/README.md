@@ -135,5 +135,5 @@ These are review sources, not runtime dependencies.
 | Bounded failures | 10-second signal, 1 MiB body, strict UTF-8 JSON, no redirects/retry, sanitized errors; source matched, runtime unverified |
 | Dependency installation and `npm run check` | Passed with Node 22.23.2 / Windows; installation and syntax only |
 | Runtime, authorization/failure paths and live API | Not run at the owner's creation-only request; unverified |
-| Hosted workflow | Path-filtered install/syntax checks configured; hosted result unverified |
+| Hosted workflow | Install/syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199936); runtime acceptance unverified |
 | Byte integrity, signatures, model compatibility, reachability and installation | Outside this metadata reader; no proof supplied |

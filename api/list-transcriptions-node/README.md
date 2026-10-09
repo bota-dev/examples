@@ -106,7 +106,7 @@ The compound-engineering review compares examples architecture §§2–6 and the
 | Documented read scopes | Config/docs require both scopes; backend source reviewed | Partial platform enforcement in reviewed source; deployed scope behavior unverified |
 | Bounded progression and honest completion | Page/item/time/body caps; duplicate/cursor checks; explicit capped vs observed-end output | Matched in source; malformed-page, cap and timeout runtime acceptance unverified |
 | Metadata-only output | Selected validated projection after final ownership check; safe fixed error text | Matched in source; runtime data/error output unverified |
-| Independent syntax workflow | Path-scoped pinned actions, `contents: read`, install and parse only | Matched in source; hosted execution unverified |
+| Independent syntax workflow | Path-scoped pinned actions, `contents: read`, install and parse only | Install/syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199999); runtime acceptance unverified |
 | Verification boundary | Local `npm ci` and `npm run check` passed; no CLI invocation, test suite or API/device call | Syntax verified; functional/live acceptance not run by owner instruction |
 
 Local syntax verification:

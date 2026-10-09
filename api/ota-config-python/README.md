@@ -153,7 +153,8 @@ repository architecture with this implementation on **2026-10-08**:
 | Bounded strict JSON/no retries | 1 MiB cap, duplicate/non-finite rejection, shared deadline, no redirects or retry loop | Matched by source review; network/runtime acceptance unverified; DNS limitation above |
 | Syntax | `py_compile main.py` using the bundled Python on Windows | Passed locally; compilation does not execute the program |
 | Formatting | `git diff --check` for this directory/workflow | Passed locally |
-| Hosted CI; unit/functional/live/device acceptance | Creation-only instruction | Not run; advertised success and failure behavior remain unverified |
+| Hosted CI | Syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199952) | Compilation only |
+| Unit/functional/live/device acceptance | Creation-only instruction | Not run; advertised success and failure behavior remain unverified |
 
 Review basis: [repository architecture](../../ARCHITECTURE.md),
 [Hierarchical Configuration](https://docs.bota.dev/guides/hierarchical-config)

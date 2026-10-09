@@ -143,7 +143,7 @@ device checks. Compilation proves Python syntax only.
 | Local Python `py_compile` | Passed using the bundled Windows Python runtime. |
 | Public/source comparison | Reviewed OpenAPI `GET /summaries` and `Summary`, public summary/transcription/recording GET documentation, and backend controller/service/repository/pagination at `1ac67c92`. Runtime compatibility remains unverified. |
 | Unit / functional / live API / device tests | Not run, as requested; no sample CLI or API/device calls were made. |
-| Hosted syntax workflow | Added; execution remains unverified in this creation batch. |
+| Hosted syntax workflow | Syntax [passed at source `2752a79`](https://github.com/bota-dev/examples/actions/runs/37887199848); runtime acceptance unverified. |
 
 Post-implementation review follows `bota-skills:compound-engineering` 1.2.9 with
 the repository architecture, authorized scope and selected public contracts as
