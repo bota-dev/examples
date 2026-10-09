@@ -17,9 +17,18 @@ fixed. See [qualification and limits](docs/build-dependency-remediation.md).
 
 Read [README.md](README.md) for current availability, [ARCHITECTURE.md](ARCHITECTURE.md) for target structure and acceptance gates, and the README of the example being changed. This file is the canonical contributor/agent instruction source; `CLAUDE.md` refers here.
 
-The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All seven independent device examples pin public beta.13 after completed protected publication. Read [current evidence and blockers](docs/independent-examples-review.md#beta13-adoption); earlier phone results remain tied to their tested versions. The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
+The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All eight independent device examples pin public beta.13 after completed protected publication. Read [current evidence and blockers](docs/independent-examples-review.md#beta13-adoption); earlier phone results remain tied to their tested versions. The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
 
 ## Implementation rules
+
+The next creation batch adds `api/read-ask-history-node`,
+`api/export-transcription-python` and `api/recording-pipeline-node`. Preserve
+fixed-owner session membership, recording ownership and exact citation scope
+before emitting conversation text. Transcript export uses completed `full_text`
+and private no-overwrite publication. Pipeline output projects independent
+resource statuses and exact source links; it cannot authorize device cleanup or
+establish an atomic snapshot. These are GET-only workflows with no model calls.
+Keep syntax/source evidence separate from unverified runtime/live acceptance.
 
 The next batch adds `api/list-recordings-python`, `api/export-summary-python`
 and `app-sdk/apple-recording-catalog`. Python pagination preserves its fixed

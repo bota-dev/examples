@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: twenty-six independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring and JSON export, Node/Python pagination/search/webhooks, and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent eleven API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: twenty-nine independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, existing Ask history and linked processing snapshots, and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent fourteen API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -57,6 +57,9 @@ examples/
     export-summary-node/
     list-recordings-python/
     export-summary-python/
+    read-ask-history-node/
+    export-transcription-python/
+    recording-pipeline-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -247,6 +250,21 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+The Ask-history reader uses bounded GETs for an existing recording-scoped
+session. Session membership, recording ownership and citation scope are checked
+before any conversation text is emitted. Pagination caps are explicit; no model
+generation is requested. Separate reads remain non-atomic.
+
+Python transcript export reads an existing completed job's `full_text`, checks
+its recording/owner chain and publishes UTF-8 without overwriting. The content
+is untrusted text; no subtitles, model validation or audio conversion is added.
+
+The linked pipeline snapshot accepts explicit recording/transcription/summary
+IDs and checks their source chain and project/owner scope. It reports each
+resource status independently. A hash-verification timestamp is server evidence,
+not device cleanup authorization, and `uploaded` alone is not verification proof.
+The snapshot never starts, retries or cancels processing.
 
 Every new example README must include:
 

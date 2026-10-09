@@ -10,6 +10,12 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+The latest creation batch adds [Ask history](api/read-ask-history-node/README.md),
+[Python transcript text export](api/export-transcription-python/README.md) and
+[linked processing snapshots](api/recording-pipeline-node/README.md). Preserve
+session membership, owner/source checks and no-overwrite export. These readers
+create no processing jobs; snapshots are non-atomic and authorize no device cleanup.
+
 New API examples cover [recording-scoped Ask](api/ask-recording-node/README.md),
 [SRT export](api/export-transcription-node/README.md), and a standard-library
 [Python webhook receiver](api/webhook-receiver-python/README.md). Preserve their
@@ -52,7 +58,7 @@ adapter and an authenticated local backend. Pairing, full automatic recovery and
 legacy retirement remain outside its bounded scope. Follow the exact evidence in
 the [scoped review](docs/independent-examples-review.md#pre-provisioned-recording-sync).
 
-The first independent [Node API example](api/upload-and-transcribe-node/README.md) is implemented, locally tested, and live-verified with a test key and synthetic speech. Python is also live-verified; a webhook receiver and five read-only connection samples are implemented. All seven independent device examples pin public beta.13 after completed protected publication. See [current review](docs/independent-examples-review.md#beta13-adoption) for package/build checks and separate historical phone evidence. Beta.13 example hardware acceptance remains unverified. The existing `apps/backend` and `apps/react-native` workspace uses `@bota.dev/react-native-app-sdk@2.0.0-beta.6` and Node 22.23.2 or newer. Read [migration evidence](docs/app-sdk-migration.md): prior all-platform exports and Android native build passed, while authentication/provisioning compatibility gaps, iOS native linking, and physical-device acceptance remain. Keep design intent, source behavior, and verified results distinct.
+The first independent [Node API example](api/upload-and-transcribe-node/README.md) is implemented, locally tested, and live-verified with a test key and synthetic speech. Python is also live-verified; a webhook receiver and five read-only connection samples are implemented. All eight independent device examples pin public beta.13 after completed protected publication. See [current review](docs/independent-examples-review.md#beta13-adoption) for package/build checks and separate historical phone evidence. Beta.13 example hardware acceptance remains unverified. The existing `apps/backend` and `apps/react-native` workspace uses `@bota.dev/react-native-app-sdk@2.0.0-beta.6` and Node 22.23.2 or newer. Read [migration evidence](docs/app-sdk-migration.md): prior all-platform exports and Android native build passed, while authentication/provisioning compatibility gaps, iOS native linking, and physical-device acceptance remain. Keep design intent, source behavior, and verified results distinct.
 ## October 7 dependency tooling
 
 Keep the three independently installed node-forge parser guards and their

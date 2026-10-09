@@ -2,6 +2,66 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="ask-history-text-pipeline-october-8"></a>
+## Ask history, plain-text export and pipeline snapshots — 2026-10-08
+
+Three parallel agents added independent GET-only workflows, bringing the catalog
+to twenty-nine. The owner continues to request creation without unit, functional,
+live or hardware testing. This pass uses frozen installation, syntax, workflow
+parsing, MDX compilation and source review only.
+
+Review basis: [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6; public Ask
+session/message, recording, transcription and summary contracts; tracked backend
+`1ac67c92c6d72858e29dc264037cb82b6c449825`; and Upload Management §1.1's distinction
+between observational GETs, integrity evidence and durable cleanup authority.
+
+| Requirement | Implementation evidence | Status / verification limit |
+| --- | --- | --- |
+| §§2, 4: independent installation | Two Node built-in CLIs with own manifests/locks and a Python standard-library CLI; own configuration/docs/workflows | Matched in source and syntax/install checks; no sibling runtime |
+| §3: owned conversation | Recording owner reads, fixed-owner filtered session membership before/after, exact recording scope and citation validation | Matched in source; live authorization, scope changes and membership lookup unverified |
+| §3: bounded history | Opaque cursor/page/byte/deadline bounds, duplicate/non-progress rejection, explicit capped output | Matched in source; runtime traversal unverified and non-atomic |
+| §3: completed text export | Three GETs, exact owner/source/status, optional returned project checks, direct UTF-8 `full_text` encoding | Matched in source; null/empty/content-preservation execution unverified |
+| §3: exclusive publication | Private-directory gate, exclusive partial, flush/fsync, no-overwrite hard link and own-partial cleanup | Matched in source; filesystem/ACL/crash behavior unverified |
+| §3: independent pipeline states | Four GETs, mandatory summary project/source chain, selected status/timestamps and `atomic_snapshot: false` | Matched in source; no aggregate completion or deletion authorization |
+| §4: documentation | Example/root docs plus public catalog and endpoint links describe exact limits | Matched by source/doc review and MDX compilation |
+| §6: behavioral acceptance | No functional, unit, live or device checks, per owner instruction | Intentionally not performed; runtime acceptance remains unverified |
+| §6: isolated CI | Three path-filtered syntax-only workflows with pinned actions and read-only permissions | Configured; hosted results are separate |
+
+Local evidence: frozen installs and `npm run check` passed for both Node examples
+on Node 22.23.2; Python `py_compile` passed on 3.12.14. Workflow YAML parsed and
+public MDX passed Mint 4.2.949 compilation. The generator's referenced validator
+skill/resources are absent from this installed bundle; existing reviewed action
+pins, parser checks and manual trigger/permission/path review were used instead.
+These checks do not establish runtime acceptance.
+
+Ask GET session/message shapes do not require owner/project metadata. The reader
+therefore establishes observed session membership through a fixed-owner filtered
+list, rather than treating recording ownership as session ownership. Optional
+returned project metadata is checked when present; omitted fields cannot prove
+the configured project independently of the API key. Membership lookup caps fail
+closed without history output. Message traversal caps remain explicit partial
+selections. No answer, regeneration or branch-selection request occurs.
+
+Public message docs say oldest-first, while tracked backend repository ordering
+is newest-first and its service forwards that page unchanged. The example keeps
+returned order and labels it `api_response_order`; no chronological, active-branch
+or exhaustive-history claim is made. This is a source/docs discrepancy, not
+deployed evidence or a backend/schema change.
+
+Text export accepts an empty completed `full_text`, rejects missing/null text,
+and adds no BOM, newline or content transformation. Preserved controls/markup
+remain untrusted at a future rendering boundary. The pipeline observation prints
+no audio URLs, transcript/summary output, provider errors or actual hash values.
+`uploaded` alone is not verified; a reported hash timestamp does not authorize
+device cleanup. Separate resource reads and owner rechecks remain non-atomic.
+
+Changed paths, environment names, `full_text`, `start_ms`, cursor/output labels
+and hash-verification tokens were searched across internal/public docs and
+workspace overview/agent files; the downstream matrix and relevant upload/Ask
+designs were reviewed. Existing backend/SDK/firmware behavior and historical
+conformance remain unchanged. Usage and webhook-management examples were not
+created because those routes are internal-only in the current public docs.
+
 <a id="python-pagination-json-apple-catalog-october-8"></a>
 ## Python pagination, JSON export and Apple catalog — 2026-10-08
 
