@@ -2,6 +2,96 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="download-summary-ota-watchers-october-8"></a>
+## Original downloads and existing-resource watchers — 2026-10-08
+
+Three parallel creators added Python original-byte download and Node summary/OTA
+watchers, bringing the catalog to forty-one. The compound-engineering 1.2.9
+review compares [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, public
+recording/download, transcription/summary and device/OTA contracts, the OTA and
+upload designs, and read-only backend source
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. The owner requested creation without
+unit, functional, CLI workflow, live API or device tests. Existing SDK pins,
+dependency guards, platform implementation and physical-device state are unchanged.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §§2, 4: independent setup | Standard-library Python and two Node built-in CLIs with own manifests/locks, configuration, READMEs and workflows | Matched in source; install/syntax evidence only |
+| §3: owned original download | Fixed recording/end-user IDs, strict deletion markers and optional project checks before URL issuance and before publication | Matched in source; live authorization and ownership-change behavior unverified |
+| §3: separate credential boundaries | Fresh authenticated metadata connections and credential-free storage connection, independently configured exact HTTPS host allowlist, no redirect following | Matched in source; transport/privacy rejection paths unverified |
+| §3: bounded private original bytes | Identity encoding, framing and size checks, 25 MiB cap, optional trusted SHA-256, exclusive private partial, file fsync and no-overwrite hard-link publication | Matched in source; filesystem, interruption, cleanup and trusted-hash failure behavior unverified |
+| §3: exact summary observation | Fixed project/summary/transcription/recording/owner chain, completed source before/after bounded GET polling | Matched in source; runtime polling and identity rejection unverified |
+| §3: metadata-only summary output | Explicit identity/status projection after final source/owner checks; no result, prompts or raw errors | Matched in source; disclosure/failure behavior unverified |
+| §3: exact OTA observation | Immutable assignment/device/release IDs; bound-owner reads around every observation, optional current generation checks, null/replacement rejection | Matched in source; timing, replacement and live authorization behavior unverified |
+| §3: OTA evidence limits | Operator-only historical authority, non-atomic observation and backend-report labels; no grant/delivery/install/cancel/device writes | Partial: historical project/owner/generation unavailable in assignment rows; physical installation unverified |
+| §4: documentation | Three READMEs, all four root entry points, catalog and public endpoint/changelog links | Matched by document/source review; no platform contract changed |
+| §6: isolated verification | Pinned, read-permission, path-filtered syntax workflows; local compilation and public MDX compilation | Matched for configuration/local syntax; hosted results recorded separately |
+| §6: behavioral acceptance | No functional/live/device checks at owner direction | Intentionally deferred; runtime acceptance unverified |
+
+Python requests the original download URL without format or enhancement options;
+the stored object may be an encrypted container and is never decrypted here.
+URL issuance performs no existence check and supplies no checksum. An optional
+trusted `EXPECTED_SHA256` validates those original bytes; a computed hash alone,
+size metadata or upload-compatible status proves neither cloud integrity nor
+device-cleanup authority. Public recording metadata may omit project identity,
+so the authenticated key supplies project scope when that field is absent.
+Download descriptor keys follow the public required/nullable schema, with
+canonical decimal byte strings accepted for backend bigint serialization.
+
+The Python client rejects duplicate JSON keys, invalid UTF-8/nonfinite numbers,
+encoded/partial responses and ambiguous HTTP framing. Storage hostnames come
+from trusted operator configuration, never the returned URL. API bearer keys,
+cookies and referrers are absent from the separate storage connection. The
+existing private parent and its ancestors must be trusted; Windows ACLs require
+operator verification. File fsync does not guarantee directory-entry power-loss
+durability. Hard links require filesystem support, cleanup may fail after
+publication, and a crash may retain a partial. DNS/TCP/TLS establishment and local
+filesystem operations can outlast timer budgets; these limits are documented.
+
+Summary monitoring observes only the original configured ID and requires an
+existing completed transcription. It prints four summary metadata fields after
+fresh source and owner checks. Failed/nonterminal timeout observations do not
+establish completion or permit regeneration. HTTP, malformed response or identity
+failures stop rather than retrying or following replacement resources. The
+conservative 1 MiB response limit also applies to discarded content. Source and
+ownership reads remain separate and non-atomic. Parent review tightened the
+recording deletion check to absent/null only before final syntax review.
+
+The public summary/transcription pages require their read scopes, while the
+tracked routers lack corresponding explicit `requireScopes` guards. Project
+authentication and repository filters are present; the example requires all
+documented permissions on its configured key. Deployed permission enforcement
+is unverified, and this creation batch does not repair that platform discrepancy.
+
+The OTA endpoint returns the latest assignment, rather than looking up an exact
+ID. The watcher stops when its configured assignment disappears or is replaced;
+it cannot continue an older row through that endpoint. Current device project,
+bound owner and available generation checks do not establish historical assignment
+authorization or uninterrupted ownership. Backend assignment queries use device
+ID alone and omit historical project/end-user/generation. Independently authorized
+operators must account for that provenance gap. Reported `applied` is not a fresh
+physical boot, image-integrity or installed-version check. Public endpoint prose
+and examples now use that narrower report wording; no delivery behavior changed.
+
+Changed paths, configuration names, resource fields and output/evidence tokens
+were searched across internal/public docs and all workspace overview/agent files.
+The downstream impact matrix and current OTA/upload designs were reviewed.
+Affected example/catalog/reference docs were updated; existing endpoint and
+metadata references, historical internal conformance and unrelated platform
+overview files need no change for these independent readers.
+
+Local evidence: both frozen Node installations and final `npm run check` passed
+on Node 22.23.2; Python `py_compile` passed on 3.12.14. All three workflow YAML
+files parsed, and action pins, read permissions, trigger paths, working directories
+and syntax-only commands were checked. The generator's referenced validator and
+resources are absent from the installed bundle; parsing/manual review is the
+recorded fallback. Root catalog inspection counted forty-one example rows. Public
+MDX passed Mint 4.2.949 compilation; whitespace checks passed. These checks do not
+execute the example CLIs or establish functional, deployed or hardware acceptance.
+An independent fourth agent reviewed the final sources, READMEs, public/backend
+contracts and workflows and found no actionable blockers. Its source review
+performed no CLI execution, tests, live requests or device operations.
+
 <a id="configuration-ask-directory-october-8"></a>
 ## Configuration discovery, processing observations and Ask directory — 2026-10-08
 

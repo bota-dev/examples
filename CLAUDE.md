@@ -10,6 +10,11 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+The [download/summary/OTA batch](docs/independent-examples-review.md#download-summary-ota-watchers-october-8)
+adds private Python original-byte downloads and bounded GET watchers for existing
+exact resources. Preserve storage credential isolation, owner/source checks and
+historical OTA authorization limits; perform no device writes or job creation.
+
 The [configuration/Ask-directory batch](docs/independent-examples-review.md#configuration-ask-directory-october-8)
 discovers schema metadata, observes effective processing settings and lists
 owner-filtered session metadata. Server resolution is not consumer enforcement;

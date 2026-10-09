@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: thirty-eight independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent twenty-three API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: forty-one independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent twenty-six API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -69,6 +69,9 @@ examples/
     config-schema-node/
     processing-config-python/
     list-ask-sessions-python/
+    download-recording-python/
+    watch-summary-node/
+    watch-ota-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -259,6 +262,25 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+Python original-file download keeps authenticated metadata requests separate from
+credential-free storage GETs. Storage origins must match an independently trusted
+exact host allowlist; redirects, conversion and enhancement are excluded. Private
+partial bytes are size/time bounded and published without overwriting after an
+owner recheck. A caller-supplied trusted hash is optional; URL issuance, uploaded
+status and a computed hash alone do not establish integrity or cleanup authority.
+
+Summary monitoring observes one configured job after exact project, source and
+owner checks. It emits selected status metadata without summary/transcript text
+or prompts. GET polling is bounded; failure or timeout never creates another job.
+Separate source/owner observations do not establish an atomic snapshot.
+
+OTA monitoring observes the exact configured assignment and firmware release.
+Missing or replacement assignments stop observation rather than changing its
+identity. Current bound-owner checks do not prove historical assignment ownership;
+operators need independent authority to inspect this metadata. Backend `applied`
+is a report, not fresh physical installation or boot-integrity evidence. The
+watcher performs no grant, delivery, artifact download, cancellation or device write.
 
 Configuration discovery reads one public schema list and projects section names,
 descriptions, allowed levels and merge strategies; it prints no defaults or

@@ -21,6 +21,13 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Original downloads and existing-resource watchers
+
+- [Python download](api/download-recording-python/README.md) isolates storage credentials, uses trusted exact hosts and publishes private original bytes without overwriting. Recheck ownership; URL issuance is not integrity proof.
+- [Summary watching](api/watch-summary-node/README.md) retains exact project/source/owner scope and emits metadata only. Bounded GET failure never permits regeneration.
+- [OTA watching](api/watch-ota-node/README.md) retains exact assignment/release identity. Current owner checks do not prove historical authorization; reported `applied` is not physical installation evidence. Perform no device writes.
+- Keep creation-only evidence and runtime gaps in the [batch review](docs/independent-examples-review.md#download-summary-ota-watchers-october-8).
+
 ### Configuration and Ask session discovery
 
 - [Schema discovery](api/config-schema-node/README.md) prints metadata only; no defaults, fixed section inventory or consumer-enforcement claim.
