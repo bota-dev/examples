@@ -1,0 +1,8 @@
+.env
+.env.*
+!.env.example
+node_modules/
+private/
+*.partial
+*.md
+!README.md

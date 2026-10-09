@@ -2,6 +2,86 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="ask-export-device-name-lookup-october-8"></a>
+## Ask export, cloud names and exact identity lookup — 2026-10-08
+
+Three parallel creators added private Ask Markdown, Python cloud device-name
+updates and Node external-ID lookup, bringing the independent catalog to
+fifty-four. Compound-engineering 1.2.9 review compares [ARCHITECTURE.md](../ARCHITECTURE.md)
+§§2–4 and §6, public recording/Ask/device/end-user contracts, current Ask and
+provisioning designs, and read-only backend
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. These examples use public HTTP APIs
+and built-ins only; private source is review evidence, never a dependency.
+The owner continues to request creation without tests or runtime execution.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §2: independent setup | Two Node built-in projects with own manifests/locks and one standard-library Python project; own config/ignore/README/workflow | Matched in source; Node frozen installs/syntax and Python compilation passed locally |
+| §3: exact Ask owner/source | `export-ask-markdown-node` requires fixed owner-filtered membership, exact single-recording scope before/after, exact citations and final recording-owner read before publication | Matched in source; deployed authorization, concurrency and rejection behavior unverified |
+| §3: bounded history selection | Repeated cursor/ID and malformed continuation rejection, ten-page cap, observed end required for export; API order preserved | Matched in source; capped exports fail, observed end is not an atomic/audit-complete snapshot |
+| §3: escaped private Markdown | Only selected roles/content/parts/citations; controls flattened, ASCII punctuation encoded; private exclusive partial, fsync, hard-link no-overwrite and own-partial cleanup | Matched in source; rendering/filesystem/ACL/crash acceptance unverified |
+| §3: name-only cloud mutation | `rename-device-python` sends only exact UTF-8 `name`, max 128 UTF-16 units; preserves empty/whitespace/BOM, rejects NUL before intent/network | Matched in source; deliberate NUL restriction for PostgreSQL text compatibility; no hardware/identity/settings mutation |
+| §3: current device observations | Bound fixed owner, exact device/project/deletion, optional generation held stable through initial/PATCH/final/saved observations | Partial: source PATCH lacks owner/generation/deletion CAS; separate reads cannot supply atomic ownership authorization |
+| §3: durable uncertainty | Private versioned SQLite intent before network, FULL/IMMEDIATE uncertainty claim before one PATCH, separate validated acknowledgment, every retained phase GET-only | Matched in source; crash/locking/concurrent-writer/storage behavior unverified |
+| §3: exact read-only mapping | `lookup-end-user-node` reads private exact external ID, requires terminal zero/one collection result and exact-ID recheck before selected metadata | Matched in source; never creates, pages or adopts a successor; reuse/race acceptance unverified |
+| §3: private input/output | Names and external IDs come from private UTF-8 files; sanitized errors and selected IDs/flags only; trusted key-project mapping required | Matched in source; OS ACL and failure-path acceptance unverified |
+| §4: documentation | Three READMEs, four root entry points, 54 catalog paths and public catalog/Ask/device/end-user/external-ID/changelog pages | Matched by document/source review; public MDX compilation passed |
+| §6: isolated workflows | Full SHA action pins, read permissions, disabled credential persistence, main/path filters, install/compile only | Matched by YAML/manual review; hosted results recorded after delivery |
+| §6: behavioral acceptance | No unit/functional/CLI/live/API/device execution by creators or reviewer | Intentionally deferred at owner direction; runtime conformance unverified |
+
+The lookup author independently reviewed the other two cases without edits or
+execution. Parent reviewed all three and required pre-network NUL rejection for
+device names. The final Python source compiled after that edit. No concrete
+source blocker remained; no source review is represented as runtime proof.
+
+Public message docs describe oldest-first order while the tracked repository
+returns newest-first; export preserves API order rather than inventing sorting,
+branches or audit completeness. Text layout is flattened and punctuation
+encoded for ordinary Markdown parsing. Custom viewers that reparse decoded
+text or add links after rendering remain outside that guarantee. Node JSON
+parsing uses standard last-key behavior; Python rejects duplicate keys and
+nonfinite numbers. The exports do not generate answers or call a model.
+
+Device PATCH filters project/id without atomic owner, generation or deletion
+preconditions. The name example is an independently authorized operator CLI
+requiring coordinated writers and binding/deletion changes, not an end-user
+authorization proxy. Stable optional generation observations cannot prove
+uninterrupted or historical ownership; missing metadata proves less. A retained
+prepared intent conservatively consumes a possible write even before PATCH.
+Observed name equality never becomes causal acknowledgment or physical naming
+evidence. The input/journal must remain private, trusted and stable; POSIX fresh
+directory fsync does not establish Windows or physical power-loss durability.
+
+Exact end-user lookup requires a nonempty external ID because the tracked service
+otherwise enters its directory branch. It preserves whitespace and BOM, rejects
+NUL, and prints neither that identifier nor profile fields. The identifier still
+reaches the API in a query; trusted API/proxy logging must follow its documented
+redaction policy. External-ID reuse can change the mapping across invocations;
+there is no persistent identity or creation-causality claim. Public read scopes
+remain required although tracked end-user GET/list routes lack explicit scope
+middleware; deployed enforcement is unverified.
+
+HTTP/body budgets are bounded as documented; DNS, filesystem and SQLite waits
+can outlast network timers. Private parent ancestry and Windows ACLs are operator
+prerequisites. Export file fsync and hard-link publication do not establish
+directory-entry power-loss durability. No live credentials, cloud mutation or
+physical-device command was used during creation or review.
+
+Changed paths, input/configuration names, scope/name/citation and external-ID
+tokens were searched across internal/public docs and workspace overview/agent
+files. The downstream matrix and current designs were inspected. Current example
+and public reference docs were updated; unrelated/historical platform, SDK and
+hardware conformance records remain unchanged. Webhook endpoint management is
+dashboard-only in the current public contract, so no nonexistent `/v1` listing
+example was created. The installed Actions generator's referenced validator
+resources are absent; parsed YAML and manual review supply the recorded fallback.
+
+Local evidence: both `npm ci`/`npm run check` commands passed on Node 22.23.2,
+Python `py_compile` passed on Python 3.12.14, and Mint 4.2.949
+`validate --disable-openapi` compiled the final public docs. No functional/live
+checks were added or run. Delivery and the three hosted syntax results are
+recorded after pushing to `main`; public `prod` is outside this delivery.
+
 <a id="ten-api-cases-october-8"></a>
 ## Ten independent API cases — 2026-10-08
 

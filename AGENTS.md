@@ -23,6 +23,8 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ### Ten independent API cases
 
+- The [Ask-export/device-name/lookup batch](docs/independent-examples-review.md#ask-export-device-name-lookup-october-8) keeps private Markdown escaped, name intent durable and external-ID lookup read-only. Preserve owner/membership gates and no-overwrite publication; cloud names are not hardware identity.
+
 - Keep fleet output aggregate and operator-scoped. Connection/upload/OTA readers report server resolution, never applied firmware, radio availability or upload integrity.
 - Transcription/summary directories retain exact source filters across bounded pages and recheck ownership; emit no content. JSON transcript export is separately authorized and private, with no overwrite.
 - Empty Ask session creation and title rename keep intent durable before a single write. Uncertainty permits GET reconciliation only; preserve owner membership, immutable scope and private title material.

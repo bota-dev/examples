@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: fifty-one independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent thirty-six API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: fifty-four independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent thirty-nine API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -82,6 +82,9 @@ examples/
     create-ask-session-python/
     rename-ask-session-node/
     firmware-detail-node/
+    export-ask-markdown-node/
+    rename-device-python/
+    lookup-end-user-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -272,6 +275,24 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+Ask Markdown export reads one existing recording-scoped conversation under fixed
+owner membership and source checks. It preserves API response order, rejects a
+capped traversal, escapes untrusted text and publishes a private file without
+overwriting. Observed page exhaustion is not an atomic or audit-complete history.
+It sends no messages and creates no model request.
+
+Device name changes update only cloud metadata. A private input and durable
+pre-PATCH intent prevent repeat writes after uncertainty; observed name equality
+does not prove causality. Current owner and available generation checks cannot
+make an unconditional server update atomic with those observations. Coordinated
+writers and ownership changes remain a prerequisite; this is no firmware rename,
+serial-number provisioning or physical-device command.
+
+External-ID lookup uses one exact filtered collection read and, when found, an
+exact end-user read. It emits identity metadata only and creates no account.
+External identifiers can be reused: a current mapping is not persistent identity,
+proof of creation causality or an atomic snapshot.
 
 The ten-case expansion adds aggregate fleet observation, three effective settings
 readers, transcription/summary directories, private transcript JSON export,

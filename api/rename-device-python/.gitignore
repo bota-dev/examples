@@ -1,0 +1,6 @@
+.env
+__pycache__/
+.state/
+name.txt
+*.sqlite
+*.sqlite-*
