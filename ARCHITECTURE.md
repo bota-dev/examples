@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: fifty-four independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent thirty-nine API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: fifty-seven independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent forty-two API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -85,6 +85,9 @@ examples/
     export-ask-markdown-node/
     rename-device-python/
     lookup-end-user-node/
+    watch-device-command-node/
+    upload-security-config-python/
+    export-transcription-vtt-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -275,6 +278,25 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+Command observation retains one configured ordinary command ID and target.
+Owner and available generation reads surround every observation; backend
+delivery/execution statuses are reports, not independent physical proof. Current
+binding cannot establish a historical command's authorization. The observer
+never picks up pending delivery, relays, acknowledges, cancels or replaces work.
+
+Upload-security observation selects only the effective policy and section source.
+The security-owned strictest-policy merge cannot be interpreted as field
+provenance, an applied device revision, current recording encryption, negotiated
+capability, upload integrity or deletion authority. No policy write or fallback
+occurs. A missing/unknown policy fails rather than supplying a client default.
+
+WebVTT export requires one exact completed transcription and owned source.
+Supplied segment starts remain ordered, valid overlaps are retained and timing
+rounding is explicit. Escaped single-line payloads carry no speaker/style markup
+or inferred timings. Private partial-file synchronization and no-overwrite
+publication follow a final owner observation; filesystem/runtime acceptance is
+separate from source and syntax checks.
 
 Ask Markdown export reads one existing recording-scoped conversation under fixed
 owner membership and source checks. It preserves API response order, rejects a

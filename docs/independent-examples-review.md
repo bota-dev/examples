@@ -2,6 +2,77 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="command-policy-webvtt-october-8"></a>
+## Command observation, upload policy and WebVTT — 2026-10-08
+
+Three parallel creators added an exact ordinary-command watcher, a resolved
+upload-security policy reader and a private WebVTT exporter, bringing the
+independent catalog to fifty-seven. Compound-engineering 1.2.9 review compares
+[ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, public HTTP contracts,
+remote-command/configuration/encrypted-upload designs, and read-only backend
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. Public APIs and built-ins are the
+only dependencies. The owner requested creation without runtime or tests.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §2: independent setup | One Node built-in project with own manifest/lock and two standard-library Python projects; own config/ignore/README/workflow | Matched in source; Node frozen install/syntax and Python compilation passed locally |
+| §3: exact ordinary command | `watch-device-command-node` requires fixed project/end-user/device/command, validates returned target/type, and surrounds each command GET with owner reads | Matched in source; historical command authority and atomic ownership are not supplied by these reads |
+| §3: bounded observation | Pending/delivered are nonterminal; last complete observation retained on deadline; no pending-delivery GET, write or cancellation | Matched in source; backend status does not prove physical execution or upload completion; runtime behavior unverified |
+| §3: narrow resolved policy | `upload-security-config-python` reads only exact policy enum/source with supported direct section metadata, initial/final bound owner and stable available generation | Matched in source; no local default, merge recreation, downgrade permission or applied-enforcement claim |
+| §3: supplied WebVTT timings | `export-transcription-vtt-python` requires completed exact transcription/recording, nondecreasing supplied starts and positive intervals; rounds starts down/ends up to milliseconds | Matched against the linked W3C format; player/rendering acceptance unverified |
+| §3: private escaped export | Selected text only, flattened line breaks/controls, escaped ampersands/angles, private exclusive partial, fsync, final owner GET and hard-link no-overwrite publication | Matched in source; filesystem, ACL, concurrency and crash behavior unverified |
+| §4: documentation | Three READMEs, root catalog/architecture/agent docs, public catalog/guides/changelog and existing command GET reference/schema/navigation | Matched by source review; compilation evidence below |
+| §6: isolated workflows | SHA-pinned checkout, disabled credential persistence, contents:read, main/path filters and install/compile only | Matched by parsed YAML/manual review; hosted evidence recorded after delivery |
+| §6: behavioral acceptance | No CLI/functions, unit/functional/live API or physical-device execution | Intentionally deferred at owner direction; runtime conformance unverified |
+
+The policy author independently reviewed the other two cases and command GET
+reference without executing code. Parent reviewed all three full sources. One
+private policy-design anchor was corrected; no concrete source blocker remained.
+The WebVTT basis is [W3C WebVTT, 20 May 2026](https://www.w3.org/TR/2026/CRD-webvtt1-20260520/)
+§§4.1 and 4.2.2. Source/format review is not player acceptance.
+
+The tracked command GET looks up authenticated project and command ID without
+using the path device ID. The watcher checks the returned `device_id`; public
+GET docs and OpenAPI now describe that existing route and limitation. Command
+rows do not expose historical owner/generation. Fixed operator authorization
+remains required independently of current owner observations. GET does not mark
+commands delivered; the separate pending-delivery endpoint does and is unused.
+Terminal status is selected backend evidence, never physical-command proof.
+
+The configuration schema registers `upload_security`, whose security-owned
+policy uses `ordered_max`. Section `source` is the last participating override,
+not field provenance. Cloud policy resolution does not prove desired/applied
+firmware enforcement, capability, recording encryption, upload authorization,
+commitment or cleanup. Unknown/missing policy fails without substituting a
+weaker default. A proposed recording-configuration reader was deferred because
+tracked backend source does not register the `recording` section described in
+public configuration docs. Deployed availability remains unverified; this is a
+source/documentation discrepancy, not evidence of a platform regression.
+
+WebVTT export preserves supplied segment order and overlaps, derives no timings
+from full text and emits no raw response or speaker markup. The final owner read
+cannot provide an atomic ownership/export snapshot. Tracked transcription routes
+lack explicit read-scope middleware; the documented scope is still required,
+and deployed authorization is unverified. Python rejects duplicate/nonfinite
+JSON; Node uses standard last-key semantics. DNS/filesystem waits can outlast
+network budgets. Private parent ancestry and Windows ACLs remain prerequisites;
+file fsync/hard-link publication do not establish directory-entry power-loss
+durability. No credentials, cloud mutation or device command was used.
+
+Changed example/configuration/command/policy/export tokens were searched across
+internal/public docs and workspace overview/agent files. The downstream impact
+matrix and current designs were inspected. Current example/public docs changed;
+unrelated and historical platform/SDK/hardware conformance remains unchanged.
+The installed Actions generator's referenced validator resources are absent;
+parsed YAML and manual review supply the fallback.
+
+Local evidence: Node 22.23.2 `npm ci` and `npm run check`, and Python 3.12.14
+`py_compile`, passed. Final inspection confirmed 57 existing catalog paths, workflow permissions/action
+pins/filters, command GET response references and navigation. Mint 4.2.949
+`validate --disable-openapi` compiled the final public docs; JSON parsing and
+manual/static operation review covered the OpenAPI addition separately. No functional or
+live checks were added or run. Public docs are delivered to `main` only; the
+publication branch and released SDK artifacts are outside this batch.
 <a id="ask-export-device-name-lookup-october-8"></a>
 ## Ask export, cloud names and exact identity lookup — 2026-10-08
 

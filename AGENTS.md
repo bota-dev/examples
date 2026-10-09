@@ -21,6 +21,12 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Command observation, policy and WebVTT
+
+- Preserve exact command/target and owner/generation observations; status reports do not prove physical execution. Never fetch pending delivery in the watcher.
+- Policy resolution is not applied encryption or cleanup authority. WebVTT uses supplied ordered segments, escaped payloads and private no-overwrite publication.
+- Keep source/syntax evidence and deferred acceptance in the [batch review](docs/independent-examples-review.md#command-policy-webvtt-october-8).
+
 ### Ten independent API cases
 
 - The [Ask-export/device-name/lookup batch](docs/independent-examples-review.md#ask-export-device-name-lookup-october-8) keeps private Markdown escaped, name intent durable and external-ID lookup read-only. Preserve owner/membership gates and no-overwrite publication; cloud names are not hardware identity.
