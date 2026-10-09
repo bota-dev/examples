@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: twenty-three independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history and transcription monitoring, Node/Python search and webhook receivers, and an Android metadata catalog. Node/Python upload and transcription are live-verified. The recent nine API examples have syntax checks and source review; live behavior remains unverified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: twenty-six independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring and JSON export, Node/Python pagination/search/webhooks, and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent eleven API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog awaits native build and physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -55,12 +55,15 @@ examples/
     list-devices-node/
     watch-transcription-python/
     export-summary-node/
+    list-recordings-python/
+    export-summary-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
     apple-device-connect/
     android-device-connect/
     android-recording-catalog/
+    apple-recording-catalog/
     flutter-device-connect/
   end-to-end/
     react-native-recording-sync/    # Already-provisioned Android, encrypted v2 only
@@ -228,6 +231,20 @@ linked transcription/recording, checking project and owner scope. Only the
 documented note fields are formatted. Untrusted content becomes escaped text;
 exclusive local publication preserves existing files. This is export, not
 summary generation or verification of the model's statements.
+
+Python recording pagination follows the public opaque cursor with a fixed owner
+and page cap. Exhausting observed pages is not an atomic inventory/audit proof.
+Python summary export checks exact completed resources/project/owner and writes
+the structured output as JSON without interpreting it or overwriting a file.
+
+Apple metadata catalog uses public identity verification, fresh pairing reads
+and `PendingRecording` variants. Legacy metadata does not imply plaintext;
+encrypted-v2 metadata does not prove transfer permission or cloud commitment.
+Observed public status-stream failure/termination and explicit disconnect clear
+the view and fence late results; omitted native callbacks remain unverified.
+Web/Flutter
+catalogs are deferred rather than bypassing missing public lifecycle/pairing
+or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
 

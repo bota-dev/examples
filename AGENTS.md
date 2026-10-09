@@ -21,6 +21,20 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+The next batch adds `api/list-recordings-python`, `api/export-summary-python`
+and `app-sdk/apple-recording-catalog`. Python pagination preserves its fixed
+owner on every cursor request and reports capped traversal; JSON export checks
+the completed summary's project and source links, rejects invalid JSON and
+publishes without overwriting. Apple uses exact public beta.13, fresh
+`controls.readPairingState(from:)` and `recordings.listPendingRecordings(_:)`;
+connection snapshots alone are insufficient. Clear/fence metadata after observed
+status-stream failure/termination or disconnect; omitted OS callbacks remain
+unverified. Never transfer/delete audio. Web/Flutter catalog proposals
+were deferred because their published beta.13 surfaces lack the required gates;
+do not import private transports or unpublished facade APIs to bypass them.
+No functional/live/device tests were run in this creation batch; Apple native
+build is unavailable locally on Windows and remains a separate hosted gate.
+
 The inventory/watcher/notes batch adds `api/list-devices-node`,
 `api/watch-transcription-python` and `api/export-summary-node`. Inventory is one
 bounded end-user-filtered GET, not a paging loop: tracked backend does not honor

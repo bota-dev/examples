@@ -31,6 +31,14 @@ writes escaped general-notes Markdown without overwriting. Preserve their
 scope checks and read-only cloud behavior. Offset pagination for owner-filtered
 inventory is a tracked source/public-doc discrepancy; do not invent a paging loop.
 
+New examples add [Python recording pagination](api/list-recordings-python/README.md),
+[Python summary JSON export](api/export-summary-python/README.md), and a
+[macOS recording catalog](app-sdk/apple-recording-catalog/README.md). Preserve
+their owner/link checks and exclusive output. Apple metadata uses fresh pairing
+and connection fencing; it does not establish cloud ownership or upload durability.
+Public Web/Flutter beta.13 lacks gates needed for equivalent catalogs; those
+examples remain deferred, with no private SDK workaround.
+
 The [Node summary workflow](api/summarize-transcription-node/README.md) retains
 creation intent and resumes the saved job through GET. Preserve that behavior:
 another template-based POST can replace an existing summary. The

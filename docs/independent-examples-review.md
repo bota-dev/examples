@@ -2,6 +2,65 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="python-pagination-json-apple-catalog-october-8"></a>
+## Python pagination, JSON export and Apple catalog — 2026-10-08
+
+Parallel agents implemented three independent examples, bringing the catalog to
+twenty-six. This pass follows the owner's creation-without-testing instruction:
+syntax, packaging and source review only; no functional tests, live API requests
+or device operations. Review basis is [ARCHITECTURE.md](../ARCHITECTURE.md)
+§§2–4 and §6, public recording/processing contracts and immutable App SDK
+`v2.0.0-beta.13` at `958696b603be0ff6b30adba95e499dc1b5bc05b7`.
+
+| Requirement | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| §§2, 4: independent setup | Two Python standard-library CLIs; own config/docs; Apple manifest/lock/build bundle; isolated workflows | Matched in source; native package compilation unavailable locally |
+| §3: scoped pagination | Fixed owner on every GET and every returned row; bounded cursors/pages; duplicate/non-progress rejection | Matched in source; live pagination and authorization unverified |
+| §3: honest completion | Exhausted observed traversal versus capped output; `atomic_snapshot: false` | Matched in source; no exhaustive audit claim |
+| §3: completed JSON export | Four GETs, exact source/project/owner chain, strict JSON, selected envelope, exclusive partial and no-overwrite hard link | Matched in source; runtime, filesystem and failure behavior unverified |
+| §3: device boundary | Exact SDK serial verification, fresh pairing before each catalog refresh, public legacy/encrypted-v2 metadata only | Matched against public tag; native/firmware compatibility unverified |
+| §3: late-result fencing | Operation identity/revision guards; cancellation and connection-scoped status observer | Matched in source; callback ordering and physical loss detection unverified |
+| §4: coherent documentation | Example/root docs and public catalog/endpoint links describe limits | Matched by review and MDX compilation |
+| §6: behavioral acceptance | No unit, functional, live or hardware checks per owner instruction | Intentionally not performed; runtime acceptance unverified |
+| §6: isolated CI | Two syntax workflows and macOS build-only workflow, pinned checkout, read-only permissions | Configured; hosted outcomes remain separate |
+
+Local evidence: both Python CLIs passed `py_compile` on Python 3.12.14; three
+workflow YAML files parsed. Apple lock/plist and Bash syntax were checked on
+Windows. Public MDX passed Mint 4.2.949 build validation. No local Swift/macOS
+toolchain is available; syntax/packaging review does not establish Swift compilation.
+
+Unlike the device inventory discrepancy in the preceding review, the public
+recording list and tracked backend `1ac67c92c6d72858e29dc264037cb82b6c449825`
+agree on fixed-owner cursor traversal. A changing dataset remains non-atomic.
+The JSON exporter preserves the public generic structured output object without
+inventing a template schema; it excludes arbitrary top-level API fields.
+Filesystem publication, model correctness and network deadline behavior remain
+unverified; Python DNS/TCP/TLS establishment and filesystem limits are documented.
+
+Independent review found Apple `connectionUpdates()` is cached manager state,
+not a spontaneous native-loss notification in public beta.13. The example now
+uses public `devices.statusUpdates()` after exact identity verification; observed
+setup failure, stream failure or termination clears and fences metadata. Observer
+cancellation, connection revision, device ID and verified serial prevent old
+observers clearing new connections. A nil connection event also fences a pending
+connect. Native source forwards disconnect subscription failure, but omitted OS
+callbacks or an open stream may leave a snapshot displayed. No promptness,
+reconnect or hardware acceptance is claimed, and no private transport is added.
+
+Equivalent Web/Flutter catalogs were investigated before implementation and
+deferred. Published Web beta.13 lacks fresh pairing and a public loss observer;
+its encrypted-list path also requires host upload-context preparation. Published
+Flutter beta.13 lacks fresh pairing and Android encrypted-catalog bridging.
+These are facade/workflow gaps, not package publication failures. No SDK source,
+package publication or existing security gate was changed to bypass them.
+
+Changed paths, configuration names, `PendingRecording`, `readPairingState` and
+`listPendingRecordings` were searched across internal/public docs and workspace
+overview/agent files; the downstream impact checklist was consulted. Existing
+upload/protocol designs remain references: these examples consume released
+contracts without changing backend, SDK or firmware behavior. Historical
+conformance evidence remains unchanged.
+
 <a id="inventory-watcher-notes-october-8"></a>
 ## Bounded inventory, transcription watching and notes export — 2026-10-08
 

@@ -6,7 +6,7 @@ Each independent example has its own setup, dependencies, verification steps, an
 
 ## Current status
 
-The catalog contains twenty-three independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks and transcript search, paginated recording metadata, original-file download, structured summaries, recording-scoped Ask, subtitle and Markdown export, cloud device status, bounded device inventory, command history and existing transcription monitoring. The recent nine API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android recording metadata listing are implemented; exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+The catalog contains twenty-six independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, transcript search and recording pagination, original-file download, structured summaries, recording-scoped Ask, subtitle/Markdown/JSON export, cloud device status, bounded device inventory, command history and existing transcription monitoring. The recent eleven API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android/macOS recording catalogs are implemented; the new Apple catalog has source review and awaits native build/physical acceptance. Exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -23,8 +23,8 @@ for Expo signing tools. The unchanged 1.4.0 scanner alerts remain open.
 
 ## Example catalog
 
-Each linked example installs independently. All seven device examples (the five
-connection examples, Android catalog and encrypted recording sync) pin published
+Each linked example installs independently. All eight device examples (the five
+connection examples, Android/Apple catalogs and encrypted recording sync) pin published
 **2.0.0-beta.13**. The [current adoption review](docs/independent-examples-review.md#beta13-adoption)
 records public package availability and example checks. Beta.13 physical-device
 acceptance has not been performed for these examples.
@@ -66,11 +66,14 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Device inventory (Node.js)](api/list-devices-node/README.md) | Read one bounded selection of an end user's devices without claiming a complete inventory | No |
 | [Watch a transcription (Python)](api/watch-transcription-python/README.md) | Observe an existing job through bounded GET polling without starting processing | No |
 | [Export summary notes (Node.js)](api/export-summary-node/README.md) | Export an existing completed general-notes summary as a local Markdown file | No |
+| [List recordings (Python)](api/list-recordings-python/README.md) | Follow bounded cursor pagination for a fixed end user and report incomplete traversal | No |
+| [Export a summary (Python)](api/export-summary-python/README.md) | Export an existing completed structured summary as private JSON without overwriting | No |
 | [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
 | [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
 | [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |
 | [Android connect](app-sdk/android-device-connect/README.md) | Kotlin Android application using Maven Central | Yes |
 | [Android recording catalog](app-sdk/android-recording-catalog/README.md) | Verify exact serial and list legacy/encrypted-v2 metadata without audio transfer | Yes |
+| [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [React Native encrypted recording sync](end-to-end/react-native-recording-sync/README.md) | Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; [scope and evidence](docs/independent-examples-review.md#pre-provisioned-recording-sync) | Yes |
 
