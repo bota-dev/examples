@@ -1,0 +1,6 @@
+.env
+.env.*
+!.env.example
+node_modules/
+*.log
+end-user-connection-config.json

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: sixty-five independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent fifty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: seventy-five independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent sixty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -22,7 +22,7 @@ first-attempt reconnect limitation.
 
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
 
-Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
+Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The credential-free health example uses the separately documented public `/health` endpoint. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
 
 Bota One is the internal reference application: it demonstrates a real customer application built on the SDK and backend API. It is a source of integration lessons, not a dependency or template to copy wholesale. Its private helpers, native modules, infrastructure, deployment accounts, branding, and application state do not become example prerequisites.
 
@@ -97,6 +97,16 @@ examples/
     project-upload-config-node/
     inspect-recording-integrity-python/
     export-transcription-csv-python/
+    end-user-upload-config-python/
+    project-connection-config-node/
+    project-ota-config-python/
+    end-user-connection-config-node/
+    end-user-ota-config-python/
+    project-upload-security-node/
+    inspect-summary-python/
+    export-transcription-ndjson-node/
+    export-transcription-html-python/
+    api-health-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -155,6 +165,21 @@ an apostrophe before CSV quoting, an explicit content transformation rather than
 a universal spreadsheet-import guarantee. Private publication never overwrites.
 See the [source/syntax review](docs/independent-examples-review.md#project-upload-integrity-csv-october-9)
 for deferred runtime and filesystem acceptance.
+
+Project/end-user connection, upload, OTA and upload-security observations
+stop at their selected level. End-user readers retain identity and available
+project-assignment generation across reads; missing project markers still rely
+on independently established key mapping. Array-index merge results and numeric
+or ordered policy merges are reported unchanged, not reconstructed locally.
+Configuration intent is not physical radio availability, promotion, delivery,
+installation, applied encryption or device cleanup authority. The summary reader
+reports exact source-linked metadata without generating or printing content.
+NDJSON preserves selected supplied segment values as a local interchange format;
+HTML escapes all dynamic values in text positions and includes no script or
+external resource. Both publish privately without overwrite. The health probe
+sends no credential and reports one backend health response, not authenticated
+resource, queue/provider, device or sustained uptime proof. See the
+[ten-case review](docs/independent-examples-review.md#ten-readers-exports-health-october-9).
 
 ### Independence and dependencies
 

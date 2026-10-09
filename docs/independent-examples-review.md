@@ -2,6 +2,86 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="ten-readers-exports-health-october-9"></a>
+## Ten hierarchy readers, exports and health — 2026-10-09
+
+Ten distinct creator agents work in waves of at most three alongside the
+integrator. The batch adds six project/end-user hierarchy readers, a summary
+metadata snapshot, NDJSON and HTML transcript exports, and a credential-free
+health probe. The catalog contains seventy-five independent cases.
+Compound-engineering 1.2.9 compares the batch with
+[ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4,6, public configuration/summary/
+transcription/recording/health contracts, current Hierarchical Configuration
+Management Design, Connection Management, Device-App-Backend OTA Design and
+Upload Management §1.1. Owner direction defers example/function execution,
+functional tests, live API, filesystem and physical-device acceptance.
+
+| Requirement / authority | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §2 independent public installation | Four built-in Node cases with own manifests/locks; six Python stdlib cases; own env, README and workflow | Matched in source; local frozen installation/syntax evidence recorded below; no sibling runtime imports or SDK changes |
+| Hierarchy scoped resolution | Project key selects `/config/<section>`; end-user GET fences around `/end-users/<id>/config/<section>`; exact identity and stable available assignment generation | Partial: independent key/project mapping remains a prerequisite when project markers are absent; separate current reads are non-atomic and do not prove historical ownership |
+| Hierarchy actual merge semantics | Required registered fields, no fallback/defaults; upload numeric-min including zero, connection array-index order/repeats, OTA selector distinct from section source, upload-security ordered-max | Matched in source; section source is not field provenance, resolved cloud intent is not device-applied state; target desired/applied revision remains unimplemented here |
+| OTA publication/delivery boundary | Reads enabled intent and legacy/service selector only; no promotion, assignment, artifact, install or SDK/device operation | Matched for observation scope; eligibility, signing, installed state and physical compatibility remain unverified |
+| Upload Management commitment/cleanup | Upload and security policy observations make no commitment, media validation, receipt or cleanup operation | Matched for read-only boundary; policy selection alone establishes no actual encryption or cleanup authority |
+| Exact summary source chain | Existing exact summary/transcription/recording/end-user/project, source-linked before/after GETs, selected status/timestamps only | Matched in source; current observations are not atomic, generated content/provider/prompt/error data omitted; live authorization and status transitions unverified |
+| Completed transcript export | Exact completed transcription and owner/source/project fences, supplied finite ordered segment times, overlaps retained, bounded text and output | Matched in source; no new job, audio download, timing/speaker inference or content-accuracy claim; API/runtime acceptance unverified |
+| Local NDJSON and HTML formats | Selected one-object-per-segment JSON lines; HTML escapes dynamic values only into text positions and has no script or external resource | Matched in source; NDJSON is not an API reimport schema, HTML is not a universal viewer-safety guarantee; consumers/rendering unverified |
+| Private no-overwrite publication | Trusted private existing parent/ancestry prerequisite, exclusive same-directory partial, file fsync, final owner check, hard link and only-own partial cleanup | Matched in source; Windows ACL/reparse/concurrent-writer prerequisites, race/crash and directory durability limits retained; filesystem acceptance unverified |
+| Root health contract | One credential-free `/health` GET; known HTTP 200/503 and source-reported database health shape; no key or resource identity | Matched in source; one backend report proves no authenticated API, storage operation, queue/provider/device health or sustained availability; deployed/network acceptance unverified |
+| §4 discovery/documentation | Root README/architecture/agent pointers, JSON index, ten selected READMEs, public catalog/hierarchy/summary/transcription/recording/health/changelog | Matched by final metadata and MDX checks below; no endpoint/schema/platform design change |
+| §6 minimal CI and honest acceptance | Ten pinned read-only scoped main/PR workflows, frozen installation/syntax or Python compilation only; separate catalog workflow | Matched in workflow review; exact-source hosted evidence recorded after delivery; no example/function/behavioral execution |
+
+Read-only backend source was
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. Its relevant configuration,
+end-user, device, summary, transcription and server files were compared with
+fetched `origin/main` at `b6c7a550cd5f75399018c45431777869496c8d2a` and have
+no differences for these contracts. This is source evidence, not a deployed
+revision assertion. The public documentation baseline was
+`7114baf52c6783fdd41224d00ca029c9e3ca101c`.
+
+Configuration GET routes enforce `config:read`; the reviewed end-user entity,
+transcription and summary GET routes do not consistently enforce their public
+per-resource restricted-key read scopes. Readers document the required public
+scopes and keep caller authorization/operator scope prerequisites. This batch
+does not fix platform middleware or present local ownership fences as a
+replacement. Upload-security has organization/project/device override levels,
+with no end-user override. No missing `recording` registry definition or other
+unsupported endpoint is invented.
+
+Python rejects duplicate JSON keys and nonfinite values; Node documents its
+parser's last-key semantics and rejects nonfinite numeric values. Invalid UTF-8
+fails. Requests and bodies are bounded with no redirects, automatic retries or
+raw upstream/exception logging. Network timers, DNS, scheduling and filesystem
+limits do not imply universal hard deadlines. The health probe neither loads
+nor forwards an API credential. All other keys remain in trusted server
+configuration, with expected scope independently established by the operator.
+
+The internal downstream-impact matrix and changed-token search cover available
+internal/public documents and repository overview/instruction files. Affected
+example/public guidance changes; platform implementation conformance remains
+unchanged. Installed Actions-generator reference/validator resources are absent;
+parsed YAML and manual SHA, trigger, permission, credential-persistence and
+syntax-only command inspection provide the fallback.
+
+Parent reviewed all ten complete sources, READMEs and workflows. Two creators
+independently cross-reviewed the summary reader, both exports and health probe
+without executing them; no concrete source blockers remain. All four Node
+22.23.2 frozen installations/syntax checks and six Python 3.12.14 compilations
+passed locally. Final parsed-YAML/manual inspection passed for all ten workflow
+structures and built-in-only manifests. Catalog validation passed for 75
+examples, 80 documents and 258 local file links. Independent `@mdx-js/mdx`
+3.1.1 compilation passed for all seven changed public pages; 60 local public
+file targets and all ten new example README/workflow targets resolve. No MDX
+snippets or example code were executed.
+
+The earlier full Mintlify timeout remains a separate tool limitation. This
+batch does not repeat that validator or claim a rendered/deployed site result.
+Exact-source hosted outcomes are recorded after delivery; until observed, they
+remain unverified. Runtime, live authorization, network interruption,
+filesystem, export-consumer/rendering and physical-device acceptance remain
+unverified. No credentials, device operations, package publication or SDK and
+legacy dependency changes occurred.
+
 <a id="project-upload-integrity-csv-october-9"></a>
 ## Project upload, integrity metadata and CSV — 2026-10-09
 

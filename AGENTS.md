@@ -29,6 +29,12 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Hierarchy readers, exports and health
+
+- Project keys select scope; end-user reads retain identity/available assignment generation. Keep array-index/numeric-min/ordered-max results unchanged; report no applied state.
+- Summary snapshots emit source-linked metadata only. NDJSON is a local export format; HTML dynamic values stay escaped in text positions, with no script or external resources. Preserve private no-overwrite publication.
+- Health uses the documented `/health` path without credentials; one response proves no queue/provider/device or sustained uptime. Keep [source/syntax evidence](docs/independent-examples-review.md#ten-readers-exports-health-october-9).
+
 ### Project upload, integrity metadata and CSV
 
 - Project upload intent is not child resolution or applied firmware. Keep the numeric-min/zero-sentinel caveat; no local defaults or limit enforcement.
@@ -189,7 +195,7 @@ or encrypted-upload capability/authorization checks.
 
 1. One example teaches one bounded workflow. Use the simplest structure that exposes the public integration clearly.
 2. New examples install independently, with their own manifest/lockfile and README. An end-to-end example may have a local app/backend workspace. Do not extend the legacy root workspace to all examples.
-3. Consume published Bota SDK packages and public `/v1/*` APIs. Pin direct SDK dependencies exactly and record the release channel. Verify availability and methods before choosing a version. Never assume private source HEAD is published.
+3. Consume published Bota SDK packages and public `/v1/*` APIs; the credential-free health probe uses the documented `/health` endpoint. Pin direct SDK dependencies exactly and record the release channel. Verify availability and methods before choosing a version. Never assume private source HEAD is published.
 4. Bota One is the primary internal integration reference. Read it to understand behavior and boundaries, then reimplement from public contracts. Do not import or copy private app helpers, native modules, comments, transforms, auth wrappers, account configuration, or infrastructure. No dependency on sibling repositories is allowed at runtime or install time.
 5. No new GATT protocol implementation, custom crypto, generic SDK wrapper framework, or private `/dashboard/*` calls. If public SDK support is missing, document the blocker rather than building a hidden alternative SDK.
 6. Do not share runtime code between independent examples. Avoid speculative examples, empty scaffolds, and a global package manager requirement for non-JavaScript examples.

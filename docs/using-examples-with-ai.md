@@ -16,6 +16,9 @@ with physical devices. End-to-end examples include both an app and a backend.
 The legacy `apps/` workspace is separate and is excluded from the JSON index.
 For a cloud device-status or policy read, a physical device is not required to run
 the example: its output remains backend metadata, not a physical observation.
+The `api-health-python` probe requires no key and uses the root `/health` path.
+Choose NDJSON or HTML export only when transcript content is authorized for a
+private local file; a metadata reader omits that content.
 
 ## Read the index
 
