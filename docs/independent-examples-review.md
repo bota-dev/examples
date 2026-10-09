@@ -65,6 +65,27 @@ Catalog validation passed for 62 entries, 67 documents and 221 local file
 links. Public documentation compilation and hosted evidence will be recorded
 with exact delivered source below.
 
+Implementation `95c24d9bb596653913f8b5a28a884a662bc63e15` was pushed directly
+to examples `main`. GitHub APIs confirmed these runs and their only jobs
+completed successfully at that exact source, without reruns:
+[encrypted watcher](https://github.com/bota-dev/examples/actions/runs/37995712315),
+[Ask inspection](https://github.com/bota-dev/examples/actions/runs/37995712281),
+[firmware download](https://github.com/bota-dev/examples/actions/runs/37995712323)
+and [catalog](https://github.com/bota-dev/examples/actions/runs/37995712329).
+The first three execute install/syntax or compilation only; catalog validates
+metadata and file links. None establishes runtime or device acceptance.
+
+Public guidance was pushed only to docs `main` as
+`f809aa2f60735a4ac63b8ceba7b01e52791d7f21`. Independent `@mdx-js/mdx`
+compilation passed for all five changed pages; 56 local file targets and the
+three new example links were checked. The full Mintlify 4.2.949
+`validate --disable-openapi` command did not settle within five minutes and
+was stopped; no full build/render result is claimed. Its client-update/prebuild
+stage gave no concrete page diagnostic. Production `prod` remains
+`8a6eff44631384ec724c6decebb26d2f339d3c56`; no public deployment, package
+publication, credentials, device operations or legacy dependency changes
+occurred. This follow-up records evidence only.
+
 <a id="catalog-validation-ci-october-9"></a>
 ## Minimal catalog/documentation CI — 2026-10-09
 

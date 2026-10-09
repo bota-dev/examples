@@ -155,7 +155,7 @@ Public contracts: [list firmware](https://docs.bota.dev/api-reference/firmware/l
 | Isolated storage and original-byte verification | Exact independently configured hosts; HTTPS; no forwarded Bearer/redirect/retry; streamed SHA-256 and exact size | Matched in source; runtime transfer acceptance unverified |
 | Private no-overwrite output | Exclusive partial; fsync; directory identity check; hard link; only own partial cleanup | Matched in source; filesystem/crash acceptance unverified |
 | Python syntax | `python -m py_compile main.py`, Python 3.12.14 / Windows | Passed; syntax only |
-| CI | Pinned checkout, read-only permissions, path-filtered compile-only workflow | Hosted result pending |
+| CI | [Compile-only workflow](https://github.com/bota-dev/examples/actions/runs/37995712323) at `95c24d9bb596653913f8b5a28a884a662bc63e15` | Passed; syntax only |
 | Runtime/live API/storage/device acceptance | No CLI, function, test, download or device execution in this creation pass | Unverified |
 
 Keep caller authorization, trusted host selection and private storage in your

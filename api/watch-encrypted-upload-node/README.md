@@ -162,5 +162,5 @@ that a deployed API runs this revision. Readers do not need that private source.
 | Honest publication and cleanup boundaries | Source review: selected projection, no receipt/authorization output and false integrity/receipt/cleanup evidence flags; cryptographic/device acceptance unverified |
 | Bounded read-only failure behavior | Source review: deadline/cap, finite JSON/body bounds, no redirects/retries or writes; failure-path runtime unverified |
 | Restricted-key GET scope | Source actor authorizer requires `recordings:write`; recording/device gates require their read scopes; live authorization unverified |
-| Hosted workflow | Pinned read-only frozen-install/syntax workflow added; hosted result pending maintainer integration |
+| Hosted workflow | [Frozen-install/syntax run](https://github.com/bota-dev/examples/actions/runs/37995712315) passed at `95c24d9bb596653913f8b5a28a884a662bc63e15`; source parsing only |
 | Functional, live API and physical-device checks | Not run under the owner's creation-only instruction |

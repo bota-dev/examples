@@ -151,7 +151,7 @@ tests. Syntax success establishes parsing only.
 | Public contract and tracked source comparison | Reviewed get/list-session and recording GET contracts against backend `1ac67c92`; deployed behavior unverified. |
 | Static workflow review | Pinned action, read-only permissions, standalone working directory, main/path PR triggers and syntax-only commands reviewed. |
 | Unit / functional / live API / device tests | Not run, as requested. |
-| Hosted syntax workflow | Added; hosted result not yet recorded. |
+| Hosted syntax workflow | [Compile-only run](https://github.com/bota-dev/examples/actions/runs/37995712281) passed at `95c24d9bb596653913f8b5a28a884a662bc63e15`; parsing only. |
 
 Post-implementation review follows `bota-skills:compound-engineering` 1.2.9,
 using the repository architecture and public contracts as the authoritative
