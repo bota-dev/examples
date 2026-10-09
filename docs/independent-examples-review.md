@@ -84,6 +84,15 @@ installation/syntax commands; hosted syntax results are recorded separately.
 An independent fourth agent reviewed the final cursor traversal, OTA selection
 and journal/recovery source and reported no additional blocking findings.
 
+Hosted syntax evidence at source `599ec0f326a28e008c758143a65f38539c5dbe48`:
+[end-user directory](https://github.com/bota-dev/examples/actions/runs/37881767587),
+[OTA history](https://github.com/bota-dev/examples/actions/runs/37881767575)
+and [existing-upload transcription](https://github.com/bota-dev/examples/actions/runs/37881767581)
+all passed. These jobs run installation/syntax commands only and do not establish
+runtime, live API, provider, crash/recovery, physical or whole-repository acceptance.
+Public catalog/endpoint updates were pushed to documentation `main` at
+`67509d10adc0d7609e30ce1e68838079a3b9de0d`; `prod` publication remains separate.
+
 <a id="onboarding-custom-firmware-october-8"></a>
 ## End-user onboarding, custom summaries and firmware discovery — 2026-10-08
 
