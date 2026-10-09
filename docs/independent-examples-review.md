@@ -17,16 +17,16 @@ filesystem and physical-device acceptance.
 
 | Requirement / authority | Implementation evidence | Status / remaining verification |
 | --- | --- | --- |
-| §2 independent installation | Built-in Node project reader with own manifest/lock; two Python stdlib programs; own configuration/README/workflows | Source/syntax checks recorded below; no shared runtime or unpublished SDK |
-| Hierarchy project resolution | Fixed public `/config/upload` GET, key-derived project, direct section value/source/merge strategy; no child resolution or local defaults | Missing project marker relies on independently verified key/project mapping; live authorization unverified |
-| Hierarchy field semantics | Selected streaming flag/chunk/flush/daily values use registered schema; daily field remains numeric-min including zero | Resolved intent only, not field provenance or firmware timing/cap enforcement; desired/applied target remains unimplemented here |
-| §3 recording lineage | Exact configured source/recording/end user; device-origin variant also fences exact bound owner and available generation | Separate current reads are non-atomic; historic ownership and deployed rejection unverified |
-| Upload Management commitment/cleanup | Selected nullable server verification timestamp and hash-presence evidence; no source-byte fetch/hash, completion request or receipt verification | Reported timestamp cannot authorize cleanup or prove durable attempt fencing, media validation for historical rows, independent bytes or v2 signed receipt |
-| §3 completed transcript source | Exact transcription/recording links, completed status, owner reads before/after; supplied ordered times and overlaps retained | No timing inference, new job, audio download or provider validation; API/runtime acceptance unverified |
-| CSV content boundary | Fixed columns, standard CSV quoting and apostrophe transformation on every nonempty text/speaker cell | Explicit altered cell content; spreadsheet import/re-save semantics remain consumer-dependent and unverified |
-| Private no-overwrite publication | Exclusive same-directory partial, private setup/ancestry checks, file fsync, hard-link publication and only-own partial cleanup | Filesystem/concurrency/crash acceptance unverified; Windows ACL/reparse and trusted-writer prerequisites documented |
-| §4 discovery/documentation | Root catalog/architecture/agent pointers and JSON index; selected READMEs; public catalog/hierarchy/recording/transcription/changelog | Metadata and compilation results recorded below; no new endpoint or schema |
-| §6 minimal CI and honest acceptance | Pinned read-only scoped main/PR workflows, frozen install/syntax or Python compile only | Workflow review/hosted evidence below; no example or behavioral test execution |
+| §2 independent installation | Built-in Node project reader with own manifest/lock; two Python stdlib programs; own configuration/README/workflows | Matched in source/syntax checks below; no shared runtime or unpublished SDK |
+| Hierarchy project resolution | Fixed public `/config/upload` GET, key-derived project, direct section value/source/merge strategy; no child resolution or local defaults | Partial: missing project marker relies on independently verified key/project mapping; live authorization unverified |
+| Hierarchy field semantics | Selected streaming flag/chunk/flush/daily values use registered schema; daily field remains numeric-min including zero | Matched in source; resolved intent only, not field provenance or firmware timing/cap enforcement; desired/applied target remains unimplemented here |
+| §3 recording lineage | Exact configured source/recording/end user; device-origin variant also fences exact bound owner and available generation | Matched in source; separate current reads are non-atomic; historic ownership and deployed rejection unverified |
+| Upload Management commitment/cleanup | Selected nullable server verification timestamp and hash-presence evidence; no source-byte fetch/hash, completion request or receipt verification | Matched for metadata-only boundary; timestamp cannot authorize cleanup or prove durable attempt fencing, historical media validation, independent bytes or v2 signed receipt |
+| §3 completed transcript source | Exact transcription/recording links, completed status, owner reads before/after; supplied ordered times and overlaps retained | Matched in source; no timing inference, new job, audio download or provider validation; API/runtime acceptance unverified |
+| CSV content boundary | Fixed columns, standard CSV quoting and apostrophe transformation on every nonempty text/speaker cell | Matched in source with explicit altered cell content; spreadsheet import/re-save semantics remain consumer-dependent and unverified |
+| Private no-overwrite publication | Exclusive same-directory partial, private setup/ancestry checks, file fsync, hard-link publication and only-own partial cleanup | Matched in source; filesystem/concurrency/crash acceptance unverified; Windows ACL/reparse and trusted-writer prerequisites documented |
+| §4 discovery/documentation | Root catalog/architecture/agent pointers and JSON index; selected READMEs; public catalog/hierarchy/recording/transcription/changelog | Matched by metadata and compilation results below; no new endpoint or schema |
+| §6 minimal CI and honest acceptance | Pinned read-only scoped main/PR workflows, frozen install/syntax or Python compile only | Matched by workflow review; hosted evidence below; no example or behavioral test execution |
 
 The inspected registry does not register the public guide's `recording` section;
 that candidate was excluded in favor of the existing project upload endpoint.
@@ -60,6 +60,23 @@ executed. The prior full Mintlify timeout remains a separate tool limitation;
 this batch does not repeat that full validator or claim a rendered/deployed
 site result. Runtime, live authorization, interruption, filesystem, spreadsheet
 consumer and physical-device acceptance remain unverified.
+
+Implementation `268150ec24422067747075676a251fd519025834` was pushed directly
+to examples `main`. GitHub APIs confirmed these runs and their only jobs
+completed successfully at that exact source, without reruns:
+[project upload](https://github.com/bota-dev/examples/actions/runs/38001047171),
+[integrity metadata](https://github.com/bota-dev/examples/actions/runs/38001047222),
+[CSV export](https://github.com/bota-dev/examples/actions/runs/38001047147) and
+[catalog](https://github.com/bota-dev/examples/actions/runs/38001047210).
+These are install/syntax/compilation and metadata checks; none executes an
+example workflow or establishes live/runtime conformance.
+
+Public guidance was pushed only to docs `main` as
+`7114baf52c6783fdd41224d00ca029c9e3ca101c`, retaining the concurrent native
+rebuild guidance at `d9f93a7`. Production `prod` remains
+`8a6eff44631384ec724c6decebb26d2f339d3c56`. No public deployment, package
+publication, credentials, device operations or legacy dependency changes
+occurred. This follow-up records exact evidence and review status only.
 
 <a id="upload-session-ask-firmware-october-9"></a>
 ## Upload/session metadata and firmware inspection — 2026-10-09

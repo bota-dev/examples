@@ -181,7 +181,7 @@ success establishes parsing only.
 | Public contract / tracked source / authoritative design comparison | Reviewed source/status/integrity fields and separate commitment/cleanup phases; deployed behavior unverified. |
 | Static workflow review | Full action SHA, read-only permissions, standalone working directory, triggers and syntax-only commands checked. |
 | Unit / functional / live API / device tests | Not run, as requested. |
-| Hosted syntax workflow | Added; hosted result not yet recorded. |
+| Hosted syntax workflow | [Compile-only run](https://github.com/bota-dev/examples/actions/runs/38001047222) passed at `268150ec24422067747075676a251fd519025834`; parsing only. |
 
 Post-implementation review follows `bota-skills:compound-engineering` 1.2.9:
 

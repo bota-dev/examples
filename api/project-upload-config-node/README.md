@@ -123,5 +123,5 @@ Source inspection does not prove the deployed server runs that revision.
 | Narrow actual-schema projection | Source: exact boolean/integer bounds, valid source/merge strategy, optional markers checked, no local defaults |
 | Honest intent versus enforcement | Source/docs: raw numeric min result and false device/timing/enforcement flags; applied behavior unverified |
 | Bounded safe GET | Source: response/deadline bounds, no redirects/retries/writes and sanitized failures; runtime rejection unverified |
-| Hosted workflow | Pinned read-only frozen-install/syntax workflow added; hosted result pending maintainer integration |
+| Hosted workflow | [Frozen-install/syntax run](https://github.com/bota-dev/examples/actions/runs/38001047171) passed at `268150ec24422067747075676a251fd519025834`; source parsing only |
 | Functional/live API/device acceptance | Not run under the owner's creation-only instruction |

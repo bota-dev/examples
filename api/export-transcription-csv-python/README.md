@@ -166,5 +166,5 @@ not repair platform authorization and does not depend on private source at runti
 | CSV string handling | Fixed columns; apostrophe on every nonempty string before stdlib quoting; controls rejected | Matched in source; spreadsheet consumer safety unverified |
 | Private no-overwrite output | Exclusive partial, file fsync, directory check, hard link and own-partial cleanup | Matched in source; filesystem/crash acceptance unverified |
 | Python syntax | `python -m py_compile main.py`, Python 3.12.14 / Windows | Passed; parsing only |
-| Hosted CI | Pinned read-only path-filtered compile-only workflow | Result pending integration |
+| Hosted CI | [Compile-only run](https://github.com/bota-dev/examples/actions/runs/38001047147) at `268150ec24422067747075676a251fd519025834` | Passed; syntax only |
 | Runtime/live API/filesystem/consumer/device checks | No CLI, function or test execution in this creation pass | Unverified |
