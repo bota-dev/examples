@@ -79,8 +79,24 @@ resources are absent; parsed YAML and manual review supply the recorded fallback
 Local evidence: both `npm ci`/`npm run check` commands passed on Node 22.23.2,
 Python `py_compile` passed on Python 3.12.14, and Mint 4.2.949
 `validate --disable-openapi` compiled the final public docs. No functional/live
-checks were added or run. Delivery and the three hosted syntax results are
-recorded after pushing to `main`; public `prod` is outside this delivery.
+checks were added or run.
+
+Implementation `f8607c6d90b393daeb2e3ea634c910160b19bef6` was pushed directly to
+examples `main`; docs `76b0a4fd2da6f557c79bcbe20f793bc1be76dac4` was pushed to
+docs `main`. The publication branch remains at
+`8a6eff44631384ec724c6decebb26d2f339d3c56`. GitHub APIs confirmed the three
+syntax workflows completed successfully at that implementation source:
+
+| Case | Hosted result |
+| --- | --- |
+| Ask Markdown export | [Install/syntax passed](https://github.com/bota-dev/examples/actions/runs/37892681335) |
+| Python cloud device name | [Syntax passed](https://github.com/bota-dev/examples/actions/runs/37892681416) |
+| Exact external-ID lookup | [Install/syntax passed](https://github.com/bota-dev/examples/actions/runs/37892681342) |
+
+These results establish hosted installation/compilation only; runtime/live and
+failure/crash acceptance remain unverified. The follow-up evidence changes
+documentation only, preserving the recorded source/workflows. No PR, workflow
+rerun, package publication or public `prod` update was performed.
 
 <a id="ten-api-cases-october-8"></a>
 ## Ten independent API cases — 2026-10-08

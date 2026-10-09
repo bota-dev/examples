@@ -110,7 +110,7 @@ as read-only reference. Private source is not an install/runtime dependency.
 | Authenticated project and active mapping | Server-held key, optional project contradiction checks, strict deletion markers, final exact-ID reread | Partial: current key project is an operator prerequisite; requests are non-atomic |
 | Bounded read-only operation | 10-second requests, 30-second overall abort, 1-MiB decoded responses, no redirect/retry | Matched by static review; runtime interruptions deferred |
 | Scoped permission contract | Public docs require `end_users:read`; tracked GET/list router has no explicit `requireScopes` middleware | Unverified deployed scope enforcement; global project authentication/repository isolation exists in source, but does not prove per-route scope enforcement |
-| Syntax-only delivery | `npm ci`, `npm run check`; parsed YAML/pin/path and package-lock identity review | Matched locally on Node 22.23.2; hosted workflow remains pending batch delivery. No unit, functional, live API or device tests, and no example CLI execution |
+| Syntax-only delivery | `npm ci`, `npm run check`; parsed YAML/pin/path and package-lock identity review | Matched locally on Node 22.23.2; hosted install/syntax [passed at source `f8607c6`](https://github.com/bota-dev/examples/actions/runs/37892681342). No unit, functional, live API or device tests, and no example CLI execution |
 
 Creation-only delivery follows the owner's instruction. It does not establish
 deployed or end-to-end conformance. Remaining acceptance includes a disposable

@@ -183,7 +183,7 @@ without credentials or example execution.
 | Workflow source | YAML parsing, pinned action references, `contents: read`, disabled persisted credentials, main branch and working-directory checks passed |
 | Public/source contracts | Public recording/Ask pages and backend controller, service and repositories reviewed at `1ac67c92` |
 | Functional/unit/live/device checks | Not added or run, by request; behavioral acceptance unverified |
-| Hosted workflow | Not run locally; inspect the exact committed workflow run |
+| Hosted workflow | Install/syntax [passed at source `f8607c6`](https://github.com/bota-dev/examples/actions/runs/37892681335); runtime acceptance remains unverified |
 
 Compound-engineering review against repository architecture and the requested
 read-only, private, bounded export:
