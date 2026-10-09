@@ -84,6 +84,16 @@ required owner filter, while public contracts and tracked routes use
 pins that filter on every request; it neither implements the historical route
 nor claims to resolve this internal source/design discrepancy.
 
+Hosted syntax evidence at source `d1f7b2560b331051dd87485f43020311ce6b87f3`:
+[schema discovery](https://github.com/bota-dev/examples/actions/runs/37883219962),
+[processing observations](https://github.com/bota-dev/examples/actions/runs/37883219991)
+and [Ask session directory](https://github.com/bota-dev/examples/actions/runs/37883219969)
+all passed. These jobs establish installation/syntax only, not CLI execution,
+runtime failure paths, deployed authorization, consumer enforcement, live API
+or whole-repository acceptance. Public catalog/guide changes were pushed to
+documentation `main` at `6f0baf032919ba6035925f58b3f3e17eeabed5d4`; `prod`
+publication remains separate.
+
 <a id="directory-ota-transcription-october-8"></a>
 ## End-user directory, OTA history and existing-upload transcription — 2026-10-08
 
