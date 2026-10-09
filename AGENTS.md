@@ -29,6 +29,12 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Project upload, integrity metadata and CSV
+
+- Project upload intent is not child resolution or applied firmware. Keep the numeric-min/zero-sentinel caveat; no local defaults or limit enforcement.
+- Integrity timestamps report server evidence only; retain exact owner/source/link fences and grant no cleanup authority. CSV string cells are transformed explicitly before quoting; private files must not overwrite.
+- Keep [source/syntax evidence and acceptance gaps](docs/independent-examples-review.md#project-upload-integrity-csv-october-9).
+
 ### Upload/session metadata and firmware inspection
 
 - Encrypted-session GET currently requires `recordings:write` for restricted keys; surrounding ownership GETs require their read scopes. Preserve exact revision and complete-observation fences; published status grants no receipt/cleanup authority.

@@ -706,6 +706,45 @@
       "workflow": ".github/workflows/download-firmware-python.yml"
     },
     {
+      "id": "project-upload-config-node",
+      "path": "api/project-upload-config-node",
+      "title": "Project upload settings (Node.js)",
+      "purpose": "Observe project-resolved upload intent without child overrides or device-enforcement claims",
+      "category": "api",
+      "language": "JavaScript",
+      "physical_device_required": false,
+      "readme": "api/project-upload-config-node/README.md",
+      "setup_reference": "api/project-upload-config-node/README.md",
+      "verification_reference": "api/project-upload-config-node/README.md",
+      "workflow": ".github/workflows/project-upload-config-node.yml"
+    },
+    {
+      "id": "inspect-recording-integrity-python",
+      "path": "api/inspect-recording-integrity-python",
+      "title": "Recording integrity metadata (Python)",
+      "purpose": "Inspect server-reported hash-verification metadata without downloading bytes or authorizing cleanup",
+      "category": "api",
+      "language": "Python",
+      "physical_device_required": false,
+      "readme": "api/inspect-recording-integrity-python/README.md",
+      "setup_reference": "api/inspect-recording-integrity-python/README.md",
+      "verification_reference": "api/inspect-recording-integrity-python/README.md",
+      "workflow": ".github/workflows/inspect-recording-integrity-python.yml"
+    },
+    {
+      "id": "export-transcription-csv-python",
+      "path": "api/export-transcription-csv-python",
+      "title": "Export transcript CSV (Python)",
+      "purpose": "Publish supplied transcript segments as private CSV with explicit string-cell transformation and no overwrite",
+      "category": "api",
+      "language": "Python",
+      "physical_device_required": false,
+      "readme": "api/export-transcription-csv-python/README.md",
+      "setup_reference": "api/export-transcription-csv-python/README.md",
+      "verification_reference": "api/export-transcription-csv-python/README.md",
+      "workflow": ".github/workflows/export-transcription-csv-python.yml"
+    },
+    {
       "id": "react-native-device-connect",
       "path": "app-sdk/react-native-device-connect",
       "title": "React Native connect",

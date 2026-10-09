@@ -8,5 +8,5 @@
 - Read [DEPENDENCY_SECURITY.md](DEPENDENCY_SECURITY.md) before touching legacy dependencies or install scripts.
 - Use per-example commands and published pins; keep server secrets, durable uncertainty and hardware identity checks intact.
 - Run `node scripts/check-catalog.mjs` after index/catalog/docs changes; no root install is required.
-- Preserve [upload/session/firmware inspection boundaries](docs/independent-examples-review.md#upload-session-ask-firmware-october-9).
+- Read the [implementation review](docs/independent-examples-review.md) for current evidence and integration boundaries.
 - Report the exact checks performed and remaining runtime/hardware gaps; index entries and syntax CI are not live verification.

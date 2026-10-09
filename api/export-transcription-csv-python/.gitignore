@@ -1,0 +1,6 @@
+.env
+exports/
+*.csv
+*.partial
+__pycache__/
+*.pyc

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: sixty-two independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent forty-seven API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: sixty-five independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent fifty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -94,6 +94,9 @@ examples/
     watch-encrypted-upload-node/
     inspect-ask-session-python/
     download-firmware-python/
+    project-upload-config-node/
+    inspect-recording-integrity-python/
+    export-transcription-csv-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -140,6 +143,18 @@ against declared size/hash before private no-overwrite publication. It does not
 verify a signing authority, physical compatibility or installed firmware.
 Source/syntax evidence and deferred acceptance are in the
 [batch review](docs/independent-examples-review.md#upload-session-ask-firmware-october-9).
+
+Project upload observations stop at organization/project inheritance, retain
+the server's numeric daily-limit result and infer no child settings or firmware
+enforcement. Recording integrity inspection reports a successful server hash
+verification timestamp only when present, without treating a null timestamp as
+failure or granting device-cleanup authority. It does not independently hash
+bytes or validate encrypted-v2 signed receipts. Transcript CSV exports preserve
+supplied ordered seconds and overlaps; every nonempty text/speaker cell receives
+an apostrophe before CSV quoting, an explicit content transformation rather than
+a universal spreadsheet-import guarantee. Private publication never overwrites.
+See the [source/syntax review](docs/independent-examples-review.md#project-upload-integrity-csv-october-9)
+for deferred runtime and filesystem acceptance.
 
 ### Independence and dependencies
 
