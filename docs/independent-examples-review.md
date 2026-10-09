@@ -39,6 +39,15 @@ scope pinning, known-ID immutability and polling without additional blockers.
 Parent review tightened both Python deletion-marker checks; firmware JSON also
 rejects duplicate object keys and non-standard NaN/Infinity constants.
 
+Hosted syntax evidence at source `6eb05f0bbb4ec9f88680d157586af75678ac25c2`:
+[end-user onboarding](https://github.com/bota-dev/examples/actions/runs/37880942154),
+[custom summaries](https://github.com/bota-dev/examples/actions/runs/37880942144)
+and [firmware discovery](https://github.com/bota-dev/examples/actions/runs/37880942251)
+all passed. These isolated jobs do not execute the examples or establish broader
+repository CI, live API, crash/recovery or physical-device acceptance. Public
+catalog/endpoint changes were pushed to documentation `main` at
+`b1381ae99b2eb3e765a04033eb80a080da47ad4b`; publication to `prod` is separate.
+
 End-user external-ID lookup establishes the current active mapping, not which
 writer created it. Backend active uniqueness permits reuse after soft deletion;
 unknown attempts cannot distinguish that history. A retained ID cannot silently
