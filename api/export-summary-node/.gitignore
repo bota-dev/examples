@@ -1,0 +1,4 @@
+.env
+node_modules/
+general-notes.md
+*.partial

@@ -2,6 +2,69 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="inventory-watcher-notes-october-8"></a>
+## Bounded inventory, transcription watching and notes export — 2026-10-08
+
+Three agents implemented independent device inventory (Node), an existing
+transcription watcher (Python) and general-notes Markdown export (Node), bringing
+the catalog to twenty-three. The owner continues to request creation without
+testing. This pass uses frozen installs, syntax checks and source review only;
+no functional tests, live API calls or device operations were performed.
+
+Review basis: [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, public
+[device list](https://docs.bota.dev/api-reference/devices/list),
+[recording](https://docs.bota.dev/api-reference/recordings/get),
+[transcription](https://docs.bota.dev/api-reference/ai/transcriptions/get) and
+[summary](https://docs.bota.dev/api-reference/ai/summaries/get) contracts.
+
+| Requirement | Source evidence | Status / verification limit |
+| --- | --- | --- |
+| §§2, 4: standalone setup | Own directories, config/docs/ignore/workflows; Node manifest/locks and Python standard library | Matched by install/source review; no sibling runtime |
+| §3: server scope | Fixed owner/resource IDs; inventory validates all rows; watcher checks recording before and after polls; notes verifies project and all source links | Matched in source; live authorization and concurrent changes unverified |
+| §3: bounded inventory | One end-user-filtered GET with limit, selected metadata and unconditional incomplete label | Matched for bounded selection; full pagination not implemented |
+| §3: async observation | Existing transcription GETs only; public states, 2-second delay, 20 attempts and 60-second budget, final owner reserve; timeout is inconclusive | Matched in source; timed/terminal/failure execution unverified |
+| §3: safe local export | Completed general-notes schema only; punctuation/control normalization; private exclusive partial, flush, no-overwrite hard link, own-partial cleanup | Matched in source; renderer/filesystem/crash behavior unverified |
+| §4: coherent docs | Root catalog/architecture/agent docs plus public catalog and endpoint links state exact workflow limits | Matched by source/doc review |
+| §6: behavioral acceptance | No functional/live/hardware tests, per owner instruction | Intentionally diverged; runtime acceptance unverified |
+| §6: independent CI | Three path-filtered install/syntax workflows with pinned actions and read-only permissions | Matched in source; hosted results separate |
+
+Local evidence: both Node examples passed frozen installation and syntax checks
+on Node 22.23.2; Python passed `py_compile` on 3.12.14. The three workflow YAML
+files parsed, package/lock identities agreed, and public MDX passed Mint 4.2.949
+build validation. These checks do not establish runtime acceptance.
+
+The original inventory proposal included pagination. Tracked backend source
+`1ac67c92c6d72858e29dc264037cb82b6c449825` accepts cursor rather than documented
+offset, and its end-user-filtered branch does not consume either to advance.
+This is a tracked-source observation, not deployed evidence. The example uses
+only the common owner/limit selection and exposes `has_more`, with
+`inventory_complete: false` even for empty/short results. No backend or public
+pagination schema was changed to make the example appear fully qualified.
+
+The watcher preserves known job identity across repeated invocations without a
+creation journal: every operation is GET. It returns completed/failed only after
+scope verification, and reports elapsed/capped observation as inconclusive. It
+does not emit transcript, segments or provider error details. Python connection
+establishment can exceed its post-connect header/body deadline; the README
+records OS DNS/TCP/TLS limits rather than claiming strict wall-clock cancellation.
+
+Notes export reads the configured recording, completed transcription and
+completed summary, requiring `tmpl_general_notes`, null custom prompt and exact
+summary project/source. Optional project fields on other resources are checked
+when present. Only the five documented note fields are rendered. Independent
+source review found directional-format controls surviving text normalization;
+they are now removed along with line/control boundaries before punctuation
+encoding. Renderer behavior and model accuracy remain unverified. A successful
+publication followed by cleanup failure can leave the destination present;
+retry preserves it rather than overwriting.
+
+Cross-document searches covered paths, configuration names, job routes,
+`tmpl_general_notes` and ownership/pagination terms across public/internal docs
+and workspace overview/agent files. Existing processing/template designs and
+the downstream impact checklist were reviewed; these examples consume existing
+contracts and do not change backend, SDK or firmware behavior. Historical
+conformance evidence remains unchanged.
+
 <a id="device-readers-python-search-october-8"></a>
 ## Cloud device readers and Python search — 2026-10-08
 

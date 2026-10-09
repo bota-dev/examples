@@ -21,6 +21,17 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+The inventory/watcher/notes batch adds `api/list-devices-node`,
+`api/watch-transcription-python` and `api/export-summary-node`. Inventory is one
+bounded end-user-filtered GET, not a paging loop: tracked backend does not honor
+documented offset pagination for that filter. Always label the selection
+incomplete. The watcher observes an existing configured transcription by GET;
+failure/timeout must not create or replace jobs. Summary export accepts only
+completed `tmpl_general_notes` output with exact project/transcription/recording
+and owner links, escapes untrusted Markdown text, and preserves existing output
+files. Keep this batch's syntax/source evidence separate from runtime acceptance;
+the owner continues to request creation without functional/live testing.
+
 The next October 8 creation batch adds `api/device-status-node`,
 `api/list-device-commands-python` and `api/search-transcripts-python`. Device
 readers use configured end-user ownership; snapshots and command timestamps are

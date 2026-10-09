@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: twenty independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/search/Ask/subtitle/device-status workflows, Python command history, Node/Python search and webhook receivers, and an Android metadata catalog. Node/Python upload and transcription are live-verified. The recent six API examples have syntax checks and source review; live behavior remains unverified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: twenty-three independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history and transcription monitoring, Node/Python search and webhook receivers, and an Android metadata catalog. Node/Python upload and transcription are live-verified. The recent nine API examples have syntax checks and source review; live behavior remains unverified. All seven independent device examples now pin public beta.13; the [current adoption review](docs/independent-examples-review.md#beta13-adoption) records package and build checks separately from physical acceptance. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -52,6 +52,9 @@ examples/
     device-status-node/
     list-device-commands-python/
     search-transcripts-python/
+    list-devices-node/
+    watch-transcription-python/
+    export-summary-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -210,6 +213,21 @@ The Python search example uses the same configured end-user, recording allowlist
 and ownership boundaries as Node search. It makes one provider-backed retrieval
 request with no retry, validates all excerpts and checks each unique recording
 before printing text. It does not create an Ask session or start indexing.
+
+The device inventory example reads one bounded end-user-filtered list and labels
+it incomplete. Public offset documentation and tracked owner-filtered backend
+behavior disagree; full traversal remains unsupported by this example.
+
+The transcription watcher polls only a caller-configured existing job, checking
+its recording link and owner before emitting selected terminal metadata. A
+deadline means observation is inconclusive, not that processing failed; no job
+is created, replaced or cancelled on retry.
+
+Summary export reads an existing completed `tmpl_general_notes` summary and its
+linked transcription/recording, checking project and owner scope. Only the
+documented note fields are formatted. Untrusted content becomes escaped text;
+exclusive local publication preserves existing files. This is export, not
+summary generation or verification of the model's statements.
 
 ## 4. Example contract
 

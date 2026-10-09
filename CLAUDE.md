@@ -24,6 +24,13 @@ snapshots do not prove live connectivity or physical execution. Keep command
 credentials out of output and validate excerpt ownership before printing text.
 These examples also have syntax/source evidence only.
 
+[Device inventory](api/list-devices-node/README.md) is a bounded selection,
+[transcription watching](api/watch-transcription-python/README.md) polls an
+existing job, and [summary notes export](api/export-summary-node/README.md)
+writes escaped general-notes Markdown without overwriting. Preserve their
+scope checks and read-only cloud behavior. Offset pagination for owner-filtered
+inventory is a tracked source/public-doc discrepancy; do not invent a paging loop.
+
 The [Node summary workflow](api/summarize-transcription-node/README.md) retains
 creation intent and resumes the saved job through GET. Preserve that behavior:
 another template-based POST can replace an existing summary. The
