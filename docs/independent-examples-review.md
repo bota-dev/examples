@@ -2,6 +2,88 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="directory-ota-transcription-october-8"></a>
+## End-user directory, OTA history and existing-upload transcription — 2026-10-08
+
+Three parallel creators added independent workflows, bringing the catalog to
+thirty-five. Review follows compound-engineering 1.2.9 against
+[ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, public end-user pagination,
+OTA history/device and recording/transcription contracts, and backend
+`1ac67c92c6d72858e29dc264037cb82b6c449825`. The owner requested creation without
+unit, functional, live API or hardware tests. SDK versions and platform behavior
+remain unchanged; these workflows neither write to devices nor authorize cleanup.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §§2, 4: independent setup | Two Node built-in CLIs with own manifests/locks; Python standard-library CLI; own configuration/docs/workflows | Matched in source; installation and syntax checks only |
+| §3: project directory | Fixed project credential, optional returned project/deletion checks, selected identity projection | Matched in source; live project authorization unverified |
+| §3: bounded cursor traversal | Opaque cursor, page/body/deadline limits, duplicate/non-progress rejection, cap versus observed-end output | Matched in source; runtime traversal/failure behavior unverified, no atomic audit |
+| §3: OTA history boundary | Current owned-device checks before/after; one limit-only GET; validate all rows before timestamp selection | Matched in source; historical owner/generation provenance absent, intentionally not claimed |
+| §3: honest OTA evidence | Selected assignment/status/timestamp metadata; incomplete history label, no arbitrary errors or delivery path | Matched in source; physical installed version and historical authorization unverified |
+| §3: owned uploaded source | Exact recording/owner and optional project checks, uploaded-compatible status, strict deletion marker | Matched in source; remote observations non-atomic, upload integrity not established |
+| §3: explicit job creation | Public recording/language/provider body only, durable scope and pre-POST atomic intent, immutable saved ID | Matched in source; crash/concurrency/billing and provider execution unverified |
+| §3: uncertain recovery | Known-ID GET polling; unknown intent stops; no automatic replacement or discovery endpoint | Matched in source; external manual reconciliation remains required |
+| §4: documentation | Root/example docs and public catalog/endpoint links; external-ID nullability corrected in list/get tables | Matched by source/doc review; no platform API change |
+| §6: behavioral acceptance | No unit, functional, live or hardware checks, per owner instruction | Intentionally deferred; runtime acceptance unverified |
+| §6: isolated CI | Path-filtered syntax-only workflows, pinned actions and read-only permissions | Configured; hosted execution remains separate |
+
+Directory output excludes name, email and arbitrary metadata. External IDs can
+be null and remain private untrusted application data when present. The backend
+filters project and active rows; omitted project fields in a public response
+cannot independently corroborate configured project identity. Observed page
+exhaustion does not establish an exhaustive snapshot under concurrent changes.
+The OpenAPI/backend allow null external IDs; accompanying public list/get tables
+now match that selected field. Broader omitted profile-field schema differences
+are not used to invent query parameters or output fields.
+
+The OTA history controller checks current project access, then the repository
+queries by device ID alone. Rows omit historical project, owner and binding
+generation and can survive a transfer/rebind. A trusted assignment-time cutoff
+only limits selection; it cannot prove historical authorization. The sample is
+for operators already authorized to inspect device history, not an end-user
+privacy boundary. It rejects optional project mismatches even on excluded rows
+and reports `historical_owner_verified: false` and `history_complete: false`.
+Pre/post ownership observations cannot detect every away-and-back race.
+Backend `applied` records a reported outcome rather than fresh physical evidence.
+No pagination, grant, artifact, assignment, cancellation or device write is added.
+
+Transcription creation is not an idempotent read/reuse operation. The tracked
+service can remove a completed/failed result or processing result older than ten
+minutes before creating another; a pending result can fall through to another
+insert. Operators must coordinate automatic transcription and other writers.
+The local SQLite claim serializes one journal only and conservatively consumes
+intent even if interrupted before network send. An uncertain outcome, failed job
+or observation timeout never authorizes another POST. Known IDs remain fixed;
+unknown IDs need external reconciliation without deleting the journal.
+Language is a request hint: the worker can replace it with detected/normalized
+provider output. Exact source and saved job identity remain the recovery anchors.
+Public prose describes a project provider default while tracked creation source
+uses `DEFAULT_ASR_PROVIDER`; the example delegates omission without inferring a
+particular provider or claiming that source discrepancy is resolved in deployment.
+No diarization or vocabulary fields are invented, and no transcript text is printed.
+An uploaded-compatible status is not hash verification or source cleanup authority.
+
+Changed paths, environment names, cursor/output labels, external-ID, OTA-history
+and transcription tokens were searched across internal/public docs and workspace
+overview/agent files. Current OTA ownership and downstream documentation guidance
+were reviewed; historical internal conformance and private provider designs remain
+unchanged. Only example/catalog and relevant public contract guidance are updated.
+Functional and live authorization, crash recovery, concurrent writers, Windows
+ACL privacy and provider/physical acceptance remain unverified by owner direction.
+
+Local evidence: both independent frozen Node installations and final
+`npm run check` passed on Node 22.23.2; Python `py_compile` passed on 3.12.14.
+All three workflow YAML files parsed, package/lock identities matched and staged
+whitespace checks passed. Public MDX passed Mint 4.2.949 compilation after the
+external-ID table corrections. Workflow pins, read permissions, triggers and
+paths were reviewed manually; the generator's referenced validator skill and
+resources are unavailable in this installed bundle. Parent review corrected
+terminal-language comparison to allow provider normalization and retained a
+final observation-budget check. No workflow or CLI was executed locally beyond
+installation/syntax commands; hosted syntax results are recorded separately.
+An independent fourth agent reviewed the final cursor traversal, OTA selection
+and journal/recovery source and reported no additional blocking findings.
+
 <a id="onboarding-custom-firmware-october-8"></a>
 ## End-user onboarding, custom summaries and firmware discovery — 2026-10-08
 

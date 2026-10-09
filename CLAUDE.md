@@ -10,6 +10,11 @@ Then read:
 
 Bota One is an internal reference application built on the SDK and public backend API. Reimplement teaching examples from public contracts; do not copy private helpers or require access to Bota One to run an example.
 
+The [directory/OTA-history/transcription batch](docs/independent-examples-review.md#directory-ota-transcription-october-8)
+keeps project traversal bounded, historical owner provenance explicit and job
+creation durable. Another transcription POST can replace a previous result;
+uncertainty does not authorize a retry. These samples perform no device writes.
+
 The [onboarding/custom-summary/firmware batch](docs/independent-examples-review.md#onboarding-custom-firmware-october-8)
 records durable create intent, GET-only uncertain recovery and device-filtered
 metadata discovery. Keep saved identities stable; firmware discovery performs no OTA.

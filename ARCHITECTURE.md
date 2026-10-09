@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: thirty-two independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, existing Ask history and linked processing snapshots, and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent seventeen API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: thirty-five independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, Ask history and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, existing-upload transcription and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent twenty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -63,6 +63,9 @@ examples/
     create-end-user-node/
     custom-summary-python/
     list-firmware-python/
+    list-end-users-node/
+    list-ota-history-python/
+    transcribe-existing-node/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -253,6 +256,26 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+The end-user directory traverses public opaque cursors within one configured
+project, with page/row/deadline caps and selected identity output. It excludes
+profile fields and reports observed exhaustion separately from capped traversal.
+Neither result is an atomic account audit; project isolation relies on the key
+when returned rows omit project metadata.
+
+OTA history reads selected assignment metadata between current device-owner
+observations. Its trusted assignment-time cutoff limits selection, not historical
+authorization: the public rows omit historical project/owner/generation. The
+sample is for authorized project operators, not an end-user history endpoint.
+Backend `applied` is a report, not fresh physical installed-version evidence.
+No delivery, grant, artifact, cancellation or device write occurs.
+
+Existing-upload transcription uses documented language/provider fields only.
+Durable intent precedes the single POST; known IDs resume by GET and uncertain
+unknown results require explicit reconciliation. Backend creation can replace
+existing results, so operators must coordinate automatic processing and other
+writers. Uploaded status permits the public job request but proves neither
+hash verification nor device cleanup authority. No diarization field is invented.
 
 End-user onboarding stores intent before its one minimal `external_id` POST.
 An existing active mapping can be reused; unknown creates reconcile through GET

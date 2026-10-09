@@ -21,6 +21,13 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Directory, OTA history and existing-upload transcription
+
+- Keep [directory traversal](api/list-end-users-node/README.md) project-scoped, bounded and explicit about capped/non-atomic output; print no profile data.
+- [OTA history](api/list-ota-history-python/README.md) is operator metadata. A timestamp cutoff and current-owner reads cannot prove historical assignment ownership; perform no device writes.
+- Keep [transcription creation](api/transcribe-existing-node/README.md) intent durable, IDs immutable and uncertain recovery GET-only; another POST can replace an existing result. Use only public language/provider fields.
+- Record creation-only evidence and runtime gaps in the [batch review](docs/independent-examples-review.md#directory-ota-transcription-october-8).
+
 ### Onboarding, custom summaries and firmware discovery
 
 - Keep [end-user creation](api/create-end-user-node/README.md) pre-POST intent durable; uncertainty permits GET reconciliation only. Never replace a saved end-user ID after external-ID reuse.
