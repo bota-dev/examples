@@ -29,6 +29,16 @@ workflow YAML files parsed. Apple lock/plist and Bash syntax were checked on
 Windows. Public MDX passed Mint 4.2.949 build validation. No local Swift/macOS
 toolchain is available; syntax/packaging review does not establish Swift compilation.
 
+Hosted evidence at examples source `9117760400d8b19b9aaa3cbad47bbc4d03131d80`:
+[Python pagination syntax](https://github.com/bota-dev/examples/actions/runs/37876771786),
+[Python JSON export syntax](https://github.com/bota-dev/examples/actions/runs/37876771741)
+and [macOS package resolution/app compilation](https://github.com/bota-dev/examples/actions/runs/37876771920)
+all completed successfully. This establishes the new Swift build gate, not UI,
+runtime or hardware acceptance. The public docs rebased onto concurrent beta.14
+documentation without changing these examples' exact beta.13 pins; final MDX
+build validation passed after that rebase. The repository-wide legacy workflows
+were still running at this observation and are not new-example acceptance evidence.
+
 Unlike the device inventory discrepancy in the preceding review, the public
 recording list and tracked backend `1ac67c92c6d72858e29dc264037cb82b6c449825`
 agree on fixed-owner cursor traversal. A changing dataset remains non-atomic.

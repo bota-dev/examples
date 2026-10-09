@@ -2,7 +2,7 @@
 
 A focused macOS SwiftUI app that verifies the serial you enter, reads fresh pairing state, and lists pending recording **metadata** through public Bota App SDK **2.0.0-beta.13**. It performs no audio download/upload, recording confirmation/deletion, binding, provisioning, reset or custom GATT work. No backend or API key is needed.
 
-**Status:** implemented; public-tag contract and source reviewed. This Windows host has no Swift/macOS toolchain, so local Swift compilation, application execution and physical Bluetooth behavior are unverified. The independent hosted workflow performs resolution and app compilation only; no unit, live or hardware tests were added, following the owner's creation-only instruction.
+**Status:** implemented; public-tag contract and source reviewed. This Windows host has no Swift/macOS toolchain, so local Swift compilation, application execution and physical Bluetooth behavior are unverified. The independent [hosted workflow](https://github.com/bota-dev/examples/actions/runs/37876771920) passed resolution and app compilation at `9117760`; no unit, live or hardware tests were added, following the owner's creation-only instruction.
 
 ## Prerequisites and run
 
@@ -68,7 +68,7 @@ bash build.sh
 | Exact published version/tag and method/model inspection | Matched by public-tag source review. |
 | Local plist/lock and shell syntax | Checked on Windows; does not compile Swift. |
 | Local Swift package/app compilation | Not run; macOS/Swift toolchain unavailable. |
-| Hosted package/build | Build-only workflow configured; inspect its exact committed run. |
+| Hosted package/build | [macOS compilation passed](https://github.com/bota-dev/examples/actions/runs/37876771920) at `9117760`; no functional/hardware tests. |
 | UI ordering, pairing rejection, Bluetooth/hardware | Not run; unverified by owner's creation-only scope. |
 
 Metadata stays in UI memory; no journal or export is created. Close the window to cancel the UI operation and status observer, then destroy the SDK client. Cleanup of the local build is limited to this example's `.build`, `.swiftpm` and `BotaCatalog.app` artifacts. No cloud resources or device recordings are created or removed. Treat screenshots or copied metadata according to the device owner's content-retention policy.

@@ -33,7 +33,7 @@ unverified. Never transfer/delete audio. Web/Flutter catalog proposals
 were deferred because their published beta.13 surfaces lack the required gates;
 do not import private transports or unpublished facade APIs to bypass them.
 No functional/live/device tests were run in this creation batch; Apple native
-build is unavailable locally on Windows and remains a separate hosted gate.
+build is unavailable locally on Windows; hosted macOS compilation passed at 9117760.
 
 The inventory/watcher/notes batch adds `api/list-devices-node`,
 `api/watch-transcription-python` and `api/export-summary-node`. Inventory is one
