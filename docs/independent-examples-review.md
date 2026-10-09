@@ -68,6 +68,20 @@ filters/action pins and formatting passed. Mint 4.2.949
 concurrent remote documentation commits. Only Markdown spacing changed afterward.
 No examples, functions, tests, APIs or physical devices were executed. Publication
 `prod` and SDK packages remain unchanged; public docs are delivered to `main`.
+Implementation `44eb4a29fa71f047e11fdd406aed2dfa72cfc3af` was pushed directly to
+examples `main`; docs `de07d63122a14fb169d879232cac89948258ca56` was pushed to
+docs `main`. GitHub APIs confirmed both new workflows completed successfully
+at that implementation source:
+
+| Case | Hosted result |
+| --- | --- |
+| Project processing reader | [Install/syntax passed](https://github.com/bota-dev/examples/actions/runs/37972686626) |
+| End-user processing reader | [Syntax passed](https://github.com/bota-dev/examples/actions/runs/37972686501) |
+
+The publication branch remains `8a6eff44631384ec724c6decebb26d2f339d3c56`.
+These checks do not execute the readers. Runtime/live/hardware acceptance stays
+unverified. The follow-up changes documentation evidence only.
+
 <a id="command-policy-webvtt-october-8"></a>
 ## Command observation, upload policy and WebVTT — 2026-10-08
 

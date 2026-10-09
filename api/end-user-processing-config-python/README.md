@@ -156,7 +156,7 @@ on **2026-10-09**:
 | Processing/provider separation | Output limits current server resolution, no provider fields or jobs | Matched by source review; provider/future-job/historical authority unverified |
 | Minimal output and bounded failure | Projection excludes profile/defaults; strict JSON, 1 MiB cap, time budgets, GET only | Matched by source review; runtime rejection and DNS termination unverified |
 | Syntax | `py_compile main.py`, Python 3.12.14 on Windows | Passed locally; this check executes no workflow code |
-| Workflow source | Pinned checkout, exact path filters, five-minute job, read-only permission, syntax only | Matched by YAML parsing/manual review; hosted CI not run at authoring |
+| Workflow source | Pinned checkout, exact path filters, five-minute job, read-only permission, syntax only | YAML/manual review passed; [hosted syntax passed](https://github.com/bota-dev/examples/actions/runs/37972686501) at `44eb4a29fa71f047e11fdd406aed2dfa72cfc3af` |
 | Independent peer source review | Another agent inspected source, README, workflow and assignment-lineage evidence | No blockers found; no example execution or runtime acceptance |
 | Unit/functional/live/device checks | Creation-only instruction | Not run; runtime success/failure acceptance remains open |
 

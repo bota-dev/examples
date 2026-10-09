@@ -132,7 +132,7 @@ Compound-engineering 1.2.9 review, **2026-10-09**:
 | Bounded sanitized failures | 1 MiB, 10-second signal, fatal UTF-8, finite JSON, no redirect/retry | Matched by source review; failure behavior unverified; duplicate-key/parsing limits above |
 | Local install and syntax | Node 22.23.2 `npm ci`, `npm run check` on Windows | Passed; CLI/functions were not executed |
 | Formatting/workflow | New-file whitespace inspection and YAML/manual security review | Passed locally; bundled validator skill/resources unavailable, manual fallback used |
-| Hosted CI | Separate path-filtered workflow | Not yet observed |
+| Hosted CI | [Separate path-filtered workflow](https://github.com/bota-dev/examples/actions/runs/37972686626) | Install/syntax passed at `44eb4a29fa71f047e11fdd406aed2dfa72cfc3af`; no runtime acceptance |
 | Unit/functional/live/device acceptance | Owner's creation-only instruction | Not run; advertised runtime behavior unverified |
 
 Public contract basis: [Hierarchical Configuration](https://docs.bota.dev/guides/hierarchical-config),
