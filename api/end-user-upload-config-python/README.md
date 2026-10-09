@@ -144,7 +144,7 @@ current upload schema/resolver:
 | Resolution/enforcement distinction | Unmodified numeric-min zero, section-only source, false applied/timing/cap flags | Matched by source/docs; firmware behavior unverified |
 | Narrow bounded safe failure | 1 MiB, 10/30-second budgets, strict JSON, sanitized errors, no retries/writes/defaults | Matched by source review; runtime rejection and DNS termination unverified |
 | Syntax | Python 3.12 `py_compile main.py` on Windows | Passed locally; no example code executed |
-| Workflow | SHA pin, paths, permissions, timeout and syntax-only steps | Parsed YAML/manual static review passed; hosted run pending |
+| Workflow | SHA pin, paths, permissions, timeout and syntax-only steps | Parsed YAML/manual static review passed; hosted syntax passed; see delivery evidence below |
 | Unit/functional/live/device acceptance | Creation-only instruction | Not run; no runtime or physical acceptance claim |
 
 Public references: [Hierarchical Configuration](https://docs.bota.dev/guides/hierarchical-config),
@@ -168,3 +168,12 @@ one repository query. Its generation-stamped override filtering is specific to
 processing; this upload section exposes no generation to correlate with the
 entity reads. Keep both documented scopes operationally; this script cannot inspect
 a key's scopes or correct the server's enforcement gap.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676960) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676960/job/114067435907) completed successfully at that exact source.
+This establishes Python syntax compilation only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

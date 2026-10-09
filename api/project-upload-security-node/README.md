@@ -135,10 +135,19 @@ production capability; root catalog/reference integration is tracked separately.
 | Requirement | Evidence | Status / remaining verification |
 | --- | --- | --- |
 | Independent setup | Own built-in-only manifest/lock; `npm ci` on Node 22.23.2 / Windows | Matched locally for installation |
-| Syntax and workflow | `npm run check`; parsed YAML; full-SHA actions and syntax-only 5-minute job | Matched locally for parsing; hosted check unverified |
+| Syntax and workflow | `npm run check`; parsed YAML; full-SHA actions and syntax-only 5-minute job | Matched locally for parsing; hosted syntax passed; see delivery evidence below |
 | Project and read scope | Source router/controller/auth: one exact project-selected GET and enforced restricted-key `config:read` | Matched by source; deployed key authorization/rejection unverified |
 | Direct section and selected policy | Source validates shape, merge strategy, allowed sources/enums and optional identity/deletion markers | Matched by source; malformed/live response behavior unverified |
 | Strictest server resolution | Schema levels and resolver field `ordered_max`; no local defaults, merging or downgrade choice | Matched by source; deployed resolution unverified |
 | Honest evidence limits | Narrow projection and explicit false encryption/capability/commitment/cleanup flags | Matched by source; desired/applied device protection unverified |
 | Bounded safe read | Source request/body/deadline caps, no redirects/retries/writes and sanitized errors | Matched by source; runtime transport/timeout rejection unverified |
 | Functional/live/device acceptance | Owner requested creation only; none executed | Unverified; requires separately authorized runtime acceptance |
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676851) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676851/job/114067435269) completed successfully at that exact source.
+This establishes frozen installation and JavaScript syntax only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

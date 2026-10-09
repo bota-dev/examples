@@ -146,7 +146,7 @@ OTA design on **October 9, 2026 (Pacific)**:
 | Distinct section metadata and OTA intent | Narrow projection, separate selected/outer sources and false execution evidence flags | Matched by source review; release and physical acceptance outside scope |
 | Bounded safe failure | Strict JSON, 1 MiB cap, shared/per-request budgets, static errors, no retries | Matched by source review; runtime failure handling and DNS termination unverified |
 | Python syntax | Python 3.12 `py_compile main.py` | Passed locally; no example workflow code executed |
-| CI workflow | Pinned checkout, path filters, contents read, syntax-only five-minute job | Parsed YAML/manual source review; hosted check unverified in this creation pass |
+| CI workflow | Pinned checkout, path filters, contents read, syntax-only five-minute job | Parsed YAML/manual source review; hosted syntax passed; see delivery evidence below |
 | Functional/live/device acceptance | Owner's creation-only instruction | Unverified; no unit, functional, API or device tests run |
 
 Public basis: [Hierarchical Configuration](https://docs.bota.dev/guides/hierarchical-config),
@@ -174,3 +174,12 @@ override-lineage filtering is specific to `processing`; current generation
 observations do not establish the historical origin of OTA overrides. This
 example requires both documented scopes operationally and cannot fix or verify
 server scope enforcement. The discrepancy remains a platform follow-up.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676898) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676898/job/114067435580) completed successfully at that exact source.
+This establishes Python syntax compilation only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

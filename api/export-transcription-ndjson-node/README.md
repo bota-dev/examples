@@ -171,9 +171,18 @@ and public documentation integration belong to the coordinating batch.
 | Private no-overwrite publication | Private ancestry/identity checks, exclusive partial, file fsync, hard link and own-partial cleanup | Matched in source; ACL/reparse/filesystem/crash acceptance unverified |
 | Public read-scope enforcement | Public contract versus tracked transcription router | Partial in platform source; deployed enforcement unverified |
 | Independent install and JavaScript syntax | `npm ci` and `npm run check`, Node 22.23.2 / Windows | Passed; installation/parsing only |
-| Workflow syntax and pins | Parsed YAML and source review; full-SHA actions, read-only permissions, no API secrets | Matched statically; hosted run unverified |
+| Workflow syntax and pins | Parsed YAML and source review; full-SHA actions, read-only permissions, no API secrets | Matched statically; hosted syntax passed; see delivery evidence below |
 | Runtime/live API/filesystem/consumer/device checks | No example CLI, function or test execution in this creation pass | Unverified |
 
 The workflow runs `npm ci` and syntax-only `npm run check` on relevant main/PR
 changes or manual dispatch. It uses no live credentials or hardware. A hosted
 result must be observed for the exact delivered source before being reported.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676943) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676943/job/114067435478) completed successfully at that exact source.
+This establishes frozen installation and JavaScript syntax only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

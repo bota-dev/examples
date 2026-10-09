@@ -140,17 +140,26 @@ Pacific**:
 | Source-specific health mapping | Exact three-field shape, known billing choices and `200`/`503` status correspondence in `read_health()` | Matched against `server.ts`; deployed profile and both runtime outcomes unverified |
 | Bounded strict JSON and no retries | 10-second connected request interruption, 30-second total checks, 64 KiB read cap, strict UTF-8/duplicate/finite parsing, no redirect or retry path | Matched by source review; DNS caveat retained; timeout/failure execution unverified |
 | Narrow evidence | Selected database/status projection and local times; broader verification flags false; no billing/URL/error payload output | Matched by source review; output execution unverified |
-| Syntax and CI structure | Python compilation and Node 22.23.2 YAML parsing; workflow uses verified repository checkout SHA | Local syntax/YAML checks recorded below; hosted CI unverified |
+| Syntax and CI structure | Python compilation and Node 22.23.2 YAML parsing; workflow uses verified repository checkout SHA | Local checks and exact-source hosted syntax passed; see delivery evidence below |
 
 | Check / compatibility | Evidence on 2026-10-09 Pacific |
 | --- | --- |
 | Python 3.12 standard-library compilation | `py_compile` passed with bundled Python 3.12.14 on Windows |
 | Workflow YAML / source review | YAML parsed with the existing `yaml` package under Node 22.23.2; source reviewed against the pinned backend and public root path |
 | Runtime, unit and functional tests | Not run under the creation-only instruction |
-| Live API, hosted CI, physical device or sustained uptime | Not run; no acceptance or SLA claim |
+| Live API, physical device or sustained uptime | Not run; no acceptance or SLA claim |
 
 Changed-token documentation review covers `api-health-python`,
 `BOTA_API_ORIGIN` and `/health`. The existing public API-status page and parent
 catalog/architecture entries are the affected overview surfaces; integration
 updates are owned by the parent task. This example adds no backend, protocol,
 SDK or production design change.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676933) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676933/job/114067435642) completed successfully at that exact source.
+This establishes Python syntax compilation only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

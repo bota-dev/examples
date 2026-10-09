@@ -202,10 +202,19 @@ applied-acknowledgement sections. Requirement-to-source evidence on
 | Connection policy and generation limits | No device/SDK path; explicit false flags; response revision/acknowledgement absent | Partial relative to broader target design; applied policy and connection-generation enforcement unverified |
 | Bounded safe reads | Three GETs, 10/30-second budgets, 1 MiB each, finite UTF-8 JSON, no redirects/retries, sanitized errors | Matched by source review; runtime failure behavior unverified |
 | Source syntax | `npm run check` on Node 22.23.2 / Windows | Passed locally; no example code executed |
-| Workflow | YAML parsing and manual source inspection; SHA pins match existing reviewed workflows | Matched statically; hosted CI not run in this creation pass |
+| Workflow | YAML parsing and manual source inspection; SHA pins match existing reviewed workflows | Matched statically; hosted syntax passed; see delivery evidence below |
 | Independent peer source review | Parent agent source review; explicit empty query/fragment delimiters are rejected | No source blockers after correction; runtime acceptance unverified |
 | Functional/live/device acceptance | Creation-only instruction | Unverified; no unit/functional/live/device checks added or run |
 
 For other scopes, see the independent [project reader](../project-connection-config-node/README.md)
 and [device reader](../connection-config-python/README.md). End-user observations
 do not include any owned device's overrides or applied state.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003677041) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003677041/job/114067436052) completed successfully at that exact source.
+This establishes frozen installation and JavaScript syntax only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

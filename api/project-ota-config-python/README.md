@@ -153,7 +153,7 @@ Compound-engineering 1.2.9 source review, **October 9, 2026 (Pacific)**:
 | Bounded sanitized failures | 1 MiB; strict UTF-8/duplicate/finite parsing; timer/timeouts; no redirect/retry; fixed safe errors | Matched in source; runtime/network failure behavior unverified and DNS limitation retained. |
 | Python syntax | Bundled Python 3.12 `py_compile main.py` on Windows | Passed locally; no example code executed. |
 | Workflow and formatting | Parsed YAML and manual permission/trigger/SHA/syntax-only review; new-file whitespace check | Passed locally. Generator validator resources are absent; YAML/manual fallback used. |
-| Hosted CI | Separate workflow is provided | Unverified; local syntax is not hosted evidence. |
+| Hosted CI | Separate workflow is provided | Hosted syntax passed; see delivery evidence below; runtime remains unverified. |
 | Unit/functional/live/device acceptance | Owner's creation-only instruction | Not run; advertised success/failure behavior remains unverified. |
 
 Public basis: [repository architecture](../../ARCHITECTURE.md),
@@ -180,3 +180,12 @@ separates release publication, project promotion, delivery and installation.
 The hierarchy design's desired/applied revision target is separate from this
 project intent read. These references are review evidence, not installation or
 runtime prerequisites.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676873) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676873/job/114067435391) completed successfully at that exact source.
+This establishes Python syntax compilation only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

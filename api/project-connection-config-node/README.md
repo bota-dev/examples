@@ -179,9 +179,18 @@ applied-acknowledgement sections. Requirement-to-source evidence on
 | Applied policy and generation limits | Constant false flags and no firmware/SDK path; target acknowledgement remains separate | Partial relative to broader target design; no applied-state evidence claimed |
 | Bounded safe read | One GET, 10/30-second budgets, 1 MiB, finite UTF-8 JSON, no redirects/retries, sanitized errors | Matched by source review; network/failure behavior unverified |
 | Source syntax | `npm run check` on Node 22.23.2 / Windows | Passed locally; no example code executed |
-| Workflow | YAML parsing and manual source inspection; SHA pins match existing reviewed workflows | Matched statically; hosted CI not run in this creation pass |
+| Workflow | YAML parsing and manual source inspection; SHA pins match existing reviewed workflows | Matched statically; hosted syntax passed; see delivery evidence below |
 | Functional/live/device acceptance | Creation-only instruction | Unverified; no unit/functional/live/device checks added or run |
 
 For device-owned resolution with separate ownership reads, see the independent
 [Python connection reader](../connection-config-python/README.md). This project
 reader never selects an end user or device.
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003677188) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003677188/job/114067436621) completed successfully at that exact source.
+This establishes frozen installation and JavaScript syntax only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

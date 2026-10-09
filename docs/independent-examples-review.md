@@ -76,11 +76,34 @@ snippets or example code were executed.
 
 The earlier full Mintlify timeout remains a separate tool limitation. This
 batch does not repeat that validator or claim a rendered/deployed site result.
-Exact-source hosted outcomes are recorded after delivery; until observed, they
-remain unverified. Runtime, live authorization, network interruption,
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed all ten syntax runs and the catalog run, including
+their only jobs, completed successfully at that exact source without reruns.
+
+| Check | Exact-source run | Job |
+| --- | --- | --- |
+| End-user upload settings (Python) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676960) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676960/job/114067435907) |
+| Project connection settings (Node.js) | [Run](https://github.com/bota-dev/examples/actions/runs/38003677188) | [Job](https://github.com/bota-dev/examples/actions/runs/38003677188/job/114067436621) |
+| Project OTA settings (Python) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676873) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676873/job/114067435391) |
+| End-user connection settings (Node.js) | [Run](https://github.com/bota-dev/examples/actions/runs/38003677041) | [Job](https://github.com/bota-dev/examples/actions/runs/38003677041/job/114067436052) |
+| End-user OTA settings (Python) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676898) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676898/job/114067435580) |
+| Project upload-security policy (Node.js) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676851) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676851/job/114067435269) |
+| Summary metadata snapshot (Python) | [Run](https://github.com/bota-dev/examples/actions/runs/38003677115) | [Job](https://github.com/bota-dev/examples/actions/runs/38003677115/job/114067436261) |
+| Export transcript NDJSON (Node.js) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676943) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676943/job/114067435478) |
+| Export transcript HTML (Python) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676950) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676950/job/114067435634) |
+| API health probe (Python) | [Run](https://github.com/bota-dev/examples/actions/runs/38003676933) | [Job](https://github.com/bota-dev/examples/actions/runs/38003676933/job/114067435642) |
+| Catalog metadata | [Run](https://github.com/bota-dev/examples/actions/runs/38003677045) | [Job](https://github.com/bota-dev/examples/actions/runs/38003677045/job/114067436346) |
+
+These checks execute only frozen installation/syntax, Python compilation or
+catalog metadata validation. Runtime, live authorization, network interruption,
 filesystem, export-consumer/rendering and physical-device acceptance remain
-unverified. No credentials, device operations, package publication or SDK and
-legacy dependency changes occurred.
+unverified. The follow-up evidence commit changes documentation only.
+
+Public guidance was pushed only to docs `main` as
+`d9add9aeacf490426906c1d0267c1a01ae53b463`. Production `prod` remains
+`8a6eff44631384ec724c6decebb26d2f339d3c56`; no public deployment is claimed.
+No credentials, device operations, package publication or SDK and legacy
+dependency changes occurred.
 
 <a id="project-upload-integrity-csv-october-9"></a>
 ## Project upload, integrity metadata and CSV — 2026-10-09

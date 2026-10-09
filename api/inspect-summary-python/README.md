@@ -8,8 +8,8 @@ generation, polling, cancellation or device operation and creates no local file.
 Status on **October 9, 2026 (Pacific)**: implemented with source review and Python
 syntax verification only. The owner requested creation without executing the
 example or unit, functional, live API or device tests. Runtime authorization,
-response rejection and concurrency behavior remain unverified; hosted CI has
-not yet been observed for this source.
+response rejection and concurrency behavior remain unverified. Hosted syntax
+results for the delivered source are recorded below.
 
 ## Prerequisites and configuration
 
@@ -149,7 +149,7 @@ skill's referenced validator/reference resources are unavailable locally.
 | Evidence, October 9, 2026 (Pacific) | Result / remaining acceptance |
 | --- | --- |
 | Local Python `py_compile` | Passed with the bundled Windows Python runtime. Syntax only. |
-| Workflow YAML/source review | Parsed YAML; checked triggers, example paths, full checkout pin, permissions and syntax-only commands. Hosted execution remains unverified. |
+| Workflow YAML/source review | Parsed YAML; checked triggers, example paths, full checkout pin, permissions and syntax-only commands. Hosted syntax passed; see delivery evidence below. |
 | Public/backend comparison | Reviewed public summary/transcription/recording GET prose, OpenAPI `Summary`/`Transcription`, backend routes/controller/service/repository/model source at `1ac67c92`. Compatibility remains unverified. |
 | Example execution / unit / functional / live API / device tests | Not run as requested. No API, model, storage or device action was performed. |
 
@@ -191,3 +191,12 @@ evidence includes the [summary router](https://github.com/bota-dev/bota/blob/1ac
 [transcription router](https://github.com/bota-dev/bota/blob/1ac67c92c6d72858e29dc264037cb82b6c449825/api/src/routes/v1/transcriptions/index.ts),
 [recording router](https://github.com/bota-dev/bota/blob/1ac67c92c6d72858e29dc264037cb82b6c449825/api/src/routes/v1/recordings/index.ts)
 and [project-scoped repository lookup](https://github.com/bota-dev/bota/blob/1ac67c92c6d72858e29dc264037cb82b6c449825/api/src/repositories/base.repository.ts).
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003677115) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003677115/job/114067436261) completed successfully at that exact source.
+This establishes Python syntax compilation only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.

@@ -176,5 +176,14 @@ Current source is not proof that a future/deployed service enforces these gates.
 | Text/output/transport bounds | Aggregate original text limit, incremental encoded output bound and bounded JSON GETs | Matched in source; runtime failure acceptance unverified |
 | Private no-overwrite publication | `private_directory`; exclusive partial, file fsync, final owner read, hard link and own-partial cleanup | Matched in source; ACL/filesystem/crash paths unverified |
 | Python syntax and workflow YAML | `python -m py_compile main.py`, Python 3.12.14 / Windows; workflow parsed with Node 22.23.2 and existing YAML parser | Passed; syntax/static configuration only |
-| Hosted CI | Workflow added, no hosted run attributed here | Unverified; parent checks exact integrated source |
+| Hosted CI | Workflow and exact-source GitHub job | Passed for syntax; see delivery evidence below; runtime unverified |
 | Runtime/API/viewer/filesystem/device checks | No CLI, function, test, renderer, API or device execution in this pass | Unverified |
+
+## Hosted syntax evidence
+
+Implementation `6a50f36586212f5c388843a068a90c3f96c23b96` was pushed directly to examples
+`main`. GitHub APIs confirmed the [run](https://github.com/bota-dev/examples/actions/runs/38003676950) and
+[job](https://github.com/bota-dev/examples/actions/runs/38003676950/job/114067435634) completed successfully at that exact source.
+This establishes Python syntax compilation only; no example, functional,
+live API, filesystem, consumer or device acceptance was executed. The later
+evidence update changes documentation only.
