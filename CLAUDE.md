@@ -7,4 +7,5 @@
 - Read [README.md](README.md) for the catalog, legacy sample and current availability.
 - Read [DEPENDENCY_SECURITY.md](DEPENDENCY_SECURITY.md) before touching legacy dependencies or install scripts.
 - Use per-example commands and published pins; keep server secrets, durable uncertainty and hardware identity checks intact.
+- Run `node scripts/check-catalog.mjs` after index/catalog/docs changes; no root install is required.
 - Report the exact checks performed and remaining runtime/hardware gaps; index entries and syntax CI are not live verification.

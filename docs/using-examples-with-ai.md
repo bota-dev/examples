@@ -33,6 +33,13 @@ running the intended workflow, not whether syntax checks require hardware.
 When adding an implemented example, update the README catalog and JSON index in
 the same change. Include its actual README/workflow paths; keep proposed or
 blocked examples out of the index. Recheck unique IDs and every referenced path.
+From the repository root, run `node scripts/check-catalog.mjs` with Node.js
+22.23.2 or newer; no install is required. The same command runs on every push/PR
+in [catalog CI](../.github/workflows/catalog.yml). It checks metadata types,
+unique IDs, all independent directories, ordered catalog/index correspondence
+and local inline file targets in entry/indexed docs. Fenced examples, remote
+URLs, heading anchors, reference-style and HTML links are excluded. This check
+reads repository metadata; it never executes an example or verifies API behavior.
 
 ## Adapt the selected directory
 

@@ -2,6 +2,50 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="catalog-validation-ci-october-9"></a>
+## Minimal catalog/documentation CI — 2026-10-09
+
+The owner approved automated validation of index identities/paths, README
+catalog correspondence and local documentation file links on every push/PR.
+Compound-engineering 1.2.9 compares the implementation with those criteria and
+[ARCHITECTURE.md](../ARCHITECTURE.md) §§2, 4 and 6. This change validates repository
+metadata only; it does not add or execute example workflows.
+
+| Requirement | Evidence | Status / remaining verification |
+| --- | --- | --- |
+| Dependency-free local command | `scripts/check-catalog.mjs`, Node built-ins only; repository root derived from its own file | Matched; actual 59-entry checkout validation passed without install |
+| Index integrity | Version 1/nonempty list; string/unique IDs, category/path relation, metadata types, hardware/platform fields and existing canonical paths | Matched in source; controlled bad-ID/missing-file scenarios rejected |
+| Catalog consistency | Exact ordered README/index equality and independent directory inventory equality | Matched; catalog mismatch and unlisted-directory scenarios rejected |
+| Local documentation targets | Root README/AGENTS/CLAUDE/architecture/AI guide plus indexed Markdown pointers; lexical and realpath containment | Matched for supported inline links; broken/outside/absolute links rejected; actual 64 documents/208 file links passed before docs additions |
+| Lightweight unfiltered CI | Separate catalog.yml: push, pull_request, manual; Node 22.23.2, full-SHA actions, contents:read, persisted credentials disabled, five-minute job | Matched by parsed YAML/manual review; hosted evidence recorded after delivery |
+| No example/API/device execution | No imports of example code, installs, secrets, network calls or device tools in checker/job | Matched in source; only metadata checker/scenarios executed locally |
+| Contributor and AI instructions | Root entry files and AI guide document one command and exact scope | Matched by document/link review; workflow does not alter branch-protection settings |
+
+The independent project-reader agent reviewed final source/workflow without
+edits or execution and found no blockers. Parent ran syntax, the real repository
+check and 12 controlled temporary metadata scenarios. Expected results held for
+valid input, duplicate/non-string IDs, catalog mismatch, missing README/workflow,
+broken/outside/Windows-absolute prose links, unlisted directory, ignored fenced
+placeholders and ignored remote URLs/heading fragments. Temporary files were
+removed only from their verified task-owned artifact directory. No example,
+API, model or physical-device action occurred.
+
+The checker intentionally handles inline Markdown file targets and ignores
+fenced snippets; it is not a complete Markdown parser. It does not check heading
+anchors, reference-style links, HTML links, remote reachability, claimed runtime
+status, API schemas or workflow semantics. Existing per-example checks remain
+separate. All indexed README/setup/evidence Markdown files are included; future
+pointers may expand the current 64-document selection. There is no fixed example
+count in the checker and no root package/lock/dependency modification.
+
+Changed index/guide/checker/workflow tokens were searched across workspace
+instruction/overview files and internal/public docs. Existing public index/guide
+references remain valid; no API/SDK/platform contract changed. README,
+architecture and both agent entry points plus the AI guide were updated. The
+installed Actions-generator references/validator are absent; YAML parsing and
+manual permission/pin/trigger review supply the fallback. Source and controlled
+metadata results do not establish example runtime or physical acceptance.
+
 <a id="agent-discovery-processing-october-9"></a>
 ## Coding-agent discovery and processing readers — 2026-10-09
 

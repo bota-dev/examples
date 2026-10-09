@@ -165,6 +165,20 @@ Lifecycle scripts must be enabled for `npm ci`. If installation scripts were dis
 
 ## Verification
 
+The [catalog workflow](.github/workflows/catalog.yml) runs on every push and pull
+request, independently of the example checks. Run the same dependency-free
+command locally with Node.js 22.23.2 or newer:
+
+```sh
+node scripts/check-catalog.mjs
+```
+
+It validates the index's IDs/types and paths, all independent directories,
+ordered README catalog consistency, and local inline file links in the root
+entry documents, AI guide and indexed README/setup/evidence Markdown files.
+It ignores fenced snippets, remote URLs and heading fragments; it does not
+validate anchors, reference-style links, HTML links or example behavior. No
+package installation, API key or hardware is needed.
 The current root CI runs:
 
 ```sh

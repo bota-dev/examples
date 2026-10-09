@@ -25,6 +25,8 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 - Install/check from the selected directory. Node uses its own npm manifest/lock; Python readers use the standard library. Native tooling is defined per example. Root npm commands are legacy-only.
 - Processing readers stop at project/end-user/device scope; resolution is not provider approval or job execution. Keep the [review](docs/independent-examples-review.md#agent-discovery-processing-october-9) evidence limits.
 - Update the index, root catalog and selected README together when adding or moving an example. Do not embed secrets or assume a recorded device identity is the caller's device.
+- Run `node scripts/check-catalog.mjs` for index/catalog/docs changes. It needs no npm install; [catalog CI](.github/workflows/catalog.yml) runs on every push/PR. File-link checks exclude remote URLs, anchors, reference-style/HTML links and fenced snippets.
+
 ## Implementation rules
 
 ### Command observation, policy and WebVTT
