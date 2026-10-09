@@ -2,6 +2,88 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="configuration-ask-directory-october-8"></a>
+## Configuration discovery, processing observations and Ask directory — 2026-10-08
+
+Three parallel creators added GET-only workflows, bringing the catalog to
+thirty-eight. Review uses compound-engineering 1.2.9 against
+[ARCHITECTURE.md](../ARCHITECTURE.md) §§2–4 and §6, public configuration schema,
+hierarchy/processing, Ask-session and device/end-user contracts, and tracked
+backend `1ac67c92c6d72858e29dc264037cb82b6c449825`. The owner requested creation
+without unit, functional, live API or device tests. Existing SDK dependencies,
+platform behavior, regulated provider gates and physical-device state are unchanged.
+
+| Requirement | Implementation evidence | Status / remaining verification |
+| --- | --- | --- |
+| §§2, 4: independent setup | Node built-in CLI with own manifest/lock and two Python standard-library CLIs; own configuration/docs/workflows | Matched in source; installation/syntax evidence only |
+| §3: schema discovery | One fixed public schema GET, config read scope, bounded rows/bytes/time and duplicate/metadata validation | Matched in source; serving/deployed registry and malformed-response behavior unverified |
+| §3: selected schema output | Section/description/levels/merge strategy only; defaults and arbitrary properties excluded | Matched in source; metadata does not establish permissions or consumer enforcement |
+| §3: owned processing observation | Exact bound device and owner checks before/after direct processing-section GET; strict deletion and optional project checks | Matched in source; live authorization and concurrent ownership observations unverified |
+| §3: effective settings limits | Selected enabled flags/providers/built-in templates, section source annotation and explicit resolution/applied/execution labels | Matched in source; field provenance, consumer enforcement and job success intentionally not claimed |
+| §3: scoped session selection | Fixed end-user filter on every page, account reads before/after and optional identity checks | Matched in source; filtered membership is observed metadata, not recording access authority |
+| §3: bounded history traversal | Opaque cursors, page/item/byte/deadline caps, duplicate/non-progress rejection and explicit capped/end output | Matched in source; mutable activity ordering is non-atomic and runtime pagination unverified |
+| §3: private metadata | No session titles/messages, raw errors, prompts, credentials or arbitrary config contents printed | Matched in source; runtime disclosure/failure handling unverified |
+| §4: documentation | Example/root docs and public catalog, configuration guides and Ask endpoint links | Matched in source/doc review; API/platform contracts unchanged |
+| §6: behavioral acceptance | No unit, functional, live or hardware checks per owner direction | Intentionally deferred; runtime acceptance unverified |
+| §6: isolated CI | Path-filtered syntax workflows with pinned actions and read permissions | Configured; hosted results remain separate |
+
+Schema discovery receives one serving process's registry without inventing
+pagination or a fixed section list. Public guide `recording` settings are absent
+from the inspected backend registry; this is a source/documentation discrepancy,
+not deployed evidence. The reader accepts valid returned names dynamically.
+Returned allowed levels are not the key's write permissions, and a section's
+merge strategy omits per-field overrides and the complete validation schema.
+Descriptions remain untrusted JSON-escaped text. Expected project configuration
+cannot independently prove the key's project when metadata omits that identity.
+
+The processing endpoint returns `{ value, source, definition }` directly. Its
+source is the last participating section override, not per-field provenance.
+All four enabled flags must be actual booleans; unsupported or malformed selected
+options stop without raw output. ASR/summary null providers are accepted by the
+tracked schema but omitted from the public OpenAPI provider type; absence/null
+does not identify an explicit provider. Custom template strings are validated
+but excluded, and no undocumented language option is emitted. This is explicitly
+selected configuration, not a complete settings dump. Server resolution proves
+neither consumer applied state nor provider authorization, processing execution
+or integrity/cleanup authority. Ownership reads and the config observation are
+separate, non-atomic operations.
+
+Ask session metadata omits titles, cached recording titles, model/provider,
+messages, citations and content. The public response can omit owner/project;
+the tracked serializer includes owner but not project. Membership is established
+by the fixed-owner filter and checked when returned identity is present. Referenced
+recording IDs are context, not permission to retrieve their contents. Public
+`folder` scope is reserved in tracked creation and lacks a supported exact shape;
+the reader fails closed rather than fabricating one. The database supplies a
+non-null activity timestamp even for zero-message sessions. Message count is
+active-branch metadata, not a full sibling-message count. Activity updates may
+move sessions between pages; observed exhaustion cannot prove an atomic audit.
+Parent review tightened absent/null deletion markers and explicit page-identity
+contradictions before final selection.
+
+New paths, configuration names, schema/merge-strategy, processing-option and
+Ask-session tokens were searched across internal/public docs and workspace
+overview/agent files. The hierarchical configuration and Ask designs and downstream
+matrix were reviewed. Changes update the catalog and current public guide links;
+historical internal conformance, private templates and regulated provider approvals
+remain unchanged. Video summaries are coming soon, and logs, usage and webhook
+management are not mounted in public `/v1`; no examples invent those routes.
+
+Local evidence: Node 22.23.2 frozen installation and final `npm run check`
+passed; both Python CLIs passed final `py_compile` on Python 3.12.14. Workflow
+YAML parsed, package/lock identity matched and whitespace checks passed. Public
+MDX passed Mint 4.2.949 compilation. The generator's referenced validator skill
+and resources are absent from the installed bundle, so action pins, permissions,
+paths and triggers were reviewed manually alongside parsing. A separate fourth
+agent reviewed the final source/docs and found no additional blocking defects.
+These checks do not execute the CLIs or establish functional/runtime acceptance.
+
+Internal Ask list-design examples retain the older `/v1/sessions` route and a
+required owner filter, while public contracts and tracked routes use
+`/v1/ask/sessions` with an optional project-key filter. The sample deliberately
+pins that filter on every request; it neither implements the historical route
+nor claims to resolve this internal source/design discrepancy.
+
 <a id="directory-ota-transcription-october-8"></a>
 ## End-user directory, OTA history and existing-upload transcription — 2026-10-08
 

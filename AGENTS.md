@@ -21,6 +21,13 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Implementation rules
 
+### Configuration and Ask session discovery
+
+- [Schema discovery](api/config-schema-node/README.md) prints metadata only; no defaults, fixed section inventory or consumer-enforcement claim.
+- [Processing observations](api/processing-config-python/README.md) retain current device-owner checks. Section `source` is not field provenance, job success or applied device state; perform no writes.
+- Keep [Ask session traversal](api/list-ask-sessions-python/README.md) bounded with its fixed owner filter on every page. Session scope IDs are not recording access authorization; emit no conversation text.
+- Record source/syntax evidence and runtime gaps in the [batch review](docs/independent-examples-review.md#configuration-ask-directory-october-8).
+
 ### Directory, OTA history and existing-upload transcription
 
 - Keep [directory traversal](api/list-end-users-node/README.md) project-scoped, bounded and explicit about capped/non-atomic output; print no profile data.

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: thirty-five independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, Ask history and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, existing-upload transcription and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent twenty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: thirty-eight independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent twenty-three API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -66,6 +66,9 @@ examples/
     list-end-users-node/
     list-ota-history-python/
     transcribe-existing-node/
+    config-schema-node/
+    processing-config-python/
+    list-ask-sessions-python/
   app-sdk/
     react-native-device-connect/
     web-device-connect/
@@ -256,6 +259,24 @@ catalogs are deferred rather than bypassing missing public lifecycle/pairing
 or encrypted-catalog support. No hidden protocol implementation is introduced.
 
 ## 4. Example contract
+
+Configuration discovery reads one public schema list and projects section names,
+descriptions, allowed levels and merge strategies; it prints no defaults or
+effective values. Returned metadata is not proof that deployed consumers apply
+the fields. Schema availability comes from the selected API, not a hard-coded
+section inventory or private registry import.
+
+The processing reader observes one owned device's resolved `processing` section
+between current ownership checks. It projects only documented settings; the
+section-level `source` does not identify each contributing field after merging.
+The result is server resolution, not job execution or firmware applied state.
+No configuration or processing write occurs, and separate reads are non-atomic.
+
+Ask session traversal preserves the fixed end-user filter on every cursor GET,
+checks available identity metadata and emits selected session/scope timestamps
+without titles or messages. Session membership does not authorize reading its
+referenced recordings. Caps and mutable activity ordering prevent an atomic
+audit claim; unsupported scope shapes fail closed.
 
 The end-user directory traverses public opaque cursors within one configured
 project, with page/row/deadline caps and selected identity output. It excludes
