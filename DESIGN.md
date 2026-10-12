@@ -13,7 +13,7 @@ own application. Evaluate additions by developer usefulness and maintenance cost
 | --- | --- | --- |
 | API sample | Server-side public API calls: recordings, uploads, transcription, summaries, Ask, webhooks and device metadata | [api/](api/) |
 | App SDK sample | Published platform SDK calls for discovery, connection, status, recording and supported transfer/lifecycle operations | [app-sdk/](app-sdk/) |
-| Combined demo | How application UI, device SDK and customer backend fit together, within explicitly supported public contracts | [end-to-end/](end-to-end/) |
+| Combined demo | How application UI and customer backend fit together, with device SDK integration where supported by public contracts | [end-to-end/](end-to-end/) |
 
 A demo may cover several related capabilities with small feature modules and
 shared helpers inside that app. A focused sample may teach just one operation.

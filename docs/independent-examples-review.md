@@ -20,6 +20,9 @@ capabilities or establish live SDK/API acceptance. Existing historical reviews
 remain evidence for their exact implementations and dates.
 Local checker syntax and catalog validation passed: 76 examples, 82 documents
 and 310 local file links. No API, SDK, UI or dependency implementation changed.
+Independent read-only review corrected two descriptions: device SDK integration
+is included where supported, and combined demos may use one install root or
+separate app/backend roots. The current web reference is one API-only install root.
 
 <a id="web-reference-october-12"></a>
 ## Web reference with small recipes — 2026-10-12

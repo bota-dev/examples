@@ -61,8 +61,8 @@ reads repository metadata; it never executes an example or verifies API behavior
 ## Adapt the selected directory
 
 - Use the example directory as the install unit. Do not run a root workspace
-  install for independent API or App SDK cases. End-to-end READMEs identify their
-  separate app/backend install roots.
+  install for independent API or App SDK cases. Follow each end-to-end README's
+  documented install layout; an app may use one root or separate app/backend roots.
 - Keep exact public SDK pins and their release channel. Check the manifest and
   lockfile rather than assuming a version mentioned in historical prose is current.
 - Use the linked public API/SDK contracts. Never import private Bota One helpers,
