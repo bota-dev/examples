@@ -81,6 +81,11 @@ the earlier exact sources in [implementation evidence](../independent-examples-r
   set; this additional check covers the new documents in this delivery.
 - Public client-SDK guidance and changelog compiled as MDX; 57 local page targets
   passed. Existing workflow/dependabot YAML also parsed without duplicate keys.
+- The first push's web CI found Markdown table formatting in the changed web
+  DESIGN. Applied that install root's pinned Prettier 3.8.5 to the document;
+  `npm run format:check` now passes across the complete web install root.
+  This correction changes formatting only; replacement hosted status is checked
+  separately from the local result.
 - Independent final product/architecture and contract-preservation reviews found
   no material conformance gap. Corrected two misleading phrases about complete
   app availability and download-URL playback evidence.

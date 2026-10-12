@@ -15,13 +15,13 @@ points, not another app layer.
 
 ## Implemented subset and target
 
-| Capability | Current web implementation |
-| --- | --- |
-| Audio input | Import a supported audio file through the customer backend. No microphone capture. |
-| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask. |
-| Playback | Not implemented. The target adds playback only for a supported, authorized audio representation. |
-| Device SDK | Not integrated. The separate browser connection sample does not make this app a device-sync template. |
-| Synthetic mode | In-process API fixtures and synthetic results; no external upload/provider/device acceptance. |
+| Capability          | Current web implementation                                                                            |
+| ------------------- | ----------------------------------------------------------------------------------------------------- |
+| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                    |
+| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                |
+| Playback            | Not implemented. The target adds playback only for a supported, authorized audio representation.      |
+| Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template. |
+| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.         |
 
 The [root roadmap](../../ROADMAP.md) owns the remaining journey and platform work.
 Do not describe target features as available controls or add overlapping app
