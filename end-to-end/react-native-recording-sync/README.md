@@ -1,9 +1,59 @@
-# Encrypted recording sync with React Native and a backend
+# Mobile recording app samples: React Native and Flutter
+
+Two Android sample apps share one customer Node backend. Both provide a common
+recording library with Transcript, Summary and Ask views, inspired by the familiar
+Demo/Bota One recording flow. Run a client with synthetic sample recordings and
+no credentials, or connect it to your authorized backend. Each client installs
+independently; no private Bota app or cross-example runtime import is required.
+
+| Client | Common app | Device capability |
+| --- | --- | --- |
+| [React Native](app/README.md) | Sample/live library, transcription, general notes, recording-scoped Ask and GET-only request recovery | Existing Android encrypted-v2 sync for an already-provisioned device |
+| [Flutter](flutter/README.md) | Same sample/live recording journey and customer API | Connection/status only; published facade lacks the fresh pairing/verified encrypted-upload interfaces for sync |
+
+The existing directory name preserves links and journals. This is one combined
+mobile example within Layer 1; vertical workflows remain later work. Current
+hosts are Android only. Native iOS, Flutter iOS and Windows app samples remain
+separate implementation gaps. The [design](DESIGN.md) and
+[architecture](ARCHITECTURE.md) define the shared flow and integration boundaries.
+
+## Try sample recordings
+
+For React Native, follow [app setup](app/README.md), then choose **Try sample recordings**.
+For Flutter, follow [Flutter setup](flutter/README.md) and choose its sample entry.
+The clients use synthetic in-memory content. Sample actions make no network or
+device calls, simulate no device upload/receipt/cleanup, and reset when the app
+session is exited. SDK operations are available only through the explicit live
+Device screen. No Bota API key belongs in either client.
+
+## Connect the common app to your backend
+
+Start the [backend](backend/README.md) with your authorized project/end user,
+server-held Bota key and a distinct random `APP_ACCESS_TOKEN`. Forward its
+loopback port to a USB-connected Android host with `adb reverse tcp:8787 tcp:8787`.
+Enter `http://127.0.0.1:8787` and the application token in the client.
+
+The common app uses `/api/library/*` for fixed-owner recordings, completed
+transcripts, `tmpl_general_notes`, recording-scoped Ask and saved-operation
+GET recovery. It can read existing authorized cloud recordings without device
+configuration. Processing is explicit; upload verification and completed
+transcript prerequisites remain required. Coordinate with other writers and
+automatic processing are the integrator's responsibility.
+
+The optional React Native device workflow requires additional configuration and
+firmware gates below. Flutter cannot perform that sync workflow in this release.
+Audio import/capture and playback are not added to these mobile clients; use
+existing cloud audio or the supported React Native device path.
+
+## React Native encrypted device sync
 
 Select a recording on an already-provisioned Bota device, upload it through the
 public App SDK's encrypted-v2 workflow, and request a transcription after cloud
 publication. This independent example has an Android Expo application and a
-local, authenticated Node backend. Install each from its own directory.
+local, authenticated Node backend. Open **Device** from the live recording app,
+then authorize and enable Bluetooth. After verified sync, return to the library
+for Transcript, Summary and Ask. The original native routes and capture journal
+retain their scoped recovery contract.
 
 **Current SDK:** exact public beta.13. Its local and hosted checks are recorded
 in the [adoption review](../../docs/independent-examples-review.md#beta13-adoption).
@@ -102,9 +152,10 @@ is reachable on IPv4 loopback. This app contains a native upload module, so Expo
 Go cannot run it. The app ID is `dev.bota.examples.recordingsync`; do not uninstall
 an unrelated application if a debug signing key differs.
 
-1. Enter `http://127.0.0.1:8787` and the separate backend application token.
-   Credentials stay in memory. Restart the app to change identity or environment.
-2. Authorize, allow Bluetooth permission, scan and select the expected device.
+1. Connect the recording app to `http://127.0.0.1:8787` with the separate backend
+   application token. Credentials stay in memory; sign out to change identity.
+2. Open **Device**, choose **Enable device access**, authorize, allow Bluetooth
+   permission, scan and select the expected device.
    Its connected serial must match the server-authorized serial, and a fresh
    `BotaDeviceSDK.controls.isProvisioned(device)` read must confirm paired state.
 3. List encrypted recordings. Legacy recordings are counted but excluded.
@@ -114,8 +165,14 @@ an unrelated application if a debug signing key differs.
    receipts and recording bytes remain native; only metadata crosses JavaScript.
 5. Wait for the SDK operation to finish. It obtains the signed publication
    receipt and performs device confirmation before the app reports completion.
-6. Select **Transcribe or check existing job** for the cloud recording. The app
-   polls for up to five minutes and displays the text only after completion.
+6. Choose **Back to recordings**, refresh the library and open the cloud
+   recording. In **Transcript**, explicitly start transcription if needed,
+   then refresh the result. Summary and Ask use the completed transcript.
+
+Back, sign-out and disposal retire the device screen and drain its pending
+native actions before a replacement screen can use the host. Late setup cannot
+dispose a newer host. Failed final cleanup requires an app restart; do not erase
+the retained native or backend journals.
 
 No progress message or successful PUT is authority to delete the source. The
 app never issues its own recording-confirm or recording-delete command.
@@ -169,7 +226,25 @@ npm run export
 npx expo prebuild --platform android --no-install
 cd android
 ./gradlew :recording-sync:testDebugUnitTest :app:assembleDebug --no-daemon -PreactNativeArchitectures=arm64-v8a
+cd ../../flutter
+flutter pub get --enforce-lockfile
+node --test ../scripts/test-flutter-licenses.mjs
+node ../scripts/check-flutter-licenses.mjs
+dart format --output=none --set-exit-if-changed lib test
+flutter analyze
+flutter test
+flutter build apk --debug
 ```
+
+On Windows, use a short checkout path for React Native's native build. CMake/
+Ninja can exceed Windows path limits under deeply nested worktrees. A short
+source copy must preserve the frozen manifest/lock and required postinstall
+security guards; do not replace the SDK or disable checks to make it build.
+
+The Flutter license gate inspects root license texts of resolved Dart packages
+for recognized MIT/BSD/Apache notices and prohibited terms. It is a minimal
+dependency check, not SPDX/legal approval, and does not inspect transitive native
+libraries, embedded assets or every additional term in combined license texts.
 
 The native module's tests cover its HTTP, cancellation and journal obligations.
 Mocked tests and native builds do not establish physical upload/receipt/deletion

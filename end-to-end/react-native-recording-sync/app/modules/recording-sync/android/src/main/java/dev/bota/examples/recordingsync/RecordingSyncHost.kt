@@ -12,7 +12,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.ensureActive
@@ -213,8 +212,11 @@ internal class RecordingSyncHost(root: File, private val config: JSONObject) {
 
     suspend fun cancel(operationId: String) {
         val operation = operations[operationId] ?: return
+        // Retire the coroutine before cancelling sockets. Otherwise an OkHttp
+        // failure can resume preparation with IOException while its Job is active.
+        operation.preparation?.cancel()
         operation.close()
-        operation.preparation?.cancelAndJoin()
+        operation.preparation?.join()
         operation.registration?.let { BotaDeviceSDKEncryptedUploadV2Materials.release(it) }
         operations.remove(operationId, operation)
     }

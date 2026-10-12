@@ -13,7 +13,8 @@
     "postinstall": "node scripts/apply-node-forge-security-patch.mjs && node scripts/apply-braces-security.mjs",
     "test:node-forge-security": "node --test scripts/test-node-forge-security.mjs",
     "test:braces-security": "node --test scripts/test-braces-security.mjs",
-    "test:source-map-security": "node --test scripts/test-source-map-security.mjs"
+    "test:source-map-security": "node --test scripts/test-source-map-security.mjs",
+    "license-check": "node scripts/check-licenses.mjs"
   },
   "engines": {
     "node": ">=22.23.2"

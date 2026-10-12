@@ -6,7 +6,7 @@
   "engines": { "node": ">=22.23.2" },
   "scripts": {
     "start": "node --env-file=.env server.mjs",
-    "check": "node --check server.mjs && node --check service.mjs && node --check service.test.mjs",
-    "test": "node --test service.test.mjs"
+    "check": "node --check server.mjs && node --check service.mjs && node --check service.test.mjs && node --check library.mjs && node --check library.test.mjs && node --check library/errors.mjs && node --check library/store.mjs && node --check library/recordings.mjs && node --check library/processing.mjs && node --check library/ask.mjs",
+    "test": "node --experimental-strip-types --test service.test.mjs library.test.mjs"
   }
 }

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Bota Recording Sync",
+    "name": "Bota Recordings Sample",
     "slug": "bota-recording-sync-example",
     "version": "1.0.0",
     "platforms": ["android"],

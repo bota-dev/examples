@@ -2,6 +2,72 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="mobile-recording-templates-october-12"></a>
+## React Native and Flutter recording app templates — 2026-10-12
+
+Owner direction calls for common, customer-adaptable recording apps from mobile
+to web, inspired by Demo/Bota One. This pass extends the existing combined
+[mobile example](../end-to-end/react-native-recording-sync/README.md), following
+its [design](../end-to-end/react-native-recording-sync/DESIGN.md) and the root
+Layer 1 scope. Independent React Native and Flutter Android clients share one
+customer backend inside this example. It adds no catalog entry, private app
+dependency, vertical workflow or cross-example runtime import.
+
+Three agents implemented/reviewed backend, React Native and Flutter separately.
+Independent reviews caught native/library competing transcription intent, late
+Device cleanup, edited-question answers, source-link validation, Flutter disposal
+and failed SDK cleanup. These were corrected with focused regressions. A real
+native test exposed a coroutine/socket cancellation ordering race; preparation
+now retires before socket closure, then joins before registration release.
+
+| Requirement / authority | Implementation and verified evidence | Status / remaining acceptance |
+| --- | --- | --- |
+| Common customer app, owner direction and local DESIGN | Library/detail with Transcript/Summary/Ask; familiar RN controls and Flutter Material navigation; pure synthetic session in each | Matched in source/controller tests; Flutter phone-size widget journey passes; connected-phone screen review remains unverified because the phone is locked |
+| Multiple platform implementations with maintainable code | Independent RN/Flutter manifests and Android hosts; one Node backend; recipe tables identify public calls and adaptation files | Matched for Android plus the existing web app; mobile iOS and native Windows common apps remain unimplemented |
+| Sample mode does not operate API/SDK/device | Local in-memory APIs, no bearer or backend needed; Device is live-only and explicitly enabled | Matched by synthetic/controller/widget tests and lazy RN SDK entry; no live API/provider or Bluetooth calls performed |
+| Fixed authenticated customer API and exact source ownership | `/api/library` DTOs, server-derived project/end user, exact recording/transcription/summary/Ask links; Bota key server-only, separate app token | Matched by backend and actual RN-adapter→loopback HTTP tests; production/multi-user identity remains customer-owned |
+| Durable uncertain writes and GET-only recovery | Separate scope-bound SQLite journal; pre-write intent, exact known IDs; no replay after uncertainty; narrow operation metadata only | Matched by restart/concurrency/source/HTTP tests; key rotation refuses retained scope; external writers and multiple server instances are not coordinated |
+| Existing native and new library paths cannot compete | One-process recording lock and both-journal intent checks; known missing native job blocks replacement | Matched by both-direction uncertainty and shared-lock regressions; no global exactly-once claim |
+| Late content and edited-question results stay retired | Client account/selection/tab/question revisions, retained action locks, exact summary/citation source IDs, safe 401 expiry | Matched by RN controller/adapter and Flutter HTTP/controller/widget regressions; content renders as literal text |
+| Device screens close before replacement admission | RN `DeviceSessionGate` drains actions/finalizers, disposes native host and awaits SDK destroy; Flutter drains configure/subscriptions/destroy and blocks failed cleanup admission | Matched by deferred lifecycle regressions and independent source review; native callback/physical timing remains unverified |
+| Preserve device completion/security boundaries | RN encrypted-v2 sync retains serial/fresh pairing, inactive direct upload, binding generation, native material and signed receipt gates; Flutter connection/status only | Matched in source; no encrypted transfer, receipt validation or physical deletion acceptance added |
+| Reproducible open-source validation | Frozen npm/pub installs, RN typecheck/export, Flutter format/analyze, Android native tests/builds; license and catalog gates; pinned read-only CI | Matched locally; hosted results must be assessed at the exact pushed source; no publication/deployment included |
+
+Local evidence: **63 backend tests**, **43 RN app tests plus 35 retained security
+tests**, **37 Flutter tests**, **10 native adapter tests**, **five Flutter license
+gate regressions** and **nine catalog regressions** pass. Backend tests use
+mocked public API responses, real local SQLite and loopback HTTP; two exercise
+the actual RN HTTP adapter against the backend. Flutter uses real loopback
+transport plus SDK testing doubles. RN typecheck and Android Metro export pass;
+Flutter frozen install, format and analysis pass. Both debug Android APKs build.
+
+The original deeply nested Windows RN build failed at Ninja's path limit. An
+independent short source copy with the same frozen lock/postinstall guards passed
+all native tests and assembly; the README records this Windows constraint. RN
+APK SHA-256: `07c563b068903c945142399345444307444b17d97d4e6f6c2f60d95d0090399c`.
+Flutter final-source APK SHA-256:
+`5b57490cc43dba05fb16840baf71895548df1fe81b99ea512f319bec096d9b2c`.
+Build warnings include upstream deprecations and Flutter's future Kotlin plugin
+compatibility notice; they are not failed checks or native acceptance evidence.
+
+RN's 445-package license gate and Flutter's 44 resolved package-root notice gate
+pass. Flutter's minimal text scanner does not establish SPDX/legal approval or
+inspect transitive native libraries/embedded assets/additional unknown terms.
+The existing RN graph still reports 17 high audit entries; mandatory qualified
+Forge/braces/source-map guards remain unchanged. No scanner closure or general
+vulnerability-free claim follows. Existing package locks and public beta.13
+identities are preserved; Flutter reuses the exact existing connection-sample
+lock graph. RN fetch requests redirect refusal but native enforcement and its
+post-buffer response limit remain qualification gaps documented in the app.
+
+Changed-token searches covered internal/public docs and repository root docs;
+the downstream matrix requires no platform/device-design change for these
+customer samples. Root/local design, architecture, README, agent/AI guidance,
+catalog and public SDK/changelog source reflect actual support. Historical
+reviews below retain their tested source/package/hardware identities. No live
+API/provider/storage request, wearable operation, firmware change, package
+publication or site deployment was performed.
+
 <a id="common-recording-template-october-12"></a>
 ## Common recording app template correction — 2026-10-12
 

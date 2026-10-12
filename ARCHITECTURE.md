@@ -54,11 +54,19 @@ credential-free demo are authorized; live API and production identity/deployment
 acceptance remain separate. See its [architecture](end-to-end/web-reference/ARCHITECTURE.md)
 and the [historical implementation review](docs/independent-examples-review.md#web-reference-october-12).
 
-Existing mobile/native connection and catalog examples are focused snippets,
-not complete versions of that app journey. The Android recording-sync demo
-covers only its documented already-provisioned path. Full app coverage on other
-platforms remains future implementation work with separate public-contract,
-build and physical acceptance gates.
+The [mobile recording samples](end-to-end/react-native-recording-sync/README.md)
+add React Native and Flutter Android library/detail apps with Transcript,
+Summary, Ask and GET-only request recovery. Each client installs independently;
+one authenticated customer backend within this example serves both. Synthetic
+mode makes no API or SDK calls. React Native retains its optional encrypted-v2
+sync for an already-provisioned device; Flutter offers connection/status only.
+Cloud library access needs no device configuration and grants no cleanup
+authority. Public package pins and existing capture journals remain unchanged.
+
+Other connection/catalog examples remain focused snippets. Native iOS and
+Windows common apps, Flutter iOS, mobile audio capture/playback and broader
+device workflows remain future work with separate public-contract, build and
+physical acceptance gates. See the [mobile review](docs/independent-examples-review.md#mobile-recording-templates-october-12).
 
 Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The credential-free health example uses the separately documented public `/health` endpoint. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
 
@@ -161,7 +169,7 @@ examples/
       web/features/
       server/features/
       README.md
-    react-native-recording-sync/    # Already-provisioned Android, encrypted v2 only
+    react-native-recording-sync/    # RN/Flutter Android apps + one customer backend
       app/
       backend/
       README.md

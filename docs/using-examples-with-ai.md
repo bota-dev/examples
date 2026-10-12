@@ -20,7 +20,15 @@ Use the [platform coverage table](../README.md#current-platform-coverage) for
 mobile/native hosts and their current gaps. Keep each app's UI focused on the
 recording user; put public-call explanations in README/source. Connection and
 catalog snippets do not implement a complete recording app.
-Its recipe table maps recordings, upload, transcription, notes, Ask and notifications
+For Android, use [mobile recording samples](../end-to-end/react-native-recording-sync/README.md):
+React Native and Flutter clients install independently and share one customer
+backend. Select `app/` or `flutter/` and follow its README. Synthetic mode needs
+no backend or device; live API content uses a separate app token and server-held
+Bota key. RN's optional device page retains encrypted-v2 sync; Flutter's page
+supports connection/status only. No mobile iOS or Windows host is supplied there.
+
+The web sample's
+recipe table maps recordings, upload, transcription, notes, Ask and notifications
 to small backend/frontend files. One install root shares HTTP, auth and durable
 intent helpers. Adapt just the selected feature and its imports, or run the whole
 synthetic demo. Replace the app auth adapter with your verified identity mapping;

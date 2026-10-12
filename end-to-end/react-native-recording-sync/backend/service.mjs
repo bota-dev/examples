@@ -35,11 +35,12 @@ export function readConfig(env) {
   valid(api.protocol === 'https:' || (api.protocol === 'http:' && ['localhost', '127.0.0.1', '[::1]'].includes(api.hostname)), 'invalid_api_origin');
   valid(api.pathname.replace(/\/$/, '') === '/v1' && !api.search && !api.hash && !api.username && !api.password, 'invalid_api_origin');
   valid(typeof env.BOTA_API_KEY === 'string' && /^(sk_test_|sk_live_|rk_)[A-Za-z0-9_-]+$/.test(env.BOTA_API_KEY), 'invalid_api_key');
-  valid(ID.device.test(env.BOTA_DEVICE_ID) && ID.user.test(env.BOTA_END_USER_ID), 'invalid_fixed_identity');
+  const deviceId = env.BOTA_DEVICE_ID === undefined || env.BOTA_DEVICE_ID === '' ? null : env.BOTA_DEVICE_ID;
+  valid((deviceId === null || ID.device.test(deviceId)) && ID.user.test(env.BOTA_END_USER_ID), 'invalid_fixed_identity');
   valid(typeof env.BOTA_PROJECT_ID === 'string' && /^[A-Za-z0-9_-]{3,128}$/.test(env.BOTA_PROJECT_ID), 'invalid_project');
-  valid(typeof env.APP_ACCESS_TOKEN === 'string' && env.APP_ACCESS_TOKEN.length >= 32 && env.APP_ACCESS_TOKEN.length <= 256 && !/\s/.test(env.APP_ACCESS_TOKEN) && !/^(sk_|rk_|dtok_)/.test(env.APP_ACCESS_TOKEN) && env.APP_ACCESS_TOKEN !== env.BOTA_API_KEY, 'invalid_application_token');
+  valid(typeof env.APP_ACCESS_TOKEN === 'string' && env.APP_ACCESS_TOKEN.length >= 32 && env.APP_ACCESS_TOKEN.length <= 256 && !/\s/.test(env.APP_ACCESS_TOKEN) && !/^(sk_|rk_|dtok_|up_|rct_)/.test(env.APP_ACCESS_TOKEN) && env.APP_ACCESS_TOKEN !== env.BOTA_API_KEY, 'invalid_application_token');
   return { apiBase: api.href.replace(/\/$/, ''), apiKey: env.BOTA_API_KEY, projectId: env.BOTA_PROJECT_ID,
-    endUserId: env.BOTA_END_USER_ID, deviceId: env.BOTA_DEVICE_ID, appToken: env.APP_ACCESS_TOKEN };
+    endUserId: env.BOTA_END_USER_ID, deviceId, appToken: env.APP_ACCESS_TOKEN };
 }
 
 /** A single fixed customer identity. The database never contains signed material or audio. */
@@ -67,11 +68,11 @@ export class SyncService {
   }
   close() { this.db.close(); }
 
-  async upstream(path, method = 'GET', body) {
+  async upstream(path, method = 'GET', body, timeout = 25_000) {
     // Every path comes from a fixed route below and validated identifiers.
     let response;
     try {
-      response = await this.fetch(this.config.apiBase + path, { method, redirect: 'error', signal: AbortSignal.timeout(25_000),
+      response = await this.fetch(this.config.apiBase + path, { method, redirect: 'error', signal: AbortSignal.timeout(timeout),
         headers: { Authorization: `Bearer ${this.config.apiKey}`, Accept: 'application/json', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
         ...(body === undefined ? {} : { body: JSON.stringify(body) }) });
       if (!response.ok) fail(response.status === 404 ? 404 : response.status === 429 ? 429 : 502, 'upstream_rejected');
@@ -96,6 +97,7 @@ export class SyncService {
     try { return await work(); } finally { this.busy.delete(key); }
   }
   async device(expectedGeneration) {
+    if (!this.config.deviceId) fail(409, 'device_not_configured', 'Configure a bound device and its own journal before using device sync.');
     const device = await this.upstream(`/devices/${this.config.deviceId}`);
     if (device?.id !== this.config.deviceId || device.project_id !== this.config.projectId || device.end_user_id !== this.config.endUserId || device.status !== 'bound' || device.deleted_at || !integer(device.binding_generation, 1, 0x7fffffff)) fail(409, 'device_scope_changed');
     if (expectedGeneration !== undefined && device.binding_generation !== expectedGeneration) fail(409, 'binding_changed');
@@ -243,6 +245,11 @@ export class SyncService {
     if (!ID.transcription.test(value?.id) || value.project_id !== this.config.projectId || value.recording_id !== recordingId || !['pending', 'processing', 'completed', 'failed'].includes(value.status)) fail(502, 'upstream_response_invalid');
     return { id: value.id, recordingId, status: value.status, ...(value.status === 'completed' && typeof value.full_text === 'string' ? { text: value.full_text } : {}) };
   }
+  assertLibraryTranscription(recordingId) {
+    const row = this.db.prepare('SELECT transcription_state,transcription_id FROM captures WHERE recording_id=?').get(recordingId);
+    if (row?.transcription_state === 'uncertain') fail(409, 'transcription_create_uncertain', 'The native transcription intent needs reconciliation. No library replacement is allowed.');
+    return row?.transcription_id ?? undefined;
+  }
   async transcribe(recordingId, generation) {
     return this.exclusive(`recording:${recordingId}`, async () => {
       const row = await this.capture(recordingId, generation);
@@ -255,10 +262,12 @@ export class SyncService {
       if (existing.has_more || existing.data.length > 1) fail(409, 'multiple_transcriptions_exist');
       if (existing.data.length === 1) {
         const item = this.normalizeTranscription(existing.data[0], recordingId);
+        this.beforeTranscriptionCreate?.(recordingId, item.id);
         this.db.prepare("UPDATE captures SET transcription_state='known',transcription_id=? WHERE recording_id=?").run(item.id, recordingId);
         await this.device(row.generation); return item;
       }
       await this.device(row.generation);
+      this.beforeTranscriptionCreate?.(recordingId);
       const intent = this.db.prepare("UPDATE captures SET transcription_state='uncertain' WHERE recording_id=? AND transcription_state IS NULL").run(recordingId);
       if (intent.changes !== 1) fail(409, 'transcription_create_uncertain');
       const item = this.normalizeTranscription(await this.upstream('/transcriptions', 'POST', { recording_id: recordingId }), recordingId);
@@ -288,6 +297,7 @@ export class SyncService {
     return { recordings };
   }
   async route(method, path, body, generationHeader) {
+    if (!this.config.deviceId && /^\/api\/(?:context|recordings|transcriptions|devices)(?:\/|$)/.test(path)) fail(409, 'device_not_configured', 'This backend is in cloud-library mode. Device sync is unavailable.');
     if (method === 'GET' && path === '/api/context') return this.context();
     if (method === 'POST' && path === '/api/recordings') return this.createRecording(body);
     valid(typeof generationHeader === 'string' && /^[1-9][0-9]*$/.test(generationHeader) && integer(Number(generationHeader), 1, 0x7fffffff), 'binding_generation_required');

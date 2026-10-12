@@ -85,9 +85,13 @@ the public API/SDK integration clear.
   SDKs. Connection/catalog snippets are independently useful, but they do not
   yet implement the full common recording-app journey. Their exact capabilities
   and hardware evidence are in their READMEs.
-- The [Android recording-sync demo](end-to-end/react-native-recording-sync/README.md)
-  combines SDK and backend for an already-provisioned encrypted-upload path.
-  Its supported scope is narrower than the complete target device lifecycle.
+- The [mobile recording samples](end-to-end/react-native-recording-sync/README.md)
+  provide React Native and Flutter Android clients with a shared customer backend,
+  local sample recordings and the common library/Transcript/Summary/Ask journey.
+  React Native retains an optional already-provisioned encrypted-upload path;
+  Flutter exposes connection/status only. Native iOS, Flutter iOS and Windows
+  hosts remain gaps; no complete target device lifecycle or physical acceptance
+  is inferred from the clients' source/build evidence.
 - The [review](docs/independent-examples-review.md) records implementation and
   verification. Many existing entries have source/syntax evidence only; a
   curated, consistently presented SDK/API showcase remains partial.

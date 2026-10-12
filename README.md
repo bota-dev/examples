@@ -31,8 +31,8 @@ Follow each README for build and physical-device evidence.
 
 | Platform | Runnable examples and current scope |
 | --- | --- |
-| React Native | [Android/iOS connection](app-sdk/react-native-device-connect/README.md); [Android-only recording sync](end-to-end/react-native-recording-sync/README.md) for an already-provisioned device, encrypted upload and transcription |
-| Flutter | [Android-only connection](app-sdk/flutter-device-connect/README.md); no iOS example host yet |
+| React Native | [Android recording app](end-to-end/react-native-recording-sync/app/README.md): library, Transcript/Summary/Ask and optional encrypted device sync; separate [Android/iOS connection](app-sdk/react-native-device-connect/README.md) |
+| Flutter | [Android recording app](end-to-end/react-native-recording-sync/flutter/README.md): the same library/AI flow and connection/status; separate [connection snippet](app-sdk/flutter-device-connect/README.md); no iOS example host yet |
 | Kotlin / Android | [Connection](app-sdk/android-device-connect/README.md) and [recording metadata catalog](app-sdk/android-recording-catalog/README.md); no audio/API app journey |
 | Swift / Apple | [macOS connection](app-sdk/apple-device-connect/README.md) and [macOS recording metadata catalog](app-sdk/apple-recording-catalog/README.md); no native iOS example host yet |
 | Web | [Bota Recordings API app](end-to-end/web-reference/README.md) for audio import, Transcript/Summary/Ask; separate [desktop Chromium SDK connection](app-sdk/web-device-connect/README.md) with Web Bluetooth, not integrated into that app |
@@ -48,6 +48,7 @@ agent, start with the [AI quick-start guide](docs/using-examples-with-ai.md) and
 | Your task | Start here |
 | --- | --- |
 | Start a common web recording app | [Bota Recordings: React + Node](end-to-end/web-reference/README.md) |
+| Start a common mobile recording app | [React Native and Flutter with one backend](end-to-end/react-native-recording-sync/README.md) |
 | Upload audio and get a transcript | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) |
 | Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python webhook](api/webhook-receiver-python/README.md) |
 | Connect to a physical device | Choose your platform under `app-sdk/` in the [catalog](#example-catalog) |
@@ -181,7 +182,7 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Android recording catalog](app-sdk/android-recording-catalog/README.md) | Verify exact serial and list legacy/encrypted-v2 metadata without audio transfer | Yes |
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
-| [React Native encrypted recording sync](end-to-end/react-native-recording-sync/README.md) | Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; [scope and evidence](docs/independent-examples-review.md#pre-provisioned-recording-sync) | Yes |
+| [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | React Native + Flutter Android library, Transcript/Summary/Ask; one authenticated backend; synthetic mode; optional RN encrypted sync and Flutter connection/status | No; device path optional |
 | [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
 
 Native SDK smoke samples used to develop the SDK itself belong in the SDK source repository. These customer-facing examples consume published artifacts.

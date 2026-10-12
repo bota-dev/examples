@@ -1,4 +1,4 @@
-name: React Native recording sync
+name: Mobile recording samples
 
 on:
   push:
@@ -11,10 +11,21 @@ on:
 permissions:
   contents: read
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+concurrency:
+  group: mobile-recording-samples-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   backend:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, windows-latest]
     defaults:
       run:
         working-directory: end-to-end/react-native-recording-sync/backend
@@ -26,6 +37,7 @@ jobs:
         with:
           node-version: '22.23.2'
       - run: npm ci
+      - run: npm run check
       - run: npm test
 
   android:
@@ -46,6 +58,7 @@ jobs:
           distribution: temurin
           java-version: '17'
       - run: npm ci
+      - run: npm run license-check
       - run: npm run typecheck
       - run: npm test
       - run: npm run export
@@ -58,4 +71,42 @@ jobs:
         with:
           name: recording-sync-android-${{ github.sha }}
           path: end-to-end/react-native-recording-sync/app/android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
+
+  flutter-android:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    defaults:
+      run:
+        working-directory: end-to-end/react-native-recording-sync/flutter
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22.23.2'
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Flutter 3.47.5
+        run: |
+          git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = 6a19cca56475dbfba1478ee68d7bd0c2ef891da1
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - run: flutter precache --android
+      - run: flutter pub get --enforce-lockfile
+      - name: Dependency licenses
+        run: |
+          node --test ../scripts/test-flutter-licenses.mjs
+          node ../scripts/check-flutter-licenses.mjs
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build apk --debug
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: mobile-recordings-flutter-android-${{ github.sha }}
+          path: end-to-end/react-native-recording-sync/flutter/build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
