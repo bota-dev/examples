@@ -204,6 +204,7 @@ command locally with Node.js 22.23.2 or newer:
 
 ```sh
 node scripts/check-catalog.mjs
+node --test scripts/test-catalog.mjs
 ```
 
 It validates the index's IDs/types and paths, all independent directories,
@@ -212,6 +213,9 @@ entry documents, AI guide and indexed README/setup/evidence Markdown files.
 It ignores fenced snippets, remote URLs and heading fragments; it does not
 validate anchors, reference-style links, HTML links or example behavior. No
 package installation, API key or hardware is needed.
+The regression suite creates temporary miniature repositories and exercises
+metadata/link mistakes and escaped path targets. Catalog CI runs both checks
+on Linux and Windows; it does not run the catalog's examples.
 The current root CI runs:
 
 ```sh
@@ -231,11 +235,17 @@ These commands cover dependency and upload-completion regression checks, workspa
 
 ## Documentation
 
+- [Contributing](CONTRIBUTING.md): code quality, local checks and documentation expectations.
 - [Repository design](DESIGN.md): purpose, developer experience and criteria for selecting examples.
 - [Architecture](ARCHITECTURE.md): repository structure, integration contracts, migration, and acceptance gates.
 - [Contributor and agent instructions](AGENTS.md): how to add and verify examples.
 - [Claude Code entry point](CLAUDE.md): shared instructions for Claude Code.
 - [Bota public documentation](https://docs.bota.dev): API and SDK integration contracts.
+
+## License
+
+Bota-authored sample code is available under the [MIT license](LICENSE).
+Third-party dependencies and vendored files retain their own licenses and notices.
 
 Start with the [web reference](end-to-end/web-reference/README.md) for a customer web app, or [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
 

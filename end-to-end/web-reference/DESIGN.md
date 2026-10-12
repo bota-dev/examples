@@ -1,6 +1,9 @@
-# Recording workbench
+# Bota API Explorer
 
-One compact customer reference app. Warm paper, ink/teal typography and a coral
+One general platform API sample for developers, within repository Layer 1.
+Name the demonstrated public calls and link their documentation/sample source
+inside each feature. Keep callback routes distinct from Bota API endpoints.
+Warm paper, ink/teal typography and a coral
 action accent. Serif headings and monospace metadata distinguish content from
 controls. Responsive list/detail panes, plain CSS and local fonts; no private
 component package or third-party asset service.

@@ -575,13 +575,16 @@ The compound-engineering review uses the repository architecture and public cont
 ## 6. Validation and CI design
 
 The dependency-free [catalog workflow](.github/workflows/catalog.yml) runs
-`node scripts/check-catalog.mjs` on every push and pull request without path or
+`node scripts/check-catalog.mjs` and `node --test scripts/test-catalog.mjs` on
+Linux and Windows for every push and pull request without path or
 branch filters. It validates versioned index metadata, existing independent
 example directories, ordered root catalog correspondence and local inline file
 links in root entry documents, the AI guide and indexed documentation. It reads
 repository files only and performs no dependency install or example execution.
 Fenced snippets, remote URLs, anchors, reference-style and HTML links are outside
 its checks. A passing metadata check is not runtime/API/device acceptance.
+The tests exercise miniature temporary repositories with malformed metadata,
+missing/reordered entries, broken links and escaped/symlinked targets.
 
 
 New CI jobs should install and check only the affected independent examples; shared CI changes must select all impacted jobs. Use platform-appropriate runners for native builds. Keep the current legacy job until the legacy workspace is retired.

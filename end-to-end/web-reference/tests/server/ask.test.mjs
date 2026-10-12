@@ -1,72 +1,188 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { mkdtempSync, realpathSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join } from 'node:path';
 import { AppError } from '../../server/errors.mjs';
 import { askRecording, refreshAsk } from '../../server/features/ask.mjs';
+import { createClient } from '../../server/client.mjs';
+import { configuration } from '../../server/config.mjs';
+import { demoFetch } from '../../server/demo.mjs';
+import { createStore } from '../../server/store.mjs';
 
-const principal = { accountId: 'alice', scopeId: 'scope-alice', endUserId: 'eu_alice', projectId: 'proj_test' };
-const recording = { id: 'rec_one', end_user_id: principal.endUserId, project_id: principal.projectId,
-  status: 'completed', created_at: '2026-10-12T10:00:00Z' };
+const principal = {
+  accountId: 'alice',
+  scopeId: 'scope-alice',
+  endUserId: 'eu_alice',
+  projectId: 'proj_test',
+};
+const recording = {
+  id: 'rec_one',
+  end_user_id: principal.endUserId,
+  project_id: principal.projectId,
+  status: 'completed',
+  created_at: '2026-10-12T10:00:00Z',
+};
 const question = 'What did the synthetic speaker decide?';
-const assistant = { id: 'msg_answer', role: 'assistant', content: '<b>Ship the synthetic fixture.</b>',
-  parts: [{ type: 'text', text: 'Ship the synthetic fixture.' }, { type: 'citation', recording_id: recording.id, start_ms: 1200 }],
-  finish_reason: 'stop', provider: 'private-provider', model: 'private-model', tokens: { input: 100 } };
+const assistant = {
+  id: 'msg_answer',
+  role: 'assistant',
+  content: '<b>Ship the synthetic fixture.</b>',
+  parts: [
+    { type: 'text', text: 'Ship the synthetic fixture.' },
+    { type: 'citation', recording_id: recording.id, start_ms: 1200 },
+  ],
+  finish_reason: 'stop',
+  provider: 'private-provider',
+  model: 'private-model',
+  tokens: { input: 100 },
+};
 const user = { id: 'msg_question', role: 'user', content: question };
-const page = data => ({ data, has_more: false, next_cursor: null });
+const page = (data) => ({ data, has_more: false, next_cursor: null });
+const questionDigest = (value) => createHash('sha256').update(value, 'utf8').digest('hex');
+
+async function durableFixture(run) {
+  const scratch = realpathSync(tmpdir());
+  const directory = mkdtempSync(join(scratch, 'bota-ask-upgrade-'));
+  const path = join(directory, 'intent.sqlite');
+  const config = configuration({}, { demo: true });
+  const calls = [];
+  const upstream = demoFetch();
+  let store = createStore(path);
+  const ctx = {
+    config,
+    principal: config.accounts[0].principal,
+    store,
+    ...createClient(config, {
+      fetchImpl: (url, options) => {
+        calls.push({ url, method: options.method });
+        return upstream(url, options);
+      },
+    }),
+  };
+  const reopen = () => {
+    store.close();
+    store = createStore(path);
+    ctx.store = store;
+  };
+  try {
+    await run({ ctx, calls, reopen });
+  } finally {
+    store.close();
+    const target = realpathSync(directory);
+    assert.equal(dirname(target), scratch);
+    rmSync(target, { recursive: true, force: true });
+  }
+}
 
 function fixture() {
-  const calls = [], operations = new Map(), order = [];
+  const calls = [],
+    operations = new Map(),
+    order = [];
   let messages = [];
-  const session = () => ({ id: 'as_one', scope: { type: 'recording', recording_ids: [recording.id] },
-    message_count: messages.length, title: 'private-title' });
-  const ctx = { principal: { ...principal }, store: {
-    get(owner, id) {
-      const row = [...operations.entries()].find(([key, operation]) =>
-        key.startsWith(`${owner.accountId}:${owner.scopeId}:`) && operation.id === id)?.[1];
-      if (!row) throw new AppError(404, 'NOT_FOUND', 'Operation unavailable.');
-      return structuredClone(row);
+  const session = () => ({
+    id: 'as_one',
+    scope: { type: 'recording', recording_ids: [recording.id] },
+    message_count: messages.length,
+    title: 'private-title',
+  });
+  const ctx = {
+    principal: { ...principal },
+    store: {
+      get(owner, id) {
+        const row = [...operations.entries()].find(
+          ([key, operation]) =>
+            key.startsWith(`${owner.accountId}:${owner.scopeId}:`) && operation.id === id,
+        )?.[1];
+        if (!row) throw new AppError(404, 'NOT_FOUND', 'Operation unavailable.');
+        return structuredClone(row);
+      },
+      find(owner, kind, anchor) {
+        const row = [...operations.entries()].find(
+          ([key, operation]) =>
+            key.startsWith(`${owner.accountId}:${owner.scopeId}:`) &&
+            operation.kind === kind &&
+            operation.anchor === anchor,
+        )?.[1];
+        return row ? structuredClone(row) : null;
+      },
+      findLegacyAsk(owner, recordingId) {
+        const row = [...operations.entries()].find(
+          ([key, operation]) =>
+            key.startsWith(`${owner.accountId}:${owner.scopeId}:`) &&
+            operation.kind === 'ask' &&
+            operation.details.recordingId === recordingId &&
+            operation.state !== 'complete' &&
+            operation.details.questionFormat !== 'trim-v1',
+        )?.[1];
+        return row ? structuredClone(row) : null;
+      },
+      claim(owner, kind, anchor, details) {
+        order.push('claim');
+        const key = `${owner.accountId}:${owner.scopeId}:${anchor}`;
+        if (operations.has(key))
+          return { fresh: false, operation: structuredClone(operations.get(key)) };
+        const operation = {
+          id: `op_${operations.size}`,
+          kind,
+          anchor,
+          details,
+          state: 'claimed',
+          resourceId: null,
+          updatedAt: recording.created_at,
+        };
+        operations.set(key, operation);
+        return { fresh: true, operation: structuredClone(operation) };
+      },
+      save(owner, id, changes) {
+        order.push(`save:${changes.state}`);
+        const operation = [...operations.values()].find((row) => row.id === id);
+        assert.ok(operation);
+        Object.assign(operation, {
+          ...changes,
+          details: { ...operation.details, ...changes.details },
+        });
+        return structuredClone(operation);
+      },
     },
-    claim(owner, kind, anchor, details) {
-      order.push('claim');
-      const key = `${owner.accountId}:${owner.scopeId}:${anchor}`;
-      if (operations.has(key)) return { fresh: false, operation: structuredClone(operations.get(key)) };
-      const operation = { id: `op_${operations.size}`, kind, anchor, details, state: 'claimed', resourceId: null, updatedAt: recording.created_at };
-      operations.set(key, operation);
-      return { fresh: true, operation: structuredClone(operation) };
+    async request(method, path, body) {
+      calls.push({ method, path, body });
+      order.push(`${method}:${path}`);
+      if (path === '/recordings/rec_one') return structuredClone(recording);
+      if (method === 'POST' && path === '/ask/sessions') {
+        assert.equal([...operations.values()].at(-1).state, 'creating');
+        return session();
+      }
+      if (method === 'POST' && path === '/ask/sessions/as_one/messages') {
+        const operation = [...operations.values()].at(-1);
+        assert.equal(operation.state, 'sending');
+        assert.equal(operation.resourceId, 'as_one', 'session ID must be durable before sending');
+        messages = structuredClone([user, assistant]);
+        return { session_id: 'as_one', message: structuredClone(assistant), sources: [] };
+      }
+      if (path.startsWith('/ask/sessions?')) {
+        const query = new URL(path, 'https://fixture.test').searchParams;
+        assert.equal(query.get('end_user_id'), ctx.principal.endUserId);
+        assert.equal(query.get('scope_type'), 'recording');
+        assert.equal(query.get('recording_id'), recording.id);
+        return page([session()]);
+      }
+      if (path === '/ask/sessions/as_one') return session();
+      if (path === '/ask/sessions/as_one/messages?limit=3') return page(structuredClone(messages));
+      throw new Error(`Unexpected fixture request ${path}`);
     },
-    save(owner, id, changes) {
-      order.push(`save:${changes.state}`);
-      const operation = [...operations.values()].find(row => row.id === id);
-      assert.ok(operation);
-      Object.assign(operation, { ...changes, details: { ...operation.details, ...changes.details } });
-      return structuredClone(operation);
+  };
+  return {
+    ctx,
+    calls,
+    operations,
+    order,
+    session,
+    setMessages: (value) => {
+      messages = structuredClone(value);
     },
-  }, async request(method, path, body) {
-    calls.push({ method, path, body });
-    order.push(`${method}:${path}`);
-    if (path === '/recordings/rec_one') return structuredClone(recording);
-    if (method === 'POST' && path === '/ask/sessions') {
-      assert.equal([...operations.values()].at(-1).state, 'creating');
-      return session();
-    }
-    if (method === 'POST' && path === '/ask/sessions/as_one/messages') {
-      const operation = [...operations.values()].at(-1);
-      assert.equal(operation.state, 'sending');
-      assert.equal(operation.resourceId, 'as_one', 'session ID must be durable before sending');
-      messages = structuredClone([user, assistant]);
-      return { session_id: 'as_one', message: structuredClone(assistant), sources: [] };
-    }
-    if (path.startsWith('/ask/sessions?')) {
-      const query = new URL(path, 'https://fixture.test').searchParams;
-      assert.equal(query.get('end_user_id'), ctx.principal.endUserId);
-      assert.equal(query.get('scope_type'), 'recording');
-      assert.equal(query.get('recording_id'), recording.id);
-      return page([session()]);
-    }
-    if (path === '/ask/sessions/as_one') return session();
-    if (path === '/ask/sessions/as_one/messages?limit=3') return page(structuredClone(messages));
-    throw new Error(`Unexpected fixture request ${path}`);
-  } };
-  return { ctx, calls, operations, order, session, setMessages: value => { messages = structuredClone(value); } };
+  };
 }
 
 test('one empty-session create plus one send, then safe selected answer and GET-only repeated intent', async () => {
@@ -77,23 +193,139 @@ test('one empty-session create plus one send, then safe selected answer and GET-
   assert.deepEqual(first.citations, [{ recording_id: recording.id, start_ms: 1200 }]);
   assert.equal(first.operation.state, 'complete');
   assert.deepEqual(second, first);
-  assert.equal(calls.filter(row => row.method === 'POST').length, 2);
-  assert.deepEqual(calls.find(row => row.method === 'POST' && row.path === '/ask/sessions').body,
-    { scope: { type: 'recording', recording_id: recording.id }, end_user_id: principal.endUserId });
+  assert.equal(calls.filter((row) => row.method === 'POST').length, 2);
+  assert.deepEqual(
+    calls.find((row) => row.method === 'POST' && row.path === '/ask/sessions').body,
+    { scope: { type: 'recording', recording_id: recording.id }, end_user_id: principal.endUserId },
+  );
   assert.ok(order.indexOf('save:created') < order.indexOf('POST:/ask/sessions/as_one/messages'));
   assert.ok(!JSON.stringify(first).includes('private'));
-  assert.ok(!JSON.stringify([...operations.values()]).includes(question), 'journal stores hash, not question text');
+  assert.ok(
+    !JSON.stringify([...operations.values()]).includes(question),
+    'journal stores hash, not question text',
+  );
 });
+
+test('whitespace-equivalent questions use the public canonical text and one durable intent', async () => {
+  const { ctx, calls, operations } = fixture();
+  const first = await askRecording(ctx, recording.id, ` \t${question}\n `);
+  const repeated = await askRecording(ctx, recording.id, question);
+  const refreshed = await refreshAsk(ctx, first.operation.id);
+  assert.equal(first.answer, assistant.content);
+  assert.deepEqual(repeated, first);
+  assert.deepEqual(refreshed, first);
+  assert.equal(operations.size, 1);
+  const writes = calls.filter((row) => row.method === 'POST');
+  assert.equal(writes.length, 2, 'one session create and one message send');
+  assert.deepEqual(writes[1].body, { content: question });
+});
+
+test('blank canonical questions are rejected before reading or claiming', async () => {
+  const { ctx, calls, operations } = fixture();
+  await assert.rejects(askRecording(ctx, recording.id, ' \t\n\u00a0 '), {
+    code: 'invalid_question',
+  });
+  assert.equal(calls.length, 0);
+  assert.equal(operations.size, 0);
+});
+
+test('pre-upgrade raw Ask intent survives reopen and blocks a canonical replacement', async () =>
+  durableFixture(async ({ ctx, calls, reopen }) => {
+    const raw = ` \t${question}\n `;
+    const digest = questionDigest(raw);
+    const legacy = ctx.store.claim(ctx.principal, 'ask', `rec_demo001:${digest}`, {
+      recordingId: 'rec_demo001',
+      questionHash: digest,
+    }).operation;
+    ctx.store.save(ctx.principal, legacy.id, { state: 'uncertain' });
+    reopen();
+    const sameRaw = await askRecording(ctx, 'rec_demo001', raw);
+    assert.equal(sameRaw.operation.id, legacy.id);
+    assert.equal(sameRaw.operation.state, 'uncertain');
+    assert.equal(sameRaw.operation.resource_id, null);
+    await assert.rejects(askRecording(ctx, 'rec_demo001', question), { code: 'legacy_ask_intent' });
+    const retained = ctx.store.get(ctx.principal, legacy.id);
+    assert.equal(retained.details.questionHash, digest);
+    assert.equal(retained.details.questionFormat, undefined);
+    assert.equal(ctx.store.list(ctx.principal).length, 1);
+    assert.ok(calls.every((call) => call.method === 'GET'));
+    assert.ok(
+      !JSON.stringify(retained).includes(question),
+      'upgrade persists no question plaintext',
+    );
+  }));
+
+test('legacy uncertainty guard searches beyond the 50-row activity view and remains scoped', async () =>
+  durableFixture(async ({ ctx, calls, reopen }) => {
+    const digest = questionDigest(` ${question} `);
+    const legacy = ctx.store.claim(ctx.principal, 'ask', `rec_demo001:${digest}`, {
+      recordingId: 'rec_demo001',
+      questionHash: digest,
+    }).operation;
+    ctx.store.save(ctx.principal, legacy.id, { state: 'submitted', resourceId: 'as_legacy' });
+    await new Promise((resolve) => setTimeout(resolve, 10));
+    for (let index = 0; index < 51; index++) {
+      const laterHash = questionDigest(`later-${index}`);
+      ctx.store.claim(ctx.principal, 'ask', `rec_demo002:${laterHash}`, {
+        recordingId: 'rec_demo002',
+        questionHash: laterHash,
+        questionFormat: 'trim-v1',
+      });
+    }
+    reopen();
+    assert.equal(ctx.store.list(ctx.principal).length, 50);
+    assert.ok(!ctx.store.list(ctx.principal).some((row) => row.id === legacy.id));
+    await assert.rejects(askRecording(ctx, 'rec_demo001', question), { code: 'legacy_ask_intent' });
+    assert.equal(ctx.store.findLegacyAsk(ctx.principal, 'rec_demo001').id, legacy.id);
+    assert.equal(ctx.store.findLegacyAsk(ctx.principal, 'rec_demo002'), null);
+    assert.equal(
+      ctx.store.findLegacyAsk({ ...ctx.principal, accountId: 'other' }, 'rec_demo001'),
+      null,
+    );
+    assert.throws(
+      () => ctx.store.findLegacyAsk({ ...ctx.principal, scopeId: 'rotated' }, 'rec_demo001'),
+      { code: 'SCOPE_CHANGED' },
+    );
+    assert.ok(calls.every((call) => call.method === 'GET'));
+  }));
+
+test('exact completed canonical legacy intent reconciles without writes and permits distinct new questions', async () =>
+  durableFixture(async ({ ctx, calls, reopen }) => {
+    const digest = questionDigest(question);
+    const legacy = ctx.store.claim(ctx.principal, 'ask', `rec_demo001:${digest}`, {
+      recordingId: 'rec_demo001',
+      questionHash: digest,
+    }).operation;
+    const session = await ctx.request('POST', '/ask/sessions', {
+      scope: { type: 'recording', recording_id: 'rec_demo001' },
+      end_user_id: ctx.principal.endUserId,
+    });
+    await ctx.request('POST', `/ask/sessions/${session.id}/messages`, { content: question });
+    ctx.store.save(ctx.principal, legacy.id, { state: 'complete', resourceId: session.id });
+    reopen();
+    calls.length = 0;
+    const result = await askRecording(ctx, 'rec_demo001', ` ${question} `);
+    assert.equal(result.operation.id, legacy.id);
+    assert.equal(result.operation.state, 'complete');
+    assert.ok(calls.every((call) => call.method === 'GET'));
+    assert.equal(ctx.store.get(ctx.principal, legacy.id).details.questionFormat, undefined);
+    calls.length = 0;
+    const next = await askRecording(ctx, 'rec_demo001', 'How can I use this recording?');
+    assert.notEqual(next.operation.id, legacy.id);
+    assert.equal(ctx.store.get(ctx.principal, next.operation.id).details.questionFormat, 'trim-v1');
+    assert.equal(calls.filter((call) => call.method === 'POST').length, 2);
+  }));
 
 test('membership absence prevents exact session GET despite a saved known ID and optional owner fields', async () => {
   const { ctx, calls } = fixture();
   await askRecording(ctx, recording.id, question);
   calls.length = 0;
   const request = ctx.request;
-  ctx.request = (method, path, body) => path.startsWith('/ask/sessions?') ? page([]) : request(method, path, body);
+  ctx.request = (method, path, body) =>
+    path.startsWith('/ask/sessions?') ? page([]) : request(method, path, body);
   await assert.rejects(askRecording(ctx, recording.id, question), { code: 'session_not_owned' });
-  assert.equal(calls.filter(row => row.path === '/ask/sessions/as_one').length, 0);
-  assert.equal(calls.filter(row => row.method === 'POST').length, 0);
+  assert.equal(calls.filter((row) => row.path === '/ask/sessions/as_one').length, 0);
+  assert.equal(calls.filter((row) => row.method === 'POST').length, 0);
 });
 
 test('owner and recording filters remain fixed across membership pagination', async () => {
@@ -106,12 +338,17 @@ test('owner and recording filters remain fixed across membership pagination', as
       const query = new URL(path, 'https://fixture.test').searchParams;
       assert.equal(query.get('end_user_id'), principal.endUserId);
       assert.equal(query.get('recording_id'), recording.id);
-      if (!query.has('cursor')) return { data: [{ ...session(), id: 'as_other' }], has_more: true, next_cursor: 'membership-cursor' };
+      if (!query.has('cursor'))
+        return {
+          data: [{ ...session(), id: 'as_other' }],
+          has_more: true,
+          next_cursor: 'membership-cursor',
+        };
     }
     return request(method, path, body);
   };
   await askRecording(ctx, recording.id, question);
-  assert.ok(paths.some(path => path.includes('cursor=membership-cursor')));
+  assert.ok(paths.some((path) => path.includes('cursor=membership-cursor')));
 });
 
 test('unknown session creation never repeats and emits no upstream failure blob', async () => {
@@ -119,10 +356,16 @@ test('unknown session creation never repeats and emits no upstream failure blob'
   const request = ctx.request;
   let writes = 0;
   ctx.request = (method, path, body) => {
-    if (method === 'POST') { writes += 1; throw new Error('secret provider token'); }
+    if (method === 'POST') {
+      writes += 1;
+      throw new Error('secret provider token');
+    }
     return request(method, path, body);
   };
-  await assert.rejects(askRecording(ctx, recording.id, question), error => error.code === 'operation_uncertain' && !error.message.includes('secret'));
+  await assert.rejects(
+    askRecording(ctx, recording.id, question),
+    (error) => error.code === 'operation_uncertain' && !error.message.includes('secret'),
+  );
   const repeated = await askRecording(ctx, recording.id, question);
   assert.equal(writes, 1);
   assert.equal(repeated.operation.state, 'uncertain');
@@ -135,15 +378,16 @@ test('lost message response can recover a persisted exact pair through GET only'
   const request = ctx.request;
   ctx.request = async (method, path, body) => {
     const result = await request(method, path, body);
-    if (method === 'POST' && path.endsWith('/messages')) throw new Error('connection lost after send');
+    if (method === 'POST' && path.endsWith('/messages'))
+      throw new Error('connection lost after send');
     return result;
   };
   await assert.rejects(askRecording(ctx, recording.id, question), { code: 'operation_uncertain' });
-  const count = calls.filter(row => row.method === 'POST').length;
+  const count = calls.filter((row) => row.method === 'POST').length;
   const recovered = await askRecording(ctx, recording.id, question);
   assert.equal(recovered.operation.state, 'complete');
   assert.equal(recovered.answer, assistant.content);
-  assert.equal(calls.filter(row => row.method === 'POST').length, count);
+  assert.equal(calls.filter((row) => row.method === 'POST').length, count);
 });
 
 test('unknown send with only a user message is retained without provider fallback or resend', async () => {
@@ -151,7 +395,11 @@ test('unknown send with only a user message is retained without provider fallbac
   const request = ctx.request;
   let sends = 0;
   ctx.request = (method, path, body) => {
-    if (method === 'POST' && path.endsWith('/messages')) { sends += 1; setMessages([user]); throw new Error('provider failed'); }
+    if (method === 'POST' && path.endsWith('/messages')) {
+      sends += 1;
+      setMessages([user]);
+      throw new Error('provider failed');
+    }
     return request(method, path, body);
   };
   await assert.rejects(askRecording(ctx, recording.id, question), { code: 'operation_uncertain' });
@@ -159,7 +407,11 @@ test('unknown send with only a user message is retained without provider fallbac
   assert.equal(sends, 1);
   assert.equal(recovered.operation.state, 'uncertain');
   assert.ok(!('answer' in recovered));
-  assert.equal(calls.filter(row => row.method === 'POST').length, 1, 'only the initial session create was recorded');
+  assert.equal(
+    calls.filter((row) => row.method === 'POST').length,
+    1,
+    'only the initial session create was recorded',
+  );
 });
 
 test('session-ID persistence failure prevents message send and never recreates the session', async () => {
@@ -171,14 +423,18 @@ test('session-ID persistence failure prevents message send and never recreates t
   };
   await assert.rejects(askRecording(ctx, recording.id, question), { code: 'operation_uncertain' });
   await askRecording(ctx, recording.id, question);
-  assert.equal(calls.filter(row => row.method === 'POST').length, 1);
+  assert.equal(calls.filter((row) => row.method === 'POST').length, 1);
 });
 
 test('foreign citations, wrong question hash and extra history never return answer content', async () => {
   for (const attack of ['citation', 'question', 'extra']) {
     const { ctx, setMessages } = fixture();
     await askRecording(ctx, recording.id, question);
-    if (attack === 'citation') setMessages([user, { ...assistant, parts: [{ type: 'citation', recording_id: 'rec_foreign', start_ms: 0 }] }]);
+    if (attack === 'citation')
+      setMessages([
+        user,
+        { ...assistant, parts: [{ type: 'citation', recording_id: 'rec_foreign', start_ms: 0 }] },
+      ]);
     if (attack === 'question') setMessages([{ ...user, content: 'different question' }, assistant]);
     if (attack === 'extra') setMessages([user, assistant, { ...user, id: 'msg_extra' }]);
     await assert.rejects(askRecording(ctx, recording.id, question), AppError);
@@ -189,10 +445,10 @@ test('a signed-in foreign owner cannot read another account recording or reuse i
   const { ctx, operations, calls } = fixture();
   await askRecording(ctx, recording.id, question);
   ctx.principal = { ...principal, accountId: 'bob', scopeId: 'scope-bob', endUserId: 'eu_bob' };
-  const count = calls.filter(row => row.method === 'POST').length;
+  const count = calls.filter((row) => row.method === 'POST').length;
   await assert.rejects(askRecording(ctx, recording.id, question), { code: 'recording_forbidden' });
   assert.equal(operations.size, 1);
-  assert.equal(calls.filter(row => row.method === 'POST').length, count);
+  assert.equal(calls.filter((row) => row.method === 'POST').length, count);
 });
 
 test('final recording owner change suppresses a successful provider response', async () => {
@@ -200,7 +456,8 @@ test('final recording owner change suppresses a successful provider response', a
   const request = ctx.request;
   let reads = 0;
   ctx.request = (method, path, body) => {
-    if (path === '/recordings/rec_one' && ++reads === 3) return { ...recording, end_user_id: 'eu_bob' };
+    if (path === '/recordings/rec_one' && ++reads === 3)
+      return { ...recording, end_user_id: 'eu_bob' };
     return request(method, path, body);
   };
   await assert.rejects(askRecording(ctx, recording.id, question), { code: 'recording_forbidden' });
@@ -208,7 +465,9 @@ test('final recording owner change suppresses a successful provider response', a
 
 test('questions over the public bound are rejected before reads or claims', async () => {
   const { ctx, calls, operations } = fixture();
-  await assert.rejects(askRecording(ctx, recording.id, 'x'.repeat(10_001)), { code: 'invalid_question' });
+  await assert.rejects(askRecording(ctx, recording.id, 'x'.repeat(10_001)), {
+    code: 'invalid_question',
+  });
   assert.equal(calls.length, 0);
   assert.equal(operations.size, 0);
 });
@@ -227,7 +486,11 @@ test('bounded membership cap cannot be reported as an observed owner absence', a
   ctx.request = (method, path, requestBody) => {
     if (path.startsWith('/ask/sessions?')) {
       pages += 1;
-      return { data: [{ ...session(), id: `as_other${pages}` }], has_more: true, next_cursor: `cursor${pages}` };
+      return {
+        data: [{ ...session(), id: `as_other${pages}` }],
+        has_more: true,
+        next_cursor: `cursor${pages}`,
+      };
     }
     return request(method, path, requestBody);
   };
@@ -236,8 +499,10 @@ test('bounded membership cap cannot be reported as an observed owner absence', a
 });
 
 test('unexpected context references or message session IDs block recovered answer', async () => {
-  for (const history of [[{ ...user, context_refs: [{ type: 'recording', id: 'rec_foreign' }] }, assistant],
-    [user, { ...assistant, session_id: 'as_foreign' }]]) {
+  for (const history of [
+    [{ ...user, context_refs: [{ type: 'recording', id: 'rec_foreign' }] }, assistant],
+    [user, { ...assistant, session_id: 'as_foreign' }],
+  ]) {
     const { ctx, setMessages } = fixture();
     await askRecording(ctx, recording.id, question);
     setMessages(history);
@@ -255,10 +520,12 @@ test('Ask refresh recovers a known answer through owner-filtered GETs without cl
   assert.equal(refreshed.operation.state, 'complete');
   assert.equal(refreshed.answer, assistant.content);
   assert.deepEqual(refreshed.citations, [{ recording_id: recording.id, start_ms: 1200 }]);
-  assert.ok(calls.every(row => row.method === 'GET'));
+  assert.ok(calls.every((row) => row.method === 'GET'));
   assert.ok(!order.includes('claim'));
-  assert.ok(calls.findIndex(row => row.path.startsWith('/ask/sessions?')) <
-    calls.findIndex(row => row.path === '/ask/sessions/as_one'));
+  assert.ok(
+    calls.findIndex((row) => row.path.startsWith('/ask/sessions?')) <
+      calls.findIndex((row) => row.path === '/ask/sessions/as_one'),
+  );
 });
 
 test('unknown Ask refresh returns the retained operation after a current owner check', async () => {
@@ -276,7 +543,10 @@ test('unknown Ask refresh returns the retained operation after a current owner c
   assert.equal(refreshed.operation.state, 'uncertain');
   assert.equal(refreshed.operation.resource_id, null);
   assert.ok(!('answer' in refreshed));
-  assert.deepEqual(calls.map(row => row.path), ['/recordings/rec_one']);
+  assert.deepEqual(
+    calls.map((row) => row.path),
+    ['/recordings/rec_one'],
+  );
   assert.ok(!order.includes('claim'));
 });
 
@@ -285,15 +555,21 @@ test('Ask refresh rejects foreign account, malformed question hash and current r
     const { ctx, operations, calls } = fixture();
     const initial = await askRecording(ctx, recording.id, question);
     calls.length = 0;
-    if (attack === 'account') ctx.principal = { ...principal, accountId: 'bob', scopeId: 'scope-bob' };
+    if (attack === 'account')
+      ctx.principal = { ...principal, accountId: 'bob', scopeId: 'scope-bob' };
     if (attack === 'hash') [...operations.values()][0].details.questionHash = 'invalid';
     if (attack === 'owner') {
       const request = ctx.request;
-      ctx.request = (method, path, requestBody) => path === '/recordings/rec_one' ?
-        { ...recording, end_user_id: 'eu_bob' } : request(method, path, requestBody);
+      ctx.request = (method, path, requestBody) =>
+        path === '/recordings/rec_one'
+          ? { ...recording, end_user_id: 'eu_bob' }
+          : request(method, path, requestBody);
     }
     await assert.rejects(refreshAsk(ctx, initial.operation.id), AppError);
-    assert.ok(calls.every(row => row.method === 'GET'));
-    assert.ok(!calls.some(row => row.path.startsWith('/ask/sessions')), 'initial owner fence precedes session reads');
+    assert.ok(calls.every((row) => row.method === 'GET'));
+    assert.ok(
+      !calls.some((row) => row.path.startsWith('/ask/sessions')),
+      'initial owner fence precedes session reads',
+    );
   }
 });

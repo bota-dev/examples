@@ -1,4 +1,4 @@
-# Web reference: small recipes in one app
+# Bota API Explorer: small recipes in one app
 
 A React frontend and Node backend for recordings, uploads, transcription,
 general notes, recording-scoped Ask and webhook notifications. Shared HTTP,
@@ -8,6 +8,8 @@ below and copy its relevant code into your application.
 This is the recommended starting point for a customer web integration. Existing
 standalone snippets and platform-specific App SDK examples remain available.
 No device, private package, sibling repository or Bota SDK is needed here.
+This is a general Layer 1 capability showcase. Each UI feature names the public
+calls it demonstrates and links the documentation and reusable backend source.
 
 ## Try it without credentials
 
@@ -26,17 +28,23 @@ synthetic; they prove no transcription, upload or model-provider acceptance.
 
 Use that exact origin: `localhost` and `127.0.0.1` are different browser origins.
 The server binds loopback. Change `PORT` and `APP_ORIGIN` together if necessary.
+If that port is occupied, startup reports it and exits; stop the other listener
+or select an unused port before running again.
 
 ## Pick a recipe
 
-| Feature | Backend sample | Frontend sample |
-| --- | --- | --- |
-| List/read recordings | [recordings.mjs](server/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx) |
-| Upload audio | [upload.mjs](server/features/upload.mjs) | [Upload.tsx](web/features/uploads/Upload.tsx) |
-| Transcribe and read text | [processing.mjs](server/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx) |
-| Create/read general notes | [processing.mjs](server/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx) |
-| Ask one recording | [ask.mjs](server/features/ask.mjs) | [Ask.tsx](web/features/ask/Ask.tsx) |
-| Receive/display notifications | [webhooks.mjs](server/features/webhooks.mjs) | [Activity.tsx](web/features/webhooks/Activity.tsx) |
+| Feature                       | Public calls                                                                                                            | Backend sample                                   | Frontend sample                                             |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
+| List/read recordings          | `GET /v1/recordings`, `GET /v1/recordings/{id}`                                                                         | [recordings.mjs](server/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx)    |
+| Upload audio                  | `POST /v1/recordings`, `POST /v1/recordings/{id}/upload-url`, storage `PUT`, `POST /v1/recordings/{id}/upload-complete` | [upload.mjs](server/features/upload.mjs)         | [Upload.tsx](web/features/uploads/Upload.tsx)               |
+| Transcribe and read text      | `GET /v1/transcriptions`, `GET /v1/transcriptions/{id}`, `POST /v1/transcriptions`                                      | [processing.mjs](server/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx) |
+| Create/read general notes     | `GET /v1/summaries`, `GET /v1/summaries/{id}`, `POST /v1/summaries`                                                     | [processing.mjs](server/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx)       |
+| Ask one recording             | `POST /v1/ask/sessions`, `POST /v1/ask/sessions/{id}/messages`, scoped session/history `GET`                            | [ask.mjs](server/features/ask.mjs)               | [Ask.tsx](web/features/ask/Ask.tsx)                         |
+| Receive/display notifications | Bota delivers to your `POST /webhooks/bota` callback                                                                    | [webhooks.mjs](server/features/webhooks.mjs)     | [Activity.tsx](web/features/webhooks/Activity.tsx)          |
+
+React calls this example's authenticated `/api/*` routes. The backend files show
+the public Bota calls with fixed owner/source filters; the webhook path above is
+your application's receiver, not an endpoint for creating an event in Bota.
 
 The shared backend [client](server/client.mjs) performs bounded public HTTP calls;
 [auth](server/auth.mjs) derives the application principal, and [store](server/store.mjs)
@@ -68,6 +76,7 @@ or independently runnable standalone snippets. Never copy an API key into React.
    hash in private `accounts.json`. Deliver the token through your own trusted
    process. It is separate from the Bota key. Add accounts while the server is
    stopped, keep a backup, and restart to load mapping/token changes.
+
 5. Run `npm run dev`, or `npm run build` followed by `npm start`. Sign in with
    the application username/token. Use only synthetic or consented audio.
 
@@ -99,11 +108,19 @@ crash-safe account-management service.
   completed exact transcription. Display only the five documented notes fields.
 - **Ask:** create an empty recording-scoped session and send one question. The
   app verifies owner-filtered membership, exact history and citations before
-  displaying an answer. Another question uses a distinct intent.
+  displaying an answer. Leading/trailing whitespace is trimmed before hashing
+  and sending, matching the public API; equivalent questions reuse one intent.
+  Another question uses a distinct intent.
+  New intents record `questionFormat: trim-v1`. Older unresolved intents keep
+  their exact hashes and IDs. Because a hash cannot reveal its original whitespace,
+  an unresolved legacy intent blocks a fresh question on that recording until
+  operator reconciliation; requests on other recordings remain available.
 - **Refresh:** GET existing resources/notifications or a saved operation. It
   cannot create a replacement job, resend a question, PUT audio or replay
   completion. Known outcomes can reconcile; an unknown resource ID needs
   operator reconciliation. Activity shows selected intent metadata only.
+  Each Activity row can refresh its saved operation through GET after reopening
+  or restarting the app; recovered response content is withheld from that panel.
 
 Live SQLite uses synchronous durable claims before each uncertain write. The
 same file/name/type, recording, transcription/template or recording/question
@@ -145,6 +162,8 @@ The sample uses expiring in-memory sessions, opaque per-account application
 tokens, HttpOnly/SameSite=Strict cookies, exact Origin/Host checks and bounded
 sign-in attempts. Tokens are not saved in browser storage. Sign-out/session
 expiry clears visible content and fences late reads/mutations.
+Sign-out clears content immediately and waits for the cookie response before
+enabling another sign-in, so a late expiry cookie cannot erase a new session.
 
 This is an educational single-process auth adapter. Replace it with your IdP,
 shared session store, account lifecycle and operational controls for production.
@@ -157,6 +176,7 @@ No infrastructure, physical-device operation or package publication occurs here.
 ## Checks and evidence
 
 ```sh
+npm run format:check
 npm run lint
 npm run typecheck
 npm test
@@ -168,15 +188,15 @@ Tests use synthetic Bota/storage responses. They cover cross-user access, CSRF,
 scope-forging, storage credential isolation, durable restart/deduplication,
 uncertain writes, GET-only recovery, webhook signatures/conflicts and stale UI
 results. The HTTP integration runs the complete local fixture workflow.
-The October 12 local pass includes 81 backend tests and 25 UI tests, lint,
+The October 12 quality pass includes 87 backend tests and 30 UI tests, format/lint,
 TypeScript, production build, frozen installation and license checks; dependency
 audit reports no known vulnerabilities at that time.
 No live Bota/provider/storage or hardware acceptance is inferred.
 
 Status and exact hosted checks are recorded in the
-[reference-app review](../../docs/independent-examples-review.md#web-reference-october-12).
+[quality review](../../docs/independent-examples-review.md#general-example-quality-october-12).
 The [workflow](../../.github/workflows/web-reference.yml) uses frozen installs,
-lint/typecheck/tests/build/license checks on Linux and Windows without credentials.
+format/lint/typecheck/tests/build/license checks on Linux and Windows without credentials.
 
 Public basis: [recordings](https://docs.bota.dev/api-reference/recordings/create),
 [transcription](https://docs.bota.dev/api-reference/ai/transcriptions/create),

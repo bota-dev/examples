@@ -6,10 +6,17 @@ The example checks the fixed source recording's current end-user ownership befor
 reading text and again immediately before publication. It makes three public GETs;
 it starts no job, downloads no audio, and changes no cloud or device resource.
 
-**Status:** implemented; syntax checked with Python 3.12.14 on Windows,
-October 8, 2026. Runtime, API/failure-path, filesystem and player acceptance are
-unverified. This creation pass includes no tests or example execution. No hardware,
-SDK package or third-party Python dependency is needed.
+The public GET calls and adaptation points are in [main.py](main.py):
+`verify_recording()` authorizes the fixed source, `render_webvtt()` formats supplied
+segments, and `export_transcription()` publishes the private file. Keep the key and
+authorized resource mapping server-side when adapting those functions.
+
+**Status, October 12, 2026:** syntax and 12 synthetic contract/publication tests
+pass with Python 3.12.14 on Windows. Tests exercise real local file writes and
+hard-link publication with fake API responses; directory ancestry/ACL setup is
+mocked. Live API, private-filesystem policy, crash durability and player acceptance
+remain unverified. No hardware, SDK package or third-party Python dependency is
+needed. Historical October 8 acceptance below was syntax/source only.
 
 ## Configure and run
 
@@ -133,6 +140,28 @@ clean up. Remove sensitive local output and abandoned partial files according to
 your retention policy, after verifying that no process still uses them.
 
 ## Source and acceptance review
+
+Run the local checks from this directory:
+
+```sh
+python -m py_compile main.py test_main.py
+python -m unittest -v
+```
+
+The [verification workflow](../../.github/workflows/export-transcription-vtt-python.yml)
+repeats these checks with Python 3.12 on Linux and Windows, using commit-pinned
+actions and read-only repository permissions. No API credentials or dependencies
+are needed. The tests in [test_main.py](test_main.py) cover exact Decimal timing,
+overlaps/order, escaped payloads, wrong source/project/owner, bounded strict JSON,
+non-retrying failures, successful publication, ownership loss after flush and
+destination collisions. Output/content privacy and no-overwrite behavior are
+checked; ACL validation is explicitly outside those temporary-file tests.
+
+Compound-engineering review, **October 12, 2026**: the public GET-only workflow,
+formatting and publication implementation remain unchanged. The new tests match
+the existing owner/source, timing, output and failure requirements locally. This
+raises the documented evidence beyond syntax without claiming live API,
+filesystem sandbox, power-loss or subtitle-player conformance.
 
 Public contracts: [get recording](https://docs.bota.dev/api-reference/recordings/get)
 and [get transcription](https://docs.bota.dev/api-reference/ai/transcriptions/get).

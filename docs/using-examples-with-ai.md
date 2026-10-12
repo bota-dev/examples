@@ -60,9 +60,14 @@ unique IDs, all independent directories, ordered catalog/index correspondence
 and local inline file targets in entry/indexed docs. Fenced examples, remote
 URLs, heading anchors, reference-style and HTML links are excluded. This check
 reads repository metadata; it never executes an example or verifies API behavior.
+Run `node --test scripts/test-catalog.mjs` when changing discovery validation;
+the same fixture-based failure checks run in Linux/Windows catalog CI.
 
 ## Adapt the selected directory
 
+- Follow [CONTRIBUTING.md](../CONTRIBUTING.md) for clear public calls, focused
+  feature modules and meaningful regression checks. Preserve third-party notices
+  alongside the [MIT license](../LICENSE) for Bota-authored sample code.
 - Use the example directory as the install unit. Do not run a root workspace
   install for independent API or App SDK cases. Follow each end-to-end README's
   documented install layout; an app may use one root or separate app/backend roots.

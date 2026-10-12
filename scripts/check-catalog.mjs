@@ -74,7 +74,7 @@ function main() {
     'Expected a nonempty examples array with schema_version 1.');
   const ids = new Set();
   const paths = [];
-  const documents = new Set(['README.md', 'DESIGN.md', 'AGENTS.md', 'CLAUDE.md', 'ARCHITECTURE.md',
+  const documents = new Set(['README.md', 'DESIGN.md', 'CONTRIBUTING.md', 'AGENTS.md', 'CLAUDE.md', 'ARCHITECTURE.md',
     'docs/using-examples-with-ai.md']);
   for (const entry of index.examples) {
     requireValue(entry && typeof entry.id === 'string' &&

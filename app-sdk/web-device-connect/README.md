@@ -2,6 +2,17 @@
 
 A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.13` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
 
+The public calls are in [page.ts](page.ts):
+`devices.connect({ expectedSerialNumber })`, `devices.readSnapshot()` and
+`devices.disconnect()`. [main.ts](main.ts) connects that small workflow to the
+page controls and cleans up the client. Copy both files and the page markup to
+adapt this example; keep the serial supplied by your application's user.
+
+**Current checks, October 12, 2026:** frozen installation, 15 local tests
+(11 synthetic UI/lifecycle regressions and four dependency-security checks),
+TypeScript checking and the Vite/WASM build pass on Node 22.23.2 / Windows.
+Live browser Bluetooth and supported-firmware acceptance remain unverified.
+
 ## Run
 
 Use Node 22.23.2+, npm, and a desktop Chromium browser supporting Web Bluetooth. The page must run in a secure context: localhost works for development; remote hosting requires HTTPS. Safari/Firefox and arbitrary HTTP LAN URLs are not supported by this example. The firmware must expose Bota Identity service `0008` for serial read-back because browsers block standard serial characteristic `2A25`.
@@ -14,6 +25,16 @@ npm start
 Open the local URL printed by Vite. Enter the exact serial printed on your device, click Connect, and choose it in the browser picker. The SDK verifies identity before accepting the connection. The picker starts directly from the click handler; moving it behind an awaited request can lose browser user activation. Use Read status and Disconnect after connecting. No recording or provisioning operations are performed.
 
 If Bluetooth is unsupported, permission is denied, or identity verification fails, the page shows an error. Close other applications using the device. The browser owns permission prompts; inspect site permissions to retry. The SDK is destroyed when the page unloads.
+
+After the SDK observes Bluetooth loss, this page clears its previous metadata
+and enables Connect again. Reconnection requires a new click. The published Web
+facade has no connection subscription, so the page observes only its local
+`connectedDevice` getter every 250 ms; this sends no Bluetooth requests. Browser
+background throttling or an omitted SDK/OS callback can delay that observation.
+A read that finishes after an observed connection change cannot restore old
+metadata. Navigating away from the page (`pagehide`) stops observation, disables controls and
+fences pending initialization and reads before client cleanup. If the browser
+restores that closed page from its back/forward cache, reload it to reconnect.
 
 2026-10-08, beta.13: public frozen installation, all four source-map regression
 tests, TypeScript check and Vite 7.3.6/WASM production build pass locally on
@@ -46,6 +67,15 @@ npm test
 npm run typecheck
 npm run build
 ```
+
+`npm test` retains the four source-map checks and executes the real page entry
+point and workflow against a fake public SDK/browser. Tests cover picker invocation
+before yielding, asynchronous loss, late results, duplicate clicks, pagehide during
+initialization, cleanup and sanitized errors. They perform no Web Bluetooth, WASM,
+API or physical-device operations. Local failure/cleanup behavior is synthetic
+evidence; the SDK's native event delivery still needs a supported physical browser
+test. The [workflow](../../.github/workflows/web-device-connect.yml) runs these
+tests, typechecking and the build without credentials.
 
 2026-09-29: public package installation, TypeScript check, and Vite 7.3.6 production build (including SDK WASM) pass locally; npm audit reports zero vulnerabilities. Actual browser Bluetooth pairing/status and supported-firmware coverage remain unverified. See [implementation review](../../docs/independent-examples-review.md) for CI evidence and the [SDK reference](https://docs.bota.dev/api-reference/client-sdks).
 

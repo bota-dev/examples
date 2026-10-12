@@ -20,6 +20,7 @@ fixed. See [qualification and limits](docs/build-dependency-remediation.md).
 - Read [DESIGN.md](DESIGN.md) for the developer API/SDK showcase purpose; select current work by a platform capability or general workflow, not catalog count.
 - Current creation scope is Layer 1: general platform capabilities and integration workflows. Layer 2 adds vertical use-case or consumer app demos in a later phase. API/SDK/combined samples are Layer 1 formats.
 - Read [README.md](README.md) for availability, [ARCHITECTURE.md](ARCHITECTURE.md) for technical boundaries, and the selected example's README. This file is the canonical agent instruction source; `CLAUDE.md` refers here.
+- Follow [CONTRIBUTING.md](CONTRIBUTING.md) for sample readability, focused regressions and verification. Bota-authored samples use [MIT](LICENSE); preserve third-party notices.
 - Make the demonstrated public call and adaptation path clear. Prefer improving an existing sample or feature before adding an overlapping install root. The web reference teaches APIs; device SDK examples teach the App SDK.
 
 The repository contains an existing npm workspace under `apps/`, migrated to `@bota.dev/react-native-app-sdk@2.0.0-beta.6` while retaining compatibility lifecycle flows. Read [migration evidence](docs/app-sdk-migration.md) before changing it. The independent `api/upload-and-transcribe-node/` example is implemented, locally tested, and live-verified with a test key and synthetic speech. Additional independent examples are implemented under `api/`, `app-sdk/` and `end-to-end/`; Python is also live-verified, and five connection samples consume exact public packages. All eight independent device examples pin public beta.13 after completed protected publication. Read [current evidence and blockers](docs/independent-examples-review.md#beta13-adoption); earlier phone results remain tied to their tested versions. The full recording-sync replacement is not implemented. Do not confuse a proposed directory or workflow with implemented code. Documentation-only work must not silently upgrade packages, move examples, or run device operations.
@@ -32,6 +33,7 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 - Processing readers stop at project/end-user/device scope; resolution is not provider approval or job execution. Keep the [review](docs/independent-examples-review.md#agent-discovery-processing-october-9) evidence limits.
 - Update the index, root catalog and selected README together when adding or moving an example. Do not embed secrets or assume a recorded device identity is the caller's device.
 - Run `node scripts/check-catalog.mjs` for index/catalog/docs changes. It needs no npm install; [catalog CI](.github/workflows/catalog.yml) runs on every push/PR. File-link checks exclude remote URLs, anchors, reference-style/HTML links and fenced snippets.
+- Run `node --test scripts/test-catalog.mjs` when changing discovery validation. Catalog CI checks real metadata/link failures and path containment on Linux and Windows, without installing examples.
 
 ## Implementation rules
 

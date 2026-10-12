@@ -4,6 +4,7 @@
 - Create general platform examples now (Layer 1); vertical use-case and consumer app demos belong to the later Layer 2.
 - For a customer web integration, start with [web-reference](end-to-end/web-reference/README.md); its recipe table maps each feature to backend/frontend sample files.
 - Read and follow [AGENTS.md](AGENTS.md), the canonical editing instructions.
+- Follow [CONTRIBUTING.md](CONTRIBUTING.md) for public sample code quality and focused regression checks.
 - Select an example by task, language and hardware in [examples.json](examples.json).
 - Follow the [AI quick-start guide](docs/using-examples-with-ai.md) and read the selected example's README before adapting it.
 - Read [ARCHITECTURE.md](ARCHITECTURE.md) for public integration boundaries and acceptance gates.

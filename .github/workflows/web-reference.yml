@@ -34,6 +34,7 @@ jobs:
           node-version: '22.23.2'
       - run: npm ci
       - run: npm run license-check
+      - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test

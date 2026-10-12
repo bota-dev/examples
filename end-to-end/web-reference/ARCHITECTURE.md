@@ -4,6 +4,8 @@ One install root owns one Express server and React frontend. Features share
 ordinary HTTP/auth/intent helpers locally; no runtime import from another example
 or private Bota package is required. See [README](README.md) for recipe paths,
 configuration, operations and acceptance limits, and [DESIGN](DESIGN.md) for UI rules.
+The neutral Bota API Explorer teaches general platform capabilities; each
+feature exposes its public calls and documentation/source pointers.
 
 ```text
 React feature → same-origin /api route → authenticated server principal
@@ -17,6 +19,9 @@ tokens. Sessions are in memory; Bota project keys stay server-side. Each write
 retains its scoped claim. Explicit recovery observes a known operation with GETs;
 unknown outcomes never trigger another create or upload. Cloud upload commitment
 grants no physical-device cleanup authority.
+Activity can GET-reconcile persisted operations after reopening, retaining only
+narrow metadata. UI sign-out removes content before awaiting cookie expiration
+and serializes the next login behind that response.
 
 Demo mode uses synthetic in-process upstream responses and an in-memory store,
 with no external calls. Feature, HTTP and UI tests exercise scope, durable intent,

@@ -2,6 +2,54 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="general-example-quality-october-12"></a>
+## General example quality revision — 2026-10-12
+
+Owner direction raises the open-source code bar within [DESIGN.md](../DESIGN.md)
+Layer 1. This pass revises the existing API Explorer, Web SDK connection sample,
+WebVTT exporter validation and catalog checks. It adds no catalog entries or
+vertical/app-driven examples. Three independent agents reviewed server,
+frontend and representative API/SDK paths; review scope is these selected
+examples and repository discovery, not behavioral qualification of all 76 entries.
+
+| Requirement / design | Change and evidence | Conformance / remaining limits |
+| --- | --- | --- |
+| Clear general capability samples | Neutral API Explorer name; each feature shows public methods and docs/source links; recipe table maps calls to files | Matched; web sample remains API-only, platform samples retain their SDK scope |
+| Readable, maintainable source | Reference source uses pinned Prettier 3.8.5 with CI format checks; contributor guide names code and regression expectations | Matched in the reference install root; existing independent sample styles/guards remain intact |
+| Safe login transitions | UI clears content immediately, waits for logout cookie response before another login | Matched by deferred logout/relogin regression; production session architecture remains customer-owned |
+| Recovery after reopening | Activity rows observe saved operation IDs via GET, retaining metadata only and fencing late results | Matched by persisted-row, wrong-ID, unknown-outcome and logout tests; no resend/content display |
+| Ask matches public normalization | Canonical trim before hash/send, new `questionFormat: trim-v1`; exact prior raw/canonical lookup and full-journal legacy guard | Matched by real SQLite close/reopen and beyond-50 tests; an unresolved legacy hash conservatively blocks fresh Ask on that recording pending operator reconciliation |
+| Predictable development startup | Shared HTTP/Vite/SQLite cleanup on listener failure | Matched by a real child-process occupied-port regression; no live network service used |
+| Web SDK lifecycle | Public cached getter observation, revision/disposal fences, picker in direct click flow; teardown during SDK initialization | Matched by 11 synthetic page/entry tests plus four retained source-map security tests; SDK/OS callback delivery and physical Bluetooth remain unverified |
+| WebVTT output/privacy contract | Twelve stdlib tests cover rendering bounds, escapes/order, GET/ownership, no redirects and temporary-file publication | Matched for synthetic/temporary-file behavior; private ancestry/ACL policy is mocked, actual policy/filesystem races and player acceptance remain unverified |
+| Portable discovery checks | Nine real miniature-repository regressions for invalid metadata/links, ordering and escaped/junction targets; Linux/Windows CI | Matched locally; validates discovery/documents, not example runtime |
+| Open-source entry points | Root MIT license matching existing reference, retained third-party notices, CONTRIBUTING and agent pointers | Matched in repository files; no dependency or SDK license replacement |
+
+Parent review caught a normalization upgrade risk: simply hashing trimmed text
+could bypass an older uncertain raw-hash intent. The durable lookup/version guard
+fixes that without persisting question text, rewriting old hashes or deleting
+state. Independent follow-up found no actionable defects in Web SDK public calls,
+lifecycle fences or catalog fixture containment. Public package pins, Web SDK
+lock, legacy root manifest/lock, source guards and WebVTT implementation remain
+unchanged. Only the reference adds a formatter dependency; license/audit checks
+apply to that exact frozen graph.
+
+Local reference checks pass: frozen install, format, lint, typecheck/build,
+87 backend and 30 UI tests, 250-package license gate and zero known audit
+vulnerabilities. Web passes frozen installation, all 15 tests, typecheck and
+WASM/Vite build. Python 3.12.14 passes all 12 WebVTT tests; catalog passes nine
+regressions. Source and tests are synthetic except documented real local process/
+SQLite/temporary-file operations. No live API/provider/storage, device operation,
+package publication or deployment was performed. Hosted evidence follows delivery.
+Parent browser review confirmed public-call/source panels, synthetic Ask,
+saved Activity request refresh after reload and metadata-only recovery. The
+390×844 responsive check showed no horizontal document overflow; the default
+viewport was restored. Changed-token searches and the internal downstream matrix
+identified the existing reference/connection/export guidance. Public catalog and
+changelog source are updated; platform contracts and internal conformance remain
+unchanged. The catalog currently validates 76 entries, 83 documents and 328 local
+file links; both changed public MDX pages compile and 55 local targets resolve.
+
 ## Developer showcase design clarification — 2026-10-12
 
 The owner reiterates the repository purpose: demo/sample code showcasing the
