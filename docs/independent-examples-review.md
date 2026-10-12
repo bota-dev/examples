@@ -49,6 +49,11 @@ identified the existing reference/connection/export guidance. Public catalog and
 changelog source are updated; platform contracts and internal conformance remain
 unchanged. The catalog currently validates 76 entries, 83 documents and 328 local
 file links; both changed public MDX pages compile and 55 local targets resolve.
+Initial quality source `f4c4737ec2706cf178e75fa8c697c0d1c6a5d0e0` passed Web SDK,
+both WebVTT and both catalog jobs. The Windows reference formatter caught CRLF
+checkout conversion; Linux formatting passed. A nested `.gitattributes` sets LF
+for this example's text files while preserving binary classification and all
+root/vendor source-guard attributes. Corrected hosted evidence is recorded below.
 
 ## Developer showcase design clarification — 2026-10-12
 

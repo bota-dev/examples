@@ -6,6 +6,7 @@ never import other examples or private Bota packages.
 
 Run `npm ci`, format:check, lint, typecheck, tests, build and license-check here.
 Use `npm run format` for consistent sample source; legacy install roots are separate.
+Keep this example's LF checkout attributes so formatting checks agree on Windows/Linux.
 Tests/demo are synthetic; keep live Bota/provider/device acceptance separate.
 Preserve server-derived ownership, durable intent before writes, GET-only
 recovery, raw-byte webhook verification and safe text rendering. No browser keys.
