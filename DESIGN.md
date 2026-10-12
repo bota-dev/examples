@@ -7,7 +7,22 @@ public Bota API and App SDK. Developers should be able to find a capability,
 understand its public integration, run an example and adapt that code into their
 own application. Evaluate additions by developer usefulness and maintenance cost.
 
-## What we demonstrate
+## Two layers
+
+| Layer | Purpose | Scope |
+| --- | --- | --- |
+| 1. General platform examples | Show what Bota can do and how developers call the public API/SDK | Current work: individual capabilities and general workflows such as device connection, recording upload, transcription, summaries, Ask and webhooks |
+| 2. Use-case and app-driven demos | Show how those capabilities fit a particular vertical workflow or type of consumer application | Later work: scenarios such as sales visit notes or field-service reports, and app types such as a meeting assistant or personal voice notebook |
+
+Layer 1 is the current creation scope. A general demo app can combine capabilities
+through small feature modules and still belong to this layer. API samples, SDK
+samples and combined demos are formats within Layer 1.
+
+Layer 2 will compose those demonstrated integrations around a specific user
+journey, with the scenario's application flow and UI. It is planned here; its
+sample implementation starts in a later phase.
+
+## General sample formats
 
 | Example type | What the developer learns | Location |
 | --- | --- | --- |
@@ -56,11 +71,15 @@ the public API/SDK integration clear.
 
 ## How we choose further work
 
-Start with a concrete developer use case. Select an existing sample or feature
-module, identify the public call it must teach and improve that path before
+For the current layer, start with a platform capability or general integration
+workflow. Select an existing sample or feature module, identify the public call
+it must teach and improve that path before
 creating another install root for overlapping behavior. A combined demo can
 reuse its own integration code when that improves clarity and reduces upkeep.
 Keep the README, catalog and agent guidance aligned with the actual capability.
+
+In the later layer, start with a vertical use case or consumer app type and
+compose the relevant general integrations into that application's user journey.
 
 [ARCHITECTURE.md](ARCHITECTURE.md) defines technical boundaries and acceptance
 gates. [AGENTS.md](AGENTS.md) governs changes; this document defines the

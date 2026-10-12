@@ -1,6 +1,7 @@
 # Claude Code entry point
 
 - Read [DESIGN.md](DESIGN.md): developer demos/sample code showcase public APIs and SDKs; catalog count is not a delivery goal.
+- Create general platform examples now (Layer 1); vertical use-case and consumer app demos belong to the later Layer 2.
 - For a customer web integration, start with [web-reference](end-to-end/web-reference/README.md); its recipe table maps each feature to backend/frontend sample files.
 - Read and follow [AGENTS.md](AGENTS.md), the canonical editing instructions.
 - Select an example by task, language and hardware in [examples.json](examples.json).

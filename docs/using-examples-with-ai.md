@@ -9,6 +9,9 @@ can read repository files. No tool-specific integration or root install is requi
 Read [DESIGN.md](../DESIGN.md) first: the goal is developer-facing API/SDK demos
 and sample code. Match a concrete capability and inspect the public call being
 taught. Improve an existing sample or feature before creating overlapping code.
+Current work is Layer 1: general platform capabilities and integration workflows.
+Layer 2 is planned for later vertical use cases and consumer app types. API, SDK
+and combined examples are formats within Layer 1, including the web reference.
 The web reference showcases backend APIs; choose `app-sdk/` or a supported
 combined demo when the task requires physical-device SDK integration.
 

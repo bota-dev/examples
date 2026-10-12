@@ -17,7 +17,8 @@ fixed. See [qualification and limits](docs/build-dependency-remediation.md).
 
 ## Read first
 
-- Read [DESIGN.md](DESIGN.md) for the developer API/SDK showcase purpose; select work by a concrete developer use case, not catalog count.
+- Read [DESIGN.md](DESIGN.md) for the developer API/SDK showcase purpose; select current work by a platform capability or general workflow, not catalog count.
+- Current creation scope is Layer 1: general platform capabilities and integration workflows. Layer 2 adds vertical use-case or consumer app demos in a later phase. API/SDK/combined samples are Layer 1 formats.
 - Read [README.md](README.md) for availability, [ARCHITECTURE.md](ARCHITECTURE.md) for technical boundaries, and the selected example's README. This file is the canonical agent instruction source; `CLAUDE.md` refers here.
 - Make the demonstrated public call and adaptation path clear. Prefer improving an existing sample or feature before adding an overlapping install root. The web reference teaches APIs; device SDK examples teach the App SDK.
 

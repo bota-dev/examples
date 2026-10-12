@@ -8,10 +8,14 @@ The owner reiterates the repository purpose: demo/sample code showcasing the
 public API and SDK to developers. [DESIGN.md](../DESIGN.md) makes this explicit;
 root README/architecture and agent/AI entry points now lead with that purpose.
 Catalog validation includes the new design document and its local links.
+The owner further defines two layers: general platform capability examples now,
+then vertical use-case and consumer app demos later. The entry-point documents
+carry this phase boundary; API/SDK/combined demos are formats within Layer 1.
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
 | Developer API/SDK showcase purpose | Root design defines audience, public-call visibility, run/adaptation experience and selection criteria | Matched in design and entry-point documentation |
+| Two-layer scope and timing | General platform examples are the current scope; vertical/app-driven scenarios are documented for a later phase | Matched in design/guidance; Layer 2 implementation remains planned, with no scaffold or catalog entry added |
 | Accurate current capability | Design identifies the web reference as API-only, platform samples as App SDK examples and Android sync as a bounded combined path | Matched to current source; curated consistent presentation across all entries remains partial |
 | Minimal duplication and appropriate evidence | Further work starts from concrete use cases and existing features; count is inventory, synthetic/live/hardware evidence stays separate | Matched in guidance; no existing implementation, SDK pin, lifecycle boundary or acceptance status changed |
 

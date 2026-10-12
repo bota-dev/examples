@@ -8,6 +8,10 @@ developer experience and [technical architecture](ARCHITECTURE.md) for integrati
 boundaries. The web reference below demonstrates APIs; device SDK samples are
 listed separately in the catalog.
 
+The design has two layers: **general platform capability examples now**, then
+**vertical use-case and consumer app demos later**. API, SDK and combined samples
+are formats within the current general layer. The web reference belongs to it.
+
 Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
 
 For a customer web app, start with the [web reference](end-to-end/web-reference/README.md): one React frontend and Node backend, with small recording, upload, transcription, notes, Ask and webhook modules. Run `npm ci` and `npm run demo` inside that directory to explore synthetic data without credentials. Copy a feature with its shared helpers, or use an existing standalone snippet below.
