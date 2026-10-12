@@ -59,6 +59,33 @@ an active HMR connection before closing Vite. The corrected ordering and a real
 local HMR/child-process signal regression close that gap; no production test mode
 or external network call was added.
 
+Final implementation `42909b6c73a8f90360fdc283143e35b51c9f996f` is on examples
+`main`. GitHub APIs confirmed all final Explorer, catalog and legacy jobs
+completed successfully. Web SDK and WebVTT jobs passed at
+`f4c4737ec2706cf178e75fa8c697c0d1c6a5d0e0`; their directory tree IDs remain
+identical in the final implementation. No workflow reruns or validation bypasses
+were used. All nine applicable hosted jobs are successful:
+
+| Check | Exact-source successful job |
+| --- | --- |
+| API Explorer, Windows | [Job](https://github.com/bota-dev/examples/actions/runs/38298895320/job/114976664392) |
+| API Explorer, Linux | [Job](https://github.com/bota-dev/examples/actions/runs/38298895320/job/114976664768) |
+| Catalog, Windows | [Job](https://github.com/bota-dev/examples/actions/runs/38298895328/job/114976664837) |
+| Catalog, Linux | [Job](https://github.com/bota-dev/examples/actions/runs/38298895328/job/114976665023) |
+| Legacy tests/typecheck/build/Expo exports | [Job](https://github.com/bota-dev/examples/actions/runs/38298895466/job/114977081808) |
+| Legacy Android native build | [Job](https://github.com/bota-dev/examples/actions/runs/38298895466/job/114977082141) |
+| Web SDK tests/typecheck/WASM build | [Job](https://github.com/bota-dev/examples/actions/runs/38297980640/job/114973620873) |
+| WebVTT, Linux | [Job](https://github.com/bota-dev/examples/actions/runs/38297980679/job/114973620886) |
+| WebVTT, Windows | [Job](https://github.com/bota-dev/examples/actions/runs/38297980679/job/114973621113) |
+
+The selected regressions total 154: 88 backend, 30 UI, 15 Web SDK/security,
+12 WebVTT and nine catalog cases. This total excludes the broader retained
+legacy suites. Public guidance was pushed to docs `main` at
+`0a99999e0a2be27af46a1999930cc029fe6b8e9c`; docs publication branch remains
+`8a6eff44631384ec724c6decebb26d2f339d3c56`. Site publication, live API/provider
+acceptance and physical-device qualification are separate. This final evidence
+follow-up changes documentation only.
+
 ## Developer showcase design clarification — 2026-10-12
 
 The owner reiterates the repository purpose: demo/sample code showcasing the
