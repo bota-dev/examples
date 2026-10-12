@@ -56,7 +56,7 @@ Private Windows ACL/reparse-free paths remain an operator prerequisite; sessions
 and account configuration are not a production multi-instance auth service.
 
 Local Node 22.23.2 frozen installation, lint, TypeScript, production build and
-license gate passed. All 81 backend and 25 UI tests passed; 247 packages passed
+license gate passed. All 81 backend and 25 UI tests passed; 249 packages passed
 license policy, and the audit reported zero known vulnerabilities. Catalog
 validation passed for 76 entries, 81 documents and 292 local file links. YAML
 parsing/manual trigger/SHA/permission/command review passed for the new workflow
@@ -67,7 +67,15 @@ Browser inspection of the final local synthetic demo confirmed sign-in, recordin
 selection, transcript display, recording-scoped Ask/citations and explicit request
 refresh and sign-out clearing the workspace. The earlier local pass also displayed notes. A saved app screenshot is
 a local review artifact; no browser/live rendering claim follows for production.
-Exact-source hosted results are recorded after delivery. No live Bota/provider/storage call,
+Initial implementation `68413756591b4fb4e5e557ce83cf2209937111fc` was pushed directly
+to `main`. [Catalog CI](https://github.com/bota-dev/examples/actions/runs/38291556112)
+passed. Both initial app jobs failed at typecheck: the UI test's `node:crypto`
+import lacked an explicit local Node type dependency, hidden by the surrounding
+local checkout. The [Linux log](https://github.com/bota-dev/examples/actions/runs/38291556216/job/114952616952)
+reported TS2591. The correction pins `@types/node@22.20.5` in this app's own
+manifest/lock and selects Node/Vite ambient types explicitly. No functional code,
+SDK dependency or existing source guard changed. Corrected exact-source hosted
+results are recorded below after delivery. No live Bota/provider/storage call,
 device operation, package publication or deployment was performed.
 
 <a id="ten-readers-exports-health-october-9"></a>
