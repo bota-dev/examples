@@ -94,6 +94,15 @@ typecheck, export and incremental Flutter Android assembly. Independent source
 review found no change to intent locks or GET-only recovery. Dependency locks,
 SDK pins and native identities remain unchanged.
 
+Final code `f16f966501499f5167e8367215d4b2c8d2049935` passed all four
+[mobile workflow jobs](https://github.com/bota-dev/examples/actions/runs/38315437027):
+Linux/Windows backends, RN Android tests/assembly and Flutter Android checks/
+assembly. Both [catalog jobs](https://github.com/bota-dev/examples/actions/runs/38315437101)
+and the retained [legacy verification/Android build](https://github.com/bota-dev/examples/actions/runs/38315437055)
+also passed. This closes hosted source/build verification for this pass, while
+the live, phone-screen, wearable and additional-host gaps above remain unchanged.
+The following evidence-only documentation update does not change runtime code.
+
 <a id="common-recording-template-october-12"></a>
 ## Common recording app template correction — 2026-10-12
 
