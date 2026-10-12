@@ -1,6 +1,12 @@
 # Bota Examples
 
-Examples for integrating the Bota backend API and Bota App SDK into your own applications. API examples demonstrate server-side workflows; App SDK examples demonstrate communication with physical Bota devices; end-to-end examples connect the two.
+Examples for integrating the Bota backend API and Bota App SDK into your own applications. API examples demonstrate server-side workflows; App SDK examples demonstrate communication with physical Bota devices; end-to-end demos connect an application to its backend and include the device SDK where supported.
+
+The goal is runnable demos and easy-to-adapt sample code that showcase the public
+API/SDK to developers. Read the [repository design](DESIGN.md) for the intended
+developer experience and [technical architecture](ARCHITECTURE.md) for integration
+boundaries. The web reference below demonstrates APIs; device SDK samples are
+listed separately in the catalog.
 
 Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
 
@@ -221,6 +227,7 @@ These commands cover dependency and upload-completion regression checks, workspa
 
 ## Documentation
 
+- [Repository design](DESIGN.md): purpose, developer experience and criteria for selecting examples.
 - [Architecture](ARCHITECTURE.md): repository structure, integration contracts, migration, and acceptance gates.
 - [Contributor and agent instructions](AGENTS.md): how to add and verify examples.
 - [Claude Code entry point](CLAUDE.md): shared instructions for Claude Code.

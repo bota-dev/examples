@@ -6,6 +6,12 @@ can read repository files. No tool-specific integration or root install is requi
 
 ## Select an example
 
+Read [DESIGN.md](../DESIGN.md) first: the goal is developer-facing API/SDK demos
+and sample code. Match a concrete capability and inspect the public call being
+taught. Improve an existing sample or feature before creating overlapping code.
+The web reference showcases backend APIs; choose `app-sdk/` or a supported
+combined demo when the task requires physical-device SDK integration.
+
 For a customer web integration, prefer [web-reference](../end-to-end/web-reference/README.md).
 Its recipe table maps recordings, upload, transcription, notes, Ask and notifications
 to small backend/frontend files. One install root shares HTTP, auth and durable

@@ -2,6 +2,25 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+## Developer showcase design clarification — 2026-10-12
+
+The owner reiterates the repository purpose: demo/sample code showcasing the
+public API and SDK to developers. [DESIGN.md](../DESIGN.md) makes this explicit;
+root README/architecture and agent/AI entry points now lead with that purpose.
+Catalog validation includes the new design document and its local links.
+
+| Requirement | Evidence | Status |
+| --- | --- | --- |
+| Developer API/SDK showcase purpose | Root design defines audience, public-call visibility, run/adaptation experience and selection criteria | Matched in design and entry-point documentation |
+| Accurate current capability | Design identifies the web reference as API-only, platform samples as App SDK examples and Android sync as a bounded combined path | Matched to current source; curated consistent presentation across all entries remains partial |
+| Minimal duplication and appropriate evidence | Further work starts from concrete use cases and existing features; count is inventory, synthetic/live/hardware evidence stays separate | Matched in guidance; no existing implementation, SDK pin, lifecycle boundary or acceptance status changed |
+
+This is a documentation/discovery correction. It does not expand the web app's
+capabilities or establish live SDK/API acceptance. Existing historical reviews
+remain evidence for their exact implementations and dates.
+Local checker syntax and catalog validation passed: 76 examples, 82 documents
+and 310 local file links. No API, SDK, UI or dependency implementation changed.
+
 <a id="web-reference-october-12"></a>
 ## Web reference with small recipes — 2026-10-12
 
