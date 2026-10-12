@@ -1,5 +1,6 @@
 # Claude Code entry point
 
+- For a customer web integration, start with [web-reference](end-to-end/web-reference/README.md); its recipe table maps each feature to backend/frontend sample files.
 - Read and follow [AGENTS.md](AGENTS.md), the canonical editing instructions.
 - Select an example by task, language and hardware in [examples.json](examples.json).
 - Follow the [AI quick-start guide](docs/using-examples-with-ai.md) and read the selected example's README before adapting it.

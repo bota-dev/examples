@@ -976,7 +976,7 @@
       "id": "react-native-recording-sync",
       "path": "end-to-end/react-native-recording-sync",
       "title": "React Native encrypted recording sync",
-      "purpose": "Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; scope and evidence",
+      "purpose": "Already-provisioned Android device \u2192 encrypted upload \u2192 transcription; authenticated local backend; scope and evidence",
       "category": "end-to-end",
       "language": "TypeScript",
       "physical_device_required": true,
@@ -985,6 +985,20 @@
       "verification_reference": "end-to-end/react-native-recording-sync/README.md",
       "platform": "Android",
       "workflow": ".github/workflows/react-native-recording-sync.yml"
+    },
+    {
+      "id": "web-reference",
+      "path": "end-to-end/web-reference",
+      "title": "Web reference",
+      "purpose": "React frontend + Node backend: small recording, upload, transcription, notes, Ask and webhook recipes in one app",
+      "category": "end-to-end",
+      "language": "TypeScript / JavaScript",
+      "physical_device_required": false,
+      "readme": "end-to-end/web-reference/README.md",
+      "setup_reference": "end-to-end/web-reference/README.md",
+      "verification_reference": "end-to-end/web-reference/README.md",
+      "platform": "Web",
+      "workflow": ".github/workflows/web-reference.yml"
     }
   ]
 }

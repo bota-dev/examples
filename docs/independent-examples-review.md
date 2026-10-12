@@ -2,6 +2,74 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="web-reference-october-12"></a>
+## Web reference with small recipes — 2026-10-12
+
+Owner direction selects one maintained customer web app containing small
+feature modules, with shared helpers inside its own install root. It preserves
+all 75 existing independent examples and device package pins; the catalog now
+contains 76. Three creator agents implemented recordings/upload, processing/
+Ask/webhooks and frontend in parallel, while the integrator owned the shared
+server, HTTP integration, configuration, documentation and CI. The owner
+authorized necessary synthetic tests for this app; older creation-only evidence
+limits remain unchanged for the other examples.
+
+Compound-engineering 1.2.9 compares this implementation with current
+[ARCHITECTURE](../ARCHITECTURE.md) §§1–4,6, the app's
+[architecture](../end-to-end/web-reference/ARCHITECTURE.md), public recordings/
+upload/transcription/summary/Ask/webhook contracts, and Upload Management §1.1.
+The public documentation baseline is `50ee142141dba7c86b292efc3ab3569831707c68`;
+read-only backend source `1ac67c92c6d72858e29dc264037cb82b6c449825` supplied contract
+and ownership/source-chain context. These are source baselines, not assertions
+about deployed revisions. Bota One supplied architectural context only; no
+private helper, SDK or sibling repository is a runtime/install dependency.
+
+| Requirement / authority | Evidence | Conformance and remaining gates |
+| --- | --- | --- |
+| Customer-copyable small features in one app | README recipe table links six backend/frontend feature paths; one manifest/lock and local HTTP/auth/store helpers | Matched; no cross-example runtime sharing or generic API SDK |
+| Server-derived authorization | Operator-managed account/end-user/project mapping; cookie sessions; exact Origin/Host; exact owner/source checks before content and privileged writes | Matched locally; educational single-process auth requires production IdP, shared sessions and account operations; current observations are not historical/atomic authority |
+| Credentials isolated | Server-held Bota key; exact HTTPS storage host allowlist; no API authorization on storage; browser app tokens remain ephemeral | Matched in source and synthetic tests; deployed proxy, keys/scopes and host allowlist remain operator/live acceptance |
+| Upload commitment distinct from cleanup | Durable scoped claim and stable bytes/name/type/account identity before create; one PUT/completion attempt; exact hash and verified current GET required | Matched for cloud-only recipe; no device, receipt or cleanup authority, no encrypted-v2 or SDK lifecycle claim |
+| Processing and Ask uncertainty | Source readiness before fresh claim; exact saved resource IDs; explicit GET-only refresh; unknown create/send outcomes retained without another write | Matched locally; unknown IDs need operator reconciliation; processing/provider success remains live acceptance |
+| Authenticated notifications | Original raw byte HMAC/timestamp check; reject HTTP compression; durable metadata dedupe before ACK; current source/owner reads before UI | Matched locally; real webhook routing/delivery and production retention remain unverified |
+| Safe UI state and content | React text rendering; narrow projections; selection/account/expiry fences; duplicate click locks; same-ID recovery and citation checks | Matched in synthetic UI tests; browser visual inspection is separate from live/provider acceptance |
+| Explicit no-network demo | In-process synthetic upstream, in-memory state, persistent synthetic banner | Matched in source and local HTTP/UI exercise; demo proves no external service acceptance |
+| Minimal open-source checks | Independent frozen install, lint, typecheck, backend/UI tests, build, license policy; pinned read-only Linux/Windows CI | Local and hosted results recorded below; no publication or deployment |
+| Documentation/discovery | Root catalog/index/agent/architecture/AI guidance, own README/architecture/design, public catalog/changelog | Final link/catalog and MDX results recorded below; platform design remains unchanged |
+
+Independent reviewers inspected shared server boundaries and frontend recovery.
+Review found and fixed compressed-body verification ambiguity, an oversized-token
+edge case, upload identity changing on key rotation, and a confirmed preclaim
+readiness rejection leaving a UI lock. Targeted regressions cover those cases.
+Uncertain/claimed writes keep their locks; only exact preclaim readiness errors
+without any operation metadata allow another manual action. Native JSON keeps
+last-key semantics and rejects invalid UTF-8/nonfinite values; bounded requests
+do not claim universal hard scheduling deadlines.
+
+The changed-token search covered available internal/public Markdown/MDX and
+repository overview/agent documents; the internal downstream matrix was consulted.
+Affected example/public guidance is updated. No platform API or hardware design
+conformance changes, legacy retirement or wider SDK acceptance is claimed.
+The public UI uses standard public packages and local styling rather than the
+internal portal UI package: this is a deliberate customer-installability choice.
+Private Windows ACL/reparse-free paths remain an operator prerequisite; sessions
+and account configuration are not a production multi-instance auth service.
+
+Local Node 22.23.2 frozen installation, lint, TypeScript, production build and
+license gate passed. All 81 backend and 25 UI tests passed; 247 packages passed
+license policy, and the audit reported zero known vulnerabilities. Catalog
+validation passed for 76 entries, 81 documents and 292 local file links. YAML
+parsing/manual trigger/SHA/permission/command review passed for the new workflow
+and Dependabot entry. Both changed public MDX pages compiled independently and
+all 54 local file links resolve. This is MDX compilation, not rendered/deployed
+Mintlify acceptance; the prior full-validator timeout remains a separate limit.
+Browser inspection of the final local synthetic demo confirmed sign-in, recording
+selection, transcript display, recording-scoped Ask/citations and explicit request
+refresh and sign-out clearing the workspace. The earlier local pass also displayed notes. A saved app screenshot is
+a local review artifact; no browser/live rendering claim follows for production.
+Exact-source hosted results are recorded after delivery. No live Bota/provider/storage call,
+device operation, package publication or deployment was performed.
+
 <a id="ten-readers-exports-health-october-9"></a>
 ## Ten hierarchy readers, exports and health — 2026-10-09
 

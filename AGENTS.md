@@ -23,6 +23,7 @@ The repository contains an existing npm workspace under `apps/`, migrated to `@b
 
 ## Example selection and package manager
 
+- Prefer [web-reference](end-to-end/web-reference/README.md) for customer web integrations. October 12 owner direction authorizes small modules sharing helpers within this one app and necessary synthetic tests. Preserve existing independent examples and SDK pins; this does not authorize cross-example runtime imports or live/device operations.
 - Select by task/language/hardware in [examples.json](examples.json); follow the [AI guide](docs/using-examples-with-ai.md), then the selected README.
 - Install/check from the selected directory. Node uses its own npm manifest/lock; Python readers use the standard library. Native tooling is defined per example. Root npm commands are legacy-only.
 - Processing readers stop at project/end-user/device scope; resolution is not provider approval or job execution. Keep the [review](docs/independent-examples-review.md#agent-discovery-processing-october-9) evidence limits.

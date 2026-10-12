@@ -4,6 +4,8 @@ Examples for integrating the Bota backend API and Bota App SDK into your own app
 
 Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
 
+For a customer web app, start with the [web reference](end-to-end/web-reference/README.md): one React frontend and Node backend, with small recording, upload, transcription, notes, Ask and webhook modules. Run `npm ci` and `npm run demo` inside that directory to explore synthetic data without credentials. Copy a feature with its shared helpers, or use an existing standalone snippet below.
+
 ## Find an example
 
 Use the [machine-readable index](examples.json) to filter by task, language and
@@ -13,6 +15,7 @@ agent, start with the [AI quick-start guide](docs/using-examples-with-ai.md) and
 
 | Your task | Start here |
 | --- | --- |
+| Build a web app with reusable API recipes | [Web reference: frontend + backend](end-to-end/web-reference/README.md) |
 | Upload audio and get a transcript | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) |
 | Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python webhook](api/webhook-receiver-python/README.md) |
 | Connect to a physical device | Choose your platform under `app-sdk/` in the [catalog](#example-catalog) |
@@ -28,7 +31,7 @@ agent, start with the [AI quick-start guide](docs/using-examples-with-ai.md) and
 
 ## Current status
 
-The catalog contains seventy-five independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, transcript search and recording pagination, original-file download, structured summaries, recording-scoped Ask and session/history listings, subtitle/plain-text/Markdown/JSON export, cloud device status, bounded device inventory, command history, existing transcription/summary monitoring and linked processing snapshots, end-user onboarding and directory traversal, custom prompts, firmware discovery, OTA history and assignment monitoring, transcription of existing uploads and configuration discovery/observations. Recent expansions add fleet counters, scoped job directories, transcript JSON export, durable empty Ask sessions/title changes, exact release metadata, private Ask Markdown, cloud device-name changes, exact external-ID lookup, ordinary-command observation, upload-security policy, WebVTT export, project/end-user processing readers, exact encrypted-upload observation, Ask metadata inspection, firmware BIN downloads, project upload settings, recording integrity metadata and transcript CSV. Ten more cases add project/end-user configuration observations, a summary snapshot, private NDJSON/HTML exports and a credential-free health probe. The recent sixty API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android/macOS recording catalogs are implemented; the Apple catalog passed hosted macOS compilation; physical acceptance remains unverified. Exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+The catalog contains seventy-six independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, transcript search and recording pagination, original-file download, structured summaries, recording-scoped Ask and session/history listings, subtitle/plain-text/Markdown/JSON export, cloud device status, bounded device inventory, command history, existing transcription/summary monitoring and linked processing snapshots, end-user onboarding and directory traversal, custom prompts, firmware discovery, OTA history and assignment monitoring, transcription of existing uploads and configuration discovery/observations. Recent expansions add fleet counters, scoped job directories, transcript JSON export, durable empty Ask sessions/title changes, exact release metadata, private Ask Markdown, cloud device-name changes, exact external-ID lookup, ordinary-command observation, upload-security policy, WebVTT export, project/end-user processing readers, exact encrypted-upload observation, Ask metadata inspection, firmware BIN downloads, project upload settings, recording integrity metadata and transcript CSV. Ten more cases add project/end-user configuration observations, a summary snapshot, private NDJSON/HTML exports and a credential-free health probe. The recent sixty API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android/macOS recording catalogs are implemented; the Apple catalog passed hosted macOS compilation; physical acceptance remains unverified. Exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
 
 | Existing source | Purpose | Status |
 | --- | --- | --- |
@@ -147,6 +150,7 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [React Native encrypted recording sync](end-to-end/react-native-recording-sync/README.md) | Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; [scope and evidence](docs/independent-examples-review.md#pre-provisioned-recording-sync) | Yes |
+| [Web reference](end-to-end/web-reference/README.md) | React frontend + Node backend: small recording, upload, transcription, notes, Ask and webhook recipes sharing one app runtime; synthetic demo and scoped live mode | No |
 
 Native SDK smoke samples used to develop the SDK itself belong in the SDK source repository. These customer-facing examples consume published artifacts.
 
@@ -222,7 +226,7 @@ These commands cover dependency and upload-completion regression checks, workspa
 - [Claude Code entry point](CLAUDE.md): shared instructions for Claude Code.
 - [Bota public documentation](https://docs.bota.dev): API and SDK integration contracts.
 
-Start with [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
+Start with the [web reference](end-to-end/web-reference/README.md) for a customer web app, or [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
 
 ## October 7 scoped braces source guard
 

@@ -1,6 +1,6 @@
 # Bota Examples Architecture
 
-Status: seventy-five independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent sixty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+Status: seventy-six independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent sixty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
 
 ## 1. Purpose and scope
 
@@ -21,6 +21,8 @@ candidate checks remain historical evidence, including the unresolved Flutter
 first-attempt reconnect limitation.
 
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
+
+Owner direction on October 12 adds one maintained [web reference](end-to-end/web-reference/README.md) with small feature modules and shared HTTP/auth/intent code inside its own install root. This is the recommended customer web starting point. It preserves all standalone examples; it creates no shared dependency between them. Its React UI and Express backend cover recordings, audio upload, transcription, general notes, recording-scoped Ask and webhook notifications. Local synthetic tests and a credential-free demo are authorized for this app; live API and production identity/deployment acceptance remain separate. See its [architecture](end-to-end/web-reference/ARCHITECTURE.md) and [review](docs/independent-examples-review.md#web-reference-october-12).
 
 Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The credential-free health example uses the separately documented public `/health` endpoint. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
 
@@ -116,6 +118,10 @@ examples/
     apple-recording-catalog/
     flutter-device-connect/
   end-to-end/
+    web-reference/                 # One install root; reusable web/backend recipes
+      web/features/
+      server/features/
+      README.md
     react-native-recording-sync/    # Already-provisioned Android, encrypted v2 only
       app/
       backend/

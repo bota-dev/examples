@@ -6,6 +6,14 @@ can read repository files. No tool-specific integration or root install is requi
 
 ## Select an example
 
+For a customer web integration, prefer [web-reference](../end-to-end/web-reference/README.md).
+Its recipe table maps recordings, upload, transcription, notes, Ask and notifications
+to small backend/frontend files. One install root shares HTTP, auth and durable
+intent helpers. Adapt just the selected feature and its imports, or run the whole
+synthetic demo. Replace the app auth adapter with your verified identity mapping;
+keep Bota keys server-side. Existing standalone and native examples remain valid
+choices for a narrower task or another platform.
+
 1. Read [examples.json](../examples.json) or the [README catalog](../README.md#example-catalog).
 2. Match `purpose`, `category`, `language` and `physical_device_required` to the task.
 3. Read [AGENTS.md](../AGENTS.md), [ARCHITECTURE.md](../ARCHITECTURE.md), then the selected example's README.
