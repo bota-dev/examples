@@ -2,11 +2,12 @@
 
 Examples for integrating the Bota backend API and Bota App SDK into your own applications. API examples demonstrate server-side workflows; App SDK examples demonstrate communication with physical Bota devices; end-to-end demos connect an application to its backend and include the device SDK where supported.
 
-The goal is runnable demos and easy-to-adapt sample code that showcase the public
-API/SDK to developers. Read the [repository design](DESIGN.md) for the intended
-developer experience and [technical architecture](ARCHITECTURE.md) for integration
-boundaries. The web reference below demonstrates APIs; device SDK samples are
-listed separately in the catalog.
+The goal is runnable demos, common app templates and easy-to-adapt sample code
+that showcase the public API/SDK to developers building for their own end users.
+The common template follows a familiar recordings app, inspired by Demo and
+Bota One: add audio, choose a recording, read its transcript and summary, and
+ask about its content. Read the [repository design](DESIGN.md) for that direction
+and [technical architecture](ARCHITECTURE.md) for integration boundaries.
 
 The design has two layers: **general platform capability examples now**, then
 **vertical use-case and consumer app demos later**. API, SDK and combined samples
@@ -14,7 +15,28 @@ are formats within the current general layer. The web reference belongs to it.
 
 Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
 
-For a customer web app, start with the [web reference](end-to-end/web-reference/README.md): one React frontend and Node backend, with small recording, upload, transcription, notes, Ask and webhook modules. Run `npm ci` and `npm run demo` inside that directory to explore synthetic data without credentials. Copy a feature with its shared helpers, or use an existing standalone snippet below.
+For a customer web app, start with [Bota Recordings](end-to-end/web-reference/README.md): one React frontend and Node backend, with a compact recording library, audio import and Transcript/Summary/Ask tabs. Run `npm ci` and `npm run demo` inside that directory to try synthetic data without credentials. Use the app as a starting template, copy a feature with its shared helpers, or use an existing standalone snippet below. This web implementation uses the API only; it has no device SDK or audio playback.
+
+Platform-specific runnable samples span mobile and web, with native Apple and
+Android examples as well. The common recording journey is the app-template
+direction across platforms, subject to their public capabilities. Existing
+connection/catalog snippets and the bounded Android sync demo cover only their
+documented steps; they do not establish full app or hardware parity.
+
+## Current platform coverage
+
+The common recording app is the template direction. The smaller SDK examples
+below cover individual capabilities; they are not complete versions of that app.
+Follow each README for build and physical-device evidence.
+
+| Platform | Runnable examples and current scope |
+| --- | --- |
+| React Native | [Android/iOS connection](app-sdk/react-native-device-connect/README.md); [Android-only recording sync](end-to-end/react-native-recording-sync/README.md) for an already-provisioned device, encrypted upload and transcription |
+| Flutter | [Android-only connection](app-sdk/flutter-device-connect/README.md); no iOS example host yet |
+| Kotlin / Android | [Connection](app-sdk/android-device-connect/README.md) and [recording metadata catalog](app-sdk/android-recording-catalog/README.md); no audio/API app journey |
+| Swift / Apple | [macOS connection](app-sdk/apple-device-connect/README.md) and [macOS recording metadata catalog](app-sdk/apple-recording-catalog/README.md); no native iOS example host yet |
+| Web | [Bota Recordings API app](end-to-end/web-reference/README.md) for audio import, Transcript/Summary/Ask; separate [desktop Chromium SDK connection](app-sdk/web-device-connect/README.md) with Web Bluetooth, not integrated into that app |
+| Native Windows | No sample yet |
 
 ## Find an example
 
@@ -25,7 +47,7 @@ agent, start with the [AI quick-start guide](docs/using-examples-with-ai.md) and
 
 | Your task | Start here |
 | --- | --- |
-| Build a web app with reusable API recipes | [Web reference: frontend + backend](end-to-end/web-reference/README.md) |
+| Start a common web recording app | [Bota Recordings: React + Node](end-to-end/web-reference/README.md) |
 | Upload audio and get a transcript | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) |
 | Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python webhook](api/webhook-receiver-python/README.md) |
 | Connect to a physical device | Choose your platform under `app-sdk/` in the [catalog](#example-catalog) |
@@ -160,7 +182,7 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [React Native encrypted recording sync](end-to-end/react-native-recording-sync/README.md) | Already-provisioned Android device → encrypted upload → transcription; authenticated local backend; [scope and evidence](docs/independent-examples-review.md#pre-provisioned-recording-sync) | Yes |
-| [Web reference](end-to-end/web-reference/README.md) | React frontend + Node backend: small recording, upload, transcription, notes, Ask and webhook recipes sharing one app runtime; synthetic demo and scoped live mode | No |
+| [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
 
 Native SDK smoke samples used to develop the SDK itself belong in the SDK source repository. These customer-facing examples consume published artifacts.
 
@@ -247,7 +269,7 @@ These commands cover dependency and upload-completion regression checks, workspa
 Bota-authored sample code is available under the [MIT license](LICENSE).
 Third-party dependencies and vendored files retain their own licenses and notices.
 
-Start with the [web reference](end-to-end/web-reference/README.md) for a customer web app, or [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
+Start with [Bota Recordings](end-to-end/web-reference/README.md) for a common web app template, or [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
 
 ## October 7 scoped braces source guard
 

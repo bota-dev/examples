@@ -62,7 +62,7 @@ test(
       });
       assert.deepEqual(exit, { code: 1, signal: null });
       assert.match(output, /Application port is already in use/);
-      assert.doesNotMatch(output, /Bota API Explorer \(demo\):/);
+      assert.doesNotMatch(output, /Bota Recordings \(demo\):/);
     } finally {
       clearTimeout(timer);
       if (child.exitCode === null) child.kill();
@@ -105,7 +105,7 @@ test(
       child.once('error', reject);
       child.stdout.on('data', (bytes) => {
         output += bytes.toString();
-        if (output.includes('Bota API Explorer (demo):')) resolve();
+        if (output.includes('Bota Recordings (demo):')) resolve();
       });
       child.stderr.on('data', (bytes) => {
         output += bytes.toString();

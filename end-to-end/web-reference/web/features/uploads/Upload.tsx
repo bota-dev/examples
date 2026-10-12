@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ApiClient, UploadResult } from '../../api';
 import { IntentNotice, useIntent } from '../../workflow';
-import { Capability } from '../../Capability';
 
 const audioTypes = new Set([
   'audio/wav',
@@ -68,19 +67,8 @@ export function Upload({ api, onUploaded }: { api: ApiClient; onUploaded: () => 
   };
   return (
     <section className="upload-panel" aria-labelledby="upload-heading">
-      <p className="eyebrow">Add to your collection</p>
-      <h2 id="upload-heading">Bring your own audio.</h2>
+      <h2 id="upload-heading">Upload audio</h2>
       <p className="muted">WAV, MP3, M4A, OGG, Opus, WebM or FLAC. Up to 25 MiB.</p>
-      <Capability
-        calls={[
-          'POST /v1/recordings',
-          'POST /v1/recordings/:id/upload-url',
-          'PUT signed storage URL (no API key)',
-          'POST /v1/recordings/:id/upload-complete',
-        ]}
-        docs="https://docs.bota.dev/api-reference/recordings/create"
-        source="server/features/upload.mjs"
-      />
       <form
         onSubmit={(event) => {
           event.preventDefault();
@@ -93,15 +81,7 @@ export function Upload({ api, onUploaded }: { api: ApiClient; onUploaded: () => 
         }}
       >
         <label className="file-label" htmlFor="audio-file">
-          <span aria-hidden="true">↑</span>
-          <span>
-            {file ? file.name : 'Choose an audio file'}
-            <small>
-              {file
-                ? `${(file.size / 1024 / 1024).toFixed(2)} MiB selected`
-                : 'Select a file from your computer'}
-            </small>
-          </span>
+          Choose an audio file
         </label>
         <input
           id="audio-file"
@@ -113,7 +93,7 @@ export function Upload({ api, onUploaded }: { api: ApiClient; onUploaded: () => 
           aria-describedby="upload-guidance"
         />
         <p id="upload-guidance" className="small-note">
-          Upload is separate from transcription. Each processing step starts with your action.
+          After uploading, open the recording to start a transcript.
         </p>
         {validation ? (
           <p className="error-note" role="alert">

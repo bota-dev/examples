@@ -15,7 +15,11 @@ and combined examples are formats within Layer 1, including the web reference.
 The web reference showcases backend APIs; choose `app-sdk/` or a supported
 combined demo when the task requires physical-device SDK integration.
 
-For a customer web integration, prefer [web-reference](../end-to-end/web-reference/README.md).
+For a common web recording app template, prefer [Bota Recordings](../end-to-end/web-reference/README.md).
+Use the [platform coverage table](../README.md#current-platform-coverage) for
+mobile/native hosts and their current gaps. Keep each app's UI focused on the
+recording user; put public-call explanations in README/source. Connection and
+catalog snippets do not implement a complete recording app.
 Its recipe table maps recordings, upload, transcription, notes, Ask and notifications
 to small backend/frontend files. One install root shares HTTP, auth and durable
 intent helpers. Adapt just the selected feature and its imports, or run the whole

@@ -84,10 +84,72 @@ afterEach(() => {
 });
 
 describe('customer reference boundaries', () => {
+  it('keeps processing failure and upload verification distinct in the library', async () => {
+    mockServer((path) =>
+      path === '/api/recordings'
+        ? json({
+            data: [
+              { ...recordingA, status: 'failed' },
+              { ...recordingB, status: 'processing', upload_verified: false },
+            ],
+            has_more: false,
+            next_cursor: null,
+          })
+        : undefined,
+    );
+    render(<App />);
+    await screen.findByRole('button', { name: /Workshop notes.*failed.*Upload verified/ });
+    expect(
+      screen.getByRole('button', { name: /An afternoon walk.*processing.*Verification pending/ }),
+    ).toBeTruthy();
+    expect(screen.queryByText('Ready')).toBeNull();
+  });
+
+  it('presents recording tasks without API documentation panels', async () => {
+    const fetchMock = mockServer();
+    render(<App />);
+    await openRecording();
+    expect(screen.getByRole('tab', { name: 'Transcript' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Summary' })).toBeTruthy();
+    expect(screen.getByRole('tab', { name: 'Ask' })).toBeTruthy();
+    expect(screen.queryByRole('complementary', { name: 'Integration sample' })).toBeNull();
+    expect(screen.queryByText(/(?:GET|POST) \/v1\//)).toBeNull();
+    expect(screen.queryByRole('link', { name: /API documentation/ })).toBeNull();
+    expect(screen.queryByText(recordingA.id)).toBeNull();
+    expect(screen.getByText('Activity & request review').closest('details')?.open).toBe(false);
+    expect(fetchMock.mock.calls.every(([, init]) => !init.method || init.method === 'GET')).toBe(
+      true,
+    );
+  });
+
+  it('returns to the library with focus and fences a late result without unlocking the attempt', async () => {
+    const pending = deferred<Response>();
+    const fetchMock = mockServer((path, init) =>
+      path.endsWith('/transcriptions') && init.method === 'POST' ? pending.promise : undefined,
+    );
+    render(<App />);
+    await openRecording();
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: 'Workshop notes' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Start transcription' }));
+    fireEvent.click(screen.getByRole('button', { name: 'All recordings' }));
+    expect(screen.queryByRole('tablist')).toBeNull();
+    expect(document.activeElement).toBe(screen.getByRole('heading', { name: /Recordings/ }));
+    await act(async () =>
+      pending.resolve(json({ operation, private_text: 'Late private result' })),
+    );
+    expect(screen.queryByText('Late private result')).toBeNull();
+    await openRecording();
+    expect(
+      (screen.getByRole('button', { name: 'Start transcription' }) as HTMLButtonElement).disabled,
+    ).toBe(true);
+    fireEvent.click(screen.getByRole('button', { name: 'Start transcription' }));
+    expect(fetchMock.mock.calls.filter(([, init]) => init.method === 'POST')).toHaveLength(1);
+  });
+
   it('starts only reads, and exposes the demo entry only after mode discovery', async () => {
     const fetchMock = mockServer(undefined, false);
     render(<App />);
-    fireEvent.click(await screen.findByRole('button', { name: 'Explore synthetic demo' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Open demo' }));
     await openRecording();
     expect(
       fetchMock.mock.calls
@@ -129,7 +191,7 @@ describe('customer reference boundaries', () => {
     expect(login[1].credentials).toBe('same-origin');
     expect(login[1].headers).toEqual({ 'Content-Type': 'application/json' });
     expect(writeStorage).not.toHaveBeenCalled();
-    expect(screen.queryByRole('button', { name: 'Explore synthetic demo' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Open demo' })).toBeNull();
   });
 
   it('does not send a Bota secret mistakenly entered into the application login', async () => {
@@ -153,8 +215,8 @@ describe('customer reference boundaries', () => {
       'live',
     );
     render(<App />);
-    await screen.findByRole('heading', { name: 'The API Explorer could not open.' });
-    expect(screen.queryByRole('button', { name: 'Explore synthetic demo' })).toBeNull();
+    await screen.findByRole('heading', { name: 'The app could not open.' });
+    expect(screen.queryByRole('button', { name: 'Open demo' })).toBeNull();
     expect(fetchMock.mock.calls.length).toBe(1);
     fail = false;
     fireEvent.click(screen.getByRole('button', { name: 'Refresh application status' }));
@@ -203,7 +265,7 @@ describe('customer reference boundaries', () => {
     expect(fetchMock.mock.calls.filter(([, init]) => init.method === 'POST')).toHaveLength(1);
     await act(async () => pending.reject(new Error('connection interrupted')));
     await screen.findByText('Review this request');
-    fireEvent.click(screen.getByRole('tab', { name: 'Notes & next steps' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Summary' }));
     fireEvent.click(screen.getByRole('tab', { name: 'Transcript' }));
     await waitFor(() =>
       expect(
@@ -227,7 +289,7 @@ describe('customer reference boundaries', () => {
     render(<App />);
     await openRecording();
     await screen.findByText('Private workshop transcript.');
-    fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
     await waitFor(() =>
       expect(screen.queryByText('Checking for a completed transcript…')).toBeNull(),
     );
@@ -243,7 +305,7 @@ describe('customer reference boundaries', () => {
       ),
     ).toHaveLength(1);
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
-    await screen.findByRole('button', { name: 'Explore synthetic demo' });
+    await screen.findByRole('button', { name: 'Open demo' });
     expect(screen.queryByText(/Workshop notes/)).toBeNull();
     expect(screen.queryByLabelText('Your question')).toBeNull();
     await act(async () =>
@@ -308,11 +370,11 @@ describe('customer reference boundaries', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
     await screen.findByRole('heading', { name: 'Signing out…' });
     expect(screen.queryByText(/Workshop notes/)).toBeNull();
-    expect(screen.queryByRole('button', { name: 'Explore synthetic demo' })).toBeNull();
+    expect(screen.queryByRole('button', { name: 'Open demo' })).toBeNull();
     expect(fetchMock.mock.calls.some(([path]) => path === '/api/login')).toBe(false);
     await act(async () => logout.resolve(json({ ok: true })));
     expect(cookie).toBe('');
-    fireEvent.click(await screen.findByRole('button', { name: 'Explore synthetic demo' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Open demo' }));
     await screen.findByRole('button', { name: /Workshop notes/ });
     expect(cookie).toBe('new-session');
     expect(
@@ -330,7 +392,7 @@ describe('customer reference boundaries', () => {
     await act(async () => logout.reject(new Error('connection ended')));
     await screen.findByText(/The server could not confirm sign-out/);
     expect(screen.queryByText(/Workshop notes/)).toBeNull();
-    expect(screen.getByRole('button', { name: 'Explore synthetic demo' })).toBeTruthy();
+    expect(screen.getByRole('button', { name: 'Open demo' })).toBeTruthy();
   });
 
   it('reconciles a saved request after reopening through one GET and keeps Activity metadata-only', async () => {
@@ -409,7 +471,7 @@ describe('customer reference boundaries', () => {
       await screen.findByRole('button', { name: `Refresh transcription request ${saved.id}` }),
     );
     fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
-    await screen.findByRole('button', { name: 'Explore synthetic demo' });
+    await screen.findByRole('button', { name: 'Open demo' });
     await act(async () =>
       recovery.resolve(
         json({ operation: { ...saved, state: 'complete' }, answer: 'Late private content.' }),
@@ -482,7 +544,7 @@ describe('customer reference boundaries', () => {
     const selected = screen.getByRole('tab', { name: 'Transcript' });
     selected.focus();
     fireEvent.keyDown(selected, { key: 'ArrowRight' });
-    expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Notes & next steps' }));
+    expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Summary' }));
   });
 
   it('starts general notes once and reads the structured result only on manual refresh', async () => {
@@ -519,7 +581,7 @@ describe('customer reference boundaries', () => {
     });
     render(<App />);
     await openRecording();
-    fireEvent.click(screen.getByRole('tab', { name: 'Notes & next steps' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Summary' }));
     const create = await screen.findByRole('button', { name: 'Create general notes' });
     await waitFor(() => expect((create as HTMLButtonElement).disabled).toBe(false));
     fireEvent.click(create);
@@ -560,7 +622,7 @@ describe('customer reference boundaries', () => {
     });
     render(<App />);
     await openRecording();
-    fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
     await waitFor(() =>
       expect(screen.queryByText('Checking for a completed transcript…')).toBeNull(),
     );
@@ -590,7 +652,7 @@ describe('customer reference boundaries', () => {
     });
     render(<App />);
     await openRecording();
-    fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
     await waitFor(() =>
       expect(screen.queryByText('Checking for a completed transcript…')).toBeNull(),
     );
@@ -626,7 +688,9 @@ describe('customer reference boundaries', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Upload audio' }));
     await screen.findByText('Request completed');
-    fireEvent.change(screen.getByLabelText(/same.wav/), { target: { files: [second] } });
+    fireEvent.change(screen.getByLabelText('Choose an audio file'), {
+      target: { files: [second] },
+    });
     await waitFor(() =>
       expect(
         (screen.getByRole('button', { name: 'Upload audio' }) as HTMLButtonElement).disabled,
@@ -634,7 +698,7 @@ describe('customer reference boundaries', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Upload audio' }));
     await screen.findByText('Request completed');
-    fireEvent.change(screen.getByLabelText(/same.wav/), {
+    fireEvent.change(screen.getByLabelText('Choose an audio file'), {
       target: {
         files: [new File(['first'], 'same.wav', { type: 'audio/wav', lastModified: 999 })],
       },
@@ -664,7 +728,7 @@ describe('customer reference boundaries', () => {
     });
     render(<App />);
     await openRecording();
-    fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
     await waitFor(() =>
       expect(screen.queryByText('Checking for a completed transcript…')).toBeNull(),
     );
@@ -674,8 +738,8 @@ describe('customer reference boundaries', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Ask recording' }));
     await screen.findByText('The saved request needs review.');
     expect(screen.getByRole('button', { name: 'Refresh request' })).toBeTruthy();
-    fireEvent.click(screen.getByRole('tab', { name: 'Notes & next steps' }));
-    fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Summary' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
     fireEvent.change(screen.getByLabelText('Your question'), {
       target: { value: 'What happens next?' },
     });
@@ -715,7 +779,7 @@ describe('customer reference boundaries', () => {
     });
     render(<App />);
     await openRecording();
-    fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+    fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
     await waitFor(() =>
       expect(screen.queryByText('Checking for a completed transcript…')).toBeNull(),
     );
@@ -765,7 +829,7 @@ describe('customer reference boundaries', () => {
       });
       render(<App />);
       await openRecording();
-      fireEvent.click(screen.getByRole('tab', { name: 'Ask recording' }));
+      fireEvent.click(screen.getByRole('tab', { name: 'Ask' }));
       await waitFor(() =>
         expect(screen.queryByText('Checking for a completed transcript…')).toBeNull(),
       );
@@ -777,7 +841,7 @@ describe('customer reference boundaries', () => {
       if (destination === 'selection') await openRecording('An afternoon walk');
       else {
         fireEvent.click(screen.getByRole('button', { name: 'Sign out' }));
-        await screen.findByRole('button', { name: 'Explore synthetic demo' });
+        await screen.findByRole('button', { name: 'Open demo' });
       }
       await act(async () =>
         recovery.resolve(
@@ -804,7 +868,7 @@ describe('customer reference boundaries', () => {
     {
       kind: 'summary',
       code: 'transcription_incomplete',
-      tab: 'Notes & next steps',
+      tab: 'Summary',
       action: 'Create general notes',
       refresh: 'Refresh notes',
       suffix: '/summaries',

@@ -3,7 +3,6 @@ import type { ApiClient, AskResult, Collection, Transcription } from '../../api'
 import { ApiError } from '../../api';
 import { durationLabel } from '../../format';
 import { IntentNotice, useIntent, useRead } from '../../workflow';
-import { Capability } from '../../Capability';
 
 export function Ask({ api, recordingId }: { api: ApiClient; recordingId: string }) {
   const [question, setQuestion] = useState('');
@@ -32,20 +31,10 @@ export function Ask({ api, recordingId }: { api: ApiClient; recordingId: string 
   });
   return (
     <section className="feature-panel" aria-labelledby="ask-heading">
-      <p className="eyebrow">04 / Follow your curiosity</p>
-      <h3 id="ask-heading">Ask this recording.</h3>
+      <h3 id="ask-heading">Ask about this recording</h3>
       <p className="muted">
         One question, grounded in this recording. Answers may contain mistakes; review the source.
       </p>
-      <Capability
-        calls={[
-          'POST /v1/ask/sessions',
-          'POST /v1/ask/sessions/:id/messages',
-          'GET /v1/ask/sessions/:id/messages',
-        ]}
-        docs="https://docs.bota.dev/api-reference/ask/create-session"
-        source="server/features/ask.mjs"
-      />
       {transcripts.error ? (
         <p className="error-note" role="alert">
           {transcripts.error}
@@ -100,12 +89,12 @@ export function Ask({ api, recordingId }: { api: ApiClient; recordingId: string 
           >
             {intent.busy ? 'Asking…' : 'Ask recording'} <span aria-hidden="true">↗</span>
           </button>
-          <small id="question-guidance">Starts one answer request.</small>
+          <small id="question-guidance">Answers use this recording's transcript.</small>
         </div>
       </form>
       {typeof intent.result?.answer === 'string' ? (
         <article className="answer-result">
-          <p className="eyebrow">Answer / Review with the source</p>
+          <h4>Answer</h4>
           <p className="answer-text">{intent.result.answer}</p>
           {intent.result.citations?.length ? (
             <ul className="citations" aria-label="Answer citations">

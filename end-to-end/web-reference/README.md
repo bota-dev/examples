@@ -1,15 +1,23 @@
-# Bota API Explorer: small recipes in one app
+# Bota Recordings: common web sample app
 
-A React frontend and Node backend for recordings, uploads, transcription,
-general notes, recording-scoped Ask and webhook notifications. Shared HTTP,
-authentication and durable intent code lives in one install root. Pick a feature
-below and copy its relevant code into your application.
+A familiar recording app template for customer developers building for their
+own end users, inspired by Demo and Bota One. Import audio, choose a recording,
+then open its Transcript, Summary or Ask tab. The React frontend and Node
+backend demonstrate public recordings, upload, transcription, general notes,
+recording-scoped Ask and webhook integrations. Shared HTTP, authentication and
+durable intent code lives in one install root.
 
-This is the recommended starting point for a customer web integration. Existing
-standalone snippets and platform-specific App SDK examples remain available.
-No device, private package, sibling repository or Bota SDK is needed here.
-This is a general Layer 1 capability showcase. Each UI feature names the public
-calls it demonstrates and links the documentation and reusable backend source.
+Use it as a starting template or copy a small recipe with its helpers. This is a
+general Layer 1 capability sample, not a vertical application or production SaaS
+starter. API documentation and source recipes are below; the everyday UI focuses
+on recordings and results. Activity is secondary and initially collapsed for
+explicit saved-operation refresh and notification metadata.
+
+This web implementation uses APIs only: no device SDK, microphone capture or
+audio playback. No device, private package or sibling repository is needed.
+Independent API snippets and platform-specific App SDK examples remain useful
+for smaller tasks. The common app journey is the direction for mobile-to-web
+templates; current connection/catalog snippets do not implement that full journey.
 
 ## Try it without credentials
 
@@ -20,8 +28,8 @@ npm ci
 npm run demo
 ```
 
-Open **http://127.0.0.1:5173** and select **Explore synthetic demo**. Choose a
-recording, read its transcript/notes, or ask one question. Uploading and processing
+Open **http://127.0.0.1:5173** and select **Open demo**. Choose a
+recording, open its Transcript/Summary/Ask tabs, or import audio. Uploading and processing
 are separate actions. The demo simulates the upstream API in-process, makes no
 external requests and resets on restart. Its outputs and notifications are
 synthetic; they prove no transcription, upload or model-provider acceptance.
@@ -104,7 +112,7 @@ crash-safe account-management service.
 - **Transcribe:** reuse an existing job or submit one explicit create after
   server-reported hash verification. `uploaded` alone is insufficient. Coordinate
   automatic transcription and other writers; separate API reads are not atomic.
-- **Notes:** reuse existing `tmpl_general_notes` or request it once from a
+- **Summary:** reuse existing `tmpl_general_notes` or request it once from a
   completed exact transcription. Display only the five documented notes fields.
 - **Ask:** create an empty recording-scoped session and send one question. The
   app verifies owner-filtered membership, exact history and citations before
@@ -119,7 +127,7 @@ crash-safe account-management service.
   cannot create a replacement job, resend a question, PUT audio or replay
   completion. Known outcomes can reconcile; an unknown resource ID needs
   operator reconciliation. Activity shows selected intent metadata only.
-  Each Activity row can refresh its saved operation through GET after reopening
+  Open the collapsed Activity panel to refresh a saved operation through GET after reopening
   or restarting the app; recovered response content is withheld from that panel.
 
 Live SQLite uses synchronous durable claims before each uncertain write. The
@@ -148,7 +156,7 @@ The receiver rejects HTTP content encoding and verifies timestamp-bound HMAC ove
 deduplicates ID/hash and stores only event/type/time/resource-pointer metadata
 before acknowledgement. It starts no jobs. The UI fetches each pointer's current
 resource/recording source chain before showing notification metadata; the signed
-payload's owner is not access authorization. Use **Refresh notifications** to
+payload's owner is not access authorization. Open **Activity** and refresh to
 observe updates; there is no background push subscription or automatic processing.
 The demo's internal fixture notifications are separate from real signed delivery.
 
@@ -194,6 +202,15 @@ audit reports no known vulnerabilities at that time.
 Process regressions cover occupied-port startup and shutdown with an active local
 development WebSocket, including closure of Vite watchers before HTTP draining.
 No live Bota/provider/storage or hardware acceptance is inferred.
+
+The common-app presentation revision adds three UI regressions: task-focused
+controls without API panels, library Back navigation/focus with a late-result
+and intent-lock fence, and distinct processing/verification labels. All 33 UI
+and 88 backend tests pass locally, alongside frozen install, format, lint,
+typecheck/build and the license gate. Desktop and phone-width browser review
+covers Transcript/Summary/Ask, returning to the library and synthetic Ask.
+See the [template review](../../docs/independent-examples-review.md#common-recording-template-october-12)
+for platform coverage and evidence limits.
 
 Status and exact hosted checks are recorded in the
 [quality review](../../docs/independent-examples-review.md#general-example-quality-october-12).

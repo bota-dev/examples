@@ -1,7 +1,6 @@
 import type { ApiClient, Collection, MutationResult, Transcription } from '../../api';
 import { stateLabel } from '../../format';
 import { IntentNotice, useIntent, useRead } from '../../workflow';
-import { Capability } from '../../Capability';
 
 export function Transcript({
   api,
@@ -20,8 +19,7 @@ export function Transcript({
     <section className="feature-panel" aria-labelledby="transcript-heading">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">02 / Listen in text</p>
-          <h3 id="transcript-heading">Transcription</h3>
+          <h3 id="transcript-heading">Transcript</h3>
         </div>
         <button
           className="text-button"
@@ -32,18 +30,7 @@ export function Transcript({
           Refresh <span aria-hidden="true">↻</span>
         </button>
       </div>
-      <p className="muted">
-        Read existing transcripts, or request one after the upload is verified.
-      </p>
-      <Capability
-        calls={[
-          'GET /v1/transcriptions?recording_id=:id',
-          'GET /v1/transcriptions/:id',
-          'POST /v1/transcriptions',
-        ]}
-        docs="https://docs.bota.dev/api-reference/ai/transcriptions/create"
-        source="server/features/processing.mjs"
-      />
+      <p className="muted">Turn the recording into text.</p>
       {read.error ? (
         <p className="error-note" role="alert">
           {read.error}
@@ -60,14 +47,13 @@ export function Transcript({
             <span className={`status-pill ${job.status === 'completed' ? 'success' : ''}`}>
               {stateLabel(job.status)}
             </span>
-            <code>{job.id}</code>
           </div>
           {job.status === 'completed' && typeof job.full_text === 'string' ? (
             <p className="transcript-text">{job.full_text}</p>
           ) : (
             <p className="empty-note">
               {job.status === 'failed'
-                ? 'This job failed. Review its recorded intent before requesting further processing.'
+                ? 'Transcription failed. Check the request status before continuing.'
                 : 'The transcript is not ready. Refresh to read its current state.'}
             </p>
           )}
@@ -75,11 +61,7 @@ export function Transcript({
       ))}
       {!jobs.length && !read.loading && !read.error ? (
         <div className="feature-empty">
-          <span className="empty-symbol" aria-hidden="true">
-            Aa
-          </span>
-          <h4>Every useful thought starts here.</h4>
-          <p>Turn your recording into a transcript, then make notes or ask a question.</p>
+          <p>No transcript yet. Start transcription to create one.</p>
         </div>
       ) : null}
       <div className="action-row">
@@ -101,8 +83,8 @@ export function Transcript({
           {!verified
             ? 'Upload verification is required.'
             : jobs.length
-              ? 'An existing job is already recorded.'
-              : 'Starts one processing request.'}
+              ? 'A transcript has already been requested.'
+              : 'Creates a transcript for this recording.'}
         </small>
       </div>
       <IntentNotice

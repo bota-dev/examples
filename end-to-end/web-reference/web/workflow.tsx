@@ -61,7 +61,7 @@ export function useIntent<T extends MutationResult>(
   validate?: (result: T) => T,
 ) {
   const scope = useContext(IntentContext);
-  if (!scope) throw new Error('Action requires a signed-in workbench.');
+  if (!scope) throw new Error('Action requires a signed-in recording app.');
   const [state, setState] = useState<{
     key: string;
     busy: boolean;

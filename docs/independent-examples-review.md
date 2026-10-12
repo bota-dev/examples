@@ -2,6 +2,50 @@
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.
 
+<a id="common-recording-template-october-12"></a>
+## Common recording app template correction — 2026-10-12
+
+The owner clarified that developers build for their own end users: the common
+sample/template should resemble Demo or Bota One, with platform-specific
+implementations from mobile to web. The earlier API workbench presentation has
+no defined end-user task and is superseded by the app direction in
+[DESIGN.md](../DESIGN.md) and the [web design](../end-to-end/web-reference/DESIGN.md).
+This pass corrects the existing web app and documents current platform coverage;
+it creates no new platform host, vertical workflow or catalog entry. The catalog
+remains 76 independently implemented examples.
+
+Three agents inspected the reference-app flow, existing UI/state boundaries and
+actual platform hosts. No private application code or component dependency was
+copied. Independent post-implementation review identified an overbroad `Ready`
+label; the library now keeps processing/failure and upload-verification evidence
+distinct, with a regression for that behavior.
+
+| Requirement / authority | Implementation and verification evidence | Status and limits |
+| --- | --- | --- |
+| Familiar common app, owner direction and web DESIGN | Bota Recordings: compact library/detail, Upload audio, Transcript/Summary/Ask tabs, plain system text and white/gray surfaces; desktop and narrow browser observations | Matched for the web sample; no audio capture/playback or device SDK added |
+| Developers adapt source; everyday controls serve recording users | Removed six endpoint/source panels and orphan Capability component; README retains public calls and backend/frontend recipe links; task-only UI regression | Matched; the footer links setup/sample code |
+| Narrow navigation, focus and state safety | Library/detail switch and All recordings control; heading focus restored; late mutation result fenced while original attempt stays locked | Matched by focused UI regression and narrow-viewport browser Back observation |
+| Honest resource state and demo evidence | Library distinguishes processing/failure from upload verification; Sample app/Demo data labels on desktop and phone; synthetic answer/source timestamp observed | Matched for local fixtures; no live provider or hardware acceptance |
+| Existing ownership, recovery and session boundaries | Server behavior unchanged apart from startup name; all 88 backend and 33 UI tests pass, including logout ordering, uncertainty, GET-only recovery and stale results | Matched for tested synthetic/process behavior; production identity and operational controls remain customer-owned |
+| Platform-specific runnable examples, owner direction | README coverage table checked against actual hosts: RN Android/iOS connection; Android-only RN sync/Flutter; Kotlin Android; Swift macOS; separate Web SDK/API samples | Partial: full common app journey outside web, native iOS/Flutter iOS hosts and native Windows sample remain unimplemented |
+| Open-source reproducibility and discovery | Frozen installation; format/lint/typecheck/build; 250-package license gate; nine catalog regressions; both changed public MDX pages compile and 56 local targets resolve | Matched locally; hosted checks must be assessed at their exact pushed source |
+
+Browser review used the normal desktop viewport, a 390×844 phone override and
+an 800×900 breakpoint override. The narrow document widths matched their
+375/785-pixel content viewports with no horizontal overflow. The phone view
+showed only the selected detail, Back restored the library and focus, and a
+synthetic Ask returned one answer with a source timestamp. Activity remained
+collapsed; synthetic demo state resets on process restart. Viewport override
+was reset. Screenshots are local review artifacts, not live-service evidence.
+
+Changed-token searches covered public/internal docs and repository root docs.
+Design, architecture, README, agent/AI guidance, catalog and public SDK/changelog
+source now reflect the correction. Prior dated reviews below retain their exact
+historical implementation evidence. Dependency manifests/locks, public SDK pins,
+legacy security guards, API contracts and device behavior are unchanged.
+No live API/provider/storage request, physical-device operation, package
+publication or site deployment was performed.
+
 <a id="general-example-quality-october-12"></a>
 ## General example quality revision — 2026-10-12
 

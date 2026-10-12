@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { ApiClient, Collection, MutationResult, Operation, ResourceEvent } from '../../api';
 import { ApiError, errorMessage, operationMetadata } from '../../api';
-import { Capability } from '../../Capability';
 import { dateLabel, stateLabel } from '../../format';
 import { useRead } from '../../workflow';
 
@@ -84,15 +83,6 @@ export function Activity({
         </span>
       </summary>
       <div className="activity-body">
-        <Capability
-          label="Webhook integration · your application's callback"
-          calls={[
-            'POST /webhooks/bota (your endpoint)',
-            'Verify timestamp-bound HMAC before acknowledgement',
-          ]}
-          docs="https://docs.bota.dev/webhooks/overview#signature-verification"
-          source="server/features/webhooks.mjs"
-        />
         <div className="section-heading">
           <p className="muted">Read current request states and signed event receipts.</p>
           <button

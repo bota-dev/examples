@@ -2,7 +2,6 @@ import { useState } from 'react';
 import type { ApiClient, Collection, MutationResult, Summary, Transcription } from '../../api';
 import { stateLabel } from '../../format';
 import { IntentNotice, useIntent, useRead } from '../../workflow';
-import { Capability } from '../../Capability';
 
 export function Summaries({ api, recordingId }: { api: ApiClient; recordingId: string }) {
   const transcripts = useRead<Collection<Transcription>>(
@@ -14,20 +13,10 @@ export function Summaries({ api, recordingId }: { api: ApiClient; recordingId: s
   const source = completed.find((job) => job.id === selected)?.id ?? completed[0]?.id;
   return (
     <section className="feature-panel" aria-labelledby="notes-heading">
-      <p className="eyebrow">03 / Find the useful parts</p>
-      <h3 id="notes-heading">Notes & next steps</h3>
+      <h3 id="notes-heading">Summary</h3>
       <p className="muted">
-        General notes from a completed transcript. Review generated content before relying on it.
+        Key points and next steps from the transcript. Review generated notes with the source.
       </p>
-      <Capability
-        calls={[
-          'GET /v1/summaries?transcription_id=:id',
-          'GET /v1/summaries/:id',
-          'POST /v1/summaries (tmpl_general_notes)',
-        ]}
-        docs="https://docs.bota.dev/api-reference/ai/summaries/create"
-        source="server/features/processing.mjs"
-      />
       {transcripts.error ? (
         <p className="error-note" role="alert">
           {transcripts.error}
@@ -37,9 +26,9 @@ export function Summaries({ api, recordingId }: { api: ApiClient; recordingId: s
         <label className="source-select">
           Source transcript
           <select value={source} onChange={(event) => setSelected(event.target.value)}>
-            {completed.map((job) => (
+            {completed.map((job, index) => (
               <option key={job.id} value={job.id}>
-                {job.id}
+                Transcript {index + 1}
               </option>
             ))}
           </select>
@@ -49,14 +38,10 @@ export function Summaries({ api, recordingId }: { api: ApiClient; recordingId: s
         <SummaryResults key={source} api={api} transcriptionId={source} />
       ) : (
         <div className="feature-empty">
-          <span className="empty-symbol" aria-hidden="true">
-            ≡
-          </span>
-          <h4>A transcript comes first.</h4>
           <p>
             {transcripts.loading
               ? 'Reading existing transcriptions…'
-              : 'Complete a transcription to turn it into structured notes.'}
+              : 'Complete a transcript before creating a summary.'}
           </p>
           <button
             className="secondary-button"
@@ -79,7 +64,6 @@ function SummaryResults({ api, transcriptionId }: { api: ApiClient; transcriptio
   return (
     <>
       <div className="result-label">
-        <code>Source: {transcriptionId}</code>
         <button
           className="text-button"
           onClick={read.refresh}
@@ -105,7 +89,6 @@ function SummaryResults({ api, transcriptionId }: { api: ApiClient; transcriptio
             <span className={`status-pill ${job.status === 'completed' ? 'success' : ''}`}>
               {stateLabel(job.status)}
             </span>
-            <code>{job.id}</code>
           </div>
           {job.status === 'completed' && job.output ? (
             <>
@@ -130,9 +113,7 @@ function SummaryResults({ api, transcriptionId }: { api: ApiClient; transcriptio
         </article>
       ))}
       {!jobs.length && !read.loading && !read.error ? (
-        <p className="empty-note">
-          No notes yet. Request a general-notes summary for this transcript.
-        </p>
+        <p className="empty-note">No summary yet. Create general notes from this transcript.</p>
       ) : null}
       <div className="action-row">
         <button
@@ -145,7 +126,9 @@ function SummaryResults({ api, transcriptionId }: { api: ApiClient; transcriptio
           {intent.busy ? 'Requesting…' : 'Create general notes'} <span aria-hidden="true">↗</span>
         </button>
         <small>
-          {jobs.length ? 'An existing summary is already recorded.' : 'Starts one summary request.'}
+          {jobs.length
+            ? 'A summary has already been requested.'
+            : 'Creates notes for this transcript.'}
         </small>
       </div>
       <IntentNotice

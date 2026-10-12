@@ -1,9 +1,10 @@
 # Bota Examples Architecture
 
 Repository purpose and developer experience are defined in [DESIGN.md](DESIGN.md).
-This repository showcases public API/SDK integrations through runnable demos and
-easy-to-adapt sample code. The web reference demonstrates APIs; platform samples
-demonstrate App SDKs, and supported combined demos connect them. The inventory
+This repository showcases public API/SDK integrations through runnable demos,
+common recording-app templates and easy-to-adapt sample code. The web sample
+demonstrates APIs; platform samples demonstrate App SDKs, and supported combined
+demos connect them. The inventory
 and historical evidence below describe current implementation, not a target
 number of examples or full showcase acceptance.
 
@@ -33,11 +34,38 @@ first-attempt reconnect limitation.
 
 Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
 
-Owner direction on October 12 adds one maintained [web reference](end-to-end/web-reference/README.md) with small feature modules and shared HTTP/auth/intent code inside its own install root. This is the recommended customer web starting point. It preserves all standalone examples; it creates no shared dependency between them. Its React UI and Express backend cover recordings, audio upload, transcription, general notes, recording-scoped Ask and webhook notifications. Local synthetic tests and a credential-free demo are authorized for this app; live API and production identity/deployment acceptance remain separate. See its [architecture](end-to-end/web-reference/ARCHITECTURE.md) and [review](docs/independent-examples-review.md#web-reference-october-12).
+Owner direction on October 12 defines a common recording-app sample/template,
+inspired by Demo and Bota One, for developers building applications for their own
+end users. Maintain platform-specific runnable implementations from mobile to
+web with the same recognizable add/select recording → transcript → summary →
+Ask journey where public contracts support it. Use native platform conventions;
+do not add a shared example framework or imply identical SDK capability.
+
+The maintained [Bota Recordings web sample](end-to-end/web-reference/README.md)
+uses a compact library/detail UI with Transcript/Summary/Ask tabs, familiar
+white/gray surfaces and system sans-serif text. API documentation and source
+recipes stay in its README; Activity is secondary, initially collapsed and
+offers GET-only observation/recovery. The React UI and Express backend cover
+audio import, transcription, general notes, recording-scoped Ask and webhook
+notifications. This implementation is API-only, with no device SDK or playback.
+Small feature modules share HTTP/auth/intent code inside this one install root.
+Standalone examples remain independent. Local synthetic tests and a
+credential-free demo are authorized; live API and production identity/deployment
+acceptance remain separate. See its [architecture](end-to-end/web-reference/ARCHITECTURE.md)
+and the [historical implementation review](docs/independent-examples-review.md#web-reference-october-12).
+
+Existing mobile/native connection and catalog examples are focused snippets,
+not complete versions of that app journey. The Android recording-sync demo
+covers only its documented already-provisioned path. Full app coverage on other
+platforms remains future implementation work with separate public-contract,
+build and physical acceptance gates.
 
 Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The credential-free health example uses the separately documented public `/health` endpoint. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
 
-Bota One is the internal reference application: it demonstrates a real customer application built on the SDK and backend API. It is a source of integration lessons, not a dependency or template to copy wholesale. Its private helpers, native modules, infrastructure, deployment accounts, branding, and application state do not become example prerequisites.
+Demo and Bota One are internal reference applications for the familiar recording
+experience and integration lessons. Neither is a dependency or a template to
+copy wholesale. Private helpers, native modules, infrastructure, deployment
+accounts, branding and application state do not become example prerequisites.
 
 Non-goals: a second SDK, a reusable example framework, a production SaaS starter, feature parity with Bota One, firmware implementations, and platform administration through `/dashboard/*`.
 

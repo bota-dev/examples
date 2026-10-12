@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { ApiClient, Mode, Operation, Recording, Session } from './api';
 import { createApi, errorMessage } from './api';
-import { dateLabel, durationLabel, stateLabel } from './format';
+import { dateLabel, durationLabel } from './format';
 import { IntentContext, useRead } from './workflow';
 import { Recordings } from './features/recordings/Recordings';
 import { Upload } from './features/uploads/Upload';
@@ -90,33 +90,30 @@ export default function App() {
   return (
     <div className="app-frame">
       <header className="site-header">
-        <a className="brand" href="#main-content" aria-label="Bota API Explorer, skip to content">
+        <a className="brand" href="#main-content" aria-label="Bota Recordings, skip to content">
           <span className="brand-mark" aria-hidden="true">
             <i />
           </span>
-          <span>
-            Bota <span className="brand-divider">/</span> <em>API Explorer</em>
-          </span>
+          <span>Bota Recordings</span>
         </a>
         <div className="header-meta">
+          <span className="sample-badge">Sample app</span>
           {['loading', 'unavailable'].includes(session.phase) ? (
             <span className="mode-badge">Mode unavailable</span>
           ) : (
             <span className={`mode-badge ${session.mode}`}>
               <span aria-hidden="true" />
-              {session.mode === 'demo' ? 'Synthetic demo' : 'Live mode'}
+              {session.mode === 'demo' ? 'Demo data' : 'Live mode'}
             </span>
           )}
           {session.user ? (
             <>
               <span className="username">{session.user.username}</span>
               <button className="text-button" onClick={logout}>
-                Sign out <span aria-hidden="true">↗</span>
+                Sign out
               </button>
             </>
-          ) : (
-            <span className="reference-label">Developer API sample</span>
-          )}
+          ) : null}
         </div>
       </header>
       <main id="main-content" tabIndex={-1}>
@@ -127,13 +124,11 @@ export default function App() {
         ) : null}
         {session.phase === 'loading' ? (
           <div className="initial-loading" role="status">
-            <p className="eyebrow">Opening the API Explorer</p>
-            <h1>Reading application status.</h1>
+            <h1>Opening your recordings…</h1>
           </div>
         ) : session.phase === 'unavailable' ? (
           <div className="initial-loading">
-            <p className="eyebrow">Application unavailable</p>
-            <h1>The API Explorer could not open.</h1>
+            <h1>The app could not open.</h1>
             <p className="muted">
               Refresh the application status to confirm its mode before signing in.
             </p>
@@ -150,14 +145,13 @@ export default function App() {
           </div>
         ) : session.phase === 'signing-out' ? (
           <div className="initial-loading" role="status">
-            <p className="eyebrow">Ending this application session</p>
             <h1>Signing out…</h1>
             <p className="muted">
               Recording content is cleared. Wait for sign-out to finish before signing in again.
             </p>
           </div>
         ) : session.user ? (
-          <Workbench key={session.epoch} api={api} mode={session.mode} />
+          <RecordingApp key={session.epoch} api={api} />
         ) : (
           <Login
             key={session.epoch}
@@ -169,13 +163,19 @@ export default function App() {
       </main>
       <footer className="site-footer">
         <span>
-          Bota API Explorer <span aria-hidden="true">·</span> General platform sample
+          <a
+            href="https://github.com/bota-dev/examples/tree/main/end-to-end/web-reference"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Setup & sample code
+          </a>
         </span>
         {!['loading', 'unavailable'].includes(session.phase) ? (
           <span>
             {session.mode === 'demo'
-              ? 'Synthetic data. No external API calls.'
-              : 'Your application session. Server-owned API access.'}
+              ? 'Synthetic recordings and results. No external API calls.'
+              : 'Recording app sample.'}
           </span>
         ) : null}
       </footer>
@@ -231,53 +231,12 @@ function Login({
   };
   return (
     <div className="welcome-layout">
-      <section className="welcome-copy">
-        <p className="eyebrow">Bota public API / Developer examples</p>
-        <h1>
-          Explore audio.
-          <br />
-          Build with <em>Bota.</em>
-        </h1>
-        <p className="welcome-description">
-          Try recordings, uploads, transcription, summaries, Ask and webhooks. Each feature links to
-          its public API calls and reusable sample code.
-        </p>
-        <ol className="welcome-steps">
-          <li>
-            <span>01</span>Explore a capability
-          </li>
-          <li>
-            <span>02</span>Read the public API
-          </li>
-          <li>
-            <span>03</span>Adapt the sample
-          </li>
-        </ol>
-        <div className="welcome-paper" aria-hidden="true">
-          <span className="paper-label">BOTA API / PLATFORM CAPABILITIES</span>
-          <div className="paper-rule" />
-          <p>
-            Upload audio.
-            <br />
-            Read a transcript.
-            <br />
-            <em>Ask a question.</em>
-          </p>
-          <span className="paper-foot">PUBLIC API → YOUR APPLICATION</span>
-          <div className="sound-lines">
-            {[22, 41, 63, 35, 80, 52, 95, 60, 35, 74, 49, 25].map((height, index) => (
-              <i key={index} style={{ height }} />
-            ))}
-          </div>
-        </div>
-      </section>
       <section className="login-panel" aria-labelledby="login-heading">
-        <p className="eyebrow">General platform showcase</p>
-        <h2 id="login-heading">{mode === 'demo' ? 'Explore the API.' : 'Connect your account.'}</h2>
+        <h1 id="login-heading">{mode === 'demo' ? 'Try the recording app' : 'Sign in'}</h1>
         <p className="muted">
           {mode === 'demo'
-            ? 'Explore the API workflow with synthetic recordings. Uploads and generated results stay inside this local demo.'
-            : 'Sign in with your application account and access token. Your operator provides these credentials.'}
+            ? 'Open sample recordings, read transcripts and summaries, or ask about your audio.'
+            : 'Use the account and application access token provided by your app operator.'}
         </p>
         <form
           onSubmit={(event) => {
@@ -312,12 +271,9 @@ function Login({
             </>
           ) : (
             <div className="demo-entry">
-              <span className="demo-icon" aria-hidden="true">
-                ↗
-              </span>
               <div>
-                <strong>A sample, from start to finish</strong>
-                <span>Recording · Transcript · Notes · Ask · Events</span>
+                <strong>Demo mode</strong>
+                <span>Synthetic recordings and results. Uploaded files are not processed.</span>
               </div>
             </div>
           )}
@@ -330,22 +286,22 @@ function Login({
             className="primary-button"
             disabled={busy || (mode === 'live' && (!username.trim() || !token))}
           >
-            {busy ? 'Opening…' : mode === 'demo' ? 'Explore synthetic demo' : 'Sign in'}{' '}
-            <span aria-hidden="true">↗</span>
+            {busy ? 'Opening…' : mode === 'demo' ? 'Open demo' : 'Sign in'}
           </button>
         </form>
         <p className="login-footnote">
           {mode === 'demo'
-            ? 'Demo mode is explicit. It uses fixtures and makes no external requests.'
-            : 'Your session uses an HttpOnly cookie. Keep application credentials private.'}
+            ? 'Runs locally without an API key or external requests.'
+            : 'Keep your application access token private.'}
         </p>
       </section>
     </div>
   );
 }
 
-function Workbench({ api, mode }: { api: ApiClient; mode: Mode }) {
+function RecordingApp({ api }: { api: ApiClient }) {
   const [selected, setSelected] = useState<string | null>(null);
+  const previousSelection = useRef<string | null>(null);
   const [revision, setRevision] = useState(0);
   const [operations, setOperations] = useState<Operation[]>([]);
   const locks = useRef(new Set<string>());
@@ -362,53 +318,36 @@ function Workbench({ api, mode }: { api: ApiClient; mode: Mode }) {
     }),
     [],
   );
+  useEffect(() => {
+    if (previousSelection.current && !selected)
+      document.getElementById('recordings-heading')?.focus();
+    previousSelection.current = selected;
+  }, [selected]);
   return (
     <IntentContext.Provider value={intentScope}>
       <div className="workbench-heading">
         <div>
-          <p className="eyebrow">General platform capabilities / API sample</p>
-          <h1>
-            Explore the API.
-            <br />
-            <em>Adapt the code.</em>
-          </h1>
+          <h1>My recordings</h1>
+          <p>Keep your audio, transcripts and summaries together.</p>
         </div>
-        <p>
-          {mode === 'demo'
-            ? 'Synthetic API responses. Each action demonstrates one explicit integration step.'
-            : 'Live public API calls, scoped to your application account. Choose each processing step explicitly.'}
-          <span>Upload → Transcribe → Summarize → Ask</span>
-        </p>
       </div>
-      <div className="workbench-layout">
+      <div className={`workbench-layout ${selected ? 'has-selection' : ''}`}>
         <aside className="collection-column">
           <Recordings api={api} selected={selected} onSelect={setSelected} revision={revision} />
           <Upload api={api} onUploaded={() => setRevision((value) => value + 1)} />
         </aside>
         <div className="detail-column">
           {selected ? (
-            <RecordingDetail key={selected} api={api} id={selected} />
+            <>
+              <button className="text-button back-button" onClick={() => setSelected(null)}>
+                <span aria-hidden="true">←</span> All recordings
+              </button>
+              <RecordingDetail key={selected} api={api} id={selected} />
+            </>
           ) : (
             <section className="detail-empty">
-              <div className="empty-line-art" aria-hidden="true">
-                <span />
-                <span />
-                <span />
-                <i />
-              </div>
-              <p className="eyebrow">Start with a recording</p>
-              <h2>
-                One recording.
-                <br />
-                <em>Several API features.</em>
-              </h2>
-              <p>
-                Select a recording to explore transcription, structured summaries and
-                recording-scoped Ask.
-              </p>
-              <span className="empty-footnote">
-                API documentation and sample source are linked in each feature.
-              </span>
+              <h2>Select a recording</h2>
+              <p>Read its transcript, create a summary or ask a question.</p>
             </section>
           )}
         </div>
@@ -422,11 +361,15 @@ type DetailTab = 'transcription' | 'notes' | 'ask';
 function RecordingDetail({ api, id }: { api: ApiClient; id: string }) {
   const record = useRead<Recording>(api, `/api/recordings/${encodeURIComponent(id)}`);
   const [tab, setTab] = useState<DetailTab>('transcription');
+  const heading = useRef<HTMLHeadingElement>(null);
+  useEffect(() => {
+    heading.current?.focus();
+  }, []);
   return (
     <section className="recording-detail" aria-labelledby="detail-heading">
       <div className="detail-heading">
         <div className="detail-topline">
-          <p className="eyebrow">Selected recording</p>
+          <p className="eyebrow">Recording</p>
           <button
             className="text-button"
             onClick={record.refresh}
@@ -436,7 +379,9 @@ function RecordingDetail({ api, id }: { api: ApiClient; id: string }) {
             Refresh recording <span aria-hidden="true">↻</span>
           </button>
         </div>
-        <h2 id="detail-heading">{record.data?.name || 'Your recording'}</h2>
+        <h2 id="detail-heading" ref={heading} tabIndex={-1}>
+          {record.data?.name || 'Your recording'}
+        </h2>
         {record.data ? (
           <>
             <div className="detail-meta">
@@ -446,9 +391,6 @@ function RecordingDetail({ api, id }: { api: ApiClient; id: string }) {
                 {record.data.upload_verified ? 'Upload verified' : 'Verification pending'}
               </span>
             </div>
-            <code className="resource-id">
-              {record.data.id} <span aria-hidden="true">/</span> {stateLabel(record.data.status)}
-            </code>
           </>
         ) : null}
         {record.error ? (
@@ -489,12 +431,7 @@ function RecordingDetail({ api, id }: { api: ApiClient; id: string }) {
                   }
                 }}
               >
-                <span aria-hidden="true">0{index + 2}</span>{' '}
-                {item === 'transcription'
-                  ? 'Transcript'
-                  : item === 'notes'
-                    ? 'Notes & next steps'
-                    : 'Ask recording'}
+                {item === 'transcription' ? 'Transcript' : item === 'notes' ? 'Summary' : 'Ask'}
               </button>
             ))}
           </div>

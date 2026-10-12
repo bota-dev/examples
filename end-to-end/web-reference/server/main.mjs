@@ -68,7 +68,7 @@ try {
       resolve();
     });
   });
-  console.log(`Bota API Explorer (${config.mode}): ${config.origin}`);
+  console.log(`Bota Recordings (${config.mode}): ${config.origin}`);
   server.on('error', () => {
     console.error('Application listener failed.');
     process.exitCode = 1;

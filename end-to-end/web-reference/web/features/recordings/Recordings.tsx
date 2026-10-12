@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react';
 import type { ApiClient, Recording, RecordingPage } from '../../api';
 import { dateLabel, durationLabel, stateLabel } from '../../format';
 import { useRead } from '../../workflow';
-import { Capability } from '../../Capability';
 
 export function Recordings({
   api,
@@ -42,8 +41,7 @@ export function Recordings({
     <section className="recordings-panel" aria-labelledby="recordings-heading">
       <div className="section-heading">
         <div>
-          <p className="eyebrow">01 / Your collection</p>
-          <h2 id="recordings-heading">
+          <h2 id="recordings-heading" tabIndex={-1}>
             Recordings <span className="count">{rows.length}</span>
           </h2>
         </div>
@@ -60,26 +58,30 @@ export function Recordings({
           Refresh <span aria-hidden="true">↻</span>
         </button>
       </div>
-      <Capability
-        calls={['GET /v1/recordings', 'GET /v1/recordings/:id']}
-        docs="https://docs.bota.dev/api-reference/recordings/list"
-        source="server/features/recordings.mjs"
-      />
       {page.error ? (
         <p className="error-note" role="alert">
           {page.error}
         </p>
       ) : null}
       <div className="recording-list" aria-busy={page.loading}>
-        {rows.map((row, index) => (
+        {rows.map((row) => (
           <button
             key={row.id}
             className={`recording-row ${selected === row.id ? 'is-selected' : ''}`}
             onClick={() => onSelect(row.id)}
             aria-pressed={selected === row.id}
           >
-            <span className="recording-number" aria-hidden="true">
-              {String(index + 1).padStart(2, '0')}
+            <span className="recording-icon" aria-hidden="true">
+              <svg
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <path d="M5 9v6m4-10v14m4-12v10m4-13v16m4-11v6" />
+              </svg>
             </span>
             <span className="recording-copy">
               <strong>{row.name || 'Untitled recording'}</strong>
@@ -88,23 +90,20 @@ export function Recordings({
                 {durationLabel(row.duration_seconds)}
               </span>
               <span className="row-state">
-                {row.upload_verified ? 'Upload verified' : 'Verification pending'}{' '}
-                <span aria-hidden="true">/</span> {stateLabel(row.status)}
+                {['processing', 'completed', 'failed'].includes(row.status)
+                  ? `${stateLabel(row.status)} · `
+                  : ''}
+                {row.upload_verified ? 'Upload verified' : 'Verification pending'}
               </span>
-            </span>
-            <span className="row-arrow" aria-hidden="true">
-              ↗
             </span>
           </button>
         ))}
         {!rows.length && !page.loading && !page.error ? (
-          <p className="empty-note">
-            Your collection starts with a recording. Upload an audio file below.
-          </p>
+          <p className="empty-note">No recordings yet. Upload an audio file to get started.</p>
         ) : null}
         {page.loading ? (
           <p className="loading-note" role="status">
-            Reading your collection…
+            Loading recordings…
           </p>
         ) : null}
       </div>

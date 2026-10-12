@@ -2,10 +2,13 @@
 
 ## Purpose
 
-This repository provides demo applications and sample code that showcase the
-public Bota API and App SDK. Developers should be able to find a capability,
-understand its public integration, run an example and adapt that code into their
-own application. Evaluate additions by developer usefulness and maintenance cost.
+This repository provides demo applications, templates and sample code that
+showcase the public Bota API and App SDK. Customer developers build applications
+for their own end users. Our common sample app should resemble a familiar
+recordings app, inspired by Demo and Bota One: add audio, find a recording, read
+its transcript and summary, and ask about its content. Developers run that app
+and adapt its small integration modules. Evaluate additions by developer
+usefulness and maintenance cost.
 
 ## Two layers
 
@@ -14,13 +17,29 @@ own application. Evaluate additions by developer usefulness and maintenance cost
 | 1. General platform examples | Show what Bota can do and how developers call the public API/SDK | Current work: individual capabilities and general workflows such as device connection, recording upload, transcription, summaries, Ask and webhooks |
 | 2. Use-case and app-driven demos | Show how those capabilities fit a particular vertical workflow or type of consumer application | Later work: scenarios such as sales visit notes or field-service reports, and app types such as a meeting assistant or personal voice notebook |
 
-Layer 1 is the current creation scope. A general demo app can combine capabilities
-through small feature modules and still belong to this layer. API samples, SDK
-samples and combined demos are formats within Layer 1.
+Layer 1 is the current creation scope. A common recording app can combine
+capabilities through small feature modules and still belong to this layer.
+API samples, SDK samples and combined demos are formats within Layer 1.
 
 Layer 2 will compose those demonstrated integrations around a specific user
 journey, with the scenario's application flow and UI. It is planned here; its
 sample implementation starts in a later phase.
+
+## Common app journey across platforms
+
+Use the same recognizable recording journey in platform-specific runnable
+implementations from mobile to web, where their public API/SDK surfaces support
+it. Use each platform's normal controls and navigation rather than sharing a
+new UI framework. Mobile device integration can supply recordings through the
+App SDK; an API-only web sample can import audio through its customer backend.
+Describe unsupported steps and each implementation's actual evidence explicitly.
+
+The everyday UI serves someone managing recordings and reading results. It
+shows recording titles, dates, durations, processing state and clear actions.
+API endpoints, source recipes and operator details belong in README/source,
+not in the main recording experience. A small sample/demo label identifies the
+app's purpose. This is a learning template, not a production product or an
+attempt to reproduce every feature of Bota One.
 
 ## General sample formats
 
@@ -57,11 +76,15 @@ the public API/SDK integration clear.
 
 - The [catalog](README.md#example-catalog) and [JSON index](examples.json) contain
   76 implemented entries. That count is an inventory, not a completeness target.
-- The [web reference](end-to-end/web-reference/README.md) showcases backend APIs
-  through a React UI. It has small recipes, shared server helpers, a synthetic
-  demo and a configured live API path. It does **not** use the device App SDK.
+- [Bota Recordings](end-to-end/web-reference/README.md) is the current web sample:
+  a React UI and Node backend for importing audio, transcription, summaries and
+  recording-scoped Ask. It has small recipes, shared server helpers, a synthetic
+  demo and a configured live API path. It does **not** use the device App SDK or
+  implement audio playback.
 - The [platform samples](README.md#example-catalog) demonstrate published App
-  SDKs. Their exact capabilities and hardware evidence are in their READMEs.
+  SDKs. Connection/catalog snippets are independently useful, but they do not
+  yet implement the full common recording-app journey. Their exact capabilities
+  and hardware evidence are in their READMEs.
 - The [Android recording-sync demo](end-to-end/react-native-recording-sync/README.md)
   combines SDK and backend for an already-provisioned encrypted-upload path.
   Its supported scope is narrower than the complete target device lifecycle.
@@ -77,6 +100,8 @@ it must teach and improve that path before
 creating another install root for overlapping behavior. A combined demo can
 reuse its own integration code when that improves clarity and reduces upkeep.
 Keep the README, catalog and agent guidance aligned with the actual capability.
+For app templates, extend the common recording journey on the selected platform
+only when the necessary public contracts and acceptance gates are available.
 
 In the later layer, start with a vertical use case or consumer app type and
 compose the relevant general integrations into that application's user journey.
