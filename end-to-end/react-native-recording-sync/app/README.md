@@ -119,6 +119,10 @@ recording text, questions, answers and local request maps, aborts pending local
 requests and retires the adapter. Aborting an app request does not cancel a
 cloud provider job or undo a POST. The secondary **Request status** panel shows
 metadata only; it does not reveal recovered answers from unscoped saved rows.
+Successful completed request metadata stays in that initially collapsed panel;
+the main result view retains notices for active, uncertain, failed or
+not-yet-ready actions. Hiding a completed notice does not unlock its intent or
+change GET-only recovery.
 
 Keep API credentials and authorization in a customer backend. Replace the
 fixed local bearer mapping with your application's authenticated per-user

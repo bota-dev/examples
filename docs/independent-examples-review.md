@@ -35,7 +35,7 @@ now retires before socket closure, then joins before registration release.
 
 Local Windows evidence: **63 backend tests pass, one POSIX case skipped**,
 **43 RN app tests plus 35 retained security
-tests**, **37 Flutter tests**, **10 native adapter tests**, **five Flutter license
+tests**, **38 Flutter tests**, **10 native adapter tests**, **five Flutter license
 gate regressions** and **nine catalog regressions** pass. Backend tests use
 mocked public API responses, real local SQLite and loopback HTTP; two exercise
 the actual RN HTTP adapter against the backend. Flutter uses real loopback
@@ -47,7 +47,7 @@ independent short source copy with the same frozen lock/postinstall guards passe
 all native tests and assembly; the README records this Windows constraint. RN
 APK SHA-256: `07c563b068903c945142399345444307444b17d97d4e6f6c2f60d95d0090399c`.
 Flutter final-source APK SHA-256:
-`5b57490cc43dba05fb16840baf71895548df1fe81b99ea512f319bec096d9b2c`.
+`d57e0543daa69306262986f1ca5be74a00f00902cc68f88f702609f50dc1b9a6`.
 Build warnings include upstream deprecations and Flutter's future Kotlin plugin
 compatibility notice; they are not failed checks or native acceptance evidence.
 
@@ -77,6 +77,22 @@ The fixture now deliberately uses `0600`; production guards are unchanged. A
 separate POSIX regression rejects `0644` without modifying the database. Windows
 passes 63/64 and skips that POSIX case; fresh Linux acceptance is recorded at its
 corrected source after CI finishes. The correction adds no native/client change.
+Corrected source `8412d43` passed both backend jobs, both catalog jobs and the
+RN Android tests/assembly in [the mobile workflow](https://github.com/bota-dev/examples/actions/runs/38314212152).
+Its Flutter build was still running at this checkpoint.
+
+Final visual review rendered the actual Flutter local journey at 390×844 in the
+test engine, using local substitute UI fonts and the SDK's Material icon asset.
+Setup, library, transcript, summary and Ask completed without layout exceptions.
+These screenshots are local review artifacts, not native phone screenshots or
+live-service evidence. Successful request metadata/recovery controls now stay
+in the collapsed secondary request panel in both clients. Busy, uncertain and
+failed notices remain visible; per-intent Flutter errors survive unrelated
+reads. A real widget regression covers uncertainty and completed panel recovery;
+38 Flutter tests and all 78 RN tests pass after this correction, with analysis,
+typecheck, export and incremental Flutter Android assembly. Independent source
+review found no change to intent locks or GET-only recovery. Dependency locks,
+SDK pins and native identities remain unchanged.
 
 <a id="common-recording-template-october-12"></a>
 ## Common recording app template correction — 2026-10-12

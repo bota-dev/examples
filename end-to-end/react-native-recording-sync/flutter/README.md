@@ -66,7 +66,12 @@ and the bounded HTTP adapter [api.dart](lib/api.dart); the
 The [UI](lib/main.dart) contains library/detail and Transcript/Summary/Ask tabs.
 [Public API and SDK reference](https://docs.bota.dev/api-reference/client-sdks).
 
-Processing is explicit. Failed, timed-out or ambiguous writes remain locked
+Processing is explicit. Completed requests without errors have no detail recovery
+panel, leaving transcript, notes and answer content in focus. Busy, uncertain
+and failed requests retain their notices. Completed request metadata remains in
+the initially collapsed **Recent requests** section.
+
+Failed, timed-out or ambiguous writes remain locked
 when navigating among tabs or recordings. **Recent requests** and **Refresh
 request** use GET only and never repeat POST. A known request can be reconciled;
 a request without a known resource may stay uncertain and need operator
@@ -116,8 +121,8 @@ live Bota API, provider or native iOS acceptance. Local/hosted check results are
 recorded in the [combined implementation review](../../../docs/independent-examples-review.md).
 
 Local qualification on October 12, 2026: frozen pub install, formatting,
-analysis and **37 tests** pass (9 HTTP, 15 controller, 10 device lifecycle,
-3 app widgets). The final-source Android debug APK also builds with Flutter
+analysis and **38 tests** pass (9 HTTP, 15 controller, 10 device lifecycle,
+4 app widgets). The final-source Android debug APK also builds with Flutter
 3.47.5/JDK 17/SDK 37. Its application ID is
 `dev.bota.examples.mobile_recordings_flutter`. The public beta.13 plugin still
 uses Kotlin Gradle Plugin and produces Flutter's migration warning; this build

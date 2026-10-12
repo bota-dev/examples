@@ -4,7 +4,10 @@ import 'models.dart';
 
 class WriteIntent {
   bool busy = false;
+  String error = '';
   Operation? operation;
+  bool get needsNotice =>
+      busy || error.isNotEmpty || operation?.state != 'complete';
 }
 
 /// App-owned presentation state. Bota keys and authorization stay on the backend.
@@ -342,6 +345,7 @@ class RecordingsController extends ChangeNotifier {
       }
     } catch (e) {
       if (!_current(account)) return;
+      intent.error = _message(e);
       if (e is ApiException) {
         if (e.operation?.kind == kind) {
           intent.operation = e.operation;
@@ -402,11 +406,19 @@ class RecordingsController extends ChangeNotifier {
       if (!_current(account)) return;
       _record(operation);
       for (final intent in intents.values) {
-        if (intent.operation?.id == operation.id) intent.operation = operation;
+        if (intent.operation?.id == operation.id) {
+          intent.operation = operation;
+          intent.error = '';
+        }
       }
       // Recovery presents metadata. Read source tabs explicitly for content.
       _notify();
     } catch (e) {
+      if (_current(account)) {
+        for (final intent in intents.values) {
+          if (intent.operation?.id == previous.id) intent.error = _message(e);
+        }
+      }
       _failure(e, account);
     }
   }

@@ -457,19 +457,22 @@ class _RecordingsHomeState extends State<RecordingsHome> {
 
   Widget _notice(String key) {
     final intent = state.intents[key];
-    if (intent == null || intent.busy) return const SizedBox.shrink();
+    if (intent == null || !intent.needsNotice) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            intent.operation == null
+            intent.busy
+                ? 'Requesting…'
+                : intent.operation == null
                 ? 'The outcome may be unknown. Check Recent requests before starting another action.'
                 : 'Request: ${intent.operation!.state}',
             style: const TextStyle(fontSize: 12),
           ),
-          if (intent.operation != null)
+          if (intent.error.isNotEmpty) Text(intent.error),
+          if (intent.operation != null && !intent.busy)
             TextButton(
               onPressed: () => state.refreshOperation(intent.operation!),
               child: const Text('Refresh request'),
@@ -540,15 +543,18 @@ class _AskTabState extends State<AskTab> {
               style: const TextStyle(fontSize: 12),
             ),
         ],
-        if (intent != null && !intent.busy) ...[
+        if (intent != null && intent.needsNotice) ...[
           const SizedBox(height: 16),
           Text(
-            intent.operation == null
+            intent.busy
+                ? 'Requesting…'
+                : intent.operation == null
                 ? 'The outcome may be unknown. Check Recent requests; this question will not be sent again.'
                 : 'Request: ${intent.operation!.state}',
             style: const TextStyle(fontSize: 12),
           ),
-          if (intent.operation != null)
+          if (intent.error.isNotEmpty) Text(intent.error),
+          if (intent.operation != null && !intent.busy)
             TextButton(
               onPressed: () => state.refreshOperation(intent.operation!),
               child: const Text('Refresh request'),

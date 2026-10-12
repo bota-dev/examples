@@ -34,6 +34,9 @@ Processing intents are locked before POST and remain account-owned across detail
 navigation. Uncertain/malformed responses never unlock a write. Only a documented
 preclaim readiness rejection without operation metadata may unlock. Known journal
 operations refresh with GET; refreshed metadata cannot inject answer content.
+Detail notices disappear only for completed, idle requests without a recorded
+error. Busy/error/uncertain requests keep their recovery notice, while completed
+metadata remains available in the collapsed Recent requests section.
 The shared backend owns durable intent, project/end-user authorization and public
 API calls. App memory is a UI fence, not durable replay or authorization storage.
 
@@ -57,7 +60,7 @@ hosts, live providers and physical device behavior remain separate acceptance.
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
-| Common library/detail/transcript/summary/Ask flow | Local sample/controller journey and three connected UI widgets, including 360×640 navigation | matched locally |
+| Common library/detail/transcript/summary/Ask flow | Local sample/controller journey and four connected UI widgets, including 360×640 navigation, completed-detail focus and uncertain recovery | matched locally |
 | Separate live backend credentials and bounded single-attempt HTTP | Nine actual loopback HTTP tests; HTTPS/loopback validation; no key, redirect or retry forwarding | matched locally |
 | Source/account/question isolation and durable uncertainty boundary | Fifteen controller regressions; account-owned locks, exact source/citations, GET recovery; backend owns durability | matched locally |
 | Public SDK connection/status with bounded UI lifetime | Ten SDK-platform lifecycle regressions, including terminated observations, pending configuration and destruction failure | matched in simulation |

@@ -213,6 +213,7 @@ void main() {
       await state.ask('Next?');
       expect(state.answer, isNull);
       expect(state.intents['ask:rec_sample1:Next?']?.operation?.id, 'op_1');
+      expect(state.intents['ask:rec_sample1:Next?']?.needsNotice, true);
     },
   );
 

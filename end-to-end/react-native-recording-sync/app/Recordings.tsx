@@ -122,6 +122,7 @@ function Detail({ state, controller }: { state: RecordingState; controller: Reco
 function RequestNotice({ state, controller }: { state: RecordingState; controller: RecordingsController }) {
   const request = state.request;
   if (!request) return null;
+  if (!request.busy && !request.error && request.operation?.state === 'complete') return null;
   const locked = controller.isLocked();
   return <View accessibilityLiveRegion="polite" style={styles.notice}>
     <Text style={styles.label}>{request.busy ? 'Requesting…' : request.operation?.state === 'complete' ? 'Request completed' : locked ? 'Request retained' : 'Action not started'}</Text>
