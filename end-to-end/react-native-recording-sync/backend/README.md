@@ -12,10 +12,11 @@ The cloud integration is in [library.mjs](library.mjs) and small local
 remains in [service.mjs](service.mjs). There are no runtime imports from another
 example or private Bota package.
 
-**October 12, 2026:** 63 local tests pass on Node 22.23.2: 41 cloud-library,
-composition and real-loopback HTTP regressions plus the unchanged 22 native
-service tests. HTTP tests use mocked public API responses. Live providers,
-hosted CI, mobile integration and physical upload remain separate evidence.
+**October 12, 2026:** 64 tests cover cloud-library, composition and real-loopback
+HTTP behavior plus the unchanged 22 native service tests. Local Windows checks
+pass 63 with one POSIX file-mode regression skipped; Linux CI verifies that
+regression. HTTP tests use mocked public API responses. Live providers, mobile
+integration and physical upload remain separate evidence.
 
 **Historical native status (October 2, 2026):** implemented and locally tested with 22 passing
 mocked public API tests on Node 22.23.2. Live API, Android native integration, and physical recording

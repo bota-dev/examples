@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
-import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { chmodSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, join, relative, resolve, isAbsolute } from 'node:path';
 import { once } from 'node:events';
@@ -350,6 +350,18 @@ test('API-key, endpoint, project and owner rotation refuse the original library 
   assert.deepEqual(await f.read('/api/library/operations'), { data: [] });
 });
 
+test('library refuses a publicly readable existing database on POSIX', { skip: process.platform === 'win32' }, async t => {
+  const f = fixture(t);
+  const original = readFileSync(f.database);
+  chmodSync(f.database, 0o644);
+  try {
+    assert.throws(() => new LibraryService(config, { database: f.database, request: f.request }),
+      error => error.code === 'private_state');
+    assert.deepEqual(readFileSync(f.database), original);
+  } finally { chmodSync(f.database, 0o600); }
+  assert.deepEqual(await f.read('/api/library/operations'), { data: [] });
+});
+
 test('device configuration is optional but configuring it later cannot reuse a capture journal', async t => {
   const f = fixture(t), database = join(f.directory, 'captures.sqlite');
   const service = new SyncService(config, { database, fetchImpl: () => { throw new Error('No native API call expected'); } });
@@ -360,6 +372,9 @@ test('device configuration is optional but configuring it later cannot reuse a c
   assert.throws(() => new SyncService({ ...config, deviceId: 'dev_bound' }, { database }), error => error.code === 'journal_scope_changed');
   assert.throws(() => readConfig({ ...environment, BOTA_DEVICE_ID: 'invalid' }), error => error.code === 'invalid_fixed_identity');
   assert.equal(readConfig({ ...environment, BOTA_DEVICE_ID: 'dev_bound' }).deviceId, 'dev_bound');
+  // Satisfy the library's independent privacy gate so this case tests journal identity/type.
+  // The older native service creates files using the process umask.
+  chmodSync(database, 0o600);
   const original = readFileSync(database);
   assert.throws(() => new LibraryService(config, { database, request: f.request }), error => error.code === 'library_journal_invalid');
   assert.deepEqual(readFileSync(database), original);

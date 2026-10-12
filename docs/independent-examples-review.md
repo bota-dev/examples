@@ -33,7 +33,8 @@ now retires before socket closure, then joins before registration release.
 | Preserve device completion/security boundaries | RN encrypted-v2 sync retains serial/fresh pairing, inactive direct upload, binding generation, native material and signed receipt gates; Flutter connection/status only | Matched in source; no encrypted transfer, receipt validation or physical deletion acceptance added |
 | Reproducible open-source validation | Frozen npm/pub installs, RN typecheck/export, Flutter format/analyze, Android native tests/builds; license and catalog gates; pinned read-only CI | Matched locally; hosted results must be assessed at the exact pushed source; no publication/deployment included |
 
-Local evidence: **63 backend tests**, **43 RN app tests plus 35 retained security
+Local Windows evidence: **63 backend tests pass, one POSIX case skipped**,
+**43 RN app tests plus 35 retained security
 tests**, **37 Flutter tests**, **10 native adapter tests**, **five Flutter license
 gate regressions** and **nine catalog regressions** pass. Backend tests use
 mocked public API responses, real local SQLite and loopback HTTP; two exercise
@@ -67,6 +68,15 @@ catalog and public SDK/changelog source reflect actual support. Historical
 reviews below retain their tested source/package/hardware identities. No live
 API/provider/storage request, wearable operation, firmware change, package
 publication or site deployment was performed.
+
+Initial pushed source `5fe6196` passed both catalog jobs and the Windows backend.
+Its [Linux backend job](https://github.com/bota-dev/examples/actions/runs/38313947485/job/115026012096)
+failed one fixture assertion: the native database's default POSIX permissions
+triggered the private-file gate before the test reached journal-type rejection.
+The fixture now deliberately uses `0600`; production guards are unchanged. A
+separate POSIX regression rejects `0644` without modifying the database. Windows
+passes 63/64 and skips that POSIX case; fresh Linux acceptance is recorded at its
+corrected source after CI finishes. The correction adds no native/client change.
 
 <a id="common-recording-template-october-12"></a>
 ## Common recording app template correction — 2026-10-12
