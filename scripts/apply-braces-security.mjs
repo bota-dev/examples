@@ -49,7 +49,8 @@ for (const [path, metadata] of entries) {
     if (!contained(actualRoot, realpathSync(dirname(target)))) throw new Error('Braces target parent escapes package');
     if (existsSync(target) && !contained(actualRoot, realpathSync(target))) throw new Error('Braces target escapes package');
     const current = existsSync(target) ? hash(readFileSync(target)) : null;
-    if (current !== file.pristineSha256 && current !== file.patchedSha256) throw new Error(`Unknown braces runtime: ${path}/${file.path}`);
+    // Only the exact reviewed previous guard may migrate; verification requires the current assets.
+    if (current !== file.pristineSha256 && current !== file.patchedSha256 && current !== file.previousPatchedSha256) throw new Error(`Unknown braces runtime: ${path}/${file.path}`);
     if (verify && current !== file.patchedSha256) throw new Error(`Unpatched braces runtime: ${path}/${file.path}`);
     if (current !== file.patchedSha256) plan.push({ target, bytes: assets.get(file.path), expected: file.patchedSha256 });
   }
@@ -57,4 +58,4 @@ for (const [path, metadata] of entries) {
 }
 for (const item of plan) writeFileSync(item.target, item.bytes);
 for (const item of plan) if (hash(readFileSync(item.target)) !== item.expected) throw new Error('Braces write verification failed');
-console.log(JSON.stringify({ guard: 'braces3.0.3 scoped upstream PR82', installed, changedFiles: plan.length, mode: verify ? 'verify' : 'apply', omittedInstallScope: installed.length === 0 }));
+console.log(JSON.stringify({ guard: 'braces3.0.3 scoped PR82 and data-array guard', installed, changedFiles: plan.length, mode: verify ? 'verify' : 'apply', omittedInstallScope: installed.length === 0 }));

@@ -1,11 +1,13 @@
 # AGENTS.md - Bota Examples
 
-October 7 braces #111/#112/#113: all three affected install roots own standalone
-mandatory postinstall source guards, MIT/provenance assets and 16-case suites.
-Keep public package/lock/SDK identities unchanged; do not import sibling helpers.
-Root `npm test` and both independent app test chains require the guard. Vendor
-bytes stay exact across checkouts; unknown source/identity fails. See
-[review](docs/braces-depth-mitigation.md).
+Braces #111/#112/#113: all three standalone install roots require six final
+asset hashes and their updated 22-case suites. Only exact pristine/previous/
+current helper and utils bytes may migrate; unknown drift refuses before writes.
+Direct AST child/value arrays have combined depth 128/65,536-visit limits and
+refuse structural/index accessors. Iterative flatten retains wide output. Keep
+public package/lock/SDK identities and all existing postinstall/test chains.
+This source hardening does not close the three alerts or prove native/physical
+installation. See [policy and migration review](docs/braces-depth-mitigation.md).
 
 October 7 new #114–#119 records: keep the four standalone source-map-js suites
 required by each root/app `npm test`, including Web CI. The root selector-parser

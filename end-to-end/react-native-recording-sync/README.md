@@ -242,3 +242,13 @@ shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
 Each install root has required public-consumer tests; Web CI now runs `npm test`.
 See the [source compatibility review](../../docs/build-dependency-remediation.md) for aged tarballs, tests and
 bundled-parser limits. Hosted/scanner and physical acceptance remain separate.
+
+## October 11 braces migration
+
+Keep this app's ordinary frozen install and existing Forge/braces hooks.
+The reviewed six-file guard permits only known pristine/previous/current bytes;
+`npm run test:braces-security` now checks 22 cases and all six final hashes.
+Direct AST/value-array limits and iterative-flatten behavior are documented in
+[the source review](../../docs/braces-depth-mitigation.md#october-11-six-file-migration).
+The public SDK/manifest/lock/native and workflow identities remain unchanged.
+Hosted native builds, scanner closure and device installation are separate gates.

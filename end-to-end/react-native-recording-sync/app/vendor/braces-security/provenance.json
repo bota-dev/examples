@@ -11,7 +11,7 @@
   "upstreamHead": "1f11eb558be9ea0cda87861408bb766e2e714086",
   "upstreamProposalDiffSha256": "87e685a2533405317a71c3d943951361d931b577c4aacd73089bd78318be6da3",
   "scopedPatchSha256": "69e72afed3a85fa6688d294cacb10544ff0a930efe7334a9a0017cfac3125910",
-  "basis": "PR82 depth/cycle/visit/queue and shared-range marker retention hunks onto public3.0.3; utils and expansion-step range semantics omitted, preexisting master unmatchedquote/comma changes excluded; no graph/version/main changes",
+  "basis": "Retained scoped PR82 depth/cycle/visit/queue/shared-range backport plus independently reviewed iterative flatten and data-valued AST/accessor hardening; range-step/unsafe-endpoint and unrelated master quote/comma changes remain excluded; no graph/version/main change",
   "files": [
     {
       "path": "lib/compile.js",
@@ -23,7 +23,8 @@
       "path": "lib/depth-guard.js",
       "asset": "lib/depth-guard.js.source",
       "pristineSha256": null,
-      "patchedSha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e"
+      "patchedSha256": "689e1c8fd14c7224bfcf1bd5fd0ad323fec65714203cfa3b7523933638d92ae0",
+      "previousPatchedSha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e"
     },
     {
       "path": "lib/expand.js",
@@ -42,6 +43,12 @@
       "asset": "lib/stringify.js.source",
       "pristineSha256": "379f22d77bfa1478341ccd49c5e4267464aabcbba03558bab332aac23fc6f23a",
       "patchedSha256": "39ae1d04d5ccc5498a3a8d53821a6d3fcc683fa77db12c093f144ce1c04a1c5d"
+    },
+    {
+      "path": "lib/utils.js",
+      "asset": "lib/utils.js.source",
+      "pristineSha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7",
+      "patchedSha256": "64374f5bb740f6e3917d90a453ab8ec64cc0f1b1c85a25a3377779db496f2d11"
     }
   ],
   "unchanged": [
@@ -54,10 +61,6 @@
       "sha256": "c18ac5adb57308f1ce42a28552da3a31f5d83709743ebd9a636336813a744d4b"
     },
     {
-      "path": "lib/utils.js",
-      "sha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7"
-    },
-    {
       "path": "LICENSE",
       "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2"
     }
@@ -68,12 +71,31 @@
     "patchedExecutedPasses": 764,
     "mochaPending": 0,
     "mochaFailures": 0,
-    "scope": "Executed published-tag suite, not full1137case PR82 suite or allhistorical fixtures"
+    "scope": "Historical executed published-tag suite on pristine and previous five-file guard, not re-executed for this data-array guard; not full1137case PR82 suite or allhistorical fixtures"
   },
   "limits": [
-    "Fixed128 parsercontainers/ASTchilddepth and65536visits; parsed128containers may exceedwalk depth withtextnodes.",
+    "Fixed128 parser containers; AST child/value-array combined depth128 and combined visits65536; parsed128containers may exceed walk depth withtextnodes.",
     "Parentmetadata doesnot supply queues; shared/reusable ranges retained; malformedparent queue literal behavior corrected.",
-    "No total Cartesian expansion, generated-regex, getter/array-text or omittedrange/unsafe-endpoint protection claim.",
-    "Packageidentity/locks unchanged; source mitigation only, not official release/scanner/deployment closure."
-  ]
+    "Structural nodes/value and array-index accessors are refused; caller-created JS object behavior changes and deep prototype chains are bounded; no proxy/coercion/othermetadata or general JS isolation claim.",
+    "No total Cartesian expansion/generated-regex/unsafe-range endpoint protection; generic flatten has no cardinality cap; normal90,000 Cartesian and flat cases retained.",
+    "Packageidentity/locks unchanged; source mitigation only, not maintained replacement/official release/scanner/deployment closure."
+  ],
+  "dataArrayHardening": {
+    "frozenCandidatePacketSha256": "a448436ea7fca12fef6e546929cf463da45f09c9907f6c1a5668938dbc0633e7",
+    "physicalPatchSha256": "ec6dde0e846583e9e4269aaf6012a6f26f0a8aa614b1d10e83c50f05bb839d6d",
+    "rootEngineeringReviewSha256": "8dcd12c2e08bdd2306f341f9127961999f1f048a8ce93aa5f474c3482b250c30",
+    "policy": "128 combined AST/value-array depth and 65536 combined AST/value-array visits; generic flatten has depth/cycle limits but no cardinality cap; nodes/value and array-index accessors refuse before invocation",
+    "runtimeEvidence": "52 selected frozen v2 controls plus four physical micromatch runs and twelve actual fast-glob/TailwindCSS/polling-watch runs on Windows Node20/22; no Node8/runtime-all-platform qualification",
+    "previousGuardFixtures": [
+      {
+        "asset": "fixtures/v1-depth-guard.js.source",
+        "sha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e"
+      },
+      {
+        "asset": "fixtures/v1-utils.js.source",
+        "sha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7"
+      }
+    ],
+    "status": "source candidate pending exact-tree review and hosted qualification; no advisory closure"
+  }
 }

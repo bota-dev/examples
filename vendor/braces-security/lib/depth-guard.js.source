@@ -14,13 +14,56 @@ exports.assertDepth = depth => {
   if (depth > MAX_DEPTH) fail();
 };
 
+// Structural properties must be stable data during preflight and traversal.
+// This rejects accessors without invoking them; executable proxies remain out
+// of scope, as do unrelated metadata and caller-provided coercion functions.
+const assertDataProperty = (node, key) => {
+  let current = node;
+  let depth = 0;
+  while (current) {
+    const descriptor = Object.getOwnPropertyDescriptor(current, key);
+    if (descriptor) {
+      if (descriptor.get || descriptor.set) fail();
+      return;
+    }
+    if (++depth > MAX_DEPTH) fail();
+    current = Object.getPrototypeOf(current);
+  }
+};
+
+// Follow array edges iteratively. Shared arrays are permitted, while active
+// cycles and combined AST/value-array complexity use the existing hard bounds.
+exports.walkArrays = (values, visit, budget, depth = 0) => {
+  const stack = [{ values, index: 0, depth }];
+  const ancestors = new Set([values]);
+  while (stack.length) {
+    const frame = stack[stack.length - 1];
+    if (frame.index >= frame.values.length) {
+      ancestors.delete(frame.values);
+      stack.pop();
+      continue;
+    }
+    if (budget && ++budget.count > MAX_NODES) fail();
+    const index = frame.index++;
+    assertDataProperty(frame.values, String(index));
+    const value = frame.values[index];
+    if (Array.isArray(value)) {
+      if (frame.depth + 1 > MAX_DEPTH || ancestors.has(value)) fail();
+      ancestors.add(value);
+      stack.push({ values: value, index: 0, depth: frame.depth + 1 });
+    } else if (visit) {
+      visit(value);
+    }
+  }
+};
+
 // Preflight iteratively, before processing or mutating a caller-supplied AST.
 // Only child edges are followed: parser ASTs have intentional parent/prev links.
 // Track the active path, rather than all nodes, to allow shared child objects.
 exports.assertTree = ast => {
   const stack = [{ node: ast, depth: 0, index: -1 }];
   const ancestors = new Set();
-  let count = 0;
+  const budget = { count: 0 };
 
   while (stack.length) {
     const frame = stack[stack.length - 1];
@@ -28,14 +71,19 @@ exports.assertTree = ast => {
 
     if (frame.index === -1) {
       if (!node || typeof node !== 'object') fail();
-      if (frame.depth > MAX_DEPTH || ancestors.has(node) || ++count > MAX_NODES) fail();
-      if (node.nodes && !Array.isArray(node.nodes)) fail();
+      if (frame.depth > MAX_DEPTH || ancestors.has(node) || ++budget.count > MAX_NODES) fail();
+      assertDataProperty(node, 'nodes');
+      assertDataProperty(node, 'value');
+      frame.children = node.nodes;
+      if (frame.children && !Array.isArray(frame.children)) fail();
+      if (Array.isArray(node.value)) exports.walkArrays([node.value], undefined, budget, frame.depth);
       ancestors.add(node);
       frame.index = 0;
     }
 
-    if (node.nodes && frame.index < node.nodes.length) {
-      stack.push({ node: node.nodes[frame.index++], depth: frame.depth + 1, index: -1 });
+    if (frame.children && frame.index < frame.children.length) {
+      assertDataProperty(frame.children, String(frame.index));
+      stack.push({ node: frame.children[frame.index++], depth: frame.depth + 1, index: -1 });
     } else {
       ancestors.delete(node);
       stack.pop();

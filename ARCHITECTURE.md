@@ -628,3 +628,16 @@ installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
 `npm test` and each independent app test chain require 16 installer/parser/actual
 micromatch controls. Source qualification, scanner identity, hosted native builds
 and physical installation remain separate. See [review](docs/braces-depth-mitigation.md).
+
+## October 11 braces data-array guard
+
+The legacy root, independent React Native connection app and recording-sync
+app now carry the reviewed six-file source guard. Only exact known
+pristine/previous/current assets can migrate; mandatory verification requires
+all six final hashes before consumers continue. Existing postinstall/test
+chains, manifests, locks, public SDK pins and native/device/HTTP code are
+retained. The fixed direct AST/value-array limits and accessor refusals are an
+explicit caller input policy; generic iterative flatten retains wide output.
+Package 3.0.3 remains affected and #111/#112/#113 stay open. Exact-source hosted
+native builds and physical installation remain separate from local checks.
+See [scope and evidence](docs/braces-depth-mitigation.md#october-11-six-file-migration).

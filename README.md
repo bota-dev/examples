@@ -240,3 +240,16 @@ shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
 Each install root has required public-consumer tests; Web CI now runs `npm test`.
 See the [source compatibility review](docs/build-dependency-remediation.md) for aged tarballs, tests and
 bundled-parser limits. Hosted/scanner and physical acceptance remain separate.
+
+## October 11 braces data-array guard
+
+The legacy root, independent React Native connection app and recording-sync
+app now carry the reviewed six-file source guard. Only exact known
+pristine/previous/current assets can migrate; mandatory verification requires
+all six final hashes before consumers continue. Existing postinstall/test
+chains, manifests, locks, public SDK pins and native/device/HTTP code are
+retained. The fixed direct AST/value-array limits and accessor refusals are an
+explicit caller input policy; generic iterative flatten retains wide output.
+Package 3.0.3 remains affected and #111/#112/#113 stay open. Exact-source hosted
+native builds and physical installation remain separate from local checks.
+See [scope and evidence](docs/braces-depth-mitigation.md#october-11-six-file-migration).
