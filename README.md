@@ -1,110 +1,111 @@
 # Bota Examples
 
-Examples for integrating the Bota backend API and Bota App SDK into your own applications. API examples demonstrate server-side workflows; App SDK examples demonstrate communication with physical Bota devices; end-to-end demos connect an application to its backend and include the device SDK where supported.
+Demo apps, sample code and templates for customer developers building end-user
+applications with the public Bota API and App SDK.
 
-The goal is runnable demos, common app templates and easy-to-adapt sample code
-that showcase the public API/SDK to developers building for their own end users.
-The common template follows a familiar recordings app, inspired by Demo and
-Bota One: add audio, choose a recording, read its transcript and summary, and
-ask about its content. Read the [repository design](DESIGN.md) for that direction
-and [technical architecture](ARCHITECTURE.md) for integration boundaries.
+The main template is **Bota Recordings**, a familiar recording app inspired by
+Demo and Bota One. The repository has exactly two layers: **general platform
+capabilities now**, then **vertical and app-type examples later**. One recording
+template family spans React web, React Native and Flutter; small SDK workflows
+and API recipes support it. Read the [design](DESIGN.md) and [roadmap](ROADMAP.md)
+for the target and remaining work.
 
-The design has two layers: **general platform capability examples now**, then
-**vertical use-case and consumer app demos later**. API, SDK and combined samples
-are formats within the current general layer. The web reference belongs to it.
+## Start with Bota Recordings
 
-Each independent example has its own setup, dependencies, verification steps, and compatibility notes. You do not need Bota's internal application repositories to run an example.
+| Client | Run and adapt | Current scope |
+| --- | --- | --- |
+| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, recording library, Transcript/Summary/Ask; API-only |
+| React Native Android | [RN sample](end-to-end/react-native-recording-sync/app/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
+| Flutter Android | [Flutter sample](end-to-end/react-native-recording-sync/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
 
-For a customer web app, start with [Bota Recordings](end-to-end/web-reference/README.md): one React frontend and Node backend, with a compact recording library, audio import and Transcript/Summary/Ask tabs. Run `npm ci` and `npm run demo` inside that directory to try synthetic data without credentials. Use the app as a starting template, copy a feature with its shared helpers, or use an existing standalone snippet below. This web implementation uses the API only; it has no device SDK or audio playback.
+Try the web app without credentials or hardware:
 
-Platform-specific runnable samples span mobile and web, with native Apple and
-Android examples as well. The common recording journey is the app-template
-direction across platforms, subject to their public capabilities. Existing
-connection/catalog snippets and the bounded Android sync demo cover only their
-documented steps; they do not establish full app or hardware parity.
+```sh
+cd end-to-end/web-reference
+npm ci
+npm run demo
+```
 
-## Current platform coverage
+Open **http://127.0.0.1:5173** and select **Open demo**. Use Node **22.23.2 or
+newer**. The mobile READMEs explain their native builds and **Try sample
+recordings** entry. Sample content/actions are synthetic and make no external
+calls; they do not prove live API, provider or device behavior.
 
-The common recording app is the template direction. The smaller SDK examples
-below cover individual capabilities; they are not complete versions of that app.
-Follow each README for build and physical-device evidence.
+These apps are runnable **partial implementations**. The complete target is:
 
-| Platform | Runnable examples and current scope |
-| --- | --- |
-| React Native | [Android recording app](end-to-end/react-native-recording-sync/app/README.md): library, Transcript/Summary/Ask and optional encrypted device sync; separate [Android/iOS connection](app-sdk/react-native-device-connect/README.md) |
-| Flutter | [Android recording app](end-to-end/react-native-recording-sync/flutter/README.md): the same library/AI flow and connection/status; separate [connection snippet](app-sdk/flutter-device-connect/README.md); no iOS example host yet |
-| Kotlin / Android | [Connection](app-sdk/android-device-connect/README.md) and [recording metadata catalog](app-sdk/android-recording-catalog/README.md); no audio/API app journey |
-| Swift / Apple | [macOS connection](app-sdk/apple-device-connect/README.md) and [macOS recording metadata catalog](app-sdk/apple-recording-catalog/README.md); no native iOS example host yet |
-| Web | [Bota Recordings API app](end-to-end/web-reference/README.md) for audio import, Transcript/Summary/Ask; separate [desktop Chromium SDK connection](app-sdk/web-device-connect/README.md) with Web Bluetooth, not integrated into that app |
-| Native Windows | No sample yet |
+**Import ordinary audio → library → supported audio playback and source review
+→ transcript → general notes → recording-scoped Ask.**
 
-## Find an example
+The web app does not yet play audio. The mobile clients do not yet import
+ordinary audio or play it, and their current hosts are Android only. They can
+use existing authorized cloud recordings; RN also supports its documented device
+path. Microphone capture is optional later work.
 
-Use the [machine-readable index](examples.json) to filter by task, language and
-hardware requirement. For Claude Code, Codex, Cursor, Copilot or another coding
-agent, start with the [AI quick-start guide](docs/using-examples-with-ai.md) and
-[AGENTS.md](AGENTS.md). Every entry points to its own setup and evidence.
+RN and Flutter share the current mobile backend. The web backend is separate.
+**One canonical customer feature backend is planned**, after defining common
+DTOs, identity/authentication, uncertainty and playable-media contracts.
+No runtime directories or journals move as part of this design reset.
+
+## Focused recipes
+
+Use a small recipe when you need one integration rather than an app template.
 
 | Your task | Start here |
 | --- | --- |
-| Start a common web recording app | [Bota Recordings: React + Node](end-to-end/web-reference/README.md) |
-| Start a common mobile recording app | [React Native and Flutter with one backend](end-to-end/react-native-recording-sync/README.md) |
 | Upload audio and get a transcript | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) |
-| Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python webhook](api/webhook-receiver-python/README.md) |
-| Connect to a physical device | Choose your platform under `app-sdk/` in the [catalog](#example-catalog) |
-| Inspect processing inheritance | [Project](api/project-processing-config-node/README.md), [end user](api/end-user-processing-config-python/README.md) or [device](api/processing-config-python/README.md) |
-| Inspect existing upload or conversation metadata | [Encrypted upload](api/watch-encrypted-upload-node/README.md) or [Ask session](api/inspect-ask-session-python/README.md) |
-| Check API health without a key | [Python health probe](api/api-health-python/README.md) |
-| Inspect firmware bytes | [Python download](api/download-firmware-python/README.md); no installation |
-| Export timestamped transcripts | [CSV](api/export-transcription-csv-python/README.md), [SRT](api/export-transcription-node/README.md) or [WebVTT](api/export-transcription-vtt-python/README.md) |
+| List/read cloud recordings | [Node.js recording list](api/list-recordings-node/README.md) |
+| Create general notes | [Node.js structured summaries](api/summarize-transcription-node/README.md) |
+| Ask about one recording | [Node.js recording-scoped Ask](api/ask-recording-node/README.md) |
+| Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python](api/webhook-receiver-python/README.md) |
+| Download authorized original bytes | [Node.js](api/download-recording-node/README.md) or [Python](api/download-recording-python/README.md); original bytes are not necessarily playable audio |
+| Connect to a physical device | Choose the supported platform below |
 
-1. Pick one example and read its README, including prerequisites and current evidence.
-2. Work inside that example directory; install only its dependencies. Root npm commands apply to the retained legacy sample.
-3. Configure your own authorized IDs and server-side secrets, then use its documented commands. Syntax, live API and physical-device checks are separate evidence.
+Each README links the public calls and required helpers. Copy the feature with
+the helpers it imports, and replace the customer identity adapter as documented.
+These examples use published packages/public APIs; no private Bota application
+repository is required.
 
-## Current status
+Choose one example, install from its directory and follow its documented checks.
+Root npm commands apply only to the retained legacy workspace. The
+[machine-readable index](examples.json) and [AI guide](docs/using-examples-with-ai.md)
+help coding tools find setup, source and evidence; [AGENTS.md](AGENTS.md) supplies
+the repository instructions.
 
-The catalog contains seventy-six independent examples. Node and Python upload/transcription examples are live-verified with a test key and synthetic speech. The API examples also cover Node/Python webhooks, transcript search and recording pagination, original-file download, structured summaries, recording-scoped Ask and session/history listings, subtitle/plain-text/Markdown/JSON export, cloud device status, bounded device inventory, command history, existing transcription/summary monitoring and linked processing snapshots, end-user onboarding and directory traversal, custom prompts, firmware discovery, OTA history and assignment monitoring, transcription of existing uploads and configuration discovery/observations. Recent expansions add fleet counters, scoped job directories, transcript JSON export, durable empty Ask sessions/title changes, exact release metadata, private Ask Markdown, cloud device-name changes, exact external-ID lookup, ordinary-command observation, upload-security policy, WebVTT export, project/end-user processing readers, exact encrypted-upload observation, Ask metadata inspection, firmware BIN downloads, project upload settings, recording integrity metadata and transcript CSV. Ten more cases add project/end-user configuration observations, a summary snapshot, private NDJSON/HTML exports and a credential-free health probe. The recent sixty API examples have syntax checks and source review; live behavior is unverified. Five focused App SDK connection examples, Android encrypted recording sync and Android/macOS recording catalogs are implemented; the Apple catalog passed hosted macOS compilation; physical acceptance remains unverified. Exact evidence is recorded in the [implementation review](docs/independent-examples-review.md). The full replacement, including target secure pairing and wider recovery acceptance, remains incomplete. The existing React Native/backend pair remains until replacement acceptance gates pass.
+## Current platform coverage
 
-| Existing source | Purpose | Status |
+| Platform | Available device example | Boundary |
 | --- | --- | --- |
-| [React Native app](apps/react-native/README.md) | Device discovery, connection, status, recording control, provisioning, and sync | App SDK beta.6 compatibility sample; Android native build verified by prior migration CI; physical-device acceptance remains open |
-| [Express backend](apps/backend/README.md) | Server-side Bota API calls supporting the app | Local development sample; no caller authentication or per-user resource authorization |
+| React Native | [Android/iOS connection](app-sdk/react-native-device-connect/README.md), plus the optional Android sync path in Bota Recordings | The recording template has no iOS host yet; sync is already-provisioned encrypted-v2, not a complete provisioning lifecycle |
+| Flutter | [Android connection](app-sdk/flutter-device-connect/README.md) | The published facade supports connection/status here, not the RN encrypted-sync workflow; no recording-template iOS host yet |
+| Kotlin / Android | [Connection](app-sdk/android-device-connect/README.md) and [recording metadata](app-sdk/android-recording-catalog/README.md) | Focused SDK samples, not another full consumer app |
+| Swift / Apple | [macOS connection](app-sdk/apple-device-connect/README.md) and [recording metadata](app-sdk/apple-recording-catalog/README.md) | Current sample hosts are macOS, not native iOS recording apps |
+| Desktop Chromium | [Web SDK connection](app-sdk/web-device-connect/README.md) | Requires supported Web Bluetooth/browser/OS behavior; separate from the API web template |
+| Windows | The API web template, and Chromium connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native recording host is supplied here |
 
-The existing app pins `@bota.dev/react-native-app-sdk@2.0.0-beta.6` (beta), app version 0.2.0. Rebuild native apps after installing. Its immediate binding/raw-token provisioning flow remains a compatibility gap, not the current target lifecycle. The existing backend uses one configured end user. Use it only in an isolated local test environment; it is not a multi-user backend template.
+All eight independent device examples pin published **2.0.0-beta.13**.
+Read each README for its actual build targets and device gates.
+[Current adoption evidence](docs/independent-examples-review.md#beta13-adoption)
+and [implementation reviews](docs/independent-examples-review.md) keep source,
+native builds, live API and physical acceptance distinct. Earlier phone results
+remain tied to the tested SDK/firmware/device versions; they do not establish
+beta.13 physical acceptance.
 
-See [Architecture](ARCHITECTURE.md) for the target design and migration gates. [SDK migration and verification](docs/app-sdk-migration.md) records successful all-platform exports and an Android native build, superseding the historical Hermes export failure. [Dependency security](DEPENDENCY_SECURITY.md) records required installation patches and regression checks. For the legacy workspace, iOS native linking and physical-device acceptance remain unverified.
-
-Keep install scripts enabled in the three affected React Native install roots;
-they apply a pinned [node-forge parser mitigation](docs/node-forge-parser-mitigation.md)
-for Expo signing tools. The unchanged 1.4.0 scanner alerts remain open.
+Next work is to define the common backend/media contract, complete import and
+playback across the existing clients, then add iOS hosts and bounded native SDK
+workflows. Vertical/app-type demos follow the general baseline. See
+[ROADMAP.md](ROADMAP.md); new catalog entries are not a completeness goal.
 
 ## Example catalog
 
-Each linked example installs independently. All eight device examples (the five
-connection examples, Android/Apple catalogs and encrypted recording sync) pin published
-**2.0.0-beta.13**. The [current adoption review](docs/independent-examples-review.md#beta13-adoption)
-records public package availability and example checks. Beta.13 physical-device
-acceptance has not been performed for these examples.
+The extended inventory retains focused and advanced references. Its entries
+install independently and have different verification levels; many readers and
+exports have source/syntax evidence only. Follow the selected README rather than
+inferring runtime support from inclusion in this table.
+The [public example guide](https://docs.bota.dev/api-reference/client-sdks#example-apps)
+provides API/SDK installation guidance.
 
-The [historical beta.10 review](docs/independent-examples-review.md#beta10-adoption)
-retains the earlier native builds and phone evidence. On the recorded
-Samsung/Bota Pin pair, RN beta.10 passed
-three radio-loss/first-reconnect cycles and graceful disconnect/reconnect.
-Flutter's six widget tests and hosted APK build passed. Its phone run passed
-three loss/eventual-reconnect cycles, with delayed rediscovery in the first
-cycle; consistently prompt recovery remains unverified.
-Beta.10 adds Android explicit-disconnect timeout cleanup and retains beta.9
-adapter-off handling. Restore Bluetooth, scan and reconnect explicitly.
-The earlier Flutter GATT 8/133 reconnect issue is not established as fixed;
-its beta.9 results and six UI ordering tests remain in the review.
-Physical acceptance for other platforms and devices remains open. The
-[public catalog](https://docs.bota.dev/api-reference/client-sdks#example-apps)
-provides public installation and example guidance.
-
-The Flutter sample also guards against delayed connect/status results overwriting
-a newer disconnect. Its [UI ordering review](docs/independent-examples-review.md#flutter-ui-completion-ordering-2026-09-30)
-separates widget regression evidence from the remaining native reconnect limitation.
+<details>
+<summary>Full example inventory</summary>
 
 | Example | What it teaches | Physical device |
 | --- | --- | --- |
@@ -185,119 +186,89 @@ separates widget regression evidence from the remaining native reconnect limitat
 | [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | React Native + Flutter Android library, Transcript/Summary/Ask; one authenticated backend; synthetic mode; optional RN encrypted sync and Flutter connection/status | No; device path optional |
 | [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
 
-Native SDK smoke samples used to develop the SDK itself belong in the SDK source repository. These customer-facing examples consume published artifacts.
+</details>
 
-## Run the existing sample
+SDK development smoke samples belong in the SDK source repository. These
+customer-facing examples consume published artifacts.
 
-These commands apply only to the legacy `apps/` workspace. For an independent example, use its README instead.
+## Integration and installation boundaries
 
-Prerequisites: Node 22.23.2 or newer, npm, a Bota API key and test end user in the intended project, and native Android/iOS development tooling for the mobile app. Android requires API 26 or newer; iOS builds require macOS and Xcode. BLE requires a native development build; Expo Go is insufficient.
+- Keep Bota secret and restricted keys on your server. The customer backend
+  authenticates app users and authorizes their resources before calling Bota.
+- Storage URLs grant bounded access to bytes; never forward Bota API credentials
+  to storage or expose signed URLs in logs/source.
+- Preserve upload verification, device cleanup and processing as separate
+  phases. Keep uncertain write intent; a failed response does not permit a
+  replacement POST.
+- Use synthetic or consented test audio. Do not commit credentials, recordings,
+  signed URLs or device provisioning material.
 
-From the repository root:
+Keep lifecycle scripts enabled in affected npm install roots. Required
+query-string, node-forge, braces and build-dependency guards are part of their
+documented installation/test chains; do not remove them to simplify a template.
+[Dependency security](DEPENDENCY_SECURITY.md),
+[Forge mitigation](docs/node-forge-parser-mitigation.md),
+[braces mitigation](docs/braces-depth-mitigation.md) and
+[build-dependency review](docs/build-dependency-remediation.md) record scope,
+scanner limits and required checks. Passing a source guard or CI does not close
+an unchanged dependency alert or prove physical installation.
 
-```sh
-npm ci
-```
+## Retained legacy workspace
 
-Copy `apps/backend/.env.example` to `apps/backend/.env`. Set `BOTA_API_KEY`, `BOTA_END_USER_ID`, and the intended `BOTA_API_BASE_URL` (the current code expects the `/v1` suffix). The current default reaches the production API; explicitly select your intended environment and disposable test resources.
+The [legacy RN app](apps/react-native/README.md) and
+[backend](apps/backend/README.md) under `apps/` remain compatibility examples,
+not the recommended customer template. They pin SDK beta.6. The backend has no
+caller authentication or per-user authorization and uses one configured end
+user. The immediate raw-token binding/provisioning flow is a target-lifecycle
+gap. Use this pair only in an isolated local test environment.
 
-In one terminal:
-
-```sh
-npm run dev:backend
-```
-
-Set `EXPO_PUBLIC_EXAMPLE_API_URL` to the backend URL in the mobile terminal. On a physical phone, use a reachable development-machine address, such as `http://192.168.1.20:4000`, not the phone's `localhost`.
-
-```sh
-npm run android -w @bota-dev/example-react-native
-# Or, on macOS:
-npm run ios -w @bota-dev/example-react-native
-```
-
-For an already installed compatible development build, `npm run dev:react-native` starts Metro. Existing native build limitations still apply; these commands were checked against manifests, not executed as part of the architecture work.
-
-Lifecycle scripts must be enabled for `npm ci`. If installation scripts were disabled, run `npm run postinstall` before using the sample; see [dependency security](DEPENDENCY_SECURITY.md).
+If maintaining that workspace, install with root `npm ci` and keep scripts
+enabled; if they were disabled, run `npm run postinstall` before use. Copy
+`apps/backend/.env.example` to `apps/backend/.env`, configure the authorized
+test key/end user and explicitly choose `BOTA_API_BASE_URL` ending in `/v1`.
+The default reaches production. Run `npm run dev:backend`, set
+`EXPO_PUBLIC_EXAMPLE_API_URL` to a phone-reachable backend address, then run
+`npm run android -w @bota-dev/example-react-native` or, on macOS,
+`npm run ios -w @bota-dev/example-react-native`.
+BLE needs a native development build; Expo Go is insufficient. Android requires
+API 26+. iOS native linking and broader physical acceptance remain separate
+gates. See [migration evidence](docs/app-sdk-migration.md) and the client README.
 
 ## Verification
 
-The [catalog workflow](.github/workflows/catalog.yml) runs on every push and pull
-request, independently of the example checks. Run the same dependency-free
-command locally with Node.js 22.23.2 or newer:
+[Catalog CI](.github/workflows/catalog.yml) checks the index, ordered README
+catalog and local file links on Linux and Windows without package installation,
+keys or hardware:
 
 ```sh
 node scripts/check-catalog.mjs
 node --test scripts/test-catalog.mjs
 ```
 
-It validates the index's IDs/types and paths, all independent directories,
-ordered README catalog consistency, and local inline file links in the root
-entry documents, AI guide and indexed README/setup/evidence Markdown files.
-It ignores fenced snippets, remote URLs and heading fragments; it does not
-validate anchors, reference-style links, HTML links or example behavior. No
-package installation, API key or hardware is needed.
-The regression suite creates temporary miniature repositories and exercises
-metadata/link mistakes and escaped path targets. Catalog CI runs both checks
-on Linux and Windows; it does not run the catalog's examples.
-The current root CI runs:
+It checks metadata and paths, not example behavior, heading anchors, remote URLs,
+reference-style/HTML links or fenced snippets.
 
-```sh
-npm test
-npm run typecheck
-npm run build
-```
-
-These commands cover dependency and upload-completion regression checks, workspace typechecks, and the backend build. CI also runs all-platform Expo exports and a separate Android native build. See [migration evidence](docs/app-sdk-migration.md) for prior results; pairing, iOS native linking, and live API/device workflows remain separate gates. Independent examples have their own path-filtered workflows and README commands; none need a root npm install. See [current evidence](docs/independent-examples-review.md).
-
-## Integration boundary
-
-- Keep Bota secret and restricted API keys on your server, never in mobile/browser code or public environment variables.
-- A customer backend authenticates app users and authorizes their resources before calling Bota's public API. It is not an unrestricted API proxy.
-- Apps may upload bytes directly to scoped storage URLs issued through the backend. That does not grant access to the Bota secret API key.
-- Use synthetic or explicitly consented test audio. Do not commit recordings, credentials, signed URLs, or device provisioning material.
+Use the selected example's own README and path-filtered CI for behavioral tests,
+typechecks and platform builds. Root `npm test`, `npm run typecheck` and
+`npm run build` cover the legacy workspace; its CI also exports Expo platforms
+and builds Android. Source/build checks, authorized live API checks and
+physical-device scenarios establish different evidence. See the
+[implementation review](docs/independent-examples-review.md) for current results
+and open acceptance gaps.
 
 ## Documentation
 
-- [Contributing](CONTRIBUTING.md): code quality, local checks and documentation expectations.
-- [Repository design](DESIGN.md): purpose, developer experience and criteria for selecting examples.
-- [Architecture](ARCHITECTURE.md): repository structure, integration contracts, migration, and acceptance gates.
-- [Contributor and agent instructions](AGENTS.md): how to add and verify examples.
-- [Claude Code entry point](CLAUDE.md): shared instructions for Claude Code.
-- [Bota public documentation](https://docs.bota.dev): API and SDK integration contracts.
+- [Design](DESIGN.md): product purpose, two layers and the Bota Recordings family.
+- [Roadmap](ROADMAP.md): ordered remaining work and acceptance criteria.
+- [Architecture](ARCHITECTURE.md): technical boundaries and implementation status.
+- [Plan reset review](docs/design-reviews/2026-10-12-plan-reset.md): design decisions,
+  source evidence and remaining verification.
+- [Contributing](CONTRIBUTING.md): readability, focused validation and documentation.
+- [AI guide](docs/using-examples-with-ai.md), [AGENTS.md](AGENTS.md) and
+  [CLAUDE.md](CLAUDE.md): entry points for coding tools.
+- [Public Bota docs](https://docs.bota.dev): API and SDK contracts.
 
 ## License
 
-Bota-authored sample code is available under the [MIT license](LICENSE).
-Third-party dependencies and vendored files retain their own licenses and notices.
-
-Start with [Bota Recordings](end-to-end/web-reference/README.md) for a common web app template, or [upload and transcribe](api/upload-and-transcribe-node/README.md) for a standalone API integration. Complete each example's acceptance gates before expanding its support claims.
-
-## October 7 scoped braces source guard
-
-The legacy root and both independent React Native apps retain their existing
-query-string/Forge hooks and add standalone mandatory guarded `braces` 3.0.3
-installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
-`npm test` and each independent app test chain require 16 installer/parser/actual
-micromatch controls. Source qualification, scanner identity, hosted native builds
-and physical installation remain separate. See [review](docs/braces-depth-mitigation.md).
-
-## October 7 new build-dependency fixes
-
-Four independent locks select source-map-js 1.2.2; the legacy root also selects
-shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
-Each install root has required public-consumer tests; Web CI now runs `npm test`.
-See the [source compatibility review](docs/build-dependency-remediation.md) for aged tarballs, tests and
-bundled-parser limits. Hosted/scanner and physical acceptance remain separate.
-
-## October 11 braces data-array guard
-
-The legacy root, independent React Native connection app and recording-sync
-app now carry the reviewed six-file source guard. Only exact known
-pristine/previous/current assets can migrate; mandatory verification requires
-all six final hashes before consumers continue. Existing postinstall/test
-chains, manifests, locks, public SDK pins and native/device/HTTP code are
-retained. The fixed direct AST/value-array limits and accessor refusals are an
-explicit caller input policy; generic iterative flatten retains wide output.
-Package 3.0.3 remains affected and #111/#112/#113 stay open. Exact-source hosted
-native builds and physical installation remain separate from local checks.
-See [scope and evidence](docs/braces-depth-mitigation.md#october-11-six-file-migration).
+Bota-authored sample code uses the [MIT license](LICENSE). Third-party
+dependencies and vendored files retain their own licenses and notices.

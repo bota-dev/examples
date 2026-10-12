@@ -6,14 +6,13 @@ can read repository files. No tool-specific integration or root install is requi
 
 ## Select an example
 
-Read [DESIGN.md](../DESIGN.md) first: the goal is developer-facing API/SDK demos
-and sample code. Match a concrete capability and inspect the public call being
-taught. Improve an existing sample or feature before creating overlapping code.
-Current work is Layer 1: general platform capabilities and integration workflows.
-Layer 2 is planned for later vertical use cases and consumer app types. API, SDK
-and combined examples are formats within Layer 1, including the web reference.
-The web reference showcases backend APIs; choose `app-sdk/` or a supported
-combined demo when the task requires physical-device SDK integration.
+Read [DESIGN.md](../DESIGN.md) and [ROADMAP.md](../ROADMAP.md) first. The repository
+has exactly two layers: general platform examples now, then vertical use cases
+and consumer app types later. Current work centers on one **Bota Recordings**
+app family. API, SDK and combined samples are formats within the general layer.
+Choose an existing client as a whole-app starting point; choose a focused recipe for one
+public call or bounded workflow. Do not grow overlapping install roots or the
+catalog just to increase coverage counts.
 
 For a common web recording app template, prefer [Bota Recordings](../end-to-end/web-reference/README.md).
 Use the [platform coverage table](../README.md#current-platform-coverage) for
@@ -27,18 +26,25 @@ no backend or device; live API content uses a separate app token and server-held
 Bota key. RN's optional device page retains encrypted-v2 sync; Flutter's page
 supports connection/status only. No mobile iOS or Windows host is supplied there.
 
-The web sample's
-recipe table maps recordings, upload, transcription, notes, Ask and notifications
-to small backend/frontend files. One install root shares HTTP, auth and durable
-intent helpers. Adapt just the selected feature and its imports, or run the whole
-synthetic demo. Replace the app auth adapter with your verified identity mapping;
-keep Bota keys server-side. Existing standalone and native examples remain valid
-choices for a narrower task or another platform.
+The target family uses one canonical customer backend. Currently the web root
+has its own backend and the mobile root has another, shared by its two clients.
+The [roadmap](../ROADMAP.md) tracks consolidation; it has not happened yet. Keep
+current install paths and runtime boundaries intact. Do not add a third backend
+or import one independent example into another as a shortcut.
 
-1. Read [examples.json](../examples.json) or the [README catalog](../README.md#example-catalog).
-2. Match `purpose`, `category`, `language` and `physical_device_required` to the task.
-3. Read [AGENTS.md](../AGENTS.md), [ARCHITECTURE.md](../ARCHITECTURE.md), then the selected example's README.
-4. Inspect that directory's source, manifest and lockfile before adapting it.
+The web README's recipe table maps recordings, upload, transcription, notes, Ask
+and notifications to the relevant modules. Copy the complete feature/import
+graph, including HTTP, authentication, ownership and durable-state helpers, or
+run the whole app. Some integrations span substantial source; the Ask entry
+point is not a self-contained tiny recipe. Replace the app auth adapter with
+your verified identity mapping and keep Bota keys server-side. The standalone
+API and native samples remain secondary choices for a narrower task.
+
+1. For a whole app, choose the web, React Native or Flutter template and read its
+   actual feature/platform limits. For one operation, match `purpose`, `category`,
+   `language` and `physical_device_required` in [examples.json](../examples.json).
+2. Read [AGENTS.md](../AGENTS.md), [ARCHITECTURE.md](../ARCHITECTURE.md), then the selected README.
+3. Inspect the source, imports, manifest and lockfile before adapting it.
 
 API examples run on a server or development machine. App SDK examples communicate
 with physical devices. End-to-end examples include both an app and a backend.
@@ -85,6 +91,11 @@ the same fixture-based failure checks run in Linux/Windows catalog CI.
   documented install layout; an app may use one root or separate app/backend roots.
 - Keep exact public SDK pins and their release channel. Check the manifest and
   lockfile rather than assuming a version mentioned in historical prose is current.
+- Independent device examples currently select beta.13. Its [Flutter manager contract](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.13/frameworks/flutter/bota_app_sdk/lib/src/managers.dart)
+  lacks the fresh-pairing and encrypted-v2 interfaces needed by this
+  sample's device-sync policy. Treat a missing public capability, a missing host
+  and missing verification as different gaps. [Native Windows SDK support](https://github.com/bota-dev/app-sdk#supported-platforms)
+  is planned upstream; it is not merely an omitted example host.
 - Use the linked public API/SDK contracts. Never import private Bota One helpers,
   sibling repositories or unpublished SDK interfaces to fill a missing feature.
 - Keep secret/restricted API keys on the server. Supply project, end-user,
@@ -115,9 +126,13 @@ Use the Bota examples repository to implement <task> in <language/platform>.
 Hardware available: <none or device/platform details; no credentials>.
 Requested verification: <source/syntax, build, unit, live API, or physical>.
 
-Read examples.json and select the smallest implemented workflow that fits.
-Read AGENTS.md, ARCHITECTURE.md and its README, then inspect its source,
-manifest and lockfile. Install only within its documented install root(s).
+Read DESIGN.md and ROADMAP.md. For a recording-app starting point, select an existing
+web, React Native or Flutter client. For one public operation, select a focused
+recipe using examples.json. Read AGENTS.md, ARCHITECTURE.md and the selected
+README, then inspect its source, complete imports, manifest and lockfile.
+Install only within documented roots. Do not add an overlapping app/backend
+root or a new catalog schema. One canonical backend is a planned consolidation;
+preserve today's separate web/mobile implementations until that work is verified.
 Preserve public SDK pins, authorization, privacy and uncertainty recovery.
 Do not use private helpers or repeat uncertain writes. Report contract gaps.
 

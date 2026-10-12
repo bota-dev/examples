@@ -1,18 +1,45 @@
-# Common mobile recording app sample
+# Bota Recordings: common mobile sample clients
 
 ## Purpose and layout
 
-One combined example contains independent React Native (`app/`) and Flutter
-(`flutter/`) clients and one customer Node backend (`backend/`). Both clients
-serve the same general recording user: choose a recording, read its transcript
-and summary, and ask about its content. Use familiar mobile navigation, ordinary
-platform controls and short state messages. Public API/SDK recipes belong in
-README and source. This is repository Layer 1; vertical workflows remain later work.
+This combined example contains independently installed React Native (`app/`)
+and Flutter (`flutter/`) clients sharing one Node backend (`backend/`). They
+belong to the same **Bota Recordings** family as the web client. The target
+journey is audio input → library → supported playback → transcript → general
+notes → Ask. Use familiar mobile navigation, ordinary platform controls and short
+state messages. Public API/SDK recipes belong in README/source.
+
+There are exactly two repository layers: general platform examples now, then
+vertical use cases and consumer app types later. A common recording app belongs
+to the general layer. Focused API/SDK recipes are secondary ways to learn a
+public call, not another product layer or a reason to create overlapping apps.
 
 Keep the existing directory and native sync implementation so published links
 and recovery journals retain their meaning. Each client installs separately.
 Sharing this example's backend does not permit imports from another example or
 private Bota applications. Demo/Bota One inform the user journey only.
+
+## Implemented subset and backend direction
+
+| Capability | Current mobile implementation |
+| --- | --- |
+| Audio input | RN can sync an already-provisioned encrypted-v2 device recording. Neither client implements microphone capture or file import. Flutter has no device transfer in this example. |
+| Library and results | Both clients show owned cloud recordings, transcripts, general notes and recording-scoped Ask. A live library needs existing authorized audio or RN device sync. |
+| Playback | Not implemented. The target adds playback only for a supported, authorized audio representation. |
+| Device SDK | Optional RN encrypted sync and Flutter connection/status, enabled explicitly in live mode. Their supported workflows differ. |
+| Hosts | Android hosts are supplied. Common-app iOS hosts are missing; that is separate from the SDKs' iOS support. |
+| Synthetic mode | Local DTO fixtures and synthetic results with no network or SDK work. They do not prove live processing, upload or cleanup. |
+
+The target family uses one canonical customer backend. Today this mobile backend
+and the web sample's backend are separate implementations with different local
+routes/auth adapters. Consolidation belongs to the [root roadmap](../../ROADMAP.md)
+and is not implemented. Preserve the current contract, bearer authentication,
+install roots and journals until that migration is reviewed and verified. Do not
+add another independent backend or invent a new catalog/metadata schema.
+
+Live responses and synthetic fixtures should follow their client's DTO contract;
+the planned canonical backend aligns those contracts across the family. Shared
+DTO shapes do not imply identical SDK capabilities or live acceptance.
 
 ## Modes and platform support
 
@@ -29,7 +56,13 @@ private Bota applications. Demo/Bota One inform the user journey only.
   facade lacks the fresh pairing and encrypted-upload host interfaces needed
   for this example's device sync. Do not bypass those gaps.
 
-This pass supplies Android hosts. An iOS host, full platform parity and physical
+Keep existing exact beta.13 manifest/lock pins. Version adoption needs its own
+public-contract/build/recovery evidence; do not assume a new version closes a
+facade gap. Native Windows SDK support is
+[planned upstream](https://github.com/bota-dev/app-sdk#supported-platforms);
+it is a capability gap rather than only a missing example host.
+
+This example supplies Android hosts. An iOS host, full platform parity and physical
 qualification require separate implementation/evidence. API library access is
 independent of device presence and grants no device-cleanup authority.
 
@@ -43,12 +76,13 @@ independent of device presence and grants no device-cleanup authority.
 5. Return to the library without losing uncertain-write locks. A known saved
    operation may be refreshed through GET; an unknown outcome must not be sent again.
 
-No microphone capture or audio playback is added in this pass. Device-synced
-audio or an existing authorized cloud recording supplies the live library.
+Audio intake and playback gaps are tracked in the root roadmap. Device paths
+remain optional where the published contract supports the selected workflow;
+cloud-content access does not depend on Bluetooth presence.
 
 ## Customer API contract
 
-The new `/api/library` namespace uses selected snake_case DTOs, matching the
+The current `/api/library` namespace uses selected snake_case DTOs, matching the
 public Bota resource fields. It is separate from the existing native sync
 routes and capture journal. Every live request uses the application bearer token.
 
@@ -90,3 +124,6 @@ customer responsibilities.
   establish source/build evidence. Live API/provider and device acceptance are
   recorded separately; fixtures do not qualify them.
 - Update catalog, README, architecture and review with actual platform support.
+- Treat a family feature as a feature, not a new install root or catalog entry.
+  A copied integration includes its complete import graph, authorization and
+  durable-state requirements; it is not necessarily one tiny file.

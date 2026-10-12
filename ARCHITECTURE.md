@@ -1,699 +1,186 @@
-# Bota Examples Architecture
+# Bota examples architecture
 
-Repository purpose and developer experience are defined in [DESIGN.md](DESIGN.md).
-This repository showcases public API/SDK integrations through runnable demos,
-common recording-app templates and easy-to-adapt sample code. The web sample
-demonstrates APIs; platform samples demonstrate App SDKs, and supported combined
-demos connect them. The inventory
-and historical evidence below describe current implementation, not a target
-number of examples or full showcase acceptance.
+[DESIGN.md](DESIGN.md) defines the developer audience and product direction.
+This document defines the current structure, planned consolidation and trust
+boundaries. Customer developers should be able to run a common recording app or
+copy a small public API/SDK integration without Bota's internal repositories.
 
-The design separates two layers: general platform capability examples are the
-current implementation scope; vertical use-case and consumer app demos follow
-later. API, App SDK and combined demos describe formats within the general layer.
+## Product scope
 
-Status: seventy-six independent examples are implemented, including the bounded already-provisioned Android recording-sync path, Node summary/list/download/Ask/subtitle/Markdown/device-status/inventory workflows, Python command history, transcription monitoring, text and JSON export, Node/Python pagination/search/webhooks/downloads, Ask session/history listings and linked processing snapshots, end-user onboarding/directory, custom summaries, firmware discovery/history, summary/OTA assignment watchers, existing-upload transcription, configuration discovery/observations and Android/Apple metadata catalogs. Node/Python upload and transcription are live-verified. The recent sixty API examples have syntax checks and source review; live behavior remains unverified. All eight independent device examples pin public beta.13; the new Apple catalog passed hosted macOS compilation and awaits physical acceptance, while the [earlier adoption review](docs/independent-examples-review.md#beta13-adoption) records checks for the previous seven. Web/Flutter catalog proposals are deferred on missing public gates. Beta.13 example hardware checks remain unverified. The earlier Flutter GATT 8/133 reconnect issue is not established as fixed, and wider physical coverage remains partial. Full recording-sync replacement and legacy retirement remain blocked on their existing integration/hardware gates. Target requirements below remain unchanged.
+There are exactly two product layers:
 
-## 1. Purpose and scope
+1. **General platform examples — current work.** One Bota Recordings app family
+   demonstrates common capabilities through web and platform-specific clients;
+   focused API/SDK recipes remain available for smaller tasks.
+2. **Vertical and consumer-app examples — later.** Compose the general
+   integrations into a specific use case or app type after the common flow works.
 
-The historical [beta.10 adoption review](docs/independent-examples-review.md#beta10-adoption)
-tracks the previous five public package upgrades, including Flutter after completed publication.
-RN beta.10 passed three radio-loss/first-reconnect cycles and graceful disconnect/reconnect
-on Samsung SM-A166U1 / Bota Pin firmware 1.0.19. All four beta.10 example workflows
-passed at source `54237e1`, including RN Android and iOS Simulator builds.
-Flutter's six widget tests and hosted APK build passed at source `c8c7a89`.
-Its public-package phone run passed three loss/eventual-reconnect cycles with
-verified identity/status, but the first cycle required a third scan several
-minutes later. This bounded observation does not establish prompt rediscovery
-or diagnose the delay's cause.
-Each example selects an available public version independently, as required by
-section 4. Native SDK cleanup owns connection loss; examples add no GATT or
-retry workaround. The earlier beta.8/beta.9 failures, hosted builds and isolated
-candidate checks remain historical evidence, including the unresolved Flutter
-first-attempt reconnect limitation.
+API recipes, SDK modules and app templates are formats inside the first layer,
+not additional product layers. Stop growing the catalog by case count. Complete
+and simplify the existing recording journey before adding overlapping examples.
 
-Keep customer-facing API and App SDK examples in one discoverable repository. Each example teaches one bounded workflow with enough context to run it and understand its trust boundaries. Complete app/backend workflows are allowed when that relationship is the subject of the example.
+The intended end-user flow is **add/import audio → library → playback/source →
+transcript → notes → recording-scoped Ask**. Everyday screens show recordings
+and content; API recipes and source explanations belong in README/source.
+Playback is **not implemented** in the current apps. Qualify the public audio
+retrieval, format, encryption and authorization contract before adding it:
+an encrypted original or URL issuance does not prove playable/decrypted audio, and
+synthetic output must not imply successful live playback or device transfer.
 
-Owner direction on October 12 defines a common recording-app sample/template,
-inspired by Demo and Bota One, for developers building applications for their own
-end users. Maintain platform-specific runnable implementations from mobile to
-web with the same recognizable add/select recording → transcript → summary →
-Ask journey where public contracts support it. Use native platform conventions;
-do not add a shared example framework or imply identical SDK capability.
+## Current implementation
 
-The maintained [Bota Recordings web sample](end-to-end/web-reference/README.md)
-uses a compact library/detail UI with Transcript/Summary/Ask tabs, familiar
-white/gray surfaces and system sans-serif text. API documentation and source
-recipes stay in its README; Activity is secondary, initially collapsed and
-offers GET-only observation/recovery. The React UI and Express backend cover
-audio import, transcription, general notes, recording-scoped Ask and webhook
-notifications. This implementation is API-only, with no device SDK or playback.
-Small feature modules share HTTP/auth/intent code inside this one install root.
-Standalone examples remain independent. Local synthetic tests and a
-credential-free demo are authorized; live API and production identity/deployment
-acceptance remain separate. See its [architecture](end-to-end/web-reference/ARCHITECTURE.md)
-and the [historical implementation review](docs/independent-examples-review.md#web-reference-october-12).
+Current paths and independent installation remain unchanged:
 
-The [mobile recording samples](end-to-end/react-native-recording-sync/README.md)
-add React Native and Flutter Android library/detail apps with Transcript,
-Summary, Ask and GET-only request recovery. Each client installs independently;
-one authenticated customer backend within this example serves both. Synthetic
-mode makes no API or SDK calls. React Native retains its optional encrypted-v2
-sync for an already-provisioned device; Flutter offers connection/status only.
-Cloud library access needs no device configuration and grants no cleanup
-authority. Public package pins and existing capture journals remain unchanged.
+| Location | Implemented role and limits |
+| --- | --- |
+| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK, capture or playback. |
+| [Mobile](end-to-end/react-native-recording-sync/README.md) | React Native and Flutter clients share this example's customer backend. Both common app hosts are Android only. |
+| [React Native](end-to-end/react-native-recording-sync/app/README.md) | Common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
+| [Flutter](end-to-end/react-native-recording-sync/flutter/README.md) | Common cloud-content flow and secondary connection/status. Published beta.13 lacks the fresh pairing and verified encrypted-upload host surfaces required for device sync. |
+| [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
+| [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its beta.6 compatibility path and dependency guards are retained; its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
 
-Other connection/catalog examples remain focused snippets. Native iOS and
-Windows common apps, Flutter iOS, mobile audio capture/playback and broader
-device workflows remain future work with separate public-contract, build and
-physical acceptance gates. See the [mobile review](docs/independent-examples-review.md#mobile-recording-templates-october-12).
+The web and mobile backends currently duplicate recording ownership, processing,
+Ask and journal integration code. Their authentication and persisted scope models
+also differ. **One canonical feature backend is planned; it does not exist yet.**
+Independent device examples retain exact public beta.13 pins. Native iOS common
+apps, Flutter iOS and native Windows samples are not supplied here; Windows
+native SDK availability is planned upstream and requires public-contract
+qualification before an example can depend on it. Current local, hosted, live
+and hardware evidence remains in each README and the
+[implementation review](docs/independent-examples-review.md).
 
-Examples consume public Bota `/v1/*` APIs and published Bota App SDK packages. The credential-free health example uses the separately documented public `/health` endpoint. The App SDK is the device-facing library family. A future API SDK is a separate server-client family; until a suitable public API SDK exists, use ordinary HTTP clients and the public API schema rather than inventing or importing a private SDK.
-
-Demo and Bota One are internal reference applications for the familiar recording
-experience and integration lessons. Neither is a dependency or a template to
-copy wholesale. Private helpers, native modules, infrastructure, deployment
-accounts, branding and application state do not become example prerequisites.
-
-Non-goals: a second SDK, a reusable example framework, a production SaaS starter, feature parity with Bota One, firmware implementations, and platform administration through `/dashboard/*`.
-
-## 2. Repository organization
-
-Implemented layout, including the scoped Android recording-sync example:
+## Planned Bota Recordings family
 
 ```text
-examples/
-  README.md                         # Catalog, current status, entry points
-  examples.json                     # Versioned discovery index; README pointers
-  ARCHITECTURE.md                    # Design and migration/acceptance gates
-  AGENTS.md                         # Canonical contributor/agent rules
-  CLAUDE.md                         # Claude entry point; refers to AGENTS.md
-  api/
-    upload-and-transcribe-node/
-    upload-and-transcribe-python/
-    webhook-receiver-node/
-    summarize-transcription-node/
-    list-recordings-node/
-    download-recording-node/
-    search-transcripts-node/
-    ask-recording-node/
-    export-transcription-node/
-    webhook-receiver-python/
-    device-status-node/
-    list-device-commands-python/
-    search-transcripts-python/
-    list-devices-node/
-    watch-transcription-python/
-    export-summary-node/
-    list-recordings-python/
-    export-summary-python/
-    read-ask-history-node/
-    export-transcription-python/
-    recording-pipeline-node/
-    create-end-user-node/
-    custom-summary-python/
-    list-firmware-python/
-    list-end-users-node/
-    list-ota-history-python/
-    transcribe-existing-node/
-    config-schema-node/
-    processing-config-python/
-    list-ask-sessions-python/
-    download-recording-python/
-    watch-summary-node/
-    watch-ota-node/
-    fleet-health-node/
-    connection-config-python/
-    upload-config-node/
-    ota-config-python/
-    list-transcriptions-node/
-    list-summaries-python/
-    export-transcription-json-node/
-    create-ask-session-python/
-    rename-ask-session-node/
-    firmware-detail-node/
-    export-ask-markdown-node/
-    rename-device-python/
-    lookup-end-user-node/
-    watch-device-command-node/
-    upload-security-config-python/
-    export-transcription-vtt-python/
-    project-processing-config-node/
-    end-user-processing-config-python/
-    watch-encrypted-upload-node/
-    inspect-ask-session-python/
-    download-firmware-python/
-    project-upload-config-node/
-    inspect-recording-integrity-python/
-    export-transcription-csv-python/
-    end-user-upload-config-python/
-    project-connection-config-node/
-    project-ota-config-python/
-    end-user-connection-config-node/
-    end-user-ota-config-python/
-    project-upload-security-node/
-    inspect-summary-python/
-    export-transcription-ndjson-node/
-    export-transcription-html-python/
-    api-health-python/
-  app-sdk/
-    react-native-device-connect/
-    web-device-connect/
-    apple-device-connect/
-    android-device-connect/
-    android-recording-catalog/
-    apple-recording-catalog/
-    flutter-device-connect/
-  end-to-end/
-    web-reference/                 # One install root; reusable web/backend recipes
-      web/features/
-      server/features/
-      README.md
-    react-native-recording-sync/    # RN/Flutter Android apps + one customer backend
-      app/
-      backend/
-      README.md
-  .github/workflows/                # Checks selected by changed example
-  apps/                            # Existing legacy pair during migration
-    backend/
-    react-native/
+Web client ────────── browser cookie adapter ─┐
+React Native client ─ mobile bearer adapter ─┼─ derived principal
+Flutter client ────── mobile bearer adapter ─┘       │
+                                           canonical API feature backend
+                                           ├─ recordings / audio import
+                                           ├─ transcripts / notes / scoped Ask
+                                           ├─ webhook observation
+                                           └─ cloud intent journal
+Platform device module ─ published App SDK ─ native host callbacks
+                                           └─ native capture/session journal
 ```
 
-Python now teaches server-side upload; Apple (macOS), Android, Flutter (Android), Web, and React Native teach read-only connection/status using exact published SDK packages; the adoption review records the current versions. Different languages do not require different repositories. Split a project out only when it becomes an independently maintained application with its own access, deployment, or release lifecycle; retain a catalog link here.
-
-### Coding-agent discovery
-
-`examples.json` is a maintained discovery index, not an installation workspace
-or a shared runtime. Each implemented entry points to its own directory, README
-and verification evidence. The [AI guide](docs/using-examples-with-ai.md) gives
-coding tools a common selection/adaptation workflow; `AGENTS.md` remains the
-canonical editing instructions and `CLAUDE.md` points there. Neither an index
-entry nor a configured workflow implies runtime or physical acceptance.
-
-Project and end-user processing readers stop at their selected hierarchy level.
-They report enabled automation flags and section source, without applying device
-overrides locally or reconstructing field provenance. Reads cannot establish
-provider approval, job creation/success, an atomic snapshot or applied device
-state. Missing settings fail without substituting defaults.
-The encrypted-upload watcher reads an existing exact session and owner revision,
-with recording/device ownership checks around every complete observation. A
-backend publication report is not independent integrity or signed-receipt
-verification and never authorizes device cleanup. The Ask metadata reader uses
-owner-filtered recording-scope collection membership before and after exact GET,
-without printing titles, messages or provider fields. Both are non-atomic reads.
-Firmware BIN download isolates storage credentials and verifies original bytes
-against declared size/hash before private no-overwrite publication. It does not
-verify a signing authority, physical compatibility or installed firmware.
-Source/syntax evidence and deferred acceptance are in the
-[batch review](docs/independent-examples-review.md#upload-session-ask-firmware-october-9).
-
-Project upload observations stop at organization/project inheritance, retain
-the server's numeric daily-limit result and infer no child settings or firmware
-enforcement. Recording integrity inspection reports a successful server hash
-verification timestamp only when present, without treating a null timestamp as
-failure or granting device-cleanup authority. It does not independently hash
-bytes or validate encrypted-v2 signed receipts. Transcript CSV exports preserve
-supplied ordered seconds and overlaps; every nonempty text/speaker cell receives
-an apostrophe before CSV quoting, an explicit content transformation rather than
-a universal spreadsheet-import guarantee. Private publication never overwrites.
-See the [source/syntax review](docs/independent-examples-review.md#project-upload-integrity-csv-october-9)
-for deferred runtime and filesystem acceptance.
-
-Project/end-user connection, upload, OTA and upload-security observations
-stop at their selected level. End-user readers retain identity and available
-project-assignment generation across reads; missing project markers still rely
-on independently established key mapping. Array-index merge results and numeric
-or ordered policy merges are reported unchanged, not reconstructed locally.
-Configuration intent is not physical radio availability, promotion, delivery,
-installation, applied encryption or device cleanup authority. The summary reader
-reports exact source-linked metadata without generating or printing content.
-NDJSON preserves selected supplied segment values as a local interchange format;
-HTML escapes all dynamic values in text positions and includes no script or
-external resource. Both publish privately without overwrite. The health probe
-sends no credential and reports one backend health response, not authenticated
-resource, queue/provider, device or sustained uptime proof. See the
-[ten-case review](docs/independent-examples-review.md#ten-readers-exports-health-october-9).
-
-### Independence and dependencies
-
-- The unit of installation is an example directory. A reader can copy that directory and follow its README without sibling repositories or other examples.
-- Each new example owns its dependency manifest and appropriate lockfile. An end-to-end example may own a local workspace joining its app and backend with one lockfile.
-- Do not add new examples to the legacy root `apps/*` npm workspace. Keep the existing root workspace and lockfile until its consumers migrate.
-- Avoid root runtime packages, shared authentication servers, cross-example source imports, Git submodules, unpublished artifacts, and local `file:` dependencies on Bota repositories.
-- Small teaching helpers may be repeated to keep examples self-contained. Substantial reusable protocol logic belongs in the SDK or platform, not an examples utility library.
-- Root automation can orchestrate checks; it must not become a runtime prerequisite.
-
-## 3. Integration and ownership
-
-The ninth example, `end-to-end/react-native-recording-sync`, implements a bounded
-already-provisioned-device path. Its app and backend install independently within
-the example. A public Kotlin material-registration adapter supplies authenticated
-HTTP callbacks; the SDK owns transfer, native bytes and signed-receipt confirmation.
-The backend fixes project/end-user/device scope, verifies binding generation and
-retains a SQLite journal. Uncertain creates/PUTs and expired or changed sessions
-stop for reconciliation. The example does not implement pairing, a second transport
-engine, full automatic restart recovery, or legacy retirement. Current verification
-is in the [scoped review](docs/independent-examples-review.md#pre-provisioned-recording-sync).
-
-```text
-API-only script (developer's server environment)
-  -> Bota public API -> upload storage / processing / results
-
-Physical device <-> App using published App SDK
-                      | authenticated application requests
-                      v
-                Customer-owned backend -> Bota public API
-                      |
-                      +-> scoped upload authorization -> App -> storage
-
-Bota webhook delivery -> customer receiver -> application processing
-```
-
-| Component | Owns |
-| --- | --- |
-| App SDK | Supported device transport, protocol, and device workflows exposed by its public release |
-| Example app | Permissions, selection, UI, SDK lifecycle, and documented host callbacks/persistence |
-| Customer backend | App-user authentication, project/end-user mapping, resource authorization, Bota API credentials and orchestration |
-| Bota platform | Authoritative device/recording resources, cloud audio, transcription, summaries, and platform processing |
-| API-only script | Explicit developer-selected inputs and credentials in a server/CLI environment |
-
-The customer backend may persist identity mappings and necessary recovery state. Do not mirror the platform's entire recording/transcription database merely to support an example.
-
-Connection notifications take precedence over older UI operations. A delayed
-connect or status result must not restore a disconnected selection or display
-status from a retired connection. Test event/result ordering separately from
-physical Bluetooth reliability; UI guards do not change SDK transport policy.
-
-### Authentication and authorization
-
-Use public `/v1/*` contracts. App-facing backends must validate caller identity, derive project/end-user context from trusted server-side configuration or mappings, and check ownership for every resource operation. A request's workspace header, end-user ID, or device ID is not authorization. Constrain proxy routes and accepted fields; never expose a generic forwarder using a privileged API key.
-
-For an initial local end-to-end sample, a documented single-user mode is acceptable: the backend uses a fixed test identity and requires a separate developer-configured app access token, with no built-in default. This is a local test credential, not a Bota API key or a production identity system. Bind locally by default and document deliberate LAN access for physical phones. Hosted or multi-user variants must replace this mode with verified user authentication and per-user authorization. Do not imply that adding CORS provides authentication.
-
-Keep `sk_*` and `rk_*` credentials server-side. Redact authorization headers, device tokens, signed upload URLs, provisioning envelopes, and audio contents from logs. Clients may receive only the scoped grants, opaque material, and upload authorization required by the public workflow. Use HTTPS for hosted endpoints.
-
-### Device lifecycle and recording durability
-
-Apply these contracts only when an example includes the corresponding feature; a connect/status sample need not implement binding, reset, or upload.
-
-- Verify the selected physical device through SDK identity reads, including its exact serial number; advertised names are discovery hints.
-- Binding follows prepare -> physical-device provisioning -> confirm of the exact attempt. Abort unsuccessful attempts without deleting the stable device row. The target relays a device-bound opaque provisioning payload; raw-token provisioning is a tracked compatibility gap. Preserve binding-generation checks when reconciling late results.
-- Use backend-issued action authorization and the public SDK for protected recording control. Do not implement GATT opcodes or cryptography in examples.
-- Describe the selected upload profile and capability requirements. Preserve stable recording/session identity during recovery, handle unknown outcomes, and report transfer, cloud completion, transcription, and summary as distinct states.
-- Delete a device recording only after the selected protocol's required durable confirmation. A successful byte transfer or a transcription request alone is not deletion authority.
-- If supporting direct WiFi/4G upload plus BLE fallback, establish fresh evidence that device upload ownership is inactive before starting BLE. Disconnect/timeout does not establish inactivity.
-- Keep unbind and factory reset distinct. Reset examples, if later added, must preserve the durable exact-command completion flow and generation fencing; they are outside the initial catalog.
-
-If the installed public SDK/API/firmware combination cannot support a target requirement, mark the feature blocked or explicitly limited. Do not silently reproduce Bota One's workaround or downgrade a required security profile.
-
-### Asynchronous API workflows
-
-The Node summary example starts from an existing completed transcription. It
-persists scoped creation intent before POST and the returned summary ID before
-polling. An ambiguous creation stops for explicit reconciliation; a repeated
-template-based POST can replace an existing result. A local journal does not
-serialize other applications or the platform's automatic processing. Keep those
-limits explicit instead of presenting local deduplication as exactly-once work.
-
-The Android recording catalog uses only public SDK identity/status/catalog calls.
-It renders `PendingRecording.Legacy` and `EncryptedV2` separately; legacy does not
-mean plaintext. Connection revisions fence late reads. Metadata listing does not
-authorize audio transfer or establish cloud commitment, and this example adds no
-binding, upload, recording control or cleanup operations.
-
-API upload examples must follow the public upload/finalization contract before requesting processing. Use bounded polling with terminal-error handling or documented webhooks to retrieve asynchronous results. Retry only when the operation's documented idempotency/recovery behavior makes it safe; do not create duplicate recordings or processing jobs blindly.
-
-The API recording-list example follows opaque cursors using a server-held project
-key and an optional end-user filter. It projects selected metadata, limits the
-number of pages and reports incomplete traversal explicitly. Listing is not a
-snapshot, a resource authorization check for a multi-user app, or permission to
-download or delete audio. This example performs no writes.
-
-The recording-download example retrieves original stored bytes, without format
-conversion, enhancement or decryption. It checks configured scope before URL
-issuance, isolates API credentials from storage, limits transfer size and time,
-and publishes a local file without overwriting an existing destination. A signed
-URL is not proof that an object exists or that its bytes match a trusted fixture.
-
-The transcript-search example fixes end-user scope and optionally narrows to a
-recording allowlist. It validates citations and checks each returned recording's
-owner before printing any excerpts. Search uses the provider's embedding path
-and may incur usage; it does not create an Ask session or generated answer.
-Empty results do not establish indexing readiness. Separate ownership reads do
-not provide an atomic snapshot or replace customer application authorization.
-
-The webhook example must use the public verification format, preserve the input bytes that verification requires, and handle duplicate events. It must document delivery/retry semantics and acknowledge only after the example's stated acceptance/durability step. Do not invent signature headers or claim exactly-once delivery.
-
-The recording-scoped Ask example verifies a configured recording's owner, creates
-one empty session, and submits one question. Durable intent precedes each POST;
-uncertain outcomes retain the journal and subsequent runs reconcile through GET.
-Session scope and returned citations must stay within that recording. Model usage
-may be billed, and a local journal does not coordinate other applications.
-
-The subtitle export reads an existing completed transcription and checks its
-recording and end-user scope before producing SRT from second-based segments.
-It creates the local destination exclusively, preserves existing files and
-removes only its own partial output. It requests no new processing or audio.
-
-The Python webhook receiver uses only the standard library and the same public
-raw-byte HMAC/timestamp contract as the Node receiver. A SQLite commit precedes
-acknowledgment; conflicting reuse of an event ID is rejected. Downstream business
-processing and public API reconciliation remain application responsibilities.
-
-Cloud device-status and command-history examples authorize a configured device
-against its expected end user before emitting selected fields. Ownership reads
-cannot provide an atomic snapshot across requests. Reported heartbeat freshness
-does not establish current reachability; command delivery/result timestamps
-describe the backend record rather than independent physical verification.
-Command history has a bounded newest-first response, no pagination, and no
-credential, parameter or result-payload output. Both workflows use GET only.
-
-The Python search example uses the same configured end-user, recording allowlist
-and ownership boundaries as Node search. It makes one provider-backed retrieval
-request with no retry, validates all excerpts and checks each unique recording
-before printing text. It does not create an Ask session or start indexing.
-
-The device inventory example reads one bounded end-user-filtered list and labels
-it incomplete. Public offset documentation and tracked owner-filtered backend
-behavior disagree; full traversal remains unsupported by this example.
-
-The transcription watcher polls only a caller-configured existing job, checking
-its recording link and owner before emitting selected terminal metadata. A
-deadline means observation is inconclusive, not that processing failed; no job
-is created, replaced or cancelled on retry.
-
-Summary export reads an existing completed `tmpl_general_notes` summary and its
-linked transcription/recording, checking project and owner scope. Only the
-documented note fields are formatted. Untrusted content becomes escaped text;
-exclusive local publication preserves existing files. This is export, not
-summary generation or verification of the model's statements.
-
-Python recording pagination follows the public opaque cursor with a fixed owner
-and page cap. Exhausting observed pages is not an atomic inventory/audit proof.
-Python summary export checks exact completed resources/project/owner and writes
-the structured output as JSON without interpreting it or overwriting a file.
-
-Apple metadata catalog uses public identity verification, fresh pairing reads
-and `PendingRecording` variants. Legacy metadata does not imply plaintext;
-encrypted-v2 metadata does not prove transfer permission or cloud commitment.
-Observed public status-stream failure/termination and explicit disconnect clear
-the view and fence late results; omitted native callbacks remain unverified.
-Web/Flutter
-catalogs are deferred rather than bypassing missing public lifecycle/pairing
-or encrypted-catalog support. No hidden protocol implementation is introduced.
-
-## 4. Example contract
-
-Command observation retains one configured ordinary command ID and target.
-Owner and available generation reads surround every observation; backend
-delivery/execution statuses are reports, not independent physical proof. Current
-binding cannot establish a historical command's authorization. The observer
-never picks up pending delivery, relays, acknowledges, cancels or replaces work.
-
-Upload-security observation selects only the effective policy and section source.
-The security-owned strictest-policy merge cannot be interpreted as field
-provenance, an applied device revision, current recording encryption, negotiated
-capability, upload integrity or deletion authority. No policy write or fallback
-occurs. A missing/unknown policy fails rather than supplying a client default.
-
-WebVTT export requires one exact completed transcription and owned source.
-Supplied segment starts remain ordered, valid overlaps are retained and timing
-rounding is explicit. Escaped single-line payloads carry no speaker/style markup
-or inferred timings. Private partial-file synchronization and no-overwrite
-publication follow a final owner observation; filesystem/runtime acceptance is
-separate from source and syntax checks.
-
-Ask Markdown export reads one existing recording-scoped conversation under fixed
-owner membership and source checks. It preserves API response order, rejects a
-capped traversal, escapes untrusted text and publishes a private file without
-overwriting. Observed page exhaustion is not an atomic or audit-complete history.
-It sends no messages and creates no model request.
-
-Device name changes update only cloud metadata. A private input and durable
-pre-PATCH intent prevent repeat writes after uncertainty; observed name equality
-does not prove causality. Current owner and available generation checks cannot
-make an unconditional server update atomic with those observations. Coordinated
-writers and ownership changes remain a prerequisite; this is no firmware rename,
-serial-number provisioning or physical-device command.
-
-External-ID lookup uses one exact filtered collection read and, when found, an
-exact end-user read. It emits identity metadata only and creates no account.
-External identifiers can be reused: a current mapping is not persistent identity,
-proof of creation causality or an atomic snapshot.
-
-The ten-case expansion adds aggregate fleet observation, three effective settings
-readers, transcription/summary directories, private transcript JSON export,
-empty Ask session creation, title renaming and exact firmware metadata.
-Fleet counters are project-operator observations derived from stored heartbeats;
-individual device rows are not emitted. Config readers preserve current bound
-ownership and distinguish section-level resolution from consumer enforcement,
-radio availability, upload integrity and firmware installation.
-
-Job directories preserve exact source filters across bounded cursor pages and
-recheck ownership before selected metadata is emitted. They create no jobs or
-content exports. Transcript JSON export separately authorizes completed content,
-validates selected segments and uses private publication without overwriting.
-Firmware details are declared release metadata, not artifact-byte verification
-or device compatibility/installation proof.
-
-Empty-session creation and title renaming retain durable intent before the single
-write. Existing intent permits GET-only reconciliation, even after a timeout or
-unconfirmed outcome. Session membership and exact immutable recording scope must
-be observed under the fixed owner. Neither workflow sends a message or calls a
-model. Separate reads are non-atomic, and other session writers require operator
-coordination; matching observed state alone does not prove which request caused it.
-
-Python original-file download keeps authenticated metadata requests separate from
-credential-free storage GETs. Storage origins must match an independently trusted
-exact host allowlist; redirects, conversion and enhancement are excluded. Private
-partial bytes are size/time bounded and published without overwriting after an
-owner recheck. A caller-supplied trusted hash is optional; URL issuance, uploaded
-status and a computed hash alone do not establish integrity or cleanup authority.
-
-Summary monitoring observes one configured job after exact project, source and
-owner checks. It emits selected status metadata without summary/transcript text
-or prompts. GET polling is bounded; failure or timeout never creates another job.
-Separate source/owner observations do not establish an atomic snapshot.
-
-OTA monitoring observes the exact configured assignment and firmware release.
-Missing or replacement assignments stop observation rather than changing its
-identity. Current bound-owner checks do not prove historical assignment ownership;
-operators need independent authority to inspect this metadata. Backend `applied`
-is a report, not fresh physical installation or boot-integrity evidence. The
-watcher performs no grant, delivery, artifact download, cancellation or device write.
-
-Configuration discovery reads one public schema list and projects section names,
-descriptions, allowed levels and merge strategies; it prints no defaults or
-effective values. Returned metadata is not proof that deployed consumers apply
-the fields. Schema availability comes from the selected API, not a hard-coded
-section inventory or private registry import.
-
-The processing reader observes one owned device's resolved `processing` section
-between current ownership checks. It projects only documented settings; the
-section-level `source` does not identify each contributing field after merging.
-The result is server resolution, not job execution or firmware applied state.
-No configuration or processing write occurs, and separate reads are non-atomic.
-
-Ask session traversal preserves the fixed end-user filter on every cursor GET,
-checks available identity metadata and emits selected session/scope timestamps
-without titles or messages. Session membership does not authorize reading its
-referenced recordings. Caps and mutable activity ordering prevent an atomic
-audit claim; unsupported scope shapes fail closed.
-
-The end-user directory traverses public opaque cursors within one configured
-project, with page/row/deadline caps and selected identity output. It excludes
-profile fields and reports observed exhaustion separately from capped traversal.
-Neither result is an atomic account audit; project isolation relies on the key
-when returned rows omit project metadata.
-
-OTA history reads selected assignment metadata between current device-owner
-observations. Its trusted assignment-time cutoff limits selection, not historical
-authorization: the public rows omit historical project/owner/generation. The
-sample is for authorized project operators, not an end-user history endpoint.
-Backend `applied` is a report, not fresh physical installed-version evidence.
-No delivery, grant, artifact, cancellation or device write occurs.
-
-Existing-upload transcription uses documented language/provider fields only.
-Durable intent precedes the single POST; known IDs resume by GET and uncertain
-unknown results require explicit reconciliation. Backend creation can replace
-existing results, so operators must coordinate automatic processing and other
-writers. Uploaded status permits the public job request but proves neither
-hash verification nor device cleanup authority. No diarization field is invented.
-
-End-user onboarding stores intent before its one minimal `external_id` POST.
-An existing active mapping can be reused; unknown creates reconcile through GET
-without repeating the write. A saved end-user identity remains fixed even when
-soft deletion allows another active row to reuse the external ID. Local journals
-do not prove which concurrent caller created a row.
-
-Custom summarization uses the public `prompt` field, a completed source and a
-scoped durable journal. Known summary IDs resume through GET; unknown creation
-stops for explicit reconciliation. It invents no output schema or exactly-once
-generation guarantee. Provider/model execution and billing remain platform concerns.
-
-Firmware discovery performs one public device-filtered list between device owner
-observations. The API exposes neither a caller model filter nor pagination;
-bounded metadata does not prove exhaustive inventory or physical compatibility.
-Availability is subject to project release selection and can change after a read.
-The example requests no artifact URL, assignment, delivery or device mutation.
-
-The Ask-history reader uses bounded GETs for an existing recording-scoped
-session. Session membership, recording ownership and citation scope are checked
-before any conversation text is emitted. Pagination caps are explicit; no model
-generation is requested. Separate reads remain non-atomic.
-
-Python transcript export reads an existing completed job's `full_text`, checks
-its recording/owner chain and publishes UTF-8 without overwriting. The content
-is untrusted text; no subtitles, model validation or audio conversion is added.
-
-The linked pipeline snapshot accepts explicit recording/transcription/summary
-IDs and checks their source chain and project/owner scope. It reports each
-resource status independently. A hash-verification timestamp is server evidence,
-not device cleanup authorization, and `uploaded` alone is not verification proof.
-The snapshot never starts, retries or cancels processing.
-
-Every new example README must include:
-
-1. One-sentence learning objective, expected outcome, and explicit exclusions.
-2. Status: planned, implemented but unverified, verified for a stated combination, or legacy/deprecated. Distinguish mocked, live API, native-build, and physical-device evidence.
-3. Prerequisites: language/toolchain, OS, SDK exact version and release channel, API environment, project/end user, hardware/firmware/capabilities when relevant.
-4. Dependency installation and configuration from the example directory, with placeholder-only `.env.example` or platform equivalent. Explain each value and which component may see it.
-5. Exact run commands, expected visible result, failure/recovery behavior, and cleanup of any cloud resources or device recordings it creates.
-6. Local verification commands and a dated compatibility/evidence table; say `not run` for missing checks.
-7. Links to public contracts, known limitations, and instructions for adapting to a customer application.
-
-Keep one primary path through the example. Pin direct Bota SDK dependencies to an exact publicly installable version, including beta suffixes; preserve native lock/resolution files where supported. Select versions at implementation time after public installation verification, rather than inheriting whichever source version Bota One currently uses. Respect host callback obligations and platform support limits.
-
-There is no synchronized release version for the examples collection. Update each example's dependency pin and evidence together. Catalog rows identify support and status; tags are optional snapshots, not compatibility guarantees for every example.
-
-## 5. Current baseline and migration
-
-Initial inspection used examples commit `7d817bb5b6c35902b7096c80b10085083eadd9d2`; the baseline below was reconciled with main `36684e0`, including the App SDK migration `64a9fd0`, before committing. The initial design changed documentation only. The existing workspace is legacy in layout and lifecycle scope, not in SDK package selection.
-
-| Current evidence | Consequence / migration gate |
-| --- | --- |
-| Root `package.json` declares `apps/*`, one lockfile, security tests, typechecks and workspace builds | Retain current commands until replacement paths and CI are implemented |
-| App pins `@bota.dev/react-native-app-sdk@2.0.0-beta.6`; old standalone SDK packages and BLE PLX were removed | Preserve the published SDK migration and select/verify appropriate versions for new examples |
-| Expo 57 native matrix aligned; prior migration CI passed all-platform exports and Android native build | Historical Hermes export failure superseded; iOS native linking and physical-device acceptance remain open |
-| `apps/backend/src/index.ts` has open CORS, no caller auth, a fixed `BOTA_END_USER_ID`, and unscoped resource access | Legacy local-only sample; implement the new backend boundary before publishing a replacement |
-| Register/token routes call immediate `/bind` and return `device_token`; app provisions it directly | Does not implement the target prepare/provision/confirm lifecycle or opaque payload boundary |
-| Existing upload-complete handler separately attempts transcription and may return a nested error | Replacement must distinguish cloud completion from processing failure and document safe retry |
-| Root CI runs `npm ci`, regression tests, typechecks, backend build, all-platform exports, and a separate Android native build | Prior results are in [migration evidence](docs/app-sdk-migration.md); no live API or physical-device acceptance claim |
-
-Migration sequence:
-
-1. Implement `api/upload-and-transcribe-node` independently; verify with a disposable audio fixture and explicit project configuration.
-2. Add the webhook receiver and focused React Native connect/status sample. Verify their own contracts independently.
-3. Implement the end-to-end example with a contained app/backend workspace. Reimplement the workflow using current public packages/contracts; use the existing sample and Bota One for reference.
-4. Verify replacement native builds, binding recovery, upload completion/retry, and physical-device behavior for each advertised platform. Document any unsupported profile instead of claiming broad parity.
-5. Update catalog and external documentation links. Retire `apps/` and root workspace scripts only after replacement setup works from a clean checkout, existing dependency security coverage has been retained or superseded, and old links have migration guidance.
-
-The initial design change made no source moves, package upgrades, new workflows, device operations, or deployments. The first-example implementation is recorded below. Subsequent expansion and unresolved end-to-end requirements are tracked in [the current review](docs/independent-examples-review.md). Legacy source is unchanged by this expansion.
-
-### First independent example: upload and transcribe
-
-[`api/upload-and-transcribe-node/`](api/upload-and-transcribe-node/README.md) implements create recording -> scoped storage PUT -> SHA-256 completion (exact `425` retry until `200`) -> explicit transcription -> bounded result polling. It uses Node built-ins, owns its lockfile, and has a separate path-filtered CI workflow. It never deletes the local source or automatically retries creation requests. Effective auto-transcription must be disabled for the test end user to avoid a duplicate automatic job.
-
-The example intentionally has no restart journal or automatic recovery after ambiguous requests; its README explains reconciliation using recorded IDs and the generated recording name. It accepts local files up to 25 MiB, a teaching-example memory bound rather than an API service limit. It does not implement device workflows.
-
-| Requirement | Evidence | Review status |
-| --- | --- | --- |
-| Independent setup | Own manifest/lockfile, no dependencies; frozen install and CLI copied to temporary directory | Matched locally on Node 22.23.2 / Windows |
-| Public API contracts | Public OpenAPI source and upload/transcription pages; explicit `api_upload` / `import` recording | Matched for the exercised live path; optional-size completion replay discrepancy documented in example README |
-| Credential boundary | Tests assert API bearer is absent from storage PUT and secrets are absent from progress/errors | Matched in local tests |
-| Integrity before processing | Exact bytes/hash tests; repeated `425`; HTTP/hash failure prevents transcription | Matched in local tests |
-| Bounded failures and source preservation | Deadline, terminal-status, non-retry creation, and source-byte checks | Matched in local tests; live failure recovery unverified |
-| Verification and documentation | 15 tests pass, syntax check passes; example README, root catalog, agent entries updated; [CI 36524299811](https://github.com/bota-dev/examples/actions/runs/36524299811) passed for source `fb06b1e` | Matched locally and in the standalone example's hosted CI; existing mobile CI is separate |
-| Live acceptance | 2026-09-29 UTC: reserved test key, dedicated end user with auto-processing disabled, 333,326-byte synthetic WAV; matching server SHA-256 and one completed Deepgram job | Matched for live upload, hash-only completion, and transcription retrieval; other providers/formats and live outage recovery unverified |
-
-The compound-engineering review uses the repository architecture and public contracts as its basis. Cross-repo searches for the new path, configuration variables, upload completion, SHA-256, and auto-transcription identified existing contract/reference docs. The live check found that optional numeric completion size conflicts with a stored string size on replay; the example now omits that optional field while retaining server hash verification and size on the upload-URL request. This is within the public schema, not a platform fix. Updates are contained to this repository's example and contributor documentation. No broader production or hardware conformance is inferred from these checks.
-
-## 6. Validation and CI design
-
-The dependency-free [catalog workflow](.github/workflows/catalog.yml) runs
-`node scripts/check-catalog.mjs` and `node --test scripts/test-catalog.mjs` on
-Linux and Windows for every push and pull request without path or
-branch filters. It validates versioned index metadata, existing independent
-example directories, ordered root catalog correspondence and local inline file
-links in root entry documents, the AI guide and indexed documentation. It reads
-repository files only and performs no dependency install or example execution.
-Fenced snippets, remote URLs, anchors, reference-style and HTML links are outside
-its checks. A passing metadata check is not runtime/API/device acceptance.
-The tests exercise miniature temporary repositories with malformed metadata,
-missing/reordered entries, broken links and escaped/symlinked targets.
-
-
-New CI jobs should install and check only the affected independent examples; shared CI changes must select all impacted jobs. Use platform-appropriate runners for native builds. Keep the current legacy job until the legacy workspace is retired.
-
-Default PR checks require no live credentials or physical devices. Use meaningful unit/contract checks for request construction, authorization rejection, webhook verification, duplicate handling, or recovery as applicable. Mark mocks as mocks. Live API smoke tests are explicitly configured against disposable resources; hardware tests record device/firmware, OS, SDK version, scenario, date, and outcome. Never run destructive hardware actions or live deployments as incidental PR checks.
-
-Acceptance gates for a new example:
-
-| Gate | Required evidence |
-| --- | --- |
-| Independent setup | Clean install/run from its own directory, using no private Bota dependencies |
-| Public compatibility | Exact published package installs; used methods/endpoints exist in the selected contract |
-| Trust boundary | No client API keys; backend auth/ownership and malformed-input rejection exercised where applicable |
-| Workflow | Advertised success and relevant retry/failure paths demonstrated |
-| Platform claims | Native build and physical-device evidence for each claimed device workflow; missing checks explicitly labeled |
-| Documentation | Catalog, example instructions, version/status evidence, and design deviations agree |
-
-## 7. Reference basis and design review
-
-Maintainer reference map (private sibling paths are optional context, never reader prerequisites):
-
-| Source | Lesson / authority |
-| --- | --- |
-| Public Bota documentation and selected published SDK reference | Runnable example's external interface and compatibility contract |
-| `bota-one/amplify/functions/shared/workspace-context.ts` | Derive caller scope from verified identity, not a client workspace selector |
-| `bota-one/amplify/functions/shared/encrypted-upload-v2-proxy.ts` | Validate inputs and authorize owned devices/recordings before privileged calls |
-| `bota-one/app/lib/sync/deviceUploadHandoff.ts` | BLE fallback requires known inactive device upload ownership |
-| `bota-one/app/lib/sync/nativeEncryptedUploadV2Provider.ts` | Recovery and host-side responsibilities may exceed the SDK alone; private native modules are not public SDK features |
-| `internal-docs/App SDK Architecture.md` | App SDK/API SDK separation and SDK-local development examples |
-| `internal-docs/device/Device-Provisioning.md` | Normative binding, identity, generation, and reset lifecycle |
-| `internal-docs/device/Upload-Management.md` | Upload profile, durability, recovery, and confirmation requirements |
-
-Bota One source was inspected at local HEAD `5e2c276`; it is reference evidence, not proof of public release or deployed/hardware conformance. Internal target designs may precede public availability. Preserve that distinction when implementing examples.
-
-Documentation review, 2026-09-28:
-
-| Requirement | Evidence | Status / remaining verification |
-| --- | --- | --- |
-| Design one examples repo before implementation | Sections 1-2 and README catalog | Matched for design; example implementation not started |
-| Use Bota One as reference without private dependencies | Sections 3 and 7, contributor rules | Matched for design; clean public installs remain implementation gates |
-| Provide architecture and both agent entry points plus README | Four root documents with one canonical agent rule set | Matched for documentation |
-| Preserve concurrently merged App SDK migration | Baseline reconciled with `36684e0`; README and agent notes retain beta.6, Node floor, and migration evidence | Matched for documentation; no new runtime checks |
-| Preserve current source and distinguish legacy gaps | Section 5 and README existing-sample instructions | Matched by source/manifest inspection; native/API/device checks not run |
-| Honor current device lifecycle and durability requirements | Section 3, migration and acceptance gates | Matched as target requirements; legacy implementation remains partial |
-| Keep affected documentation coherent | Token search across public/internal docs and repo instruction/overview files | Existing paths/packages preserved; external runnable-example claims must be revisited during migration |
-
-The shared `bota-skills:compound-engineering` 1.2.5 workflow was used for this review. All four documents passed local-link and fenced-code checks; documented npm commands were checked against the current manifests. The tracked diff passed `git diff --check`. Dependency installs, builds, live API calls, hosted CI, and physical-device tests were not run for this documentation-only change. No runtime or production conformance is claimed.
-## October 7 signing-tool dependency checkpoint
-
-The legacy workspace, RN connection sample and recording-sync app each apply
-their own pinned node-forge parser guard during install. This retains independent
-example installation and existing public SDK/runtime interfaces; see
-[source qualification](docs/node-forge-parser-mitigation.md). Scanner closure,
-native binary delivery and hardware acceptance remain separate.
-
-## October 7 scoped braces source guard
-
-The legacy root and both independent React Native apps retain their existing
-query-string/Forge hooks and add standalone mandatory guarded `braces` 3.0.3
-installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
-`npm test` and each independent app test chain require 16 installer/parser/actual
-micromatch controls. Source qualification, scanner identity, hosted native builds
-and physical installation remain separate. See [review](docs/braces-depth-mitigation.md).
-
-## October 11 braces data-array guard
-
-The legacy root, independent React Native connection app and recording-sync
-app now carry the reviewed six-file source guard. Only exact known
-pristine/previous/current assets can migrate; mandatory verification requires
-all six final hashes before consumers continue. Existing postinstall/test
-chains, manifests, locks, public SDK pins and native/device/HTTP code are
-retained. The fixed direct AST/value-array limits and accessor refusals are an
-explicit caller input policy; generic iterative flatten retains wide output.
-Package 3.0.3 remains affected and #111/#112/#113 stay open. Exact-source hosted
-native builds and physical installation remain separate from local checks.
-See [scope and evidence](docs/braces-depth-mitigation.md#october-11-six-file-migration).
+Share concrete public API integration functions, narrow DTOs and synthetic
+contract fixtures **within this app family**. Keep normal UI, package managers,
+permissions and SDK lifecycle code native to each client. This is not a new Bota
+API SDK, shared UI framework, generic proxy or reusable example engine.
+Standalone recipes still copy/install independently; root automation is not a
+runtime prerequisite. No private package, sibling-source import, submodule or
+local dependency on an internal Bota repository may be required.
+
+Browser-cookie and mobile-bearer adapters must each authenticate the caller and
+derive the backend principal. Consolidating feature code must not turn a client
+end-user/device/workspace selector into authorization or silently replace web
+account isolation with the mobile sample's fixed test identity.
+
+Keep ordinary cloud intent and native capture/session journals distinct.
+Preserve their paths, scope hashes, account/resource identities, anchors,
+known IDs and uncertainty states. Cloud completion, device confirmation and AI
+processing are separate phases. Do not merge databases or discard an uncertain
+operation to make a new POST possible. Compatibility routes and store adapters
+come before any storage or folder migration; current URLs and setup links remain
+valid. Move folders only when that improves clarity, with catalog, CI and link
+migration in the same reviewed change.
+
+## Integration rules
+
+Apply these rules to the features actually in scope. Keep existing compatibility
+gaps and deferred checks explicit; this reset does not establish conformance for
+every existing recipe or require a connection-only sample to implement upload.
+
+- **Public contracts and ownership:** secret/restricted Bota keys stay on the
+  backend. Authenticate app callers, derive project/end-user scope server-side,
+  and verify each recording/job/session/citation source chain before releasing
+  content or performing a write. Constrain routes and fields; never expose a
+  privileged arbitrary forwarder. Local fixed-identity mode requires a separate
+  configured app token and a loopback listener; hosted/multi-user use requires
+  real user authentication, per-user authorization and HTTPS.
+- **Uncertain writes:** persist scoped intent before non-idempotent work and
+  preserve returned IDs. Unknown outcomes keep their journal and use GET-only
+  reconciliation; no blind create, replacement or upload replay. A local lock
+  does not coordinate other apps, instances or automatic processing. Bounded
+  observations are not atomic snapshots, and timeout is not proof of failure.
+- **Audio and storage:** isolate API authorization from signed storage requests;
+  retain exact trusted-host, redirect, size/time and integrity checks. Ordinary
+  downloads return original bytes without implicit conversion/decryption.
+  Issued URLs, a successful PUT and legacy `uploaded` are not verified
+  commitment, playback or device cleanup evidence. Private exports retain
+  owner/source checks, escaped content and no-overwrite publication.
+- **Webhooks:** verify timestamp-bound signatures against original input bytes,
+  deduplicate durably and acknowledge only after the stated durable acceptance
+  step. Events prompt authorized current-resource reads, not new processing or
+  exactly-once delivery claims.
+- **Device identity and lifecycle:** SDK identity reads verify the exact serial;
+  advertised names are hints. Where binding is implemented, require prepare →
+  physical provisioning → exact-attempt confirm, abort failed attempts without
+  deleting stable identity, and retain binding-generation fences. Device-bound
+  opaque provisioning is the target; legacy raw-token paths remain explicit
+  compatibility gaps. Protected control/reset uses backend authorization and
+  public SDK methods, never custom GATT or cryptography. Unbind is not factory
+  reset; reset requires its exact-command durable completion and generation
+  contract before any example may claim support.
+- **Upload and cleanup:** choose the supported public upload profile explicitly.
+  SDK-owned encrypted material, transport and signed-receipt confirmation remain
+  separate from app HTTP callbacks and backend scope. Fresh pairing/capability
+  and backend generation checks cannot be weakened. Direct WiFi/4G ownership
+  must be freshly inactive before BLE fallback; disconnection/timeout alone
+  cannot establish inactivity. Device deletion needs the selected protocol's
+  durable confirmation/receipt; processing or cloud metadata grants no cleanup
+  authority. Unsupported public surfaces stay blocked instead of gaining a
+  hidden transport, legacy fallback or fabricated receipt.
+- **Lifecycle and dependencies:** late account, selection, question, connection
+  and read results cannot restore retired content. Drain native configuration,
+  actions/finalizers and SDK destruction before another device owner enters;
+  failed cleanup blocks admission. Keep exact published SDK pins, native
+  identities, lockfiles, mandatory postinstall guards and test chains. No
+  incidental package upgrade or legacy-workspace retirement accompanies this
+  architecture reset.
+
+The current owning detail documents remain
+[web architecture](end-to-end/web-reference/ARCHITECTURE.md),
+[web setup/contracts](end-to-end/web-reference/README.md),
+[mobile architecture](end-to-end/react-native-recording-sync/ARCHITECTURE.md),
+[mobile native sync/recovery](end-to-end/react-native-recording-sync/README.md),
+[backend routes/journal contract](end-to-end/react-native-recording-sync/backend/README.md)
+and the [operation-specific example contracts](docs/example-contracts.md),
+plus each selected recipe's README linked from the catalog. These documents own
+feature-specific pagination, config-merge, command/OTA observation, Ask membership,
+export and public-surface restrictions; this reset does not relax them. Applicable
+[AGENTS.md](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md) remain operative.
+Dependency mitigation requirements are maintained in
+[DEPENDENCY_SECURITY.md](DEPENDENCY_SECURITY.md),
+[Forge guard policy](docs/node-forge-parser-mitigation.md),
+[braces guard policy](docs/braces-depth-mitigation.md) and
+[build dependency policy](docs/build-dependency-remediation.md).
+
+## Delivery and qualification
+
+Consolidate the common backend and complete the existing app flow first. Then
+add qualified iOS hosts and missing platform SDK modules; vertical apps remain
+the later product layer. Backend convergence, playback and new hosts are planned
+work, not achievements of this documentation change.
+
+Each client/recipe retains its manifest, lock, setup and meaningful CI. Changes
+to shared code must exercise every affected client/backend contract. Preserve
+existing security/native tests and the legacy CI until its documented retirement
+gates pass. The [catalog checker](.github/workflows/catalog.yml) checks discovery
+and file links without installing/running examples; it is not API acceptance.
+
+READMEs must identify the learning objective, exact public package/toolchain,
+configured inputs and credential owners, run/check commands, expected behavior,
+uncertainty/cleanup limits, adaptation points and actual dated evidence. Source
+presence, mock tests, native assembly, live APIs/providers and physical devices
+are different evidence levels. Claim only demonstrated combinations. Default CI
+uses no live credentials, device mutation or deployment; explicit live checks
+use disposable/consented data and hardware reports record SDK, OS, device,
+firmware, scenario, date and outcome. Review each change against this design and
+its current detail owners before reporting completion.
+
+The [pre-reset architecture archive](docs/design-history/2026-10-12-architecture-before-reset.md)
+preserves history and old evidence. It is superseded and is **not** a normative
+specification for current work.
