@@ -188,9 +188,11 @@ Tests use synthetic Bota/storage responses. They cover cross-user access, CSRF,
 scope-forging, storage credential isolation, durable restart/deduplication,
 uncertain writes, GET-only recovery, webhook signatures/conflicts and stale UI
 results. The HTTP integration runs the complete local fixture workflow.
-The October 12 quality pass includes 87 backend tests and 30 UI tests, format/lint,
+The October 12 quality pass includes 88 backend tests and 30 UI tests, format/lint,
 TypeScript, production build, frozen installation and license checks; dependency
 audit reports no known vulnerabilities at that time.
+Process regressions cover occupied-port startup and shutdown with an active local
+development WebSocket, including closure of Vite watchers before HTTP draining.
 No live Bota/provider/storage or hardware acceptance is inferred.
 
 Status and exact hosted checks are recorded in the

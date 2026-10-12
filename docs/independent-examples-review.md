@@ -19,7 +19,7 @@ examples and repository discovery, not behavioral qualification of all 76 entrie
 | Safe login transitions | UI clears content immediately, waits for logout cookie response before another login | Matched by deferred logout/relogin regression; production session architecture remains customer-owned |
 | Recovery after reopening | Activity rows observe saved operation IDs via GET, retaining metadata only and fencing late results | Matched by persisted-row, wrong-ID, unknown-outcome and logout tests; no resend/content display |
 | Ask matches public normalization | Canonical trim before hash/send, new `questionFormat: trim-v1`; exact prior raw/canonical lookup and full-journal legacy guard | Matched by real SQLite close/reopen and beyond-50 tests; an unresolved legacy hash conservatively blocks fresh Ask on that recording pending operator reconciliation |
-| Predictable development startup | Shared HTTP/Vite/SQLite cleanup on listener failure | Matched by a real child-process occupied-port regression; no live network service used |
+| Predictable development startup/shutdown | Stop HTTP acceptance, close Vite sockets/watchers, drain HTTP, close SQLite | Matched by real child-process occupied-port and active-HMR signal regressions; no external network service used |
 | Web SDK lifecycle | Public cached getter observation, revision/disposal fences, picker in direct click flow; teardown during SDK initialization | Matched by 11 synthetic page/entry tests plus four retained source-map security tests; SDK/OS callback delivery and physical Bluetooth remain unverified |
 | WebVTT output/privacy contract | Twelve stdlib tests cover rendering bounds, escapes/order, GET/ownership, no redirects and temporary-file publication | Matched for synthetic/temporary-file behavior; private ancestry/ACL policy is mocked, actual policy/filesystem races and player acceptance remain unverified |
 | Portable discovery checks | Nine real miniature-repository regressions for invalid metadata/links, ordering and escaped/junction targets; Linux/Windows CI | Matched locally; validates discovery/documents, not example runtime |
@@ -35,7 +35,7 @@ unchanged. Only the reference adds a formatter dependency; license/audit checks
 apply to that exact frozen graph.
 
 Local reference checks pass: frozen install, format, lint, typecheck/build,
-87 backend and 30 UI tests, 250-package license gate and zero known audit
+88 backend and 30 UI tests, 250-package license gate and zero known audit
 vulnerabilities. Web passes frozen installation, all 15 tests, typecheck and
 WASM/Vite build. Python 3.12.14 passes all 12 WebVTT tests; catalog passes nine
 regressions. Source and tests are synthetic except documented real local process/
@@ -54,6 +54,10 @@ both WebVTT and both catalog jobs. The Windows reference formatter caught CRLF
 checkout conversion; Linux formatting passed. A nested `.gitattributes` sets LF
 for this example's text files while preserving binary classification and all
 root/vendor source-guard attributes. Corrected hosted evidence is recorded below.
+Final process review reproduced a shutdown deadlock when HTTP close waited for
+an active HMR connection before closing Vite. The corrected ordering and a real
+local HMR/child-process signal regression close that gap; no production test mode
+or external network call was added.
 
 ## Developer showcase design clarification — 2026-10-12
 

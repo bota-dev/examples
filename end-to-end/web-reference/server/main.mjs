@@ -14,15 +14,18 @@ function closeResources() {
   // Startup failures and signals share one cleanup path. Vite's watchers must
   // also close when the HTTP listener never acquired its port.
   closing ??= (async () => {
+    const drained =
+      server &&
+      new Promise((resolve) => {
+        server.close(() => resolve());
+        server.closeIdleConnections();
+      });
     try {
-      if (server) {
-        await new Promise((resolve) => {
-          server.close(() => resolve());
-          server.closeIdleConnections();
-        });
-      }
+      // Upgraded HMR sockets keep HTTP close pending. Stop accepting first,
+      // then close Vite's sockets/watchers before awaiting the HTTP drain.
       await vite?.close();
     } finally {
+      await drained;
       store?.close();
     }
   })();
