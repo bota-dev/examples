@@ -75,8 +75,25 @@ local checkout. The [Linux log](https://github.com/bota-dev/examples/actions/run
 reported TS2591. The correction pins `@types/node@22.20.5` in this app's own
 manifest/lock and selects Node/Vite ambient types explicitly. No functional code,
 SDK dependency or existing source guard changed. Corrected exact-source hosted
-results are recorded below after delivery. No live Bota/provider/storage call,
+results are recorded below. No live Bota/provider/storage call,
 device operation, package publication or deployment was performed.
+
+Correction `c9d97d3eaf5cf0b4cc47f8856ad0a5672880d4e5` was pushed directly to
+examples `main`. GitHub APIs confirmed both app jobs and the catalog job
+completed successfully at that exact source, without reruns:
+
+| Check | Exact-source run | Job |
+| --- | --- | --- |
+| Web reference, Linux | [Run](https://github.com/bota-dev/examples/actions/runs/38291885619) | [Job](https://github.com/bota-dev/examples/actions/runs/38291885619/job/114953682443) |
+| Web reference, Windows | [Run](https://github.com/bota-dev/examples/actions/runs/38291885619) | [Job](https://github.com/bota-dev/examples/actions/runs/38291885619/job/114953682070) |
+| Catalog metadata | [Run](https://github.com/bota-dev/examples/actions/runs/38291885602) | [Job](https://github.com/bota-dev/examples/actions/runs/38291885602/job/114953682410) |
+
+Public catalog/changelog source was pushed to docs `main` at
+`350350a91de470a1ab77b4f378182d426753ca82`. The docs publication branch remains
+`8a6eff44631384ec724c6decebb26d2f339d3c56`; no site publication is claimed.
+This evidence follow-up changes documentation only. All existing independent
+examples, device dependencies, legacy locks and mandatory source guards remain
+unchanged by this app expansion.
 
 <a id="ten-readers-exports-health-october-9"></a>
 ## Ten hierarchy readers, exports and health — 2026-10-09
