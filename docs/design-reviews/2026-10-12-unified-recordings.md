@@ -100,5 +100,23 @@ No live API/provider/storage, application install, physical device, SDK release
 or docs-production promotion was performed. The next compatible change is the
 complete Flutter client-root move, after the combined-server hosted gate passes.
 
+### Hosted Windows follow-up
+
+Source `c5822fac56bafd406a3df6dc36f956252693e999` passes both core/catalog/mobile
+backend matrices and both mobile Android builds. The Web Linux job passes;
+[Windows job 115156497970](https://github.com/bota-dev/examples/actions/runs/38355248252/job/115156497970)
+fails two private-file status assertions. The runner uses `C:/Users/RUNNER~1`
+temporary paths from a `D:` checkout. Vite expands its root to the long path,
+while configured literal denial paths remained short, and rewrites raw Windows
+filesystem URLs by stripping their drive. This can miss a custom private-file
+denial or fall back to ordinary HTML. A 200 status alone proves neither case.
+
+The correction rejects configured logical/native-real/identity targets before
+Vite rewrites requests, rejects nonlocal Windows targets before filesystem
+inspection, and adds native-real path variants to Vite's resolver denials.
+Regressions retain strict 403 plus no-private-marker/no-SQLite assertions and add
+actual hardlink/directory aliases. Local Web server tests now pass 143/143;
+syntax, lint and formatting pass. The replacement hosted gate remains pending.
+
 Passing synthetic HTTP/SQLite tests does not prove live API/provider/storage,
 multi-process coordination, installed applications or physical-device behavior.

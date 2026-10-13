@@ -2,7 +2,15 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { createServer } from 'node:http';
 import { DatabaseSync } from 'node:sqlite';
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  linkSync,
+  mkdtempSync,
+  mkdirSync,
+  realpathSync,
+  rmSync,
+  symlinkSync,
+  writeFileSync,
+} from 'node:fs';
 import { tmpdir } from 'node:os';
 import { basename, isAbsolute, join, relative, resolve } from 'node:path';
 import { tokenHash } from '../../server/auth.mjs';
@@ -11,7 +19,10 @@ import { startIntegratedServer } from '../../../recordings/backend/main.mjs';
 
 const marker = 'SYNTHETIC_PRIVATE_CONTENT';
 
-async function fixture(t, { custom = false, demo = false, publicPaths = false } = {}) {
+async function fixture(
+  t,
+  { custom = false, demo = false, publicPaths = false, aliases = false } = {},
+) {
   const root = mkdtempSync(join(tmpdir(), 'bota-private-development-'));
   const webBase = join(root, 'web');
   const publicBase = publicPaths ? join(webBase, 'public') : webBase;
@@ -35,6 +46,15 @@ async function fixture(t, { custom = false, demo = false, publicPaths = false } 
   );
   writeFileSync(join(webBase, '.env'), marker, { mode: 0o600 });
   writeFileSync(join(webBase, 'private.pem'), marker, { mode: 0o600 });
+  if (aliases) {
+    linkSync(accounts, join(webBase, 'public-account-alias.json'));
+    linkSync(join(webBase, '.env'), join(webBase, 'public-env-alias.txt'));
+    symlinkSync(
+      webState,
+      join(webBase, 'public-state-alias'),
+      process.platform === 'win32' ? 'junction' : 'dir',
+    );
+  }
   const listener = createServer();
   await new Promise((resolve) => listener.listen(0, '127.0.0.1', resolve));
   const port = listener.address().port;
@@ -105,10 +125,13 @@ async function fixture(t, { custom = false, demo = false, publicPaths = false } 
         db.close();
       }
     }
+  const sidecars = journals.map((path) => `${path}-journal`);
+  for (const path of sidecars) writeFileSync(path, marker, { mode: 0o600 });
   return {
     config,
     accounts,
     journals,
+    sidecars,
     webBase,
     publicBase,
     get upstreamCalls() {
@@ -117,8 +140,14 @@ async function fixture(t, { custom = false, demo = false, publicPaths = false } 
   };
 }
 
-for (const options of [{}, { custom: true }, { demo: true }, { custom: true, publicPaths: true }]) {
-  test(`development refuses private files with ${options.demo ? 'in-memory demo' : options.publicPaths ? 'private paths under public directory' : options.custom ? 'custom literal paths' : 'standard paths'}`, async (t) => {
+for (const options of [
+  {},
+  { custom: true },
+  { demo: true },
+  { custom: true, publicPaths: true },
+  { aliases: true },
+]) {
+  test(`development refuses private files with ${options.demo ? 'in-memory demo' : options.publicPaths ? 'private paths under public directory' : options.custom ? 'custom literal paths' : options.aliases ? 'physical aliases' : 'standard paths'}`, async (t) => {
     const f = await fixture(t, options);
     const accountsPath = '/' + relative(f.webBase, f.accounts).replaceAll('\\', '/');
     const paths = [
@@ -128,16 +157,35 @@ for (const options of [{}, { custom: true }, { demo: true }, { custom: true, pub
       '/' + relative(f.webBase, f.accounts).split(/[\\/]/).map(encodeURIComponent).join('/'),
       '/.env',
       '/private.pem',
+      '/@fs/relative-file',
+      '/invalid-%ZZ',
     ];
-    for (const file of [f.accounts, ...f.journals]) {
+    if (process.platform === 'win32') paths.push('/@fs//unreachable.invalid/private-share/file');
+    if (options.aliases)
+      paths.push(
+        '/public-account-alias.json',
+        '/public-env-alias.txt',
+        '/public-state-alias/reference.sqlite',
+      );
+    for (const file of [f.accounts, ...f.journals, ...f.sidecars]) {
       const absolute = file.replaceAll('\\', '/');
       paths.push('/@fs/' + absolute, '/@fs/' + absolute + '?raw');
+      paths.push('/@fs/' + realpathSync.native(file).replaceAll('\\', '/'));
       const local = relative(f.webBase, file);
       if (!local.startsWith('..')) {
         paths.push('/' + local.replaceAll('\\', '/'));
         paths.push('/' + local.split(/[\\/]/).map(encodeURIComponent).join('/'));
       }
       if (process.platform === 'win32') paths.push('/@fs/' + absolute.toUpperCase());
+    }
+    if (
+      process.platform === 'win32' &&
+      options.aliases &&
+      resolve()[0].toLowerCase() === f.webBase[0].toLowerCase()
+    ) {
+      const alias = join(f.webBase, 'public-account-alias.json').replaceAll('\\', '/');
+      const otherDrive = alias[0].toLowerCase() === 'c' ? 'D' : 'C';
+      paths.push('/@fs/' + otherDrive + alias.slice(1));
     }
     for (const path of new Set(paths)) {
       const response = await fetch(f.config.web.origin + path);

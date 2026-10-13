@@ -114,7 +114,10 @@ per-feature upstream processing deadlines are unchanged. Cookie/Bearer header
 presence selects one adapter, with mixed/duplicate credentials rejected and no
 fallback. Web Origin/body and mobile no-Origin/Bearer rules remain distinct.
 Combined development serving denies configured account/journal files and sidecars
-while retaining Vite's default denials. This remains a local sample host.
+before Vite rewrites filesystem URLs or serves fallback HTML. Logical/native-real
+paths and private-file identities cover Windows short names, drive differences
+and file aliases; Vite retains both path variants and its default denials.
+This remains a local sample host.
 Static serving, including static demo, preflights `dist` within 10,000 entries
 and depth 32. Nested symlinks/junctions, nonregular entries and hardlinks to
 configured account/journal files or sidecars are refused; genuine assets pass.

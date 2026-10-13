@@ -1,7 +1,7 @@
-import { resolve } from 'node:path';
+import { basename, dirname, isAbsolute, join, relative, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
-import { chmodSync, existsSync } from 'node:fs';
+import { chmodSync, existsSync, realpathSync, statSync } from 'node:fs';
 import { readIntegratedConfig } from './config.mjs';
 import { createIntegratedServer } from './server.mjs';
 import { createStore } from '../../web-reference/server/store.mjs';
@@ -13,6 +13,14 @@ const webRequire = createRequire(new URL('../../web-reference/package.json', imp
 
 function privateFiles(config, normalizePath) {
   const literal = (path) => normalizePath(resolve(path)).replace(/[?*[\]{}()!+@]/g, '\\$&');
+  const aliases = (path) => {
+    try {
+      return [path, realpathSync.native(path)];
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+      return [path, join(realpathSync.native(dirname(path)), basename(path))];
+    }
+  };
   const files = [
     config.web.accountsFile,
     config.paths.webDatabase,
@@ -32,10 +40,108 @@ function privateFiles(config, normalizePath) {
     '**/*.sqlite',
     '**/*.sqlite-*',
     ...files.flatMap((path) =>
-      ['', '-wal', '-shm', '-journal'].map((suffix) => literal(path + suffix)),
+      aliases(path).flatMap((alias) =>
+        ['', '-wal', '-shm', '-journal'].map((suffix) => literal(alias + suffix)),
+      ),
     ),
-    `${literal(config.web.stateDir)}/**`,
+    ...aliases(config.web.stateDir).map((path) => `${literal(path)}/**`),
   ];
+}
+
+function privateDevelopment(config) {
+  const normalized = (path) => resolve(path).replaceAll('\\', '/').toLowerCase();
+  const inspect = (path) => {
+    try {
+      return {
+        path: normalized(realpathSync.native(path)),
+        info: statSync(path, { bigint: true }),
+      };
+    } catch (error) {
+      if (error.code === 'ENOENT' || error.code === 'ENOTDIR') return null;
+      throw error;
+    }
+  };
+  const bases = [
+    config.web.accountsFile,
+    resolve('.env'),
+    ...['.env', '.env.local', '.env.development', '.env.development.local'].map((name) =>
+      resolve(config.paths.webBase, name),
+    ),
+    ...[
+      config.paths.webDatabase,
+      config.paths.mobileDatabase,
+      config.paths.mobileLibraryDatabase,
+    ].filter((path) => path && path !== ':memory:'),
+  ];
+  const paths = bases.flatMap((path) =>
+    ['', '-wal', '-shm', '-journal'].map((suffix) => path + suffix),
+  );
+  const files = new Set(paths.map(normalized));
+  const identities = new Set();
+  for (const base of bases) {
+    const actual = inspect(base);
+    if (actual)
+      for (const suffix of ['', '-wal', '-shm', '-journal']) files.add(actual.path + suffix);
+  }
+  for (const path of paths) {
+    const actual = inspect(path);
+    if (actual) {
+      files.add(actual.path);
+      identities.add(`${actual.info.dev}:${actual.info.ino}`);
+    }
+  }
+  const states = new Set([normalized(config.web.stateDir)]);
+  const state = inspect(config.web.stateDir);
+  if (state) states.add(state.path);
+  const privatePath = (path) =>
+    files.has(path) ||
+    [...states].some((base) => {
+      const name = relative(base, path);
+      return (
+        name === '' ||
+        (!isAbsolute(name) && name !== '..' && !name.startsWith('../') && !name.startsWith('..\\'))
+      );
+    });
+  const sensitivePath = (path) =>
+    /^(?:\.env(?:\..*)?|\.npmrc|\.yarnrc\.yml|accounts\.json)$|\.(?:crt|pem|key|p12|pfx|cer|der)$/i.test(
+      basename(path),
+    ) || path.replaceAll('\\', '/').toLowerCase().split('/').includes('.git');
+  return (request, response, next) => {
+    let denied;
+    try {
+      const pathname = decodeURIComponent(new URL(request.url, 'http://localhost').pathname);
+      const candidate = pathname.startsWith('/@fs/')
+        ? pathname.slice('/@fs/'.length)
+        : resolve(config.paths.webBase, '.' + pathname);
+      if (
+        !isAbsolute(candidate) ||
+        (process.platform === 'win32' && !/^[a-z]:[\\/]/i.test(candidate))
+      )
+        throw new Error('Only local absolute file targets are inspected.');
+      const candidates = [candidate];
+      if (process.platform === 'win32' && pathname.startsWith('/@fs/'))
+        candidates.push(resolve('/', candidate.replace(/^[a-z]:/i, '')));
+      denied = candidates.some((path) => {
+        const actual = inspect(path);
+        return (
+          privatePath(normalized(path)) ||
+          (actual &&
+            (privatePath(actual.path) ||
+              sensitivePath(actual.path) ||
+              identities.has(`${actual.info.dev}:${actual.info.ino}`))) ||
+          sensitivePath(path)
+        );
+      });
+    } catch {
+      denied = true;
+    }
+    if (!denied) return next();
+    response
+      .status(403)
+      .set('Cache-Control', 'no-store')
+      .type('text')
+      .send('Private application files are not served.');
+  };
 }
 
 /** Open only the validated original stores; closing never deletes their files. */
@@ -137,7 +243,9 @@ export async function startIntegratedServer(
         },
         appType: 'spa',
       });
-      host.webApp.use(vite.middlewares);
+      // Reject private targets before Vite rewrites /@fs URLs or falls back to
+      // index.html. Windows short names and cross-drive URLs need this boundary.
+      host.webApp.use(privateDevelopment(config), vite.middlewares);
     }
     await new Promise((resolve, reject) => {
       server.once('error', reject);
