@@ -29,7 +29,9 @@
     "@types/react": "19.2.17",
     "typescript": "6.0.3",
     "@expo/cli": "file:vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
-    "@expo/code-signing-certificates": "file:vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz"
+    "@expo/code-signing-certificates": "file:vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+    "@expo/metro-file-map": "file:vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+    "metro-file-map": "file:vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz"
   },
   "type": "module",
   "overrides": {
@@ -37,6 +39,8 @@
       "uuid": "11.1.1"
     },
     "@expo/cli": "$@expo/cli",
-    "@expo/code-signing-certificates": "$@expo/code-signing-certificates"
+    "@expo/code-signing-certificates": "$@expo/code-signing-certificates",
+    "@expo/metro-file-map": "$@expo/metro-file-map",
+    "metro-file-map": "$metro-file-map"
   }
 }

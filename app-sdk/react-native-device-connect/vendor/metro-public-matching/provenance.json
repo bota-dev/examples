@@ -1,0 +1,1876 @@
+{
+  "schema": "public-exact-metro-some-parent-adapter-provenance-v1",
+  "publicInputVersionsPreserved": true,
+  "parentArtifacts": [
+    {
+      "name": "@expo/metro-file-map",
+      "version": "57.0.3",
+      "lockedPath": "node_modules/@expo/metro-file-map",
+      "upstreamUrl": "https://registry.npmjs.org/@expo/metro-file-map/-/metro-file-map-57.0.3.tgz",
+      "upstreamIntegrity": "sha512-1OXy+uPYY5uc7Tm4VBsd2NRn+3wHhqeqNuEO/Xo4kmYgv8FjYgUAc+bUXON9FpC2ikcLn4EVlGM9ce2exx9Mlg==",
+      "upstreamArchive": "official-expo-metro-file-map-57.0.3.tgz",
+      "upstreamSha256": "58dad2665887d1931759bf7489b65949495687365624bf29da6917aef56df1ec",
+      "derivedArchive": "expo-metro-file-map-57.0.3.public-some.tgz",
+      "derivedBytes": 74005,
+      "derivedSha256": "b045f339e9ac9366018566e3f054ebdfe1dfd026fb7cd6e1a337f8528b609503",
+      "derivedIntegrity": "sha512-0bL6FTpZGjYKNzu5g+hfwI+Uz2uur8lzKACy3DHv70hEHK8aulnlRN2Yf30DhLmHS3kLZYNdh1Qige965+kM7g==",
+      "originalFileCount": 85,
+      "derivedFileCount": 87,
+      "changedOriginalPaths": [
+        "build/watchers/common.js",
+        "package.json"
+      ],
+      "addedPaths": [
+        "public-micromatch-some.cjs",
+        "PUBLIC-MICROMATCH-SOME-LICENSE"
+      ],
+      "unchangedOriginalFileCount": 83,
+      "files": [
+        {
+          "path": "LICENSE",
+          "bytes": 1106,
+          "sha256": "fb3ca4a837f5779e83cef89b78253a8949cfb9429c340309f62d0465ec6610b4",
+          "mode": 420,
+          "upstreamSha256": "fb3ca4a837f5779e83cef89b78253a8949cfb9429c340309f62d0465ec6610b4",
+          "changed": false
+        },
+        {
+          "path": "PUBLIC-MICROMATCH-SOME-LICENSE",
+          "bytes": 1091,
+          "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+          "mode": 420,
+          "upstreamSha256": null,
+          "changed": true
+        },
+        {
+          "path": "README.md",
+          "bytes": 25,
+          "sha256": "d017beb5d403367945ebb22ec384c49b54f3967e8515998951faf4716ba6c39c",
+          "mode": 420,
+          "upstreamSha256": "d017beb5d403367945ebb22ec384c49b54f3967e8515998951faf4716ba6c39c",
+          "changed": false
+        },
+        {
+          "path": "build/Watcher.d.ts",
+          "bytes": 1766,
+          "sha256": "e7e35d23ebcb4ca9fa4c9e231bfd7c1564d1288d573f2115274be6ed31097ef2",
+          "mode": 420,
+          "upstreamSha256": "e7e35d23ebcb4ca9fa4c9e231bfd7c1564d1288d573f2115274be6ed31097ef2",
+          "changed": false
+        },
+        {
+          "path": "build/Watcher.js",
+          "bytes": 11567,
+          "sha256": "6c22900afa59ac4a35d53bdaff79f2b93d49463616f25f9791739c5a2c2851a4",
+          "mode": 420,
+          "upstreamSha256": "6c22900afa59ac4a35d53bdaff79f2b93d49463616f25f9791739c5a2c2851a4",
+          "changed": false
+        },
+        {
+          "path": "build/cache/DiskCacheManager.d.ts",
+          "bytes": 1316,
+          "sha256": "797c37e5038dff1a1d9c3988503201ab493556eec134cd429b91fafbacc6c2aa",
+          "mode": 420,
+          "upstreamSha256": "797c37e5038dff1a1d9c3988503201ab493556eec134cd429b91fafbacc6c2aa",
+          "changed": false
+        },
+        {
+          "path": "build/cache/DiskCacheManager.js",
+          "bytes": 4614,
+          "sha256": "6c2b1032ed6cde523b0771d7b0be6ea6829f100ec17ea97c661d297d26a2af93",
+          "mode": 420,
+          "upstreamSha256": "6c2b1032ed6cde523b0771d7b0be6ea6829f100ec17ea97c661d297d26a2af93",
+          "changed": false
+        },
+        {
+          "path": "build/constants.d.ts",
+          "bytes": 639,
+          "sha256": "69e90c60c1a07cf92cc7ef31ca44990b74277bcdf27794ecab8a3f34dc530069",
+          "mode": 420,
+          "upstreamSha256": "69e90c60c1a07cf92cc7ef31ca44990b74277bcdf27794ecab8a3f34dc530069",
+          "changed": false
+        },
+        {
+          "path": "build/constants.js",
+          "bytes": 615,
+          "sha256": "226786922b7ee9ba1058f7d0bd3c4b8302f58d1c5e0621449c978b9197c183e3",
+          "mode": 420,
+          "upstreamSha256": "226786922b7ee9ba1058f7d0bd3c4b8302f58d1c5e0621449c978b9197c183e3",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/node/fallback.d.ts",
+          "bytes": 1182,
+          "sha256": "a992a7c0286d951a260bb33b193abc698cca3410f52bff7c7ebec91655d2ae69",
+          "mode": 420,
+          "upstreamSha256": "a992a7c0286d951a260bb33b193abc698cca3410f52bff7c7ebec91655d2ae69",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/node/fallback.js",
+          "bytes": 6814,
+          "sha256": "c6b777e10edd86947181430f2c6bcbc2cf191ceed326565e70a274670e578407",
+          "mode": 420,
+          "upstreamSha256": "c6b777e10edd86947181430f2c6bcbc2cf191ceed326565e70a274670e578407",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/node/index.d.ts",
+          "bytes": 351,
+          "sha256": "6d76584e73905bd42b89b404d84b40f431b9caf2b3e1f74494ce29a037c3687e",
+          "mode": 420,
+          "upstreamSha256": "6d76584e73905bd42b89b404d84b40f431b9caf2b3e1f74494ce29a037c3687e",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/node/index.js",
+          "bytes": 7316,
+          "sha256": "51fef6415862d67114a4fa2b968eec0af6a07b47fcec414340a3a9bb77737a43",
+          "mode": 420,
+          "upstreamSha256": "51fef6415862d67114a4fa2b968eec0af6a07b47fcec414340a3a9bb77737a43",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/watchman/index.d.ts",
+          "bytes": 453,
+          "sha256": "1c569ecd0d185379d21323bcbd231bf09a4ef74820c3867f41f64e7e9259f93b",
+          "mode": 420,
+          "upstreamSha256": "1c569ecd0d185379d21323bcbd231bf09a4ef74820c3867f41f64e7e9259f93b",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/watchman/index.js",
+          "bytes": 13358,
+          "sha256": "9a2d01ab1229284037af6950ce4369ebbe2a0f90199bcdd666145c1bca661332",
+          "mode": 420,
+          "upstreamSha256": "9a2d01ab1229284037af6950ce4369ebbe2a0f90199bcdd666145c1bca661332",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/watchman/planQuery.d.ts",
+          "bytes": 976,
+          "sha256": "f134a617c4e8637023bd6e74ef53232096c482bfa3e1e357f1b2c11bc8531e53",
+          "mode": 420,
+          "upstreamSha256": "f134a617c4e8637023bd6e74ef53232096c482bfa3e1e357f1b2c11bc8531e53",
+          "changed": false
+        },
+        {
+          "path": "build/crawlers/watchman/planQuery.js",
+          "bytes": 4220,
+          "sha256": "1399c3cb6f0a879666394ba64024ad6baa693829255c01e1bad661c57ccaf814",
+          "mode": 420,
+          "upstreamSha256": "1399c3cb6f0a879666394ba64024ad6baa693829255c01e1bad661c57ccaf814",
+          "changed": false
+        },
+        {
+          "path": "build/index.d.ts",
+          "bytes": 6733,
+          "sha256": "a4b407bd7f76d4ef9f4aa9c750b99f9622b4ce56a8a08072a870d00cc5c32757",
+          "mode": 420,
+          "upstreamSha256": "a4b407bd7f76d4ef9f4aa9c750b99f9622b4ce56a8a08072a870d00cc5c32757",
+          "changed": false
+        },
+        {
+          "path": "build/index.js",
+          "bytes": 40310,
+          "sha256": "8daf3a8170b2d181a8d57c5d95e08d85b8c0a2bd80ad03594192cfd3e0ae7999",
+          "mode": 420,
+          "upstreamSha256": "8daf3a8170b2d181a8d57c5d95e08d85b8c0a2bd80ad03594192cfd3e0ae7999",
+          "changed": false
+        },
+        {
+          "path": "build/lib/FileProcessor.d.ts",
+          "bytes": 1423,
+          "sha256": "0d0e82138c8dc3ef2b89e19a8ad4becf4f63e7d7529e37a5fd45485baee7fb15",
+          "mode": 420,
+          "upstreamSha256": "0d0e82138c8dc3ef2b89e19a8ad4becf4f63e7d7529e37a5fd45485baee7fb15",
+          "changed": false
+        },
+        {
+          "path": "build/lib/FileProcessor.js",
+          "bytes": 7203,
+          "sha256": "7cf65fb90622bfce700479f9dadc0e7bc7b5544ec8728282374cd2be6484cd12",
+          "mode": 420,
+          "upstreamSha256": "7cf65fb90622bfce700479f9dadc0e7bc7b5544ec8728282374cd2be6484cd12",
+          "changed": false
+        },
+        {
+          "path": "build/lib/FileSystemChangeAggregator.d.ts",
+          "bytes": 930,
+          "sha256": "be7aa2f60c5613d1332001a27f852cfdee15d73f85c25f8bb0164c1f341a9377",
+          "mode": 420,
+          "upstreamSha256": "be7aa2f60c5613d1332001a27f852cfdee15d73f85c25f8bb0164c1f341a9377",
+          "changed": false
+        },
+        {
+          "path": "build/lib/FileSystemChangeAggregator.js",
+          "bytes": 4637,
+          "sha256": "56168f41fff930d4ffa187bdba949665b78150df3ac3471e7346de469ab01556",
+          "mode": 420,
+          "upstreamSha256": "56168f41fff930d4ffa187bdba949665b78150df3ac3471e7346de469ab01556",
+          "changed": false
+        },
+        {
+          "path": "build/lib/RootPathUtils.d.ts",
+          "bytes": 1033,
+          "sha256": "32cfe2c35fbfddc9b22fe561ee78574ea8ccfb0e6cdedad1e9c996a2a271faa8",
+          "mode": 420,
+          "upstreamSha256": "32cfe2c35fbfddc9b22fe561ee78574ea8ccfb0e6cdedad1e9c996a2a271faa8",
+          "changed": false
+        },
+        {
+          "path": "build/lib/RootPathUtils.js",
+          "bytes": 16052,
+          "sha256": "bc3a22513b1e0465c1cd8bb228c7ba881450c913d6ebc2b5a42d3df2c1fb3365",
+          "mode": 420,
+          "upstreamSha256": "bc3a22513b1e0465c1cd8bb228c7ba881450c913d6ebc2b5a42d3df2c1fb3365",
+          "changed": false
+        },
+        {
+          "path": "build/lib/TreeFS.d.ts",
+          "bytes": 6222,
+          "sha256": "e62aa1c12bbd446b4a6f888a9d61de8a254187bcbf89c72cad1ee0411e3ec7a4",
+          "mode": 420,
+          "upstreamSha256": "e62aa1c12bbd446b4a6f888a9d61de8a254187bcbf89c72cad1ee0411e3ec7a4",
+          "changed": false
+        },
+        {
+          "path": "build/lib/TreeFS.js",
+          "bytes": 69706,
+          "sha256": "80c141b62559be3ea1ac5deb0e8fa94746173f89f8389f61b9afe16a689c8af6",
+          "mode": 420,
+          "upstreamSha256": "80c141b62559be3ea1ac5deb0e8fa94746173f89f8389f61b9afe16a689c8af6",
+          "changed": false
+        },
+        {
+          "path": "build/lib/checkWatchmanCapabilities.d.ts",
+          "bytes": 318,
+          "sha256": "04a821275325c1a35a131ff25d86e408e330ab52697aa24db3ac23b4c8140b8b",
+          "mode": 420,
+          "upstreamSha256": "04a821275325c1a35a131ff25d86e408e330ab52697aa24db3ac23b4c8140b8b",
+          "changed": false
+        },
+        {
+          "path": "build/lib/checkWatchmanCapabilities.js",
+          "bytes": 1949,
+          "sha256": "cb2d381e1f9d3c579b2fd6db706c2e05fd1df0f36b5af3c98b23284393778ac9",
+          "mode": 420,
+          "upstreamSha256": "cb2d381e1f9d3c579b2fd6db706c2e05fd1df0f36b5af3c98b23284393778ac9",
+          "changed": false
+        },
+        {
+          "path": "build/lib/isWatcherExcluded.d.ts",
+          "bytes": 70,
+          "sha256": "55c9f3ebb9918afab8c0bb97c772afd970aca9d36c7c4099ed19dfa983d92178",
+          "mode": 420,
+          "upstreamSha256": "55c9f3ebb9918afab8c0bb97c772afd970aca9d36c7c4099ed19dfa983d92178",
+          "changed": false
+        },
+        {
+          "path": "build/lib/isWatcherExcluded.js",
+          "bytes": 268,
+          "sha256": "97df71a442154f56b756111d24b5ccfc43ac65acba8fa31efaf71b64d04bb911",
+          "mode": 420,
+          "upstreamSha256": "97df71a442154f56b756111d24b5ccfc43ac65acba8fa31efaf71b64d04bb911",
+          "changed": false
+        },
+        {
+          "path": "build/lib/normalizePathSeparatorsToPosix.d.ts",
+          "bytes": 312,
+          "sha256": "d3c7ec2bf14cdb648fdf5987adad5e3535f8154b4163fbb0ed2df3f068b54dbd",
+          "mode": 420,
+          "upstreamSha256": "d3c7ec2bf14cdb648fdf5987adad5e3535f8154b4163fbb0ed2df3f068b54dbd",
+          "changed": false
+        },
+        {
+          "path": "build/lib/normalizePathSeparatorsToPosix.js",
+          "bytes": 729,
+          "sha256": "44b6ded6bb4c6f00de777d247a12b4d699a134bc67a5db3b931ed546bdd1550d",
+          "mode": 420,
+          "upstreamSha256": "44b6ded6bb4c6f00de777d247a12b4d699a134bc67a5db3b931ed546bdd1550d",
+          "changed": false
+        },
+        {
+          "path": "build/lib/normalizePathSeparatorsToSystem.d.ts",
+          "bytes": 314,
+          "sha256": "6cf78bc627a541b464f6d6e52ea76440343936858e128fef0cf6d3a478e21961",
+          "mode": 420,
+          "upstreamSha256": "6cf78bc627a541b464f6d6e52ea76440343936858e128fef0cf6d3a478e21961",
+          "changed": false
+        },
+        {
+          "path": "build/lib/normalizePathSeparatorsToSystem.js",
+          "bytes": 748,
+          "sha256": "e87f6ea1e8858d17eafd197f631e6f6a132b39bc43fad99ef46efa41145a382c",
+          "mode": 420,
+          "upstreamSha256": "e87f6ea1e8858d17eafd197f631e6f6a132b39bc43fad99ef46efa41145a382c",
+          "changed": false
+        },
+        {
+          "path": "build/lib/removeOverlappingRoots.d.ts",
+          "bytes": 314,
+          "sha256": "66014ff74b372b147ba54aabfbdf832788ccedee24b8e8b25b07db0e7e6411ce",
+          "mode": 420,
+          "upstreamSha256": "66014ff74b372b147ba54aabfbdf832788ccedee24b8e8b25b07db0e7e6411ce",
+          "changed": false
+        },
+        {
+          "path": "build/lib/removeOverlappingRoots.js",
+          "bytes": 1213,
+          "sha256": "591d20c25456ac7410a68dedad7fd8fadbd7856f973d9589f987436e28368474",
+          "mode": 420,
+          "upstreamSha256": "591d20c25456ac7410a68dedad7fd8fadbd7856f973d9589f987436e28368474",
+          "changed": false
+        },
+        {
+          "path": "build/lib/rootRelativeCacheKeys.d.ts",
+          "bytes": 383,
+          "sha256": "1ed798057f20097d12193296594077254edb004e8827adb9f58ddbd19165917c",
+          "mode": 420,
+          "upstreamSha256": "1ed798057f20097d12193296594077254edb004e8827adb9f58ddbd19165917c",
+          "changed": false
+        },
+        {
+          "path": "build/lib/rootRelativeCacheKeys.js",
+          "bytes": 2281,
+          "sha256": "cfcc44e7004e895636c2c56f64e9cb46a3d10ddac89fe48dc770a65d4471f410",
+          "mode": 420,
+          "upstreamSha256": "cfcc44e7004e895636c2c56f64e9cb46a3d10ddac89fe48dc770a65d4471f410",
+          "changed": false
+        },
+        {
+          "path": "build/lib/sorting.d.ts",
+          "bytes": 388,
+          "sha256": "dbe4eda37956f472fb3491dc1d4a29ea83325f2c3c170984bdd399fcdb861d1d",
+          "mode": 420,
+          "upstreamSha256": "dbe4eda37956f472fb3491dc1d4a29ea83325f2c3c170984bdd399fcdb861d1d",
+          "changed": false
+        },
+        {
+          "path": "build/lib/sorting.js",
+          "bytes": 851,
+          "sha256": "f0df7f13c1afaa7dfc3fb841f2869520c67c44702a83580211484f9743ad5cc1",
+          "mode": 420,
+          "upstreamSha256": "f0df7f13c1afaa7dfc3fb841f2869520c67c44702a83580211484f9743ad5cc1",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/DependencyPlugin.d.ts",
+          "bytes": 979,
+          "sha256": "3ef8529310d047b4fb5bf5eff9d01ca00b627a12ed7323e2c1d204206e0167b5",
+          "mode": 420,
+          "upstreamSha256": "3ef8529310d047b4fb5bf5eff9d01ca00b627a12ed7323e2c1d204206e0167b5",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/DependencyPlugin.js",
+          "bytes": 2337,
+          "sha256": "0cff1fa04c60320aed823c7e95c720b1b2390778e644556b817bd6f48e09c0cf",
+          "mode": 420,
+          "upstreamSha256": "0cff1fa04c60320aed823c7e95c720b1b2390778e644556b817bd6f48e09c0cf",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/FileDataPlugin.d.ts",
+          "bytes": 1343,
+          "sha256": "1542d40bb90d92ab6f0d0c0d4db426244ed426cbb380bf27b6e8549f1dfb3d76",
+          "mode": 420,
+          "upstreamSha256": "1542d40bb90d92ab6f0d0c0d4db426244ed426cbb380bf27b6e8549f1dfb3d76",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/FileDataPlugin.js",
+          "bytes": 1271,
+          "sha256": "b644211f303185c259e0255f19db6bdcc0ece010dee3fc9b51de26957e8f894d",
+          "mode": 420,
+          "upstreamSha256": "b644211f303185c259e0255f19db6bdcc0ece010dee3fc9b51de26957e8f894d",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/HastePlugin.d.ts",
+          "bytes": 1711,
+          "sha256": "8401f02841012a26d87c9959fd59ce351a3972906392e93109cbca97605b4cad",
+          "mode": 420,
+          "upstreamSha256": "8401f02841012a26d87c9959fd59ce351a3972906392e93109cbca97605b4cad",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/HastePlugin.js",
+          "bytes": 15804,
+          "sha256": "3ca6e16654051ba4451195f8977e727b039a6febe34def6dbf158ca404292007",
+          "mode": 420,
+          "upstreamSha256": "3ca6e16654051ba4451195f8977e727b039a6febe34def6dbf158ca404292007",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/MockPlugin.d.ts",
+          "bytes": 1232,
+          "sha256": "3072cc601879c966f85825f264fa7b8031990c508347e664bb4cf0a24bbf1dcf",
+          "mode": 420,
+          "upstreamSha256": "3072cc601879c966f85825f264fa7b8031990c508347e664bb4cf0a24bbf1dcf",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/MockPlugin.js",
+          "bytes": 6576,
+          "sha256": "7cf63e29e9bacadaccbb055e5172ff79a00acb449f601b0c1949714c986167e1",
+          "mode": 420,
+          "upstreamSha256": "7cf63e29e9bacadaccbb055e5172ff79a00acb449f601b0c1949714c986167e1",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/dependencies/dependencyExtractor.d.ts",
+          "bytes": 251,
+          "sha256": "bba1ca3ec541b8e356a396cc55acc02cc44420874d859fc26dd8a1e03a9fa58e",
+          "mode": 420,
+          "upstreamSha256": "bba1ca3ec541b8e356a396cc55acc02cc44420874d859fc26dd8a1e03a9fa58e",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/dependencies/dependencyExtractor.js",
+          "bytes": 2061,
+          "sha256": "6932483c2f05ffaff2efe79e67bdc49ceaa7a81e9b9d52e6b688640a17cd9eb6",
+          "mode": 420,
+          "upstreamSha256": "6932483c2f05ffaff2efe79e67bdc49ceaa7a81e9b9d52e6b688640a17cd9eb6",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/dependencies/worker.d.ts",
+          "bytes": 614,
+          "sha256": "aeffe9acb4efe06f88957e6719704a714777d4d03c06141c3c4e4ea54c5e292d",
+          "mode": 420,
+          "upstreamSha256": "aeffe9acb4efe06f88957e6719704a714777d4d03c06141c3c4e4ea54c5e292d",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/dependencies/worker.js",
+          "bytes": 1162,
+          "sha256": "7467b6eaf5446602e46e03c02e3afdddb4af30482f203f796a4618950855714b",
+          "mode": 420,
+          "upstreamSha256": "7467b6eaf5446602e46e03c02e3afdddb4af30482f203f796a4618950855714b",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/DuplicateHasteCandidatesError.d.ts",
+          "bytes": 545,
+          "sha256": "eadd601182b09f1445719d0c6da3f26ef4f31aa5cb7784abc59273e273b6b47e",
+          "mode": 420,
+          "upstreamSha256": "eadd601182b09f1445719d0c6da3f26ef4f31aa5cb7784abc59273e273b6b47e",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/DuplicateHasteCandidatesError.js",
+          "bytes": 2069,
+          "sha256": "55a700f6b144172a17a69c9a4781ac5a710acae5cb6793e9121844adafd03280",
+          "mode": 420,
+          "upstreamSha256": "55a700f6b144172a17a69c9a4781ac5a710acae5cb6793e9121844adafd03280",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/HasteConflictsError.d.ts",
+          "bytes": 436,
+          "sha256": "7b5fcdd84565ed0e8e37e95eb4f9cefe0c3b4c2438415180dd767a02a535954b",
+          "mode": 420,
+          "upstreamSha256": "7b5fcdd84565ed0e8e37e95eb4f9cefe0c3b4c2438415180dd767a02a535954b",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/HasteConflictsError.js",
+          "bytes": 2172,
+          "sha256": "83aa00ae8cf42e8ad78ac58616c2af8678b36a7b92708c6350a7f0f5498ed2d5",
+          "mode": 420,
+          "upstreamSha256": "83aa00ae8cf42e8ad78ac58616c2af8678b36a7b92708c6350a7f0f5498ed2d5",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/computeConflicts.d.ts",
+          "bytes": 637,
+          "sha256": "1e4e91047463ac541a9385bc7b048d4d194b3dbec0fb2e11db5c790a7c5bc015",
+          "mode": 420,
+          "upstreamSha256": "1e4e91047463ac541a9385bc7b048d4d194b3dbec0fb2e11db5c790a7c5bc015",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/computeConflicts.js",
+          "bytes": 3384,
+          "sha256": "31e5ed38b9ff1c736625299b1f1d68dfd54cf34c74b4c43a02b174bcb033872e",
+          "mode": 420,
+          "upstreamSha256": "31e5ed38b9ff1c736625299b1f1d68dfd54cf34c74b4c43a02b174bcb033872e",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/getPlatformExtension.d.ts",
+          "bytes": 298,
+          "sha256": "6fc2f1a34074438a1724fd5f192eb991d36853656073d13fbc28a6f5a4262c3e",
+          "mode": 420,
+          "upstreamSha256": "6fc2f1a34074438a1724fd5f192eb991d36853656073d13fbc28a6f5a4262c3e",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/getPlatformExtension.js",
+          "bytes": 681,
+          "sha256": "8a8684fb157645575169021c800fab51c76aa8dfbe749768831b653c2ee45c3c",
+          "mode": 420,
+          "upstreamSha256": "8a8684fb157645575169021c800fab51c76aa8dfbe749768831b653c2ee45c3c",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/worker.d.ts",
+          "bytes": 581,
+          "sha256": "53bf8e2f8b99fa7800cd5ac5f4ec9a933dde506adfce0ca9fa1ff2e7f23f4e30",
+          "mode": 420,
+          "upstreamSha256": "53bf8e2f8b99fa7800cd5ac5f4ec9a933dde506adfce0ca9fa1ff2e7f23f4e30",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/haste/worker.js",
+          "bytes": 1925,
+          "sha256": "f743f410032f44e8e9742ca724e24e3a982c190128838e85a2e365b3476cf986",
+          "mode": 420,
+          "upstreamSha256": "f743f410032f44e8e9742ca724e24e3a982c190128838e85a2e365b3476cf986",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/mocks/getMockName.d.ts",
+          "bytes": 270,
+          "sha256": "0a1d81702552047fb0ba94d42c187da071062410df22e478ecf4af0e3d0a5e72",
+          "mode": 420,
+          "upstreamSha256": "0a1d81702552047fb0ba94d42c187da071062410df22e478ecf4af0e3d0a5e72",
+          "changed": false
+        },
+        {
+          "path": "build/plugins/mocks/getMockName.js",
+          "bytes": 737,
+          "sha256": "9ae304b9f854a1bc881faedadc16bc1adc3a9aa0da096db187d9af2807577646",
+          "mode": 420,
+          "upstreamSha256": "9ae304b9f854a1bc881faedadc16bc1adc3a9aa0da096db187d9af2807577646",
+          "changed": false
+        },
+        {
+          "path": "build/ts-declarations/fb-watchman.d.ts",
+          "bytes": 477,
+          "sha256": "7ac4dea54e1a6e3c2b9d8f8d5e5376b098ce78f7f07a056a76c8ad71021339aa",
+          "mode": 420,
+          "upstreamSha256": "7ac4dea54e1a6e3c2b9d8f8d5e5376b098ce78f7f07a056a76c8ad71021339aa",
+          "changed": false
+        },
+        {
+          "path": "build/ts-declarations/fb-watchman.js",
+          "bytes": 77,
+          "sha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+          "mode": 420,
+          "upstreamSha256": "d43aa81f5bc89faa359e0f97c814ba25155591ff078fbb9bfd40f8c7c9683230",
+          "changed": false
+        },
+        {
+          "path": "build/types.d.ts",
+          "bytes": 15290,
+          "sha256": "def4aad4ccd2ba367b1960968a668d3c757840ecc05c54b4f9e2a8099802cb6f",
+          "mode": 420,
+          "upstreamSha256": "def4aad4ccd2ba367b1960968a668d3c757840ecc05c54b4f9e2a8099802cb6f",
+          "changed": false
+        },
+        {
+          "path": "build/types.js",
+          "bytes": 268,
+          "sha256": "f0b5aeefd723e3c1041a0b8f57c7271dd9e75fc290cb29719ccb4bde49ab9e17",
+          "mode": 420,
+          "upstreamSha256": "f0b5aeefd723e3c1041a0b8f57c7271dd9e75fc290cb29719ccb4bde49ab9e17",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/AbstractWatcher.d.ts",
+          "bytes": 1292,
+          "sha256": "aac5c4e4c2f57429d6d8921a95ce9a296324f88d8560e8d911e92eead2ccc454",
+          "mode": 420,
+          "upstreamSha256": "aac5c4e4c2f57429d6d8921a95ce9a296324f88d8560e8d911e92eead2ccc454",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/AbstractWatcher.js",
+          "bytes": 3370,
+          "sha256": "1dff6c83e2420db6d656f0b426e88429ad9de3b1b3fb7bd9397d11ee67b07bb6",
+          "mode": 420,
+          "upstreamSha256": "1dff6c83e2420db6d656f0b426e88429ad9de3b1b3fb7bd9397d11ee67b07bb6",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/FallbackWatcher.d.ts",
+          "bytes": 494,
+          "sha256": "123d3e5e454638a8366e300821650bb37a95faa0901bb3c531b90b8f13c38981",
+          "mode": 420,
+          "upstreamSha256": "123d3e5e454638a8366e300821650bb37a95faa0901bb3c531b90b8f13c38981",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/FallbackWatcher.js",
+          "bytes": 16114,
+          "sha256": "93e8a8586c19c1731d7460722daf4f2ae10ec2d9106a10c3a296bf020a7493f1",
+          "mode": 420,
+          "upstreamSha256": "93e8a8586c19c1731d7460722daf4f2ae10ec2d9106a10c3a296bf020a7493f1",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/NativeWatcher.d.ts",
+          "bytes": 1691,
+          "sha256": "785d990209ef18998e5669766bf35a5644827c86cc2e8cf3a38feeb71612f60d",
+          "mode": 420,
+          "upstreamSha256": "785d990209ef18998e5669766bf35a5644827c86cc2e8cf3a38feeb71612f60d",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/NativeWatcher.js",
+          "bytes": 6235,
+          "sha256": "5ab25cbcb39e0c553497a1fd5ce46bfc5863ab8dc8968610ca94d1069e5c3501",
+          "mode": 420,
+          "upstreamSha256": "5ab25cbcb39e0c553497a1fd5ce46bfc5863ab8dc8968610ca94d1069e5c3501",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/RecrawlWarning.d.ts",
+          "bytes": 667,
+          "sha256": "70a2ad14a71113843fcc0aee7635dee932f8865e5f605b83d0a938e2a165e7b3",
+          "mode": 420,
+          "upstreamSha256": "70a2ad14a71113843fcc0aee7635dee932f8865e5f605b83d0a938e2a165e7b3",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/RecrawlWarning.js",
+          "bytes": 1893,
+          "sha256": "6f42543335c70c922f19bb01c14f9f81437106094caf908e9fdfcf210e8deb40",
+          "mode": 420,
+          "upstreamSha256": "6f42543335c70c922f19bb01c14f9f81437106094caf908e9fdfcf210e8deb40",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/WatchmanWatcher.d.ts",
+          "bytes": 651,
+          "sha256": "d2ab3e88b14f6d2ca8139aaf26af86b3d055e0e870d36c6f025623dc56f08b1c",
+          "mode": 420,
+          "upstreamSha256": "d2ab3e88b14f6d2ca8139aaf26af86b3d055e0e870d36c6f025623dc56f08b1c",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/WatchmanWatcher.js",
+          "bytes": 11152,
+          "sha256": "7f2643ae173eb7ccd29dfb4edd69ff6ad0a17ee9d473d6a15d37ea9d34f2a6c3",
+          "mode": 420,
+          "upstreamSha256": "7f2643ae173eb7ccd29dfb4edd69ff6ad0a17ee9d473d6a15d37ea9d34f2a6c3",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/common.d.ts",
+          "bytes": 1659,
+          "sha256": "7f1cf34f411150b3e854347fa461f9cb4cdb5b50c600623de72b4e9672d21164",
+          "mode": 420,
+          "upstreamSha256": "7f1cf34f411150b3e854347fa461f9cb4cdb5b50c600623de72b4e9672d21164",
+          "changed": false
+        },
+        {
+          "path": "build/watchers/common.js",
+          "bytes": 2372,
+          "sha256": "d6c86dd757c1761c944a0b9c69af1272fe416969f78d285ecd25c91dbc829981",
+          "mode": 420,
+          "upstreamSha256": "d84d9441db0dceb5207d320ba2a2265bed436a91ae14b9d45eb135cf0f6faba2",
+          "changed": true
+        },
+        {
+          "path": "build/worker.d.ts",
+          "bytes": 851,
+          "sha256": "a4197ad854bdd45540b8e8e7629119a0f9df3ff365d8f4d0a3f8b1c1b0153d85",
+          "mode": 420,
+          "upstreamSha256": "a4197ad854bdd45540b8e8e7629119a0f9df3ff365d8f4d0a3f8b1c1b0153d85",
+          "changed": false
+        },
+        {
+          "path": "build/worker.js",
+          "bytes": 2785,
+          "sha256": "9a7ffd55c61ec1815a565aeec72fa6e4ef8fcfc46ab0a26095bb64fbfba59b46",
+          "mode": 420,
+          "upstreamSha256": "9a7ffd55c61ec1815a565aeec72fa6e4ef8fcfc46ab0a26095bb64fbfba59b46",
+          "changed": false
+        },
+        {
+          "path": "build/workerExclusionList.d.ts",
+          "bytes": 265,
+          "sha256": "16a12f50e0aa13573f526e68c220ede9a40825d7c2379b3f33dbd88e67f9e7cc",
+          "mode": 420,
+          "upstreamSha256": "16a12f50e0aa13573f526e68c220ede9a40825d7c2379b3f33dbd88e67f9e7cc",
+          "changed": false
+        },
+        {
+          "path": "build/workerExclusionList.js",
+          "bytes": 1401,
+          "sha256": "924a8ba78fb68493913881547a52b082d44347b3e80eb4159c90e799efb16f06",
+          "mode": 420,
+          "upstreamSha256": "924a8ba78fb68493913881547a52b082d44347b3e80eb4159c90e799efb16f06",
+          "changed": false
+        },
+        {
+          "path": "package.json",
+          "bytes": 1417,
+          "sha256": "6e43931f02db87587781fdc28843a37067e622de236b98c77826e285b64d7a83",
+          "mode": 420,
+          "upstreamSha256": "2ae7b31db89c8fa51e5a06b8c215627398c6d317c7e13d6af8eceb51c9a798cd",
+          "changed": true
+        },
+        {
+          "path": "public-micromatch-some.cjs",
+          "bytes": 465,
+          "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2",
+          "mode": 420,
+          "upstreamSha256": null,
+          "changed": true
+        }
+      ],
+      "manifestChange": "Remove micromatch ^4.0.4, add exact already selected picomatch2.3.2; all other manifest values conserved.",
+      "sourceChange": "Only private internal common matcher import (and corresponding Flow source import) now resolves the literal public micromatch4.0.8.some implementation, same locked picomatch2.3.2. No full micromatch ABI or brace parser facade.",
+      "publishedUtc": "2026-09-08T13:49:11.983Z",
+      "sevenDayFloorUtc": "2026-09-15T13:49:11.983000+00:00"
+    },
+    {
+      "name": "metro-file-map",
+      "version": "0.84.5",
+      "lockedPath": "node_modules/metro-file-map",
+      "upstreamUrl": "https://registry.npmjs.org/metro-file-map/-/metro-file-map-0.84.5.tgz",
+      "upstreamIntegrity": "sha512-mlm/JL8toSbSc2akpKIGmzvrVRSCgZ5vkbycI34oMLoOnLGuLyC8WTyVJ6P0hZG/usDaGwZSl/s9BCRriqjGJA==",
+      "upstreamArchive": "official-metro-file-map-0.84.5.tgz",
+      "upstreamSha256": "87714d2120cc45b250c2ef2a560fead966a6e18ad432ace06e8f63da8c06b364",
+      "derivedArchive": "metro-file-map-0.84.5.public-some.tgz",
+      "derivedBytes": 97119,
+      "derivedSha256": "2bbe516e04df68da05c06ad01df4ec20b47a63891507b227775c27272b59070b",
+      "derivedIntegrity": "sha512-KW6xYGc0zUoXHMWcyCz6CcheIyAqUaXMzC0xznTNMzZe1UcaF1RvrUNMlp5yseNG+ckXFVT5PRW4JoyQrCqyIg==",
+      "originalFileCount": 129,
+      "derivedFileCount": 131,
+      "changedOriginalPaths": [
+        "src/watchers/common.js.flow",
+        "src/watchers/common.js",
+        "package.json"
+      ],
+      "addedPaths": [
+        "public-micromatch-some.cjs",
+        "PUBLIC-MICROMATCH-SOME-LICENSE"
+      ],
+      "unchangedOriginalFileCount": 126,
+      "files": [
+        {
+          "path": "PUBLIC-MICROMATCH-SOME-LICENSE",
+          "bytes": 1091,
+          "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+          "mode": 420,
+          "upstreamSha256": null,
+          "changed": true
+        },
+        {
+          "path": "README.md",
+          "bytes": 534,
+          "sha256": "1dff668ed2d77e798395d76424351b35bb88b7b24f89dcbe78882da523fcf1de",
+          "mode": 420,
+          "upstreamSha256": "1dff668ed2d77e798395d76424351b35bb88b7b24f89dcbe78882da523fcf1de",
+          "changed": false
+        },
+        {
+          "path": "package.json",
+          "bytes": 1048,
+          "sha256": "71763f0131e76ac6f4ef749368c5dfeae1c789c92695c374861ea5721115283d",
+          "mode": 420,
+          "upstreamSha256": "6596e02aa02ffa7c8cbc06f1d26014d41df49a22a3f28267978ddf69a36261a5",
+          "changed": true
+        },
+        {
+          "path": "public-micromatch-some.cjs",
+          "bytes": 465,
+          "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2",
+          "mode": 420,
+          "upstreamSha256": null,
+          "changed": true
+        },
+        {
+          "path": "src/Watcher.d.ts",
+          "bytes": 2049,
+          "sha256": "e75bbe93dfac59c0ab711f46cd0ca1e3ccc246aa8ca20a14f1f2b3e3aebcf7e5",
+          "mode": 420,
+          "upstreamSha256": "e75bbe93dfac59c0ab711f46cd0ca1e3ccc246aa8ca20a14f1f2b3e3aebcf7e5",
+          "changed": false
+        },
+        {
+          "path": "src/Watcher.js",
+          "bytes": 9481,
+          "sha256": "96b780406d915a9f2c573d3cbb13ed6f3cf401701819c619eb95bf8602fad80f",
+          "mode": 420,
+          "upstreamSha256": "96b780406d915a9f2c573d3cbb13ed6f3cf401701819c619eb95bf8602fad80f",
+          "changed": false
+        },
+        {
+          "path": "src/Watcher.js.flow",
+          "bytes": 10685,
+          "sha256": "8aa51f6909ad342157323e3963e49be7efb6a293187daf8755f07d54e1fe1240",
+          "mode": 420,
+          "upstreamSha256": "8aa51f6909ad342157323e3963e49be7efb6a293187daf8755f07d54e1fe1240",
+          "changed": false
+        },
+        {
+          "path": "src/cache/DiskCacheManager.d.ts",
+          "bytes": 1482,
+          "sha256": "57b72c6c9c42e6ec86d6eab3cbbb223dc16025da4557d50e57ad3b331e859a02",
+          "mode": 420,
+          "upstreamSha256": "57b72c6c9c42e6ec86d6eab3cbbb223dc16025da4557d50e57ad3b331e859a02",
+          "changed": false
+        },
+        {
+          "path": "src/cache/DiskCacheManager.js",
+          "bytes": 3307,
+          "sha256": "821828a42668b07051ebd9675d6f8711c2a03a677b1b9d09497a52b3b7098538",
+          "mode": 420,
+          "upstreamSha256": "821828a42668b07051ebd9675d6f8711c2a03a677b1b9d09497a52b3b7098538",
+          "changed": false
+        },
+        {
+          "path": "src/cache/DiskCacheManager.js.flow",
+          "bytes": 4423,
+          "sha256": "434bfd8e7db0554ae6a4031838d5c3bf05cfc77343edc7249daf827a6e0b1e8f",
+          "mode": 420,
+          "upstreamSha256": "434bfd8e7db0554ae6a4031838d5c3bf05cfc77343edc7249daf827a6e0b1e8f",
+          "changed": false
+        },
+        {
+          "path": "src/constants.d.ts",
+          "bytes": 745,
+          "sha256": "f34ce4ebc9280c3c2389e36b55b7a6a3e9437064ed6270400eb7be3f102238e8",
+          "mode": 420,
+          "upstreamSha256": "f34ce4ebc9280c3c2389e36b55b7a6a3e9437064ed6270400eb7be3f102238e8",
+          "changed": false
+        },
+        {
+          "path": "src/constants.js",
+          "bytes": 329,
+          "sha256": "f42cb4a43fcfcdb65b0ca32f0c4b170ea1a74d84462d55a34687ffdf053027cb",
+          "mode": 420,
+          "upstreamSha256": "f42cb4a43fcfcdb65b0ca32f0c4b170ea1a74d84462d55a34687ffdf053027cb",
+          "changed": false
+        },
+        {
+          "path": "src/constants.js.flow",
+          "bytes": 937,
+          "sha256": "1107b5ff77dae0715e37dcb80575f8b5612281378d2857022e41469a785a3ba5",
+          "mode": 420,
+          "upstreamSha256": "1107b5ff77dae0715e37dcb80575f8b5612281378d2857022e41469a785a3ba5",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/directory/bar.js",
+          "bytes": 14,
+          "sha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "mode": 420,
+          "upstreamSha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/directory/bar.js.flow",
+          "bytes": 245,
+          "sha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "mode": 420,
+          "upstreamSha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/directory/other.file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "upstreamSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/foo.js",
+          "bytes": 14,
+          "sha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "mode": 420,
+          "upstreamSha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/foo.js.flow",
+          "bytes": 245,
+          "sha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "mode": 420,
+          "upstreamSha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/ignored/hidden.js",
+          "bytes": 14,
+          "sha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "mode": 420,
+          "upstreamSha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/ignored/hidden.js.flow",
+          "bytes": 245,
+          "sha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "mode": 420,
+          "upstreamSha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/link-to-directory/bar.js",
+          "bytes": 14,
+          "sha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "mode": 420,
+          "upstreamSha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/link-to-directory/bar.js.flow",
+          "bytes": 245,
+          "sha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "mode": 420,
+          "upstreamSha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/link-to-directory/other.file",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "mode": 420,
+          "upstreamSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/link-to-foo.js",
+          "bytes": 14,
+          "sha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "mode": 420,
+          "upstreamSha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/__fixtures__/link-to-foo.js.flow",
+          "bytes": 245,
+          "sha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "mode": 420,
+          "upstreamSha256": "2b93814bfc97cb1b6b66480716caf2b9755bb7c6a5ede37cea84eb3e7752e59f",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/node/hasNativeFindSupport.d.ts",
+          "bytes": 661,
+          "sha256": "08129e45a90d7d18251fab81ba5a328a7de92f773dc2bc72da52df2966d0049d",
+          "mode": 420,
+          "upstreamSha256": "08129e45a90d7d18251fab81ba5a328a7de92f773dc2bc72da52df2966d0049d",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/node/hasNativeFindSupport.js",
+          "bytes": 721,
+          "sha256": "5f95a5779549827c09a59b67163dbbd2da7bd73266b25f02e48f645b2fb9cd21",
+          "mode": 420,
+          "upstreamSha256": "5f95a5779549827c09a59b67163dbbd2da7bd73266b25f02e48f645b2fb9cd21",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/node/hasNativeFindSupport.js.flow",
+          "bytes": 925,
+          "sha256": "0d14ba88fc8cc82c074614e89efc199996f0465696f12dc825395dbe2c77be66",
+          "mode": 420,
+          "upstreamSha256": "0d14ba88fc8cc82c074614e89efc199996f0465696f12dc825395dbe2c77be66",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/node/index.d.ts",
+          "bytes": 719,
+          "sha256": "b0aced1e6b6fcf85e279f05483f1b33d8c5b446af47eb978649709d1d8cfb420",
+          "mode": 420,
+          "upstreamSha256": "b0aced1e6b6fcf85e279f05483f1b33d8c5b446af47eb978649709d1d8cfb420",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/node/index.js",
+          "bytes": 5953,
+          "sha256": "28f77512c975e827f6becec4f58e2152979bf268bf7d7ff694c1824078e91fc2",
+          "mode": 420,
+          "upstreamSha256": "28f77512c975e827f6becec4f58e2152979bf268bf7d7ff694c1824078e91fc2",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/node/index.js.flow",
+          "bytes": 5794,
+          "sha256": "9a0b0500717f9ef87ed93764d9603f1a2f2bc734bad793578693dd23061ecea9",
+          "mode": 420,
+          "upstreamSha256": "9a0b0500717f9ef87ed93764d9603f1a2f2bc734bad793578693dd23061ecea9",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/watchman/index.d.ts",
+          "bytes": 740,
+          "sha256": "9a4b8fb8fe798f84c6f7c5a01cd61470eba83c93cbf9cd7aabc72a477a60db04",
+          "mode": 420,
+          "upstreamSha256": "9a4b8fb8fe798f84c6f7c5a01cd61470eba83c93cbf9cd7aabc72a477a60db04",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/watchman/index.js",
+          "bytes": 9884,
+          "sha256": "c2f7665752734419ac8833a7e011197a75c9e7877ff11022d7f39dea02d4988d",
+          "mode": 420,
+          "upstreamSha256": "c2f7665752734419ac8833a7e011197a75c9e7877ff11022d7f39dea02d4988d",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/watchman/index.js.flow",
+          "bytes": 11627,
+          "sha256": "35410a074af68c5d855d4babc7788f507a06cf5bb5ecc5f5242bf64e4036edaf",
+          "mode": 420,
+          "upstreamSha256": "35410a074af68c5d855d4babc7788f507a06cf5bb5ecc5f5242bf64e4036edaf",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/watchman/planQuery.d.ts",
+          "bytes": 578,
+          "sha256": "64926c453c34af2ba343b8744fad77b576d77907b879c3edb27de049bc7549f9",
+          "mode": 420,
+          "upstreamSha256": "64926c453c34af2ba343b8744fad77b576d77907b879c3edb27de049bc7549f9",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/watchman/planQuery.js",
+          "bytes": 1450,
+          "sha256": "243f83b8b0c107e9bea1e139d94b64d996dadbdd25f30ed48faf6d03244aa02d",
+          "mode": 420,
+          "upstreamSha256": "243f83b8b0c107e9bea1e139d94b64d996dadbdd25f30ed48faf6d03244aa02d",
+          "changed": false
+        },
+        {
+          "path": "src/crawlers/watchman/planQuery.js.flow",
+          "bytes": 4436,
+          "sha256": "2a6458c9a9955803bd839b91de2759606f69e9ded7d0607991811490fedadb9e",
+          "mode": 420,
+          "upstreamSha256": "2a6458c9a9955803bd839b91de2759606f69e9ded7d0607991811490fedadb9e",
+          "changed": false
+        },
+        {
+          "path": "src/flow-types.d.ts",
+          "bytes": 14444,
+          "sha256": "512bd2b7822259418cd6eaab973f4d3903c47d35e19013d63a529c66ae6a32d3",
+          "mode": 420,
+          "upstreamSha256": "512bd2b7822259418cd6eaab973f4d3903c47d35e19013d63a529c66ae6a32d3",
+          "changed": false
+        },
+        {
+          "path": "src/flow-types.js",
+          "bytes": 14,
+          "sha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "mode": 420,
+          "upstreamSha256": "77f5eec38c5ef075e11892244ccf9e249d82937e07401398df98319568775a17",
+          "changed": false
+        },
+        {
+          "path": "src/flow-types.js.flow",
+          "bytes": 15494,
+          "sha256": "9fde5704213d962f934e97fa68647a08bdd6d2400216daaa72583aac13ffe138",
+          "mode": 420,
+          "upstreamSha256": "9fde5704213d962f934e97fa68647a08bdd6d2400216daaa72583aac13ffe138",
+          "changed": false
+        },
+        {
+          "path": "src/index.d.ts",
+          "bytes": 6696,
+          "sha256": "e0eaf36798b3206479b3279b5eb3d5841110ea6d9972588fda95ec8a8fd82870",
+          "mode": 420,
+          "upstreamSha256": "e0eaf36798b3206479b3279b5eb3d5841110ea6d9972588fda95ec8a8fd82870",
+          "changed": false
+        },
+        {
+          "path": "src/index.js",
+          "bytes": 26869,
+          "sha256": "3e19b6f5ea5a203d520dc9e7477c3849f1d7bef9b733d68247917c7081d5b9bc",
+          "mode": 420,
+          "upstreamSha256": "3e19b6f5ea5a203d520dc9e7477c3849f1d7bef9b733d68247917c7081d5b9bc",
+          "changed": false
+        },
+        {
+          "path": "src/index.js.flow",
+          "bytes": 36718,
+          "sha256": "056f71e495ef48f9a1af9fc09b746351e3fabaeaa62dd946e8f80b3d55d62558",
+          "mode": 420,
+          "upstreamSha256": "056f71e495ef48f9a1af9fc09b746351e3fabaeaa62dd946e8f80b3d55d62558",
+          "changed": false
+        },
+        {
+          "path": "src/lib/FileProcessor.d.ts",
+          "bytes": 1739,
+          "sha256": "83a6a0f7fcb8adea326c4855066538081bf91c73283c97604a233d19ca190c0a",
+          "mode": 420,
+          "upstreamSha256": "83a6a0f7fcb8adea326c4855066538081bf91c73283c97604a233d19ca190c0a",
+          "changed": false
+        },
+        {
+          "path": "src/lib/FileProcessor.js",
+          "bytes": 5682,
+          "sha256": "796ff5fd93c7c10afbd08e9b2e64f84e4d4c55fc5cfb8696ed8d1adef29fde72",
+          "mode": 420,
+          "upstreamSha256": "796ff5fd93c7c10afbd08e9b2e64f84e4d4c55fc5cfb8696ed8d1adef29fde72",
+          "changed": false
+        },
+        {
+          "path": "src/lib/FileProcessor.js.flow",
+          "bytes": 7984,
+          "sha256": "508519c24135d0a5e352b88fe16610457c922cc470dc6fd47d0e8bd60bc423db",
+          "mode": 420,
+          "upstreamSha256": "508519c24135d0a5e352b88fe16610457c922cc470dc6fd47d0e8bd60bc423db",
+          "changed": false
+        },
+        {
+          "path": "src/lib/FileSystemChangeAggregator.d.ts",
+          "bytes": 1311,
+          "sha256": "3ee5daa257234d2b67d994df5a71949941b1c1ec4b38a5ffc69629025addfd1c",
+          "mode": 420,
+          "upstreamSha256": "3ee5daa257234d2b67d994df5a71949941b1c1ec4b38a5ffc69629025addfd1c",
+          "changed": false
+        },
+        {
+          "path": "src/lib/FileSystemChangeAggregator.js",
+          "bytes": 2690,
+          "sha256": "35e2ac3287eabf4e31acdf5ec9a9f89afee2308aec093f19fc3ae658826bd633",
+          "mode": 420,
+          "upstreamSha256": "35e2ac3287eabf4e31acdf5ec9a9f89afee2308aec093f19fc3ae658826bd633",
+          "changed": false
+        },
+        {
+          "path": "src/lib/FileSystemChangeAggregator.js.flow",
+          "bytes": 4912,
+          "sha256": "970a7172a883e339396ecf995c7977522e6c91094d02d2fcd5a243472ba243c2",
+          "mode": 420,
+          "upstreamSha256": "970a7172a883e339396ecf995c7977522e6c91094d02d2fcd5a243472ba243c2",
+          "changed": false
+        },
+        {
+          "path": "src/lib/RootPathUtils.d.ts",
+          "bytes": 1072,
+          "sha256": "6984fc6009dcc6d399585a1d8dab9970e291376d67a2594893e6abcf5efd6f10",
+          "mode": 420,
+          "upstreamSha256": "6984fc6009dcc6d399585a1d8dab9970e291376d67a2594893e6abcf5efd6f10",
+          "changed": false
+        },
+        {
+          "path": "src/lib/RootPathUtils.js",
+          "bytes": 7204,
+          "sha256": "834198846ab6a6134750f3cbd631bbcabb8eb2e7c27e933e990d33ecca9eb430",
+          "mode": 420,
+          "upstreamSha256": "834198846ab6a6134750f3cbd631bbcabb8eb2e7c27e933e990d33ecca9eb430",
+          "changed": false
+        },
+        {
+          "path": "src/lib/RootPathUtils.js.flow",
+          "bytes": 11767,
+          "sha256": "46385bc11ce97dff94a0bd15b35ba0d4e2bf75d857eb9eab6ca125ee8f9ef525",
+          "mode": 420,
+          "upstreamSha256": "46385bc11ce97dff94a0bd15b35ba0d4e2bf75d857eb9eab6ca125ee8f9ef525",
+          "changed": false
+        },
+        {
+          "path": "src/lib/TreeFS.d.ts",
+          "bytes": 5852,
+          "sha256": "2d564ff90174930ecc13e874893917ef49bc6b4359ab9a0be08c050d7e68b020",
+          "mode": 420,
+          "upstreamSha256": "2d564ff90174930ecc13e874893917ef49bc6b4359ab9a0be08c050d7e68b020",
+          "changed": false
+        },
+        {
+          "path": "src/lib/TreeFS.js",
+          "bytes": 27290,
+          "sha256": "47715c4e6b831293354cd4e62c15a888736664a468c7a40f6f969e0020b60ccb",
+          "mode": 420,
+          "upstreamSha256": "47715c4e6b831293354cd4e62c15a888736664a468c7a40f6f969e0020b60ccb",
+          "changed": false
+        },
+        {
+          "path": "src/lib/TreeFS.js.flow",
+          "bytes": 42299,
+          "sha256": "ab81529c8a72c17fa8e863f9c74585b65862ddbd3112f80d56b278479cfaf8d1",
+          "mode": 420,
+          "upstreamSha256": "ab81529c8a72c17fa8e863f9c74585b65862ddbd3112f80d56b278479cfaf8d1",
+          "changed": false
+        },
+        {
+          "path": "src/lib/checkWatchmanCapabilities.d.ts",
+          "bytes": 700,
+          "sha256": "d26aa9a7387ac007d2173e5416f4c37f220f6271abf14caad1bf760811b04301",
+          "mode": 420,
+          "upstreamSha256": "d26aa9a7387ac007d2173e5416f4c37f220f6271abf14caad1bf760811b04301",
+          "changed": false
+        },
+        {
+          "path": "src/lib/checkWatchmanCapabilities.js",
+          "bytes": 1625,
+          "sha256": "2b60b92c387a1a5111e87fd7a6298a9cd219d35c93de18eaf323096f2325a3ee",
+          "mode": 420,
+          "upstreamSha256": "2b60b92c387a1a5111e87fd7a6298a9cd219d35c93de18eaf323096f2325a3ee",
+          "changed": false
+        },
+        {
+          "path": "src/lib/checkWatchmanCapabilities.js.flow",
+          "bytes": 1924,
+          "sha256": "23cc9d7b5d3262ab99b4e024f933f414a32be5d321f576407a549a63004f1728",
+          "mode": 420,
+          "upstreamSha256": "23cc9d7b5d3262ab99b4e024f933f414a32be5d321f576407a549a63004f1728",
+          "changed": false
+        },
+        {
+          "path": "src/lib/dependencyExtractor.d.ts",
+          "bytes": 319,
+          "sha256": "17b89a7acd4a701e298d298c6dc2a29904bdb2f68f015d70cd555ac80dc92f88",
+          "mode": 420,
+          "upstreamSha256": "17b89a7acd4a701e298d298c6dc2a29904bdb2f68f015d70cd555ac80dc92f88",
+          "changed": false
+        },
+        {
+          "path": "src/lib/normalizePathSeparatorsToPosix.d.ts",
+          "bytes": 751,
+          "sha256": "6f5cbf3e5a55bf472643f9439d71aa0e9dbf873cbacd99d2b821f2565c411c78",
+          "mode": 420,
+          "upstreamSha256": "6f5cbf3e5a55bf472643f9439d71aa0e9dbf873cbacd99d2b821f2565c411c78",
+          "changed": false
+        },
+        {
+          "path": "src/lib/normalizePathSeparatorsToPosix.js",
+          "bytes": 1201,
+          "sha256": "35eb9b467861acb48eaacd3c88b0a61b07fe7eddbcd7c2c0085cf5791941f4ab",
+          "mode": 420,
+          "upstreamSha256": "35eb9b467861acb48eaacd3c88b0a61b07fe7eddbcd7c2c0085cf5791941f4ab",
+          "changed": false
+        },
+        {
+          "path": "src/lib/normalizePathSeparatorsToPosix.js.flow",
+          "bytes": 578,
+          "sha256": "04c4f99ee5bb51b5373a2e5d35e0b12b898eefa9f23e0f5585e1d4a883e3e8e0",
+          "mode": 420,
+          "upstreamSha256": "04c4f99ee5bb51b5373a2e5d35e0b12b898eefa9f23e0f5585e1d4a883e3e8e0",
+          "changed": false
+        },
+        {
+          "path": "src/lib/normalizePathSeparatorsToSystem.d.ts",
+          "bytes": 752,
+          "sha256": "c1fff76c310dcb8ed5ad2a49de2d6d5294a83f449996cf8eb2a4498b2eab0821",
+          "mode": 420,
+          "upstreamSha256": "c1fff76c310dcb8ed5ad2a49de2d6d5294a83f449996cf8eb2a4498b2eab0821",
+          "changed": false
+        },
+        {
+          "path": "src/lib/normalizePathSeparatorsToSystem.js",
+          "bytes": 1214,
+          "sha256": "ba8e5e696a917b66e370f11c3074c015cad9c7eb77ad5eeeecd38a11f29fead4",
+          "mode": 420,
+          "upstreamSha256": "ba8e5e696a917b66e370f11c3074c015cad9c7eb77ad5eeeecd38a11f29fead4",
+          "changed": false
+        },
+        {
+          "path": "src/lib/normalizePathSeparatorsToSystem.js.flow",
+          "bytes": 587,
+          "sha256": "2216dfb287ba73274c5ecc8f25de5a426b2743ed33e3d5f7ef52d97f09bb5f6e",
+          "mode": 420,
+          "upstreamSha256": "2216dfb287ba73274c5ecc8f25de5a426b2743ed33e3d5f7ef52d97f09bb5f6e",
+          "changed": false
+        },
+        {
+          "path": "src/lib/rootRelativeCacheKeys.d.ts",
+          "bytes": 779,
+          "sha256": "b9de6c4b77e365a49bb5e7265a3aba9a805077a950ca69e8411aa01087e3f45b",
+          "mode": 420,
+          "upstreamSha256": "b9de6c4b77e365a49bb5e7265a3aba9a805077a950ca69e8411aa01087e3f45b",
+          "changed": false
+        },
+        {
+          "path": "src/lib/rootRelativeCacheKeys.js",
+          "bytes": 1746,
+          "sha256": "2f48f2533a13fb6d901c960d61bb1fe2893165a2e0291c48964fb0d148e40a9e",
+          "mode": 420,
+          "upstreamSha256": "2f48f2533a13fb6d901c960d61bb1fe2893165a2e0291c48964fb0d148e40a9e",
+          "changed": false
+        },
+        {
+          "path": "src/lib/rootRelativeCacheKeys.js.flow",
+          "bytes": 1993,
+          "sha256": "474b8d4c43bb57a8f004b6db6de30d792a722d5d99db853dc4f345149a3f7d7d",
+          "mode": 420,
+          "upstreamSha256": "474b8d4c43bb57a8f004b6db6de30d792a722d5d99db853dc4f345149a3f7d7d",
+          "changed": false
+        },
+        {
+          "path": "src/lib/sorting.d.ts",
+          "bytes": 729,
+          "sha256": "f021c0f29c89351cfa03491e949b37dada41419eb8c3ed099c028a3e06b52887",
+          "mode": 420,
+          "upstreamSha256": "f021c0f29c89351cfa03491e949b37dada41419eb8c3ed099c028a3e06b52887",
+          "changed": false
+        },
+        {
+          "path": "src/lib/sorting.js",
+          "bytes": 553,
+          "sha256": "52a3b8b45a7c68c23f09ed5636c241f1e604cd79a89a437c6d4383273c014b2e",
+          "mode": 420,
+          "upstreamSha256": "52a3b8b45a7c68c23f09ed5636c241f1e604cd79a89a437c6d4383273c014b2e",
+          "changed": false
+        },
+        {
+          "path": "src/lib/sorting.js.flow",
+          "bytes": 775,
+          "sha256": "b01b430f08af878261710379b142f6cff11dfb914b7871ab817e7468900374a0",
+          "mode": 420,
+          "upstreamSha256": "b01b430f08af878261710379b142f6cff11dfb914b7871ab817e7468900374a0",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/DependencyPlugin.d.ts",
+          "bytes": 1148,
+          "sha256": "4af0a60fd38b4d6a63674cd4c57e05f35907776a9d0a46abd92445d35e341978",
+          "mode": 420,
+          "upstreamSha256": "4af0a60fd38b4d6a63674cd4c57e05f35907776a9d0a46abd92445d35e341978",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/DependencyPlugin.js",
+          "bytes": 1562,
+          "sha256": "bec1a98bba518e5d75c60e3dff4b06a71f76d17120cb2f6b95b0dbd150acf221",
+          "mode": 420,
+          "upstreamSha256": "bec1a98bba518e5d75c60e3dff4b06a71f76d17120cb2f6b95b0dbd150acf221",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/DependencyPlugin.js.flow",
+          "bytes": 1948,
+          "sha256": "b19c53c3b506ef649e06828c367d17d58b10960b3b45570ad354b6bd6add6889",
+          "mode": 420,
+          "upstreamSha256": "b19c53c3b506ef649e06828c367d17d58b10960b3b45570ad354b6bd6add6889",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/FileDataPlugin.d.ts",
+          "bytes": 1740,
+          "sha256": "e4f9bc92929a95675398bc2000e8d28d8f2e4b82597331cffed18b9bcfb445b6",
+          "mode": 420,
+          "upstreamSha256": "e4f9bc92929a95675398bc2000e8d28d8f2e4b82597331cffed18b9bcfb445b6",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/FileDataPlugin.js",
+          "bytes": 804,
+          "sha256": "2d4494315823e7ee0bdd455cd5132725cc251d460368518b1f30e157dd3b30e1",
+          "mode": 420,
+          "upstreamSha256": "2d4494315823e7ee0bdd455cd5132725cc251d460368518b1f30e157dd3b30e1",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/FileDataPlugin.js.flow",
+          "bytes": 1865,
+          "sha256": "cf45a77af99272cbb6dead8b1b15978e80b1b3d9a6a0aba18bce8b340dd6e729",
+          "mode": 420,
+          "upstreamSha256": "cf45a77af99272cbb6dead8b1b15978e80b1b3d9a6a0aba18bce8b340dd6e729",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/HastePlugin.d.ts",
+          "bytes": 2103,
+          "sha256": "af95c10515bff7e0cbd635354ca29e916c3c5693ea80a0acfd02a26c0dbf35ea",
+          "mode": 420,
+          "upstreamSha256": "af95c10515bff7e0cbd635354ca29e916c3c5693ea80a0acfd02a26c0dbf35ea",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/HastePlugin.js",
+          "bytes": 12386,
+          "sha256": "b9592b0fab1677701264e6b36fd16887858662857fc6e308ea68262535ade76f",
+          "mode": 420,
+          "upstreamSha256": "b9592b0fab1677701264e6b36fd16887858662857fc6e308ea68262535ade76f",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/HastePlugin.js.flow",
+          "bytes": 15250,
+          "sha256": "6a620aa299120d85831fa96cbc1937171cccd9edb5a9c56b55d2e3ce80657711",
+          "mode": 420,
+          "upstreamSha256": "6a620aa299120d85831fa96cbc1937171cccd9edb5a9c56b55d2e3ce80657711",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/MockPlugin.d.ts",
+          "bytes": 1538,
+          "sha256": "cf22c12077c42bd0539adaddcf39ba7f4e6d1b42b53c5df762f715cdccf41465",
+          "mode": 420,
+          "upstreamSha256": "cf22c12077c42bd0539adaddcf39ba7f4e6d1b42b53c5df762f715cdccf41465",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/MockPlugin.js",
+          "bytes": 5524,
+          "sha256": "75ae6e71ece20df22b5a28474bf57032c246bb1190022b157efa162b678f33e7",
+          "mode": 420,
+          "upstreamSha256": "75ae6e71ece20df22b5a28474bf57032c246bb1190022b157efa162b678f33e7",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/MockPlugin.js.flow",
+          "bytes": 6408,
+          "sha256": "bb35aa4c90d644d1e73e3fde0f12083209601eccae2f19cd826e2f1606105852",
+          "mode": 420,
+          "upstreamSha256": "bb35aa4c90d644d1e73e3fde0f12083209601eccae2f19cd826e2f1606105852",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/dependencies/dependencyExtractor.d.ts",
+          "bytes": 370,
+          "sha256": "1cec9111f7e2434546d38b3ad91e169f616d5156309a89159fb70e40f7ec799d",
+          "mode": 420,
+          "upstreamSha256": "1cec9111f7e2434546d38b3ad91e169f616d5156309a89159fb70e40f7ec799d",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/dependencies/dependencyExtractor.js",
+          "bytes": 1784,
+          "sha256": "99fe0d909d814d974af375b996a5f15f8d0138327726b752a87d97c57166be25",
+          "mode": 420,
+          "upstreamSha256": "99fe0d909d814d974af375b996a5f15f8d0138327726b752a87d97c57166be25",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/dependencies/dependencyExtractor.js.flow",
+          "bytes": 2322,
+          "sha256": "2e587341ac065e0f8c921bef3120e9f4bb2613652814f87c430b329d3314d989",
+          "mode": 420,
+          "upstreamSha256": "2e587341ac065e0f8c921bef3120e9f4bb2613652814f87c430b329d3314d989",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/dependencies/worker.d.ts",
+          "bytes": 622,
+          "sha256": "c62505e4051cf2ece6dd91bccdc443a0a4be8a5b09235b2c2702d5f938f399f8",
+          "mode": 420,
+          "upstreamSha256": "c62505e4051cf2ece6dd91bccdc443a0a4be8a5b09235b2c2702d5f938f399f8",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/dependencies/worker.js",
+          "bytes": 736,
+          "sha256": "7f805d6145bb7f193bea0e54ba1acbfc721563406ccf1ef3aa3c6e405440bbc3",
+          "mode": 420,
+          "upstreamSha256": "7f805d6145bb7f193bea0e54ba1acbfc721563406ccf1ef3aa3c6e405440bbc3",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/dependencies/worker.js.flow",
+          "bytes": 1474,
+          "sha256": "c0fa62932e972a1876785f57bd21ae6e3b19754c5c81874a1e14252130526921",
+          "mode": 420,
+          "upstreamSha256": "c0fa62932e972a1876785f57bd21ae6e3b19754c5c81874a1e14252130526921",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/DuplicateHasteCandidatesError.d.ts",
+          "bytes": 943,
+          "sha256": "4c3e7551f0f2e79ab5d839e593ad6cc8aa9ed0a8921419a801afa80d7e62408a",
+          "mode": 420,
+          "upstreamSha256": "4c3e7551f0f2e79ab5d839e593ad6cc8aa9ed0a8921419a801afa80d7e62408a",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/DuplicateHasteCandidatesError.js",
+          "bytes": 1706,
+          "sha256": "c085f4c37fd9f5ee36efccbcf9b2cec19d89aa135324b7d32c0631a2c76d1237",
+          "mode": 420,
+          "upstreamSha256": "c085f4c37fd9f5ee36efccbcf9b2cec19d89aa135324b7d32c0631a2c76d1237",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/DuplicateHasteCandidatesError.js.flow",
+          "bytes": 1840,
+          "sha256": "13beb87bbe952251dde21e8480dca5c5f086a5f48988e8952d736a1f79dcddf8",
+          "mode": 420,
+          "upstreamSha256": "13beb87bbe952251dde21e8480dca5c5f086a5f48988e8952d736a1f79dcddf8",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/HasteConflictsError.d.ts",
+          "bytes": 811,
+          "sha256": "765824bcd8acecd487f259ba3b8651a9a8cb88560c12e439cc467350e3e3b3ac",
+          "mode": 420,
+          "upstreamSha256": "765824bcd8acecd487f259ba3b8651a9a8cb88560c12e439cc467350e3e3b3ac",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/HasteConflictsError.js",
+          "bytes": 1856,
+          "sha256": "49af970a07cc5a3ac8746a83c898baa218a59009113eb3ad5b04bb141a902c95",
+          "mode": 420,
+          "upstreamSha256": "49af970a07cc5a3ac8746a83c898baa218a59009113eb3ad5b04bb141a902c95",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/HasteConflictsError.js.flow",
+          "bytes": 1965,
+          "sha256": "f50d5461eca4ea21a3bac4f2a82861c0ef1cee7a81d7b5921a5c052fbd04c68b",
+          "mode": 420,
+          "upstreamSha256": "f50d5461eca4ea21a3bac4f2a82861c0ef1cee7a81d7b5921a5c052fbd04c68b",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/computeConflicts.d.ts",
+          "bytes": 984,
+          "sha256": "0f1d79c4c01f8140eab5bccb55cac031c3b6ae3ab33ae6350e2805e2f5687ac5",
+          "mode": 420,
+          "upstreamSha256": "0f1d79c4c01f8140eab5bccb55cac031c3b6ae3ab33ae6350e2805e2f5687ac5",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/computeConflicts.js",
+          "bytes": 2349,
+          "sha256": "de235c6c928d824c1790762a5d3122f3732d7ebb2e42b39abb12ae8403de27f5",
+          "mode": 420,
+          "upstreamSha256": "de235c6c928d824c1790762a5d3122f3732d7ebb2e42b39abb12ae8403de27f5",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/computeConflicts.js.flow",
+          "bytes": 3096,
+          "sha256": "eae79dbd43e882eac11e127fbb1f2929b6da394da860fda1deae53d94f92ea18",
+          "mode": 420,
+          "upstreamSha256": "eae79dbd43e882eac11e127fbb1f2929b6da394da860fda1deae53d94f92ea18",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/getPlatformExtension.d.ts",
+          "bytes": 697,
+          "sha256": "f022c296e8693b9505fd422af3f5d62fcea0a8c897f44db35a646cc162040838",
+          "mode": 420,
+          "upstreamSha256": "f022c296e8693b9505fd422af3f5d62fcea0a8c897f44db35a646cc162040838",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/getPlatformExtension.js",
+          "bytes": 427,
+          "sha256": "cd52c1c6ce00b827ff8543dee8b0b5d832f1504503c8cc3eab9f2ffc85d0f1c0",
+          "mode": 420,
+          "upstreamSha256": "cd52c1c6ce00b827ff8543dee8b0b5d832f1504503c8cc3eab9f2ffc85d0f1c0",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/getPlatformExtension.js.flow",
+          "bytes": 639,
+          "sha256": "c62e7e2efc0b22e94008f4407c50a3df55e3e2ecd747d840133f6a3f3ef14c69",
+          "mode": 420,
+          "upstreamSha256": "c62e7e2efc0b22e94008f4407c50a3df55e3e2ecd747d840133f6a3f3ef14c69",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/worker.d.ts",
+          "bytes": 561,
+          "sha256": "8586ec38c2ad87dd2db136ba77d857f998447ed3fe8eade991fe50ffb9c12f22",
+          "mode": 420,
+          "upstreamSha256": "8586ec38c2ad87dd2db136ba77d857f998447ed3fe8eade991fe50ffb9c12f22",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/worker.js",
+          "bytes": 1065,
+          "sha256": "424ba4e4c339d57d7449b04ab5117f8e1ee2d317ad6bcdbe6a7aa8eb03b82038",
+          "mode": 420,
+          "upstreamSha256": "424ba4e4c339d57d7449b04ab5117f8e1ee2d317ad6bcdbe6a7aa8eb03b82038",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/haste/worker.js.flow",
+          "bytes": 1909,
+          "sha256": "c68d0ffb40bd8940b98589c8bbcee4c6160c8295f9e363d327e8b537b0ddf094",
+          "mode": 420,
+          "upstreamSha256": "c68d0ffb40bd8940b98589c8bbcee4c6160c8295f9e363d327e8b537b0ddf094",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/mocks/getMockName.d.ts",
+          "bytes": 742,
+          "sha256": "3eb4ece9bc2f8c4ef9957294b87a89e31e091ce12b662ee143ab5ff5a305ca0b",
+          "mode": 420,
+          "upstreamSha256": "3eb4ece9bc2f8c4ef9957294b87a89e31e091ce12b662ee143ab5ff5a305ca0b",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/mocks/getMockName.js",
+          "bytes": 1207,
+          "sha256": "f2ea104042ad8df2dbaad8c01b54046b88515144d436681d07e09fab387c75ba",
+          "mode": 420,
+          "upstreamSha256": "f2ea104042ad8df2dbaad8c01b54046b88515144d436681d07e09fab387c75ba",
+          "changed": false
+        },
+        {
+          "path": "src/plugins/mocks/getMockName.js.flow",
+          "bytes": 524,
+          "sha256": "f478b93b4df46e211e294127f2d3e6b27609853889540cb9fbcd52c18dea5c50",
+          "mode": 420,
+          "upstreamSha256": "f478b93b4df46e211e294127f2d3e6b27609853889540cb9fbcd52c18dea5c50",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/AbstractWatcher.d.ts",
+          "bytes": 1441,
+          "sha256": "fc13f81ca48da3ecc2d4ee0cab8e68ed898872f965a981f9475976c94fb60132",
+          "mode": 420,
+          "upstreamSha256": "fc13f81ca48da3ecc2d4ee0cab8e68ed898872f965a981f9475976c94fb60132",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/AbstractWatcher.js",
+          "bytes": 2159,
+          "sha256": "a87a9993cd74ba40500877f069589b9a83507cc18340ce171a9b7e698b714948",
+          "mode": 420,
+          "upstreamSha256": "a87a9993cd74ba40500877f069589b9a83507cc18340ce171a9b7e698b714948",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/AbstractWatcher.js.flow",
+          "bytes": 2030,
+          "sha256": "c89f30248938802e0fafebddea84d06e0717b19b0493db36141f51bc42e45cda",
+          "mode": 420,
+          "upstreamSha256": "c89f30248938802e0fafebddea84d06e0717b19b0493db36141f51bc42e45cda",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/FallbackWatcher.d.ts",
+          "bytes": 842,
+          "sha256": "86e60bfb1efb52a6ce1f18bb02599f3cfab59544d7ce29abcba9571a14dab5c0",
+          "mode": 420,
+          "upstreamSha256": "86e60bfb1efb52a6ce1f18bb02599f3cfab59544d7ce29abcba9571a14dab5c0",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/FallbackWatcher.js",
+          "bytes": 10581,
+          "sha256": "244b61ed85ca54eaa4ccce2cb27d09f7a21729a9cdd4a5bdfb792924635f2f91",
+          "mode": 420,
+          "upstreamSha256": "244b61ed85ca54eaa4ccce2cb27d09f7a21729a9cdd4a5bdfb792924635f2f91",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/FallbackWatcher.js.flow",
+          "bytes": 12837,
+          "sha256": "bc61433b208d1bdb7f6008873971a3dedd6f58040cacf9ce710d471218f48a75",
+          "mode": 420,
+          "upstreamSha256": "bc61433b208d1bdb7f6008873971a3dedd6f58040cacf9ce710d471218f48a75",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/NativeWatcher.d.ts",
+          "bytes": 2056,
+          "sha256": "63fdd52323031a1375e92cd985a78155acd8184f7df70512ce3f740cf781211d",
+          "mode": 420,
+          "upstreamSha256": "63fdd52323031a1375e92cd985a78155acd8184f7df70512ce3f740cf781211d",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/NativeWatcher.js",
+          "bytes": 3434,
+          "sha256": "bbfccc3ad7844bd51004e4f6e2cc03ff1259c1b9be74128e7e4dfd7b2f6e0672",
+          "mode": 420,
+          "upstreamSha256": "bbfccc3ad7844bd51004e4f6e2cc03ff1259c1b9be74128e7e4dfd7b2f6e0672",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/NativeWatcher.js.flow",
+          "bytes": 4653,
+          "sha256": "3c71a5d0be21a9f380546a55d6dfe3ab50c231b8eedbf3a9dcb4618e5be300d6",
+          "mode": 420,
+          "upstreamSha256": "3c71a5d0be21a9f380546a55d6dfe3ab50c231b8eedbf3a9dcb4618e5be300d6",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/RecrawlWarning.d.ts",
+          "bytes": 1058,
+          "sha256": "246e5f562f0515795472c6a07bba1ac605aef9bacda6f9484e2bcf37d8160eb3",
+          "mode": 420,
+          "upstreamSha256": "246e5f562f0515795472c6a07bba1ac605aef9bacda6f9484e2bcf37d8160eb3",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/RecrawlWarning.js",
+          "bytes": 1190,
+          "sha256": "9a6a4dfea015f406fb8adf11e560d0ca7d0b5abd36e5b42b0ae2c38cb207ca0a",
+          "mode": 420,
+          "upstreamSha256": "9a6a4dfea015f406fb8adf11e560d0ca7d0b5abd36e5b42b0ae2c38cb207ca0a",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/RecrawlWarning.js.flow",
+          "bytes": 1759,
+          "sha256": "c2b2dab3af859001615ca9f7ef5adfd2f9e7c329657cac87e463dc24d3b74dce",
+          "mode": 420,
+          "upstreamSha256": "c2b2dab3af859001615ca9f7ef5adfd2f9e7c329657cac87e463dc24d3b74dce",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/WatchmanWatcher.d.ts",
+          "bytes": 1007,
+          "sha256": "e8dc4bb27d5020101ef0b224712ed8b93ae9165e889e34c8c69f3bb93765bd4a",
+          "mode": 420,
+          "upstreamSha256": "e8dc4bb27d5020101ef0b224712ed8b93ae9165e889e34c8c69f3bb93765bd4a",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/WatchmanWatcher.js",
+          "bytes": 8982,
+          "sha256": "88a049cf95a2be89946042e7751f5789793a55360cad2eff2ff11a61bab22478",
+          "mode": 420,
+          "upstreamSha256": "88a049cf95a2be89946042e7751f5789793a55360cad2eff2ff11a61bab22478",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/WatchmanWatcher.js.flow",
+          "bytes": 9582,
+          "sha256": "bfdc213f2d6c68a2ebc84826fe656d1d2100a67b7d94788ac61ba9bf98aadf08",
+          "mode": 420,
+          "upstreamSha256": "bfdc213f2d6c68a2ebc84826fe656d1d2100a67b7d94788ac61ba9bf98aadf08",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/common.d.ts",
+          "bytes": 2325,
+          "sha256": "e82129b2c4f300ba28702c762e6f499071714f61a7f9de56e1552a2c5c538e15",
+          "mode": 420,
+          "upstreamSha256": "e82129b2c4f300ba28702c762e6f499071714f61a7f9de56e1552a2c5c538e15",
+          "changed": false
+        },
+        {
+          "path": "src/watchers/common.js",
+          "bytes": 1430,
+          "sha256": "7db59e1f6c75e5bd869ecbd3a2a5ef2e3b5f8b41ac751ea7a6cbd1b5c32ab778",
+          "mode": 420,
+          "upstreamSha256": "fd54d0713d2066eb474652dcdf3f88ff67f66d84600d1d8013ecbf6c7fdc3c47",
+          "changed": true
+        },
+        {
+          "path": "src/watchers/common.js.flow",
+          "bytes": 2498,
+          "sha256": "87f3f4e5ee1d5ea1660196912f456eb33d18396878280124f515b23aa8219a51",
+          "mode": 420,
+          "upstreamSha256": "700521219a4c419255e8468ec457878f121d8e5c62d31a0e086c6b07db6372db",
+          "changed": true
+        },
+        {
+          "path": "src/worker.d.ts",
+          "bytes": 863,
+          "sha256": "e99a83c76c7f4979ca58dce3da7b3b32110a1bf5c21ff5643fd9bbd2433468b8",
+          "mode": 420,
+          "upstreamSha256": "e99a83c76c7f4979ca58dce3da7b3b32110a1bf5c21ff5643fd9bbd2433468b8",
+          "changed": false
+        },
+        {
+          "path": "src/worker.js",
+          "bytes": 1537,
+          "sha256": "4a0ffcbdf7ed068b6ca70f5b494b46ad70fea8ce5abbea73cf624f8b0a943311",
+          "mode": 420,
+          "upstreamSha256": "4a0ffcbdf7ed068b6ca70f5b494b46ad70fea8ce5abbea73cf624f8b0a943311",
+          "changed": false
+        },
+        {
+          "path": "src/worker.js.flow",
+          "bytes": 2575,
+          "sha256": "4aabb38f8614718986b1c5f58c28f5089bfc91653e089535e0f6770efcd51bf2",
+          "mode": 420,
+          "upstreamSha256": "4aabb38f8614718986b1c5f58c28f5089bfc91653e089535e0f6770efcd51bf2",
+          "changed": false
+        },
+        {
+          "path": "src/workerExclusionList.d.ts",
+          "bytes": 281,
+          "sha256": "e22b0abbe9c0a5020e31bb7405ece57291594d458a5726dccc3e17fdc8c22bf5",
+          "mode": 420,
+          "upstreamSha256": "e22b0abbe9c0a5020e31bb7405ece57291594d458a5726dccc3e17fdc8c22bf5",
+          "changed": false
+        },
+        {
+          "path": "src/workerExclusionList.js",
+          "bytes": 407,
+          "sha256": "d20164434e7b248ec334fefc2c6d83ecd69b66503d2c4b93b45ffb5b564f9d21",
+          "mode": 420,
+          "upstreamSha256": "d20164434e7b248ec334fefc2c6d83ecd69b66503d2c4b93b45ffb5b564f9d21",
+          "changed": false
+        },
+        {
+          "path": "src/workerExclusionList.js.flow",
+          "bytes": 1424,
+          "sha256": "054e4f03e1df095848a86bdb1d967837b990be9b9addb4f23798eaca6fc1a867",
+          "mode": 420,
+          "upstreamSha256": "054e4f03e1df095848a86bdb1d967837b990be9b9addb4f23798eaca6fc1a867",
+          "changed": false
+        }
+      ],
+      "manifestChange": "Remove micromatch ^4.0.4, add exact already selected picomatch2.3.2; all other manifest values conserved.",
+      "sourceChange": "Only private internal common matcher import (and corresponding Flow source import) now resolves the literal public micromatch4.0.8.some implementation, same locked picomatch2.3.2. No full micromatch ABI or brace parser facade.",
+      "publishedUtc": "2026-08-19T15:35:18.910Z",
+      "sevenDayFloorUtc": "2026-08-26T15:35:18.910000+00:00"
+    }
+  ],
+  "literalSome": {
+    "origin": "micromatch4.0.8/index.js .some",
+    "sha256": "e734c45aeee716b2eacbff73f275228a6acf55935bb206e3b3734502ac49ede6",
+    "rawBase64": "bWljcm9tYXRjaC5zb21lID0gKGxpc3QsIHBhdHRlcm5zLCBvcHRpb25zKSA9PiB7CiAgbGV0IGl0ZW1zID0gW10uY29uY2F0KGxpc3QpOwoKICBmb3IgKGxldCBwYXR0ZXJuIG9mIFtdLmNvbmNhdChwYXR0ZXJucykpIHsKICAgIGxldCBpc01hdGNoID0gcGljb21hdGNoKFN0cmluZyhwYXR0ZXJuKSwgb3B0aW9ucyk7CiAgICBpZiAoaXRlbXMuc29tZShpdGVtID0+IGlzTWF0Y2goaXRlbSkpKSB7CiAgICAgIHJldHVybiB0cnVlOwogICAgfQogIH0KICByZXR1cm4gZmFsc2U7Cn07",
+    "license": "MIT",
+    "licenseSha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2"
+  },
+  "matcher": {
+    "name": "picomatch",
+    "version": "2.3.2",
+    "integrity": "sha512-V7+vQEJ06Z+c5tSye8S+nHUfI51xoXIXjHQ99cQtKUkQqqO1kO/KCJUfZXuB47h/YBlDhah2H3hdUGXn8ie0oA==",
+    "scope": "Existing selected exact public matcher. No version update or generic micromatch/braces API claim.",
+    "files": [
+      {
+        "path": "LICENSE",
+        "bytes": 1091,
+        "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+      },
+      {
+        "path": "README.md",
+        "bytes": 27999,
+        "sha256": "f4653b68a1883a32f852083c1b93381ce87f44c6855ce1f01854d39d0563c98c"
+      },
+      {
+        "path": "index.js",
+        "bytes": 60,
+        "sha256": "5695ff5dfcd5a338a40630bd506056f2950bcb08fe1cc068519cbbfe60add480"
+      },
+      {
+        "path": "lib/constants.js",
+        "bytes": 4563,
+        "sha256": "980225ab847a88a784f6d315557b8434f7742b2551ce20e354455c61b938c0a5"
+      },
+      {
+        "path": "lib/parse.js",
+        "bytes": 33950,
+        "sha256": "3a91656f440069aa8f8e15c9d695b9f6b2209df1eab2be8127c72cbcca45ff5f"
+      },
+      {
+        "path": "lib/picomatch.js",
+        "bytes": 9956,
+        "sha256": "2cb169cbe17d356036c5f62a377318b85e30817877e59797842aec9d8b15f54b"
+      },
+      {
+        "path": "lib/scan.js",
+        "bytes": 9189,
+        "sha256": "227fcc994a477ea95c5a0435d32783566334c6bd0dcc4a103029735ad8c9c535"
+      },
+      {
+        "path": "lib/utils.js",
+        "bytes": 1885,
+        "sha256": "809fc29cf35ab0aa76b99cad29182f62c0ae598902481d10f9868eaef71981ee"
+      },
+      {
+        "path": "package.json",
+        "bytes": 1912,
+        "sha256": "63264d817e856a4bff57d4304f2b38d2964a4f6df520eb169e7bcdb619f13e9a"
+      }
+    ],
+    "publishedUtc": "2026-03-23T20:39:08.118Z",
+    "sevenDayFloorUtc": "2026-03-30T20:39:08.118Z"
+  },
+  "ageAdmissionVerified": true,
+  "derivedArtifactsNotPublishedUpstream": true,
+  "publicInputAgeFloorUtc": "2026-09-15T13:49:11.983000+00:00"
+}

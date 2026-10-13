@@ -130,3 +130,14 @@ No package publication, deployment-only branch update, manual dispatch, approval
 inheritance, certificate authority change, device write or native installation
 is part of this migration. The primary Examples owner's five dirty files remain
 untouched. Independent examples retain their separate public package boundaries.
+
+## October 13 prospective independent Metro matching removal
+
+The two independent RN roots locally qualify public Metro parent adaptations
+for alerts #111/#112. Each preserves its exact public SDK/Expo/runtime and all
+current native-signing guards; only the internal literal `.some` matcher uses
+the same picomatch without the unused braces closure. Ordinary owning checks,
+matching/watcher and exports are recorded in [the current scope](metro-public-matching-removal.md).
+Legacy root #113 and its six-asset parser guard remain unchanged. Source
+admission, first-push/native results, scanner closure and physical acceptance
+are separate; this prospective local evidence claims no published fix.

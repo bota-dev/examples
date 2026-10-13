@@ -135,3 +135,11 @@ devices or invented facade methods. Full app parity/shared backend is not needed
 for a useful platform example. Report public-contract gaps and actual checks;
 keep live/hardware evidence distinct from synthetic tests and builds.
 ```
+
+## Independent React Native dependency review
+
+The two independent RN roots keep their public SDK/Expo/device contracts and
+ordinary install/test chains. Read [public Metro matching removal and delivery
+limits](metro-public-matching-removal.md) before changing their parent artifacts,
+overrides or zero-braces asset guard. Legacy root retains its separate braces
+parser guard and source/scanner limits.

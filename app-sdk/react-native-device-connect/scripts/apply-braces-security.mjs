@@ -1,61 +1,78 @@
-import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
-import { dirname, isAbsolute, relative, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import {createHash} from 'node:crypto';
+import {readFileSync,existsSync,readdirSync,realpathSync,statSync} from 'node:fs';
+import {dirname,join,resolve,relative,isAbsolute} from 'node:path';
+import {fileURLToPath,pathToFileURL} from 'node:url';
+import {createRequire} from 'node:module';
 
-const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const vendor = resolve(root, 'vendor/braces-security');
-const provenance = JSON.parse(readFileSync(resolve(vendor, 'provenance.json'), 'utf8'));
-const lock = JSON.parse(readFileSync(resolve(root, 'package-lock.json'), 'utf8'));
-const verify = process.argv.includes('--verify');
-if (process.argv.slice(2).some(arg => arg !== '--verify')) throw new Error('Unknown braces guard argument');
-const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const contained = (base, target) => {
-  const path = relative(base, target);
-  return path !== '..' && !path.startsWith('../') && !path.startsWith('..\\') && !isAbsolute(path);
-};
-
-// Validate every asset and installed target before making any change.
-const assets = new Map(provenance.files.map(file => {
-  const path = resolve(vendor, file.asset);
-  if (!contained(vendor, realpathSync(path))) throw new Error('Braces vendor path escapes its directory');
-  const bytes = readFileSync(path);
-  if (hash(bytes) !== file.patchedSha256) throw new Error(`Unknown braces vendor bytes: ${file.path}`);
-  return [file.path, bytes];
-}));
-const entries = Object.entries(lock.packages ?? {}).filter(([path]) => path.endsWith('node_modules/braces'));
-if (!entries.length) throw new Error('Expected locked braces package is missing');
-const plan = [];
-const installed = [];
-for (const [path, metadata] of entries) {
-  if (path.split('/').some(part => part === '..') || isAbsolute(path)) throw new Error('Invalid braces lock path');
-  if (metadata.version !== provenance.version || metadata.integrity !== provenance.integrity) throw new Error(`Unknown locked braces identity: ${path}`);
-  const packageRoot = resolve(root, path);
-  if (!contained(root, packageRoot)) throw new Error('Braces lock path escapes repository');
-  // Workspace-scoped/production installs can legitimately omit this dev dependency.
-  if (!existsSync(packageRoot)) continue;
-  const actualRoot = realpathSync(packageRoot);
-  if (!contained(realpathSync(root), actualRoot)) throw new Error('Installed braces path escapes repository');
-  const manifestPath = realpathSync(resolve(actualRoot, 'package.json'));
-  if (!contained(actualRoot, manifestPath)) throw new Error('Braces manifest escapes package');
-  const manifest = readFileSync(manifestPath);
-  if (hash(manifest) !== provenance.manifestSha256) throw new Error(`Unknown braces manifest: ${path}`);
-  for (const file of provenance.unchanged) {
-    const target = realpathSync(resolve(actualRoot, file.path));
-    if (!contained(actualRoot, target) || hash(readFileSync(target)) !== file.sha256) throw new Error(`Unknown unchanged braces source: ${path}/${file.path}`);
+const hash=bytes=>createHash('sha256').update(bytes).digest('hex');
+const within=(base,target)=>{const p=relative(base,target);return p!=='..'&&!p.startsWith('../')&&!p.startsWith('..\\')&&!isAbsolute(p);};
+const alias=value=>typeof value==='string'&&/^npm:braces(?:@|$)/i.test(value);
+const archiveUrl=value=>typeof value==='string'&&/^https:\/\/registry\.npmjs\.org\/braces\/-\/braces-/i.test(value);
+function inspectDeclarations(value){
+  if(!value||typeof value!=='object')return;
+  for(const[key,child]of Object.entries(value)){
+    if(key==='braces'||alias(child)||archiveUrl(child))throw Error('Braces declaration remains');
+    inspectDeclarations(child);
   }
-  for (const file of provenance.files) {
-    const target = resolve(actualRoot, file.path);
-    if (!contained(actualRoot, realpathSync(dirname(target)))) throw new Error('Braces target parent escapes package');
-    if (existsSync(target) && !contained(actualRoot, realpathSync(target))) throw new Error('Braces target escapes package');
-    const current = existsSync(target) ? hash(readFileSync(target)) : null;
-    // Only the exact reviewed previous guard may migrate; verification requires the current assets.
-    if (current !== file.pristineSha256 && current !== file.patchedSha256 && current !== file.previousPatchedSha256) throw new Error(`Unknown braces runtime: ${path}/${file.path}`);
-    if (verify && current !== file.patchedSha256) throw new Error(`Unpatched braces runtime: ${path}/${file.path}`);
-    if (current !== file.patchedSha256) plan.push({ target, bytes: assets.get(file.path), expected: file.patchedSha256 });
-  }
-  installed.push(path);
 }
-for (const item of plan) writeFileSync(item.target, item.bytes);
-for (const item of plan) if (hash(readFileSync(item.target)) !== item.expected) throw new Error('Braces write verification failed');
-console.log(JSON.stringify({ guard: 'braces3.0.3 scoped PR82 and data-array guard', installed, changedFiles: plan.length, mode: verify ? 'verify' : 'apply', omittedInstallScope: installed.length === 0 }));
+export function verifyMetroPublicParents(root=resolve(dirname(fileURLToPath(import.meta.url)),'..')){
+  const physicalRoot=realpathSync(root),vendor=join(root,'vendor/metro-public-matching'),physicalVendor=realpathSync(vendor);
+  if(!within(physicalRoot,physicalVendor))throw Error('Metro vendor escapes owning root');
+  if(!within(physicalVendor,realpathSync(join(vendor,'provenance.json'))))throw Error('Metro provenance escapes vendor');
+  const provenance=JSON.parse(readFileSync(join(vendor,'provenance.json')));
+  const lock=JSON.parse(readFileSync(join(root,'package-lock.json')));
+  inspectDeclarations(JSON.parse(readFileSync(join(root,'package.json'))));
+  for(const[p,r]of Object.entries(lock.packages||{})){
+    if(p.split('/').some(part=>part.toLowerCase()==='braces')||r.name==='braces'||archiveUrl(r.resolved))throw Error('Braces remains in owning lock');
+    for(const section of ['dependencies','optionalDependencies','devDependencies','peerDependencies'])inspectDeclarations(r[section]);
+  }
+  let verifiedAssets=0;
+  for(const parent of provenance.parentArtifacts){
+    const archive=join(vendor,parent.derivedArchive);
+    if(!within(physicalVendor,realpathSync(archive)))throw Error('Metro archive escapes vendor');
+    const bytes=readFileSync(archive);
+    if(bytes.length!==parent.derivedBytes||hash(bytes)!==parent.derivedSha256||'sha512-'+createHash('sha512').update(bytes).digest('base64')!==parent.derivedIntegrity)throw Error('Metro source archive drift');
+    const row=lock.packages?.[parent.lockedPath];
+    if(!row||row.version!==parent.version||row.integrity!==parent.derivedIntegrity||row.resolved!=='file:vendor/metro-public-matching/'+parent.derivedArchive||row.dependencies?.micromatch||row.dependencies?.picomatch!=='2.3.2')throw Error('Unexpected Metro locked parent');
+    const base=join(root,parent.lockedPath);if(!existsSync(base))throw Error('Expected Metro installed parent missing');
+    const physical=realpathSync(base);if(!within(physicalRoot,physical))throw Error('Metro installed parent escapes owning root');
+    const manifest=JSON.parse(readFileSync(join(base,'package.json')));
+    if(manifest.name!==parent.name||manifest.version!==parent.version||manifest.dependencies?.micromatch||manifest.dependencies?.picomatch!=='2.3.2')throw Error('Unexpected Metro parent manifest');
+    const actual=[];const queue=[''];
+    while(queue.length){
+      const dir=queue.pop();for(const entry of readdirSync(join(base,dir),{withFileTypes:true})){
+        const p=(dir?dir+'/':'')+entry.name;
+        if(entry.isSymbolicLink())throw Error('Unexpected Metro asset link');
+        if(entry.isDirectory()){if(entry.name!=='node_modules')queue.push(p);}
+        else if(entry.isFile())actual.push(p);else throw Error('Unexpected Metro asset kind');
+      }
+    }
+    if(actual.length!==parent.files.length)throw Error('Metro asset population mismatch');
+    const expected=new Map(parent.files.map(f=>[f.path,f]));
+    for(const p of actual){const f=expected.get(p);if(!f||hash(readFileSync(join(base,p)))!==f.sha256)throw Error('Metro installed asset drift: '+p);verifiedAssets++;}
+    const matcherManifest=createRequire(join(base,'package.json')).resolve('picomatch/package.json');
+    if(!within(physicalRoot,realpathSync(matcherManifest)))throw Error('Metro matcher escapes owning root');
+    const matcher=JSON.parse(readFileSync(matcherManifest)),matcherBase=dirname(matcherManifest);
+    if(matcher.name!=='picomatch'||matcher.version!==provenance.matcher.version)throw Error('Unexpected Metro matcher identity');
+    for(const file of provenance.matcher.files){const target=join(matcherBase,file.path);if(!within(realpathSync(matcherBase),realpathSync(target))||hash(readFileSync(target))!==file.sha256)throw Error('Metro matcher asset drift');}
+  }
+  const nodes=join(root,'node_modules');if(!existsSync(nodes))throw Error('Expected owning installed tree missing');
+  const queue=[nodes],seen=new Set();let directories=0;
+  while(queue.length){
+    const dir=queue.pop(),physical=realpathSync(dir);if(!within(physicalRoot,physical))throw Error('Installed graph escapes owning root');if(seen.has(physical))continue;seen.add(physical);
+    if(++directories>50000)throw Error('Installed graph traversal bound exceeded');
+    const manifestPath=join(dir,'package.json');if(existsSync(manifestPath)){
+      if(!within(physical,realpathSync(manifestPath)))throw Error('Installed manifest escapes package');
+      if(JSON.parse(readFileSync(manifestPath)).name==='braces')throw Error('Physical braces manifest remains');
+    }
+    for(const entry of readdirSync(dir,{withFileTypes:true})){
+      if(entry.name.toLowerCase()==='braces')throw Error('Physical braces directory remains');
+      const target=join(dir,entry.name);if(entry.isDirectory()||(entry.isSymbolicLink()&&statSync(target).isDirectory()))queue.push(target);
+    }
+  }
+  return {guard:'exact public Metro some parents and zero braces',verifiedAssets,lockBracesAbsent:true,physicalBracesAbsent:true,physicalDirectoriesChecked:directories,picomatchVersion:'2.3.2',mode:'read-only'};
+}
+if(process.argv[1]&&import.meta.url===pathToFileURL(resolve(process.argv[1])).href){
+  if(process.argv.slice(2).some(arg=>arg!=='--verify'))throw Error('Unknown Metro guard argument');
+  console.log(JSON.stringify(verifyMetroPublicParents()));
+}

@@ -170,3 +170,15 @@ source-map, query-string and native checks remain required where applicable.
 See [the exact scope and local/hosted limits](../../docs/native-expo-signing-replacement.md).
 No public SDK/Expo version or application/device behavior is upgraded by this
 development-tool replacement.
+
+## Public Metro matching dependency gate
+
+Keep normal installation scripts and every existing test chain enabled. These
+reviewed downstream Metro parents retain their public names/versions and only
+replace their internal micromatch `.some` import with its literal public source
+and the same locked picomatch 2.3.2. The existing braces entry point now requires
+21 zero-removal/asset checks; native signing still attests 803 assets and runs
+32 cases. SDK beta.13, application/device contracts and native/source-map tests
+remain unchanged. See [exact local qualification and remaining source, hosted,
+scanner and native gates](../../docs/metro-public-matching-removal.md). Local checks do not establish scanner
+closure or physical acceptance.

@@ -215,3 +215,14 @@ explicit caller input policy; generic iterative flatten retains wide output.
 Package 3.0.3 remains affected and #111/#112/#113 stay open. Exact-source hosted
 native builds and physical installation remain separate from local checks.
 See [scope and evidence](docs/braces-depth-mitigation.md#october-11-six-file-migration).
+
+## October 13 prospective independent Metro matching removal
+
+The two independent RN roots locally qualify public Metro parent adaptations
+for alerts #111/#112. Each preserves its exact public SDK/Expo/runtime and all
+current native-signing guards; only the internal literal `.some` matcher uses
+the same picomatch without the unused braces closure. Ordinary owning checks,
+matching/watcher and exports are recorded in [the current scope](docs/metro-public-matching-removal.md).
+Legacy root #113 and its six-asset parser guard remain unchanged. Source
+admission, first-push/native results, scanner closure and physical acceptance
+are separate; this prospective local evidence claims no published fix.
