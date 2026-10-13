@@ -220,3 +220,20 @@ its current detail owners before reporting completion.
 The [pre-reset architecture archive](docs/design-history/2026-10-12-architecture-before-reset.md)
 preserves history and old evidence. It is superseded and is **not** a normative
 specification for current work.
+
+## Native development-signing dependency boundary — October 12
+
+The three RN install roots carry independent copies of the reviewed public Expo
+CLI 57.0.27 adaptation and an independently authored Node/OpenSSL signing adapter.
+These repository-contained development tools require no sibling repository,
+private app helper, unpublished Bota facade or shared example runtime. Standard
+crypto operations use Node; maintained public ASN.1 packages provide models.
+SDK, application authentication, upload journals and device cryptography remain
+outside this change. The [qualification review](docs/native-expo-signing-replacement.md)
+distinguishes local guards/exports from hosted/native/scanner acceptance.
+
+The October 12 architecture decision remains authoritative: focused workflows
+and platform starters are first-class; Bota Recordings is an optional reference.
+This dependency replacement preserves those choices and all current install roots.
+Its runtime qualification was frozen on 985; the later 934 owner delta changes
+documentation only and is joined separately before delivery.

@@ -30,7 +30,7 @@
 ## Preserve dependency guards
 
 - Keep lifecycle scripts enabled and every existing postinstall/test chain. Read [dependency security](DEPENDENCY_SECURITY.md), [Forge parser mitigation](docs/node-forge-parser-mitigation.md), [braces migration](docs/braces-depth-mitigation.md) and [build-dependency remediation](docs/build-dependency-remediation.md) before changing manifests, locks, overrides or guards.
-- Three RN install roots require their version/hash-pinned Forge and six-asset braces guards. Unknown source drift refuses before writes; retain each updated 22-case braces suite and its fixed depth/visit/accessor policy.
+- Three RN install roots require their own 803-asset native Expo signing guard and 32 public-contract/caller cases; Forge is removed by the reviewed self-contained development-tool replacement. Read [scope and evidence](docs/native-expo-signing-replacement.md). Retain six-asset braces guards, each 22-case suite and its fixed depth/visit/accessor policy; unknown signing/source drift refuses.
 - Keep four source-map-js suites in the respective root/app `npm test` chains, including Web CI. Root selector-parser overrides remain scoped to the two reviewed parents; no claim covers Tailwind's embedded fallback.
 - Package/scanner identities, native builds and physical acceptance are separate evidence. Do not suppress alerts or claim closure from a downstream source patch.
 

@@ -152,10 +152,12 @@ after push, independently of this source and local-audit evidence.
 <a id="node-forge-open-advisory"></a>
 ## Open node-forge advisory (2026-10-02)
 
-Subsequent October 7 checkpoint: a pinned downstream parser guard is now
-mandatory in all three affected install roots. See [mitigation and checks](docs/node-forge-parser-mitigation.md).
-The following October 2 investigation remains historical; all three alerts
-remain open on unchanged 1.4.0 with no official patched version.
+Current October 12 source replaces Forge in all three owning roots using the
+[self-contained native signing tools](docs/native-expo-signing-replacement.md),
+with ordinary installs and unchanged public SDK/Expo tuples. Hosted/native and
+exact scanner readbacks remain separate gates. The October 2 investigation and
+October 7 [parser guard](docs/node-forge-parser-mitigation.md) below are historical;
+no advisory-published fixed version or advisory-wide withdrawal is claimed.
 
 Dependabot [#108](https://github.com/bota-dev/examples/security/dependabot/108),
 [#109](https://github.com/bota-dev/examples/security/dependabot/109) and
@@ -187,7 +189,7 @@ results. Current build/test success does not remediate this dependency finding.
 ## October 7 scoped braces source guard
 
 The legacy root and both independent React Native apps retain their existing
-query-string/Forge hooks and add standalone mandatory guarded `braces` 3.0.3
+query-string/signing-tool hooks and add standalone mandatory guarded `braces` 3.0.3
 installation. Locks/public SDKs/device and HTTP code remain unchanged. Root
 `npm test` and each independent app test chain require 16 installer/parser/actual
 micromatch controls. Source qualification, scanner identity, hosted native builds

@@ -2955,3 +2955,12 @@ shell-quote 1.11.0 and a qualified parent-scoped selector-parser 7.1.6 override.
 Each install root has required public-consumer tests; Web CI now runs `npm test`.
 See the [source compatibility review](build-dependency-remediation.md) for aged tarballs, tests and
 bundled-parser limits. Hosted/scanner and physical acceptance remain separate.
+
+## Native Expo signing replacement — October 12
+
+The [bounded replacement review](native-expo-signing-replacement.md) records
+current985 input reconciliation, three normal install/graph profiles, public
+API/caller controls, complete artifact provenance and unchanged public SDK/Expo
+versions. Actual standard exports, owning types/tests and licenses pass locally.
+Hosted/native, exact-source delivery/scanner readback and physical acceptance
+remain separate; no EAS or management certificate authority is inferred.

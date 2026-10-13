@@ -1,4 +1,9 @@
-# Downstream node-forge parser mitigation — October 7, 2026
+# Historical downstream node-forge parser mitigation — October 7, 2026
+
+The source-level parser guard described below is the historical 1.4.0 checkpoint.
+Current owning source replaces the dependency and these two guard/test files with
+the [native Expo signing integrity gate](native-expo-signing-replacement.md).
+Retain this dated proof; it does not qualify the replacement or close alerts.
 
 Dependabot #108/#109/#110 remain open for [GHSA-86w9-cpqp-85rv](https://github.com/advisories/GHSA-86w9-cpqp-85rv). The three affected locks retain node-forge 1.4.0 and their existing dependency edges. There is no advisory-published patched version. The legacy workspace, RN device-connect example and recording-sync app now each apply the same narrow, independently installable parser guard. No sibling repository or shared application code is required to install/run an example.
 

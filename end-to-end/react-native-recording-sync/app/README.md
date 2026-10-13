@@ -144,3 +144,15 @@ The existing identity/lifecycle, Forge, braces and source-map suites remain in
 ordinary `npm test`. These are local synthetic tests and an Android Metro
 export, separate from native assembly, rendered phone UI, live APIs, provider
 configuration and physical upload/deletion acceptance.
+
+## Node signing-tool dependency gate
+
+Keep installation scripts enabled. This install root carries its own
+`vendor/expo-native-signing` public-upstream sources, reproducible archives and
+provenance. Its mandatory `verify-native-expo-signing.mjs` checks all 803 installed
+CLI/provider assets and rejects Forge in the lock or physical tree; 32 native
+contract/caller cases replace the previous Forge-only suite. Existing braces,
+source-map, query-string and native checks remain required where applicable.
+See [the exact scope and local/hosted limits](../../../docs/native-expo-signing-replacement.md).
+No public SDK/Expo version or application/device behavior is upgraded by this
+development-tool replacement.

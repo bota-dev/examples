@@ -158,3 +158,15 @@ Direct AST/value-array limits and iterative-flatten behavior are documented in
 [the source review](../../docs/braces-depth-mitigation.md#october-11-six-file-migration).
 The public SDK/manifest/lock/native and workflow identities remain unchanged.
 Hosted native builds, scanner closure and device installation are separate gates.
+
+## Node signing-tool dependency gate
+
+Keep installation scripts enabled. This install root carries its own
+`vendor/expo-native-signing` public-upstream sources, reproducible archives and
+provenance. Its mandatory `verify-native-expo-signing.mjs` checks all 803 installed
+CLI/provider assets and rejects Forge in the lock or physical tree; 32 native
+contract/caller cases replace the previous Forge-only suite. Existing braces,
+source-map, query-string and native checks remain required where applicable.
+See [the exact scope and local/hosted limits](../../docs/native-expo-signing-replacement.md).
+No public SDK/Expo version or application/device behavior is upgraded by this
+development-tool replacement.

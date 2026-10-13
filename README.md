@@ -213,7 +213,7 @@ customer-facing examples consume published artifacts.
   signed URLs or device provisioning material.
 
 Keep lifecycle scripts enabled in affected npm install roots. Required
-query-string, node-forge, braces and build-dependency guards are part of their
+query-string, native Expo signing, braces and build-dependency guards are part of their
 documented installation/test chains; do not remove them to simplify a template.
 [Dependency security](DEPENDENCY_SECURITY.md),
 [Forge mitigation](docs/node-forge-parser-mitigation.md),
@@ -281,3 +281,11 @@ and open acceptance gaps.
 
 Bota-authored sample code uses the [MIT license](LICENSE). Third-party
 dependencies and vendored files retain their own licenses and notices.
+
+Current Node signing-tool source removes Forge from the three RN install roots
+through self-contained public-upstream development-tool archives. Public SDK and
+Expo pins stay fixed. See [local qualification and remaining hosted/scanner
+gates](docs/native-expo-signing-replacement.md); this does not qualify mobile
+binaries, devices, EAS or certificate management. The retained 985 qualification
+and fresh 934 documentation-only reconciliation preserve the current optional
+reference and first-class workflow/platform-starter architecture.
