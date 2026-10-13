@@ -3,9 +3,9 @@ name: Integrated Recordings backend core
 on:
   push:
     branches: [main]
-    paths: ['end-to-end/recordings/**', '.github/workflows/recordings-backend.yml']
+    paths: ['end-to-end/recordings/**', 'end-to-end/web-reference/server/**', 'end-to-end/react-native-recording-sync/backend/**', '.github/workflows/recordings-backend.yml']
   pull_request:
-    paths: ['end-to-end/recordings/**', '.github/workflows/recordings-backend.yml']
+    paths: ['end-to-end/recordings/**', 'end-to-end/web-reference/server/**', 'end-to-end/react-native-recording-sync/backend/**', '.github/workflows/recordings-backend.yml']
   workflow_dispatch:
 
 permissions:

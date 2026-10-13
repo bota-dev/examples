@@ -11,7 +11,7 @@
 ## Checks and boundaries
 
 - Backend: `npm ci`, `npm run check`, `npm test`.
-- Shared-core changes also need its documented checks and web/mobile consumer checks. One implementation still has two listeners/auth adapters and three journal models; do not claim single-listener conformance or cross-store locking.
+- Shared changes also need combined-host and web/mobile consumer checks. One listener retains both auth adapters and all three journals; source/local/hosted qualification stays separate. Use the full Web install + mobile/core family, stop old listeners and retain path/schema/scope/account preflight. Fresh initialization accepts only all-missing state; peer known/complete intent refuses fresh claims with no Web adoption. Preserve own GET recovery and exact native/library known IDs; no external-writer or atomic file-race claim.
 - React Native: `npm ci`, `npm test`, `npm run typecheck`, `npm run export`, `npm run license-check`; native Android tests/build per README.
 - Flutter: locked pub install, analyzer/tests/Android build and dependency license check per its README.
 - Preserve beta.13 pins, mandatory security installer/test chains and native upload journals.

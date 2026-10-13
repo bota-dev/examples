@@ -8,12 +8,12 @@ copyable features, one shared customer backend and clients for React web,
 React Native, Flutter, native Android/Kotlin and Apple/Swift. Use normal platform
 UI and the published SDK; each client exposes its actual supported capabilities.
 
-**The foundation is partially implemented.** The [shared backend core](end-to-end/recordings/README.md)
-now owns recording, transcription/general-notes and Ask logic plus error types.
-Web and Android RN/Flutter clients consume it through compatibility adapters.
-There are still two HTTP listeners/auth adapters and three separate journal
-models; upload/webhooks/native service code remains in its existing roots.
-A single backend runtime and integrated Kotlin/Swift clients are not built.
+**The foundation is partially implemented.** The [combined backend](end-to-end/recordings/README.md)
+now provides one Node listener for the existing Web cookie and mobile Bearer
+adapters, with shared recording, transcription/general-notes and Ask features.
+The three original journals and response contracts remain separate; upload,
+webhook and native service modules are composed from their existing public paths.
+Clients have not moved, and integrated Kotlin/Swift clients are not built.
 Current client paths, public SDK pins and journal identities remain unchanged.
 
 There are exactly two product layers: **general platform capabilities now**,
@@ -33,13 +33,15 @@ focused guides/quickstarts belong to the general layer. `api/`, `app-sdk/` and
 
 Try the web sample without credentials or hardware using Node **22.23.2+**:
 
-Use a full repository checkout: the web/mobile compatibility roots now import
-`end-to-end/recordings/backend/`. Copying only an old client/backend folder is
-insufficient. Install in the selected root; no root legacy workspace install is
-required. The shared core's own README defines its separate checks.
+Use a full repository checkout. The combined server needs the Web installation,
+mobile backend source and integrated backend; copying one old folder is
+insufficient. Express/Vite resolve from the existing Web install rather than a
+duplicate runtime dependency graph. No root legacy workspace install is required.
 
 ```sh
 cd end-to-end/web-reference
+npm ci
+cd ../recordings
 npm ci
 npm run demo
 ```
@@ -56,15 +58,20 @@ hosts are Android only. Standalone device connection/status needs no backend.
 Cloud features and authorized device upload need the customer backend; device
 presence never gates browsing existing cloud recordings.
 
-The [implemented core](end-to-end/recordings/README.md) is one feature
-implementation, not a unified listener/store. Compatibility adapters retain
-application authentication, routes/DTOs, journal scope/anchors, known IDs and
-unresolved writes. Single-listener consolidation still needs cross-store
-arbitration and compatible cookie/bearer, Origin and body gates. Shared code
-does not coordinate writes across the existing listeners. SDK receipts and
-exact-generation gates still govern cleanup. The remaining client/layout migration
-is planned; current paths/catalog/journals stay valid. See the [design](DESIGN.md), [roadmap](ROADMAP.md) and
+For configured use, follow the [combined setup](end-to-end/recordings/README.md).
+Default startup requires explicit original launch bases and existing journals
+whose paths, schema and scopes validate. `--initialize` is only for a fresh
+all-missing journal set. Stop the old listeners before using the combined one.
+Fresh processing/Ask claims refuse a matching peer intent, including complete
+or known work; they never adopt a peer ID to create a new Web intent. Existing
+own GET recovery and native/library exact-known-ID paths remain available.
+These in-process guards do not coordinate other writers or make file races
+atomic. SDK receipts and exact-generation gates still govern cleanup. The next
+client move is the complete Flutter install root after qualification; current
+paths/catalog/journals remain valid. See the [design](DESIGN.md), [roadmap](ROADMAP.md) and
 [approved decision](docs/design-decisions/2026-10-12-integrated-recordings.md).
+The [combined-listener review](docs/design-reviews/2026-10-12-unified-recordings.md)
+records qualification separately from earlier core extraction and client evidence.
 
 ## Focused recipes
 
@@ -220,7 +227,7 @@ provides API/SDK installation guidance.
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | React Native + Flutter Android library, Transcript/Summary/Ask; one authenticated backend; synthetic mode; optional RN encrypted sync and Flutter connection/status | No; device path optional |
 | [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
-| [Integrated Recordings backend core](end-to-end/recordings/README.md) | Shared recording, processing and Ask implementation used by web/mobile compatibility adapters; listeners, auth and journals remain separate | No |
+| [Integrated Recordings backend](end-to-end/recordings/README.md) | One Node listener composes Web/mobile adapters, shared recording/processing/Ask and three retained journals; original-state preflight and peer-intent refusal | No |
 
 </details>
 

@@ -22,11 +22,21 @@ core needs no separate runtime install for these existing adapters; its own
 [README](../../recordings/README.md) documents development checks. No private
 Bota package is used.
 
-One implementation serves the web/mobile adapters, but two listeners/auth
-adapters and three journal models remain. Mobile keeps strict default
+The [combined launcher](../../recordings/README.md) now composes these factories
+and the Web adapter on one listener. Use its original-path/schema/scope/account
+preflight and stop older listeners first; `--initialize` is fresh all-missing
+setup only. Its copy/run graph requires the Web installation, this mobile backend
+and integrated backend. The original commands below remain compatibility setup,
+not a reason to run concurrent listeners over the same state.
+
+Separate auth adapters and three journal models remain. Mobile keeps strict default
 recording/job project checks; web explicitly tolerates omitted `project_id` and
 still verifies supplied projects and exact owner/source chains. This is not a
-unified listener/store or new multi-user auth contract.
+merged store or new multi-user auth contract. Combined fresh processing/Ask claims
+refuse matching peer intent even known/complete, without Web ID adoption; own GET
+recovery and native/library exact-known-ID paths remain. Incoming header/body
+limits are 10/30 seconds (standalone Web was 15/180); upstream processing stays
+unchanged. Other writers and atomic file races remain outside these guarantees.
 
 **Earlier October 12, 2026, before shared-core extraction:** 64 tests cover cloud-library, composition and real-loopback
 HTTP behavior plus the unchanged 22 native service tests. Local Windows checks

@@ -3,7 +3,8 @@
 This install root retains its Express listener, React frontend and local
 HTTP/auth/intent, upload and webhook modules. Recording/processing/Ask shims import
 the [canonical integrated core](../recordings/README.md). Use a full checkout or
-copy these compatibility roots together; the web folder alone is no longer a
+copy the full Web installation, mobile backend source and core for the combined
+launcher; the web folder alone is no longer a
 complete runtime copy. No private Bota package is required. See [README](README.md) for recipe paths,
 configuration, operations and acceptance limits, and [DESIGN](DESIGN.md) for UI rules.
 Bota Recordings is a common app sample/template for developers building for
@@ -30,11 +31,26 @@ for compatibility while rejecting a supplied foreign project and retaining exact
 recording-owner/source-chain/session/citation gates. It projects the core result
 to its existing DTOs; mobile uses strict default recording/job project checks.
 
-There remain two listeners/auth adapters and three journal models: web operation
-store, mobile library intents and native capture/session state. No state/path or
-account/key anchor moves. Shared code is not cross-store arbitration. A future
-single listener must coordinate those stores and preserve compatible cookie/bearer,
-Origin and body gates before it can replace either listener.
+The [combined launcher](../recordings/README.md) now composes both auth adapters
+on one listener, retaining web operations, mobile library intents and native
+capture/session journals at their original paths. Fresh processing/Ask claims
+refuse matching peer intent even when known/complete, without Web peer-ID
+adoption. Existing own GET recovery and native/library exact-known-ID paths
+remain. Stop older listeners first; this is in-process coordination, not an
+external-writer or atomic file-race guarantee.
+
+Configured combined startup preflights original absolute paths, schemas/indexes,
+scopes and server-owned account mapping. Fresh `--initialize` requires all three
+journals absent; ordinary restart never creates replacements. Common input
+header/body budgets are 10/30 seconds rather than standalone Web's 15/180;
+upstream processing deadlines stay unchanged. Combined Vite development serving
+denies configured account/journal paths and sidecars with default denials intact.
+Static publication checks a bounded tree and rejects nested links/nonregular
+entries and hardlinks to configured private state; copied private content and
+other filesystem writers/races remain outside that check. Pending route work
+drains before journal close even when the requesting socket disconnects.
+The Web install and both backend source roots are required; no runtime dependency
+graph, SDK/client/native identity or lockfile is duplicated or upgraded.
 
 Live identity comes from private operator-managed account mappings and random app
 tokens. Sessions are in memory; Bota project keys stay server-side. Each write

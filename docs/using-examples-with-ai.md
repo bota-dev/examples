@@ -11,16 +11,17 @@ may guide the work; the selected public contract defines supported behavior.
 shared customer backend and platform clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../end-to-end/recordings/README.md)
 now implements recording, processing/general-notes and Ask logic plus error
-types. Current web and Android RN/Flutter clients consume it through shims, but
-two listeners/auth adapters and three journal models remain. Upload/webhook/native
-service code is still local. One backend runtime and integrated Kotlin/Swift
-clients are not built.
+types. The combined Node launcher now composes existing Web/mobile factories on
+one listener. Both credential-specific adapters, DTOs and all three journals
+remain, with upload/webhook/native source at existing paths. Clients have not
+moved and integrated Kotlin/Swift clients are not built.
 
 Use the [README entry paths](../README.md#start-with-bota-recordings), then choose
 the feature/platform below. Run only the relevant documented install root(s)
 and copy the feature's complete imports. Use a full repository checkout or include
-both the chosen compatibility root and `end-to-end/recordings/backend/` when
-copying. The old web/mobile folder alone is no longer a complete runtime copy.
+the Web installation, mobile backend source and `end-to-end/recordings/backend/`
+when copying the combined runtime. An old web/mobile folder alone is no longer
+a complete runtime copy.
 Do not silently redirect a client to another listener or store.
 The [approved decision](design-decisions/2026-10-12-integrated-recordings.md)
 defines the foundation. Exactly two product layers remain: general capabilities
@@ -88,9 +89,14 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
    bypass postinstall to get a clean install.
 3. Keep Bota keys server-side. Derive project/end-user authorization from the
    customer's authenticated identity and retain exact owner/source checks.
-4. Shared feature implementation does not unify runtime authorization or stores.
-   Two listeners and three journal models remain; single-listener work needs
-   compatible auth/body/Origin gates and cross-store arbitration. Preserve current
+4. The combined listener retains separate auth adapters and three journal models.
+   Default startup validates original absolute paths/schema/scope/account mapping;
+   fresh `--initialize` requires every journal absent. Stop old listeners. Mixed
+   credentials refuse; preserve separate body/Origin gates and 10/30-second input
+   budgets, with upstream processing deadlines unchanged. Fresh processing/Ask
+   claims refuse matching peer intent even known/complete, without Web ID adoption.
+   Own GET recovery and native/library exact-known-ID paths remain. These are
+   in-process guards, not external-writer or atomic file-race guarantees. Preserve current
    routes/DTOs, journal scope/anchors, known IDs and unresolved writes. No journal
    deletion, account remapping or replacement write may force apparent success.
    Retain syntactically valid returned job/session IDs before later validation;
@@ -141,10 +147,15 @@ existing SDK-only sources for device capabilities; those need no backend for
 connection/status. If editing this repo, follow AGENTS.md/local instructions.
 
 Report the source/setup/copy boundary, then adapt the feature with my application's
-auth mapping. Recording/processing/Ask share an implemented core, but two listeners,
-auth adapters and three journal models remain. Copy the core and compatibility
+auth mapping. The combined listener shares recording/processing/Ask while retaining
+separate auth adapters and three journal models. Copy the Web installation, mobile
+backend source, core and compatibility
 adapters; preserve routes/DTOs, journal scope, known IDs and uncertain writes.
-Single-listener consolidation and integrated Kotlin/Swift clients remain planned.
+Use original explicit paths/schema/scope/account mapping; initialize only a fresh
+all-missing set and stop old listeners. Refuse fresh peer known/complete claims
+without Web ID adoption; retain own GET/native-library exact-known-ID recovery.
+Client moves and integrated Kotlin/Swift clients remain planned; no external-writer
+or atomic file-race guarantee is added.
 Keep keys server-side, SDK pins unchanged,
 owner/source and receipt/cleanup gates intact. No private helpers, hardcoded
 devices or duplicate uncertain writes. Use normal platform UI and supported

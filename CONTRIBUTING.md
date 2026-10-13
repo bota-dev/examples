@@ -40,12 +40,16 @@ hide a gap. A useful SDK feature need not wait for every client to be complete.
 
 **The [shared feature core](end-to-end/recordings/README.md) is implemented.**
 Web/mobile recording, processing and Ask files are now compatibility shims over
-one implementation. Two listeners/auth adapters and three journal models remain;
-upload/webhook/native service modules are still local. Single-listener migration
-must reconcile auth/body/Origin gates and cross-store arbitration before runtime
-consolidation. Preserve routes/DTOs, journal scope/anchors, known IDs, unresolved
-writes and native receipt/cleanup gates. Use the full repository checkout or copy
-the compatibility family including `end-to-end/recordings/backend/`; the old
+one implementation. The combined launcher now composes both credential-specific
+adapters and their public service factories on one listener, retaining all three
+journals and old launchers. Default startup validates original absolute paths,
+schemas and scopes; explicit initialization accepts only an all-missing fresh
+set. Stop old listeners. Fresh processing/Ask claims refuse matching peer intent,
+even known/complete; existing own GET recovery and native/library known-ID paths
+remain, with no Web peer-ID adoption. Preserve routes/DTOs, journal scope/anchors,
+known IDs, unresolved writes and native receipt/cleanup gates. No external-writer
+or atomic file-race guarantee is added. Use the full repository checkout or copy
+the Web installation, mobile backend and `end-to-end/recordings/backend/`; the old
 web/mobile folders alone are no longer complete runtime copies. Standalone
 API/App SDK quickstarts remain self-contained. No mass move/deletion is needed. See the
 [approved decision](docs/design-decisions/2026-10-12-integrated-recordings.md).

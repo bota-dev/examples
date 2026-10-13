@@ -2,9 +2,9 @@
 
 The [design](DESIGN.md) defines one common recording app with React Native and
 Flutter clients. Each client has its own manifest/lock and Android host. One
-local HTTP backend serves both, through shims importing the
+combined HTTP backend can serve Web and both mobile clients, through shims importing the
 [canonical recording/processing/Ask core](../recordings/README.md) also used by web.
-Use the full checkout or copy the compatibility family including
+Use the full checkout with the Web installation, mobile backend source and
 `end-to-end/recordings/backend/`; this backend folder alone is incomplete.
 Platform UI stays idiomatic and integration files stay easy to locate.
 
@@ -13,7 +13,7 @@ React Native app/ ─┐
                   ├─ application bearer ─ backend/library ─ shared recordings core
 Flutter flutter/ ─┘                      └─ mobile library intent journal
 
-Web listener ─ cookie/auth + policy/DTO shim ─ same core ─ public Bota /v1
+Combined listener ─ cookie/auth + policy/DTO shim ─ same core ─ public Bota /v1
              └─ separate web operation store
 
 React Native Device ─ public App SDK ─ native encrypted-v2 upload host
@@ -32,9 +32,12 @@ Core public calls/error types have one implementation. Mobile keeps default
 strict recording/job project checks and its source-linked DTOs; web's explicit
 legacy policy tolerates omitted `project_id`, but supplied projects and exact
 owner/source chains still match. Upload/webhook/native service modules remain
-local. This is two listeners/auth adapters and three journal models, not a unified
-server/store. SDK/native package pins, routes, CWD and journal scopes/anchors stay
-unchanged.
+local. One combined listener now preserves both auth adapters and all three
+journals; older launchers remain compatibility entries. Stop them before using
+the combined host. SDK/native package pins, routes and journal scope/anchors stay
+unchanged. Default startup preflights original absolute paths, columns/indexes,
+scope and configured account mapping; fresh `--initialize` requires all journals
+absent and never merges or rekeys state.
 
 The library journal is separate from the original native capture/session
 journal. Both retain immutable scope and known IDs before returning results;
@@ -43,8 +46,13 @@ establish an atomic snapshot against external writers or administrators.
 Shared processing/Ask retain syntactically valid returned IDs before later reply
 validation; awaited known-ID GET failures preserve the operation's identity and
 uncertainty. Saved IDs are recovery metadata rather than authorization or cleanup
-proof. A single listener still needs cross-store arbitration and compatible
-auth/Origin/body gates; shared code creates no lock across the web listener/store.
+proof. Combined processing/Ask arbitration refuses fresh claims against any
+matching peer intent, even known/complete; Web does not adopt a peer ID. Existing
+own GET recovery and native/library exact-known-ID paths remain. Other listeners,
+external writers and file replacement races are not coordinated. Header presence
+selects one credential adapter, mixed/duplicate headers refuse and body parsing
+remains adapter-specific. Input header/body limits are 10/30 seconds rather than
+standalone Web's 15/180, with upstream deadlines unchanged.
 
 Native and library transcription routes share a recording lock in this server
 process and inspect both journals before creating a replacement. An unknown

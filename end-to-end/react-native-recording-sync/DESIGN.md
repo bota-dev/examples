@@ -7,8 +7,9 @@ and Flutter (`flutter/`) clients sharing one Node backend (`backend/`). They
 belong to the **Bota Recordings** foundation alongside the web client. The target
 has one shared customer backend and clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../recordings/README.md)
-is implemented, but a single backend runtime and integrated Kotlin/Swift clients
-are not. The recording experience connects
+and combined listener are implemented, preserving original auth/DTOs and three
+journals. Integrated Kotlin/Swift clients and client moves are not implemented.
+The recording experience connects
 audio input → library → supported playback/source review → transcript → general
 notes → recording-scoped Ask. Use familiar mobile navigation, normal native SDK
 UI and short state messages. Public-call/copy guides belong in README/source.
@@ -40,18 +41,27 @@ permit private Bota application imports. Demo/Bota One inform the journey only.
 
 Mobile and web now use one recording/processing/Ask implementation and common
 error types under [the integrated core](../recordings/README.md), through thin
-compatibility shims. Two active listeners/auth adapters and three journal models
-remain unchanged; upload/webhook/native service modules remain local. Mobile
+compatibility shims. One combined listener composes the original factories, while
+auth adapters and three journal models remain unchanged. Older launchers remain
+for compatibility; upload/webhook/native service modules remain local. Mobile
 uses default strict recording/job project checks, while web's explicit legacy
 policy permits missing `project_id` but preserves supplied-project/source/owner
-checks and its existing DTO projection. This is not a unified runtime.
+checks and its existing DTO projection. Clients keep their existing install roots.
 
-Single-listener migration belongs to the [root roadmap](../../ROADMAP.md). It
-needs cross-store arbitration and compatible auth, Origin and strict body gates.
+Combined-host qualification and client relocation follow the [root roadmap](../../ROADMAP.md).
+Fresh processing/Ask claims refuse matching peer intent, even known/complete,
+without Web resource-ID adoption. Existing own GET recovery and native/library
+exact-known-ID paths remain. Stop old listeners; default configured startup
+validates original absolute paths/schema/scope/account mapping before writable
+stores open. Fresh initialization permits only all-three-missing journals.
+Preserve separate auth, Origin and strict body gates; 10/30-second input limits
+do not change upstream processing deadlines or establish external-writer/file-race guarantees.
 Preserve bearer authentication, routes/DTOs, install roots, CWD-relative journal
 paths and scope/anchors. Retain known IDs and unresolved-write locks without
 reinterpreting account/key ownership; do not move or merge databases implicitly.
-The shared core folder exists; additional clients/listener layout is planned.
+The combined entry exists; additional client/auth/store folders are planned. The
+whole Flutter install root is the next client move after qualification, preserving
+its package/native identity, lock and dependency-license helper graph.
 
 Live responses and synthetic fixtures should follow their client's DTO contract.
 Shared cloud features must preserve source identities and customer authorization.

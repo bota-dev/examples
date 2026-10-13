@@ -8,17 +8,21 @@ layer; vertical/app-type examples come later.
 
 ## 1. Consolidate the existing backend features compatibly
 
-**Delivered first step:** recording reads, transcription/general notes and Ask
-have one implementation in the [integrated core](end-to-end/recordings/README.md).
-Both existing backends use compatibility exports and preserve their DTOs.
-Auth, upload/webhook features and stores still run in two existing listeners.
+**Implemented:** shared recording/processing/Ask features and the
+[combined launcher](end-to-end/recordings/README.md) compose existing service
+factories on one Node listener. Cookie/Bearer adapters, routes/DTOs and all three
+journals remain intact. Original absolute paths, schema/index/scope and configured
+account mapping validate before writable startup; explicit fresh initialization
+requires all journals absent. Mixed credentials are rejected. Processing/Ask
+claims coordinate in this process and refuse matching peer intent, even known or
+complete, without Web peer-ID adoption. Existing own GET recovery and exact
+native/library known-ID reconciliation remain.
 
-**Next:** coordinate same-owner writes and retained intent across web, mobile
-library and native journals; preserve absolute/state-path resolution and request
-limits, and reject mixed cookie/Bearer credentials. Then consolidate the hosts
-into one Node sample backend. Preserve explicit browser-cookie and mobile-bearer
-adapters that authenticate callers and derive principals; do not replace web
-account isolation with the mobile sample's fixed test identity.
+**Qualification:** stop old listeners and verify the combined auth/input,
+development-file denial, retained-state and startup/shutdown contracts on every
+affected consumer. The common 10/30-second incoming header/body limits are
+stricter than standalone Web; upstream processing deadlines are unchanged.
+Other writers and concurrent filesystem changes remain outside these guarantees.
 
 Use compatibility routes and persistence adapters before moving files or
 merging storage. Preserve configured scope, account/resource IDs, existing
@@ -30,18 +34,25 @@ feature reuse, not a new API SDK, generic proxy or authentication product.
 **Acceptance:** both current backend adapters and all affected clients retain
 compatible routes/DTOs and auth/store behavior. Tests exercise ownership and
 source isolation, uncertainty recovery and existing native host-callback
-boundaries. No uncertain operation is
-lost or replayed. The approved single backend is not claimed until this migration
-and its affected checks pass. SDK version upgrades and hardware operations are
+boundaries. No uncertain operation is lost or replayed. Report the combined
+listener's source/local/hosted evidence separately from production or hardware
+acceptance. SDK version upgrades and hardware operations are
 outside this work.
 
-## 2. Connect existing clients and make feature code easy to adapt
+## 2. Qualify the combined host and move one existing client
 
 Connect the web, React Native and Flutter clients to the shared backend through
 their existing auth adapters. Preserve independent manifests, locks, native
 identities and install/build instructions. Expose actual public calls in plain
 backend/client feature files, with narrow contract fixtures shared where useful.
 Keep UI, permissions and SDK lifecycle native to each platform.
+
+After combined-host qualification, move the complete Flutter install root first
+to `end-to-end/recordings/clients/flutter/`. Move its license helper/check fixtures
+with matching path updates, preserve native identity and pub pins/lock, and update
+CI, Dependabot, setup/source links and catalog compatibility together. Web remains
+coupled to Vite/static/state paths; RN must retain its complete native/vendor/guard
+graph. Neither move requires new UI or a universal model layer.
 
 Lead the README with workflow → language/platform → source → run/adapt
 instructions. Curate connection/status/loss, recording metadata/supported

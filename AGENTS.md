@@ -6,7 +6,7 @@
 - Exactly two product layers: general capabilities now; vertical use cases and consumer app types later. API, SDK and combined examples are formats within the first layer.
 - Owner-approved architecture: one integrated Bota Recordings sample with one shared backend and platform-specific web, React Native, Flutter, Kotlin and Swift clients. Keep public calls in copyable feature modules. SDK-only connection/status works without the backend; each client declares its actual capabilities and host evidence.
 - Ordinary app UI serves recording users. Public-call explanations and technical details belong in README/source. Do not create another API Explorer or expand toward a catalog count.
-- Preserve existing launch paths, journals, locks and SDK pins. The shared cloud-core extraction is implemented; one executable backend and client relocation remain pending and require compatibility checks.
+- Preserve existing launch paths, journals, locks and SDK pins. The combined backend now provides one listener with retained cookie/Bearer adapters and three journals; client relocation is pending. Use its [setup](end-to-end/recordings/README.md).
 
 ## Select and inspect
 
@@ -15,6 +15,7 @@
 - Use published Bota SDK packages and public API contracts. Exact independent SDK pins are beta.13; the legacy workspace remains beta.6. Manifest/lockfile evidence takes precedence over historical prose.
 - Demo/Bota One are read-only behavioral references. No private helpers, unpublished facade methods, custom GATT/crypto or sibling-repo runtime/install dependencies.
 - Consolidate the integrated sample's backend feature implementation at `end-to-end/recordings/backend/`. Existing web/mobile paths may import that shared core as compatibility adapters. Preserve their auth, DTOs, launch CWD and journal anchors until tested migration. Independent API/SDK quickstarts stay self-contained; no private dependencies, wrapper SDK or universal UI framework.
+- Combined startup requires the Web install plus mobile/backend/core source. Stop old listeners; default startup validates original explicit paths/schema/scope. `--initialize` permits only an all-missing fresh set. Preserve peer-intent refusal, own GET recovery and exact native/library known-ID paths; no Web peer-ID adoption or external-writer/atomic-file guarantee.
 - Windows/Electron native device SDKs are upstream roadmap targets. Do not invent a native facade or infer full app parity from a connection example.
 
 ## Preserve integration contracts

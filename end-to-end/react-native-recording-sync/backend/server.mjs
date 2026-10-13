@@ -7,7 +7,7 @@ import { readConfig, RequestError, SyncService } from './service.mjs';
 import { LibraryService } from './library.mjs';
 import { errorOperation } from './library/errors.mjs';
 
-export function createApp(service, appToken, library) {
+export function configureMobileCoordination(service, library) {
   if (library) {
     // Both processing entry points share this process's recording lock and respect retained intent.
     // These guards never replace the SDK's upload/binding/receipt checks.
@@ -15,8 +15,12 @@ export function createApp(service, appToken, library) {
     library.coordinateTranscription = (recordingId, work) => service.exclusive(`recording:${recordingId}`,
       () => work(service.assertLibraryTranscription(recordingId)));
   }
+}
+
+export function createRequestHandler(service, appToken, library, { coordinate = true } = {}) {
+  if (coordinate) configureMobileCoordination(service, library);
   const expected = Buffer.from(`Bearer ${appToken}`);
-  const server = createServer(async (request, response) => {
+  return async (request, response) => {
     response.setHeader('Content-Type', 'application/json');
     response.setHeader('Cache-Control', 'no-store');
     response.setHeader('X-Content-Type-Options', 'nosniff');
@@ -51,7 +55,11 @@ export function createApp(service, appToken, library) {
       response.end(JSON.stringify({ error: { code: known ? error.code : 'internal_error', message: known ? error.message : 'The operation could not complete. Preserve its journal.' },
         ...(operation ? { operation } : {}) }));
     }
-  });
+  };
+}
+
+export function createApp(service, appToken, library) {
+  const server = createServer(createRequestHandler(service, appToken, library));
   server.requestTimeout = 30_000;
   server.headersTimeout = 10_000;
   return server;

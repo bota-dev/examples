@@ -7,8 +7,9 @@ adapt for their own end users, inspired by Demo and Bota One. This is the curren
 web client of the integrated **Bota Recordings** foundation: one shared customer
 backend, platform clients and copyable features. Client targets include React
 web, RN, Flutter, native Android/Kotlin and Apple/Swift. The
-[shared feature core](../recordings/README.md) is implemented; a single backend
-runtime and integrated Kotlin/Swift recording clients are not implemented yet.
+[combined backend](../recordings/README.md) now composes the existing Web/mobile
+factories on one listener with original journals/auth/DTOs retained. Integrated
+Kotlin/Swift recording clients and client relocation are not implemented yet.
 
 The recording experience is audio input → library → supported playback/source
 review → transcript → general notes → recording-scoped Ask. Use normal platform
@@ -22,7 +23,10 @@ belong to the general layer. Guides/snippets link maintained feature modules;
 a few standalone quickstarts serve distinct languages/runtimes. Current catalog
 paths remain intact. The [approved decision](../../docs/design-decisions/2026-10-12-integrated-recordings.md)
 defines the foundation. `end-to-end/recordings/backend/` now contains the shared
-core; the rest of the target client/runtime layout remains planned.
+core and combined launcher; the rest of the target client/auth/store layout
+remains planned. Fresh peer claims refuse known/complete intent without Web ID
+adoption; own GET recovery remains available. Preserve original state preflight,
+credential/input boundaries and the absence of external-writer guarantees.
 
 ## Implemented subset and target
 
@@ -44,9 +48,9 @@ Recording, processing and Ask public calls now live in
 [canonical feature modules](../recordings/backend/features/recordings.mjs), with
 shared [errors](../recordings/backend/errors.mjs). This server's feature files
 are compatibility shims. The mobile backend imports the same implementation.
-Web upload/webhook, HTTP/auth and store modules remain local; there are still two
-listeners/auth adapters and three journal models. This is shared code, not a
-single backend runtime. Preserve cookie/account authentication, routes/DTOs,
+Web upload/webhook, HTTP/auth and store modules remain local, composed by the
+combined listener with separate cookie/Bearer adapters and all three journals.
+Older launchers remain compatibility entries. Preserve cookie/account authentication, routes/DTOs,
 upload/job/Ask journals and webhook acceptance; do not silently redirect clients.
 
 The web shims explicitly permit omitted `project_id` for the legacy response
@@ -61,9 +65,9 @@ Use the full repository checkout, or copy this compatibility root together with
 alone no longer produces a runnable app. Standalone API/App SDK quickstarts
 remain self-contained.
 
-Single-listener migration must add cross-store arbitration and compatible
-cookie/bearer, Origin and body gates; shared code supplies no cross-listener lock.
-It must define compatible auth/principal mapping and routes/DTOs, retain
+The combined host adds in-process processing/Ask arbitration and peer-intent
+refusal, isolated credential/body/Origin gates and original-state preflight.
+It preserves server-owned auth/principal mapping and routes/DTOs, retains
 journal scope/anchors and known IDs, and preserve unresolved-write locks. A new
 account/key/store must not reinterpret an old operation or permit replacement
 writes. Native capture state remains separate from cloud processing intent;

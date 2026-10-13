@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "scope": "Implemented independent examples; legacy apps/ workspace is excluded.",
+  "scope": "Implemented API/SDK examples and integrated sample family; legacy apps/ workspace is excluded.",
   "evidence_note": "Presence in this index is not verification. Read each example README and docs/independent-examples-review.md for source/version-specific checks and deferred runtime, live API or physical-device acceptance.",
   "examples": [
     {
@@ -1003,8 +1003,8 @@
     {
       "id": "recordings",
       "path": "end-to-end/recordings",
-      "title": "Integrated Recordings backend core",
-      "purpose": "Shared recording, processing and Ask implementation used by web/mobile compatibility adapters; listeners, auth and journals remain separate",
+      "title": "Integrated Recordings backend",
+      "purpose": "One Node listener composes Web/mobile adapters, shared recording/processing/Ask and three retained journals; original-state preflight and peer-intent refusal",
       "category": "end-to-end",
       "language": "JavaScript",
       "physical_device_required": false,

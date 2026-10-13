@@ -31,8 +31,10 @@ integration. Its browser-cookie and mobile-bearer adapters derive the caller's
 authorized principal; clients never hold Bota secret keys.
 
 The target layout is **partially implemented**. Shared recording, processing and
-Ask modules and contract tests now exist in `end-to-end/recordings/`. Auth,
-persistence and client relocation, plus one executable backend, remain planned:
+Ask modules, contract tests and one combined Node listener now exist in
+`end-to-end/recordings/`. It composes existing cookie/Bearer service factories
+and all three journals. Auth/store implementation relocation and client folder
+moves remain planned:
 
 ```text
 end-to-end/recordings/
@@ -63,8 +65,9 @@ their language or standalone workflow adds distinct value.
 Current `api/`, `app-sdk/` and `end-to-end/` paths, catalog IDs and installation
 instructions stay valid until compatible migration is implemented. These are
 existing formats within Layer 1. The first consolidation moves duplicated cloud
-features into one maintained core with compatibility exports; it creates no
-empty future client directories and preserves existing runtime launchers.
+features into one maintained core with compatibility exports and adds a combined
+launcher. It creates no empty future client directories, changes no SDK pins and
+preserves older runtime launchers for compatibility.
 
 ## Core teaching paths
 
@@ -133,16 +136,17 @@ production account product or forced cross-platform consumer-app parity is neede
 | SDK starters | RN Android/iOS connection; Flutter Android connection; Kotlin Android and Swift macOS connection/catalog; desktop Chromium connection | Native Swift iOS and Flutter iOS hosts are missing; supported workflow coverage varies |
 | React web reference | Audio import, library, Transcript/Summary/Ask, synthetic mode and configured API path | Playback is missing; web is API-only |
 | RN/Flutter Android references | Cloud library/results/Ask, sample mode and one shared mobile backend; optional RN encrypted-v2 sync or Flutter connection/status | Ordinary import/playback and common-app iOS hosts are missing; Flutter lacks the selected encrypted-sync facade contract |
-| Shared backend target | One recording/processing/Ask implementation in the integrated core, used by existing web/mobile adapters | Two listeners and separate auth/stores remain; shared write arbitration, upload/webhook consolidation and client relocation are not implemented |
+| Combined backend | One listener composes Web/mobile service factories, shared recording/processing/Ask features and retained journals | Auth/store/client files retain existing paths; external writers and atomic file races are not coordinated |
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
 Keep SDK capability, implemented host and verification as separate facts.
 Current independent device examples pin public beta.13; legacy `apps/` remains
 beta.6 compatibility code with its local-only authentication/provisioning limits.
 The first runtime consolidation preserves SDK pins, device behavior and journal
-locations. The core has pinned development tools and no runtime dependencies.
+locations. The core has pinned development tools and no duplicated runtime
+dependencies; Express/Vite resolve from the existing Web installation.
 See the [core entry point](end-to-end/recordings/README.md) and
-[consolidation review](docs/design-reviews/2026-10-12-integrated-recordings.md).
+[combined-listener review](docs/design-reviews/2026-10-12-unified-recordings.md).
 Source, build, live API and hardware evidence remains specific to each README
 and the [implementation review](docs/independent-examples-review.md).
 
@@ -161,6 +165,16 @@ intent and native capture/session journals remain separate, and unresolved
 writes retain their recovery path. Platform feature delivery can proceed without
 waiting for full recording-app parity; SDK upgrades and hardware operations are
 outside this architecture migration.
+
+The combined launcher defaults to original explicit absolute state locations,
+with schema/scope/account preflight before writable stores open. Fresh setup uses
+`--initialize` only when all three journals are absent. Cookie/Bearer selection
+never falls back between credentials; peer-intent checks refuse fresh
+processing/Ask claims even for known/complete work, without Web peer-ID adoption.
+Existing own GET recovery and native/library exact-known-ID reconciliation remain.
+Stop older listeners first. This is in-process coordination, not a guarantee for
+other writers or concurrent file replacement. The complete Flutter install root
+is the next client move after combined-host qualification.
 
 [ARCHITECTURE.md](ARCHITECTURE.md) owns integration boundaries;
 [ROADMAP.md](ROADMAP.md) orders work;

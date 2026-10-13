@@ -5,14 +5,15 @@ own end users, inspired by Demo and Bota One. Import audio, choose a recording,
 then open its Transcript, Summary or Ask tab. The React frontend and Node
 backend demonstrate public recordings, upload, transcription, general notes,
 recording-scoped Ask and webhook integrations. Shared HTTP, authentication and
-durable intent code lives in one install root.
+durable intent adapters remain in this Web root and use shared feature code.
 
 Recording, processing and Ask public calls now use the
 [canonical backend core](../recordings/README.md) through local compatibility
-shims. Two listeners/auth adapters and three journal models remain; this extraction
-does not create one unified server or move state. Use a full repository checkout
-or copy this root together with `end-to-end/recordings/backend/`; copying the web
-folder alone is no longer a complete runtime copy. Install commands/CWD stay the same.
+shims. The [combined launcher](../recordings/README.md) now composes the Web and
+mobile service factories on one listener, retaining both auth adapters, DTOs and
+all three journals. Use a full checkout: the combined runtime needs this Web
+installation, mobile backend source and integrated backend. The old Web launcher
+remains available with its original CWD rules; clients and state have not moved.
 
 Use it as a starting template or copy a small recipe with its helpers. This is a
 general Layer 1 capability sample, not a vertical application or production SaaS
@@ -29,10 +30,13 @@ templates; current connection/catalog snippets do not implement that full journe
 ## Try it without credentials
 
 Use Node **22.23.2 or newer**, then run from this directory. The checkout must
-include the shared core described above; its README defines separate core checks.
+include the complete public family described above; the combined README defines
+the shared setup and checks.
 No legacy root workspace install is needed.
 
 ```sh
+npm ci
+cd ../recordings
 npm ci
 npm run demo
 ```
@@ -85,6 +89,19 @@ These modules belong to the integrated sample family; they are not a published g
 or independently runnable standalone snippets. Never copy an API key into React.
 
 ## Connect your authorized project
+
+For the combined listener, use the [integrated setup](../recordings/README.md)
+instead of the compatibility commands below. It requires the complete Web/mobile/core
+family, original absolute paths/schema/scope/account mapping and stopped old
+listeners; fresh initialization accepts only all-three-missing journals. It adds
+in-process peer-intent refusal without Web ID adoption, retaining own GET recovery.
+Its 10/30-second input budgets are stricter than this standalone launcher's
+15/180; upstream processing stays unchanged. Configured account/journal paths and
+sidecars are denied in combined development serving. No external-writer/file-race,
+production-auth or hardware guarantee is added.
+
+The following instructions retain the older Web launcher. Run them from this
+Web install root; do not run it alongside the combined host on the same state.
 
 1. Copy `.env.example` to `.env` (`Copy-Item` on PowerShell).
 2. Select `APP_MODE=live`, a trusted HTTPS API base ending `/v1`, server-held

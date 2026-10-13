@@ -75,7 +75,7 @@ quickstarts still install independently:
 
 | Location | Implemented role and limits |
 | --- | --- |
-| [Integrated core](end-to-end/recordings/README.md) | One recording/processing/Ask implementation, shared errors and contract tests; no standalone listener or runtime dependencies. |
+| [Integrated backend](end-to-end/recordings/README.md) | One combined Node listener composes Web/mobile factories, shared recording/processing/Ask features and all three original journals; Express/Vite resolve from the Web install. |
 | [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK, capture or playback. |
 | [Mobile](end-to-end/react-native-recording-sync/README.md) | React Native and Flutter clients share this example's customer backend. Both common app hosts are Android only. |
 | [React Native](end-to-end/react-native-recording-sync/app/README.md) | Common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
@@ -85,10 +85,12 @@ quickstarts still install independently:
 
 The web and mobile backends now import the integrated core through compatible
 feature paths and DTO projections. Authentication, bounded HTTP clients, upload,
-webhook and persisted scope models remain in their existing hosts. **One feature
-implementation is delivered; one executable backend is not.** Combining the
-listeners requires retained-intent checks and same-owner arbitration across the
-web, mobile-library and native journals before routing writes through one host.
+webhook and persisted scope models retain their existing public-family paths.
+**One feature implementation and one combined listener are implemented.** The
+combined server keeps distinct cookie/Bearer adapters and journals, with
+in-process processing/Ask arbitration and retained peer-intent refusal. Existing
+launchers remain available for compatibility and must stop before the combined
+host runs; other writers are not coordinated.
 SDK-only modules remain usable without that service.
 Independent device examples retain exact public beta.13 pins. Native iOS common
 apps, Flutter iOS and native Windows samples are not supplied here; Windows
@@ -124,6 +126,36 @@ code; root automation is not a runtime prerequisite. Imports within the public
 web/mobile/core family are required during compatibility migration. No private
 package, sibling-repository source import, submodule or local dependency on an
 internal Bota repository may be required.
+
+The current entry is [backend/main.mjs](end-to-end/recordings/backend/main.mjs).
+Its copy/run graph includes the Web installation and mobile backend source as
+well as this integrated backend. Configured startup uses original absolute
+launch bases/state paths and read-only schema, index, scope and account-mapping
+preflight. Default restart creates no replacement journals; first-use
+`--initialize` requires all three absent, with existing trusted/private parents
+and an account file. Accounts remain private files under trusted parents; journal
+parents must be private. Windows Node stat does not establish ACL privacy.
+
+Header presence selects one auth adapter; mixed/duplicate cookie/Bearer headers
+are rejected, with no fallback or shared body parser. Common incoming-header
+and body budgets are 10 and 30 seconds, stricter than the older standalone Web
+15/180-second settings; per-feature upstream processing limits stay unchanged.
+Combined development serving denies configured account/journal files and their
+sidecars while retaining Vite's default denials. This is a local sample host,
+not production authentication/deployment or hardware qualification.
+Static publication performs bounded tree checks and rejects links/nonregular
+entries and known private-file hardlink aliases, without detecting arbitrary
+copied private content or preventing filesystem races. Shutdown drains pending
+Web/mobile route work before journal closure even after socket disconnection.
+
+Fresh processing/Ask claims refuse any matching peer intent, including known or
+complete work. Web never adopts a peer resource ID into a new intent. Existing
+own GET recovery and native/library exact-known-ID paths remain intact. This
+does not merge/rekey journals, arbitrate external processes or make path checks
+atomic against concurrent filesystem changes. See the
+[combined setup and contract](end-to-end/recordings/README.md).
+Source/local/hosted qualification is recorded in the
+[combined review](docs/design-reviews/2026-10-12-unified-recordings.md).
 
 Browser-cookie and mobile-bearer adapters must each authenticate the caller and
 derive the backend principal. Consolidating feature code must not turn a client

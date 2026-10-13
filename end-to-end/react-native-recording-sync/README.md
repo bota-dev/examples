@@ -6,14 +6,16 @@ Demo/Bota One recording flow. Run a client with synthetic sample recordings and
 no credentials, or connect it to your authorized backend. Each client installs
 in its own install root. The mobile backend imports the
 [canonical recording/processing/Ask core](../recordings/README.md) shared with
-web. Use a full repository checkout or copy the mobile roots together with
-`end-to-end/recordings/backend/`; copying only `backend/` is insufficient. No
+web. Use a full public checkout: the combined runtime requires the Web
+installation, mobile backend source and `end-to-end/recordings/backend/`;
+copying only `backend/` is insufficient. No
 private Bota package is required, and SDK/client install commands stay unchanged.
 
-This is one feature implementation with two listeners/auth adapters and three
-journal models still separate. It is not a unified runtime. Upload/webhooks/native
-service paths remain local; auth/routes/DTOs, CWD-relative journal scope/anchors,
-known IDs, uncertainty and SDK receipt/cleanup gates retain their contracts.
+The [combined launcher](../recordings/README.md) now serves Web/mobile through
+one Node listener, composing existing service factories while retaining separate
+auth adapters, DTOs and three journals. Upload/webhook/native service source paths
+remain local; scope/anchors, known IDs, uncertainty and SDK receipt/cleanup gates
+retain their contracts. Clients and SDK/native identities/locks have not moved.
 
 | Client | Common app | Device capability |
 | --- | --- | --- |
@@ -37,13 +39,23 @@ Device screen. No Bota API key belongs in either client.
 
 ## Connect the common app to your backend
 
-The checkout must include the shared core. Core checks have their own README;
-the mobile runtime still starts from its original `backend/` working directory.
+Use the [combined setup](../recordings/README.md) with the Web installation,
+mobile backend source and integrated backend in one public checkout. Its live
+configuration maps the fixed mobile end user to a server-owned Web account and
+keeps the Bota key server-side. Default startup requires original explicit paths,
+schema/scope validation and all three journals; fresh `--initialize` allows only
+an all-missing set. Stop older listeners first. With default port 5173, forward
+`adb reverse tcp:5173 tcp:5173` and enter `http://127.0.0.1:5173` plus the separate
+`APP_ACCESS_TOKEN` in the client. Match any configured port change in forwarding.
 
-Start the [backend](backend/README.md) with your authorized project/end user,
-server-held Bota key and a distinct random `APP_ACCESS_TOKEN`. Forward its
-loopback port to a USB-connected Android host with `adb reverse tcp:8787 tcp:8787`.
-Enter `http://127.0.0.1:8787` and the application token in the client.
+The [older mobile backend](backend/README.md) remains a compatibility launcher
+with its original `backend/` CWD and default port 8787. Do not run it alongside
+the combined host against the same journals. Fresh processing/Ask claims refuse
+matching peer intent, including known/complete work, with no Web ID adoption;
+own GET recovery and native/library exact-known-ID paths remain. Common incoming
+header/body limits are 10/30 seconds; upstream processing limits are unchanged.
+These guards do not synchronize external writers or make file checks atomic.
+The next client move is the whole Flutter install root after qualification.
 
 The common app uses `/api/library/*` for fixed-owner recordings, completed
 transcripts, `tmpl_general_notes`, recording-scoped Ask and saved-operation
@@ -57,9 +69,10 @@ The public calls live in shared [recordings](../recordings/backend/features/reco
 [Ask](../recordings/backend/features/ask.mjs) modules. Mobile shims retain strict
 default recording/job project checks and existing source-linked DTOs; web has an
 explicit missing-project compatibility projection, not weaker owner/source gates.
-Shared code does not extend the mobile process's native/library recording lock
-across the web listener or its store. Single-listener/auth/store consolidation is
-later work with cross-store arbitration and Origin/body gates.
+The combined listener coordinates matching processing/Ask work with the retained
+Web, library and native journals in this process. The separate older launchers
+do not share that runtime lock; neither path coordinates external writers or
+automatic platform processing.
 
 The optional React Native device workflow requires additional configuration and
 firmware gates below. Flutter cannot perform that sync workflow in this release.

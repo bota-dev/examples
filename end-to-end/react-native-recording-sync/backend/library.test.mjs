@@ -5,8 +5,10 @@ import { tmpdir } from 'node:os';
 import { basename, join, relative, resolve, isAbsolute } from 'node:path';
 import { once } from 'node:events';
 import { createHash } from 'node:crypto';
+import { createServer } from 'node:http';
 import { LibraryService } from './library.mjs';
-import { createApp } from './server.mjs';
+import { createApp, createRequestHandler, configureMobileCoordination } from './server.mjs';
+import { AppError } from './library/errors.mjs';
 import { readConfig, RequestError, SyncService } from './service.mjs';
 import { createLibraryApi, LibraryError } from '../app/library-api.ts';
 
@@ -129,6 +131,167 @@ function fixture(t) {
     posts(path) { return calls.filter(call => call.method === 'POST' && call.path === path); },
   };
 }
+
+test('a host can configure standalone coordination or retain its own handler coordination', t => {
+  const f = fixture(t);
+  const native = new SyncService(config, { database: ':memory:' });
+  f.resources.push(native);
+  const nativeGuard = () => {}, libraryGuard = (_id, work) => work();
+  native.beforeTranscriptionCreate = nativeGuard;
+  f.library.coordinateTranscription = libraryGuard;
+  assert.equal(typeof createRequestHandler(native, config.appToken, f.library, { coordinate: false }), 'function');
+  assert.equal(native.beforeTranscriptionCreate, nativeGuard);
+  assert.equal(f.library.coordinateTranscription, libraryGuard);
+  configureMobileCoordination(native, f.library);
+  assert.notEqual(native.beforeTranscriptionCreate, nativeGuard);
+  assert.notEqual(f.library.coordinateTranscription, libraryGuard);
+  const server = createApp(native, config.appToken, f.library);
+  assert.equal(server.requestTimeout, 30_000);
+  assert.equal(server.headersTimeout, 10_000);
+});
+
+test('the extracted handler retains standalone authentication, routes, limits and DTOs', async t => {
+  const f = fixture(t), request = await httpFixture(t, f, { extracted: true });
+  for (const headers of [{ Authorization: '' }, { Authorization: `Bearer ${config.apiKey}` }, { Origin: 'https://example.test' }])
+    assert.equal((await request('/api/library/recordings', { headers })).status, 401);
+  assert.equal((await request('/api/library/recordings/rec%5Fone')).status, 404);
+  assert.equal((await request('/api/library/recordings?end_user_id=eu_foreign')).status, 400);
+  const oversized = await request('/api/library/recordings/rec_one/ask', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: 'x'.repeat(33000) }),
+  });
+  assert.equal(oversized.status, 413);
+  assert.equal(f.calls.length, 0);
+  const list = await request('/api/library/recordings');
+  assert.equal(list.status, 200);
+  assert.equal(list.body.data[0].id, 'rec_one');
+  const created = await request('/api/library/recordings/rec_one/transcriptions', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}',
+  });
+  assert.equal(created.status, 200);
+  assert.equal(created.body.transcription.recording_id, 'rec_one');
+  assert.equal(created.body.operation.resource_id, created.body.transcription.id);
+  const native = await request('/api/context');
+  assert.equal(native.status, 409);
+  assert.equal(native.body.error.code, 'device_not_configured');
+});
+
+for (const kind of ['transcription', 'summary', 'ask']) test(`a fresh ${kind} claim guard denies before writes or journal metadata`, async t => {
+  const f = fixture(t), request = await httpFixture(t, f);
+  const source = kind === 'summary' ? f.transcript().id : 'rec_one';
+  const route = kind === 'summary' ? `/api/library/transcriptions/${source}/summaries`
+    : `/api/library/recordings/rec_one/${kind === 'ask' ? 'ask' : 'transcriptions'}`;
+  const guards = [];
+  f.library.beforeClaim = (actualKind, anchor, details) => {
+    guards.push({ kind: actualKind, anchor, details });
+    throw new AppError(409, 'cross_intent_reconciliation_required', 'A retained operation needs reconciliation.');
+  };
+  const denied = await request(route, { method: 'POST', headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(kind === 'ask' ? { question: '  What happened?  ' } : {}) });
+  assert.equal(denied.status, 409);
+  assert.equal(denied.body.error.code, 'cross_intent_reconciliation_required');
+  assert.equal(denied.body.operation, undefined);
+  assert.equal(guards.length, 1);
+  assert.equal(guards[0].kind, kind);
+  assert.equal(guards[0].details.recordingId, 'rec_one');
+  const expectedAnchor = kind === 'transcription' ? 'rec_one' : kind === 'summary'
+    ? `${source}:tmpl_general_notes` : `rec_one:${createHash('sha256').update('What happened?').digest('hex')}`;
+  assert.equal(guards[0].anchor, expectedAnchor);
+  assert.equal(f.calls.filter(call => call.method === 'POST').length, 0);
+  assert.deepEqual(await f.read('/api/library/operations'), { data: [] });
+});
+
+test('asynchronous claim guards refuse without creating intent or sending a write', async t => {
+  const f = fixture(t);
+  f.library.beforeClaim = async () => { throw new Error('PRIVATE_GUARD_FAILURE'); };
+  await rejects(f.write('/api/library/recordings/rec_one/transcriptions'), 'configuration');
+  assert.equal(f.posts('/transcriptions').length, 0);
+  assert.deepEqual(await f.read('/api/library/operations'), { data: [] });
+});
+
+for (const kind of ['transcription', 'summary', 'ask']) test(`own retained ${kind} recovery bypasses the fresh guard after restart`, async t => {
+  const f = fixture(t), source = kind === 'summary' ? f.transcript().id : 'rec_one';
+  const route = kind === 'summary' ? `/api/library/transcriptions/${source}/summaries`
+    : `/api/library/recordings/rec_one/${kind === 'ask' ? 'ask' : 'transcriptions'}`;
+  const body = kind === 'ask' ? { question: 'What happened?' } : {};
+  const upstream = kind === 'summary' ? '/summaries' : kind === 'ask' ? '/ask/sessions' : '/transcriptions';
+  f.state.fail = `POST ${upstream}`;
+  await rejects(f.write(route, body), 'operation_uncertain');
+  const [saved] = (await f.read('/api/library/operations')).data;
+  f.restart(); f.state.fail = null;
+  let guards = 0;
+  f.library.beforeClaim = () => { guards++; throw new AppError(409, 'cross_intent_reconciliation_required', 'Peer blocked.'); };
+  const repeated = await f.write(route, body);
+  const refreshed = await f.read(`/api/library/operations/${saved.id}`);
+  assert.equal(repeated.operation.id, saved.id);
+  assert.equal(refreshed.operation.id, saved.id);
+  assert.equal(repeated.operation.state, 'uncertain');
+  assert.equal(guards, 0);
+  assert.equal(f.posts(upstream).length, 1);
+  assert.equal((await f.read('/api/library/operations')).data.length, 1);
+});
+
+test('own known resource recovery bypasses a denied fresh guard after journal reopen', async t => {
+  const f = fixture(t);
+  f.state.after = (method, path, row) => {
+    if (method === 'POST' && path === '/transcriptions') f.state.fail = `GET /transcriptions/${row.id}`;
+  };
+  await rejects(f.write('/api/library/recordings/rec_one/transcriptions'), 'operation_uncertain');
+  const [saved] = (await f.read('/api/library/operations')).data;
+  assert.match(saved.resource_id, /^txn_/);
+  f.restart(); f.state.fail = null; f.state.after = null;
+  let guards = 0;
+  f.library.beforeClaim = () => { guards++; throw new AppError(409, 'cross_intent_reconciliation_required', 'Peer blocked.'); };
+  const recovered = await f.write('/api/library/recordings/rec_one/transcriptions');
+  assert.equal(recovered.operation.id, saved.id);
+  assert.equal(recovered.operation.resource_id, saved.resource_id);
+  assert.equal(recovered.operation.state, 'complete');
+  assert.equal(recovered.transcription.id, saved.resource_id);
+  assert.equal(guards, 0);
+  assert.equal(f.posts('/transcriptions').length, 1);
+});
+
+for (const kind of ['summary', 'ask']) test(`${kind} POST executes its complete workflow inside trusted coordination`, async t => {
+  const f = fixture(t), source = kind === 'summary' ? f.transcript().id : 'rec_one';
+  let active = false, calls = 0;
+  const coordinated = async work => { calls++; active = true; try { return await work(); } finally { active = false; } };
+  if (kind === 'summary') f.library.coordinateSummary = (id, work) => {
+    assert.equal(id, source); return coordinated(work);
+  };
+  else f.library.coordinateAsk = (id, question, work) => {
+    assert.equal(id, 'rec_one'); assert.equal(question, '  What happened?  '); return coordinated(work);
+  };
+  f.library.beforeClaim = () => assert.equal(active, true);
+  f.state.after = (method) => { if (method === 'POST') assert.equal(active, true); };
+  const result = kind === 'summary' ? await f.write(`/api/library/transcriptions/${source}/summaries`)
+    : await f.write('/api/library/recordings/rec_one/ask', { question: '  What happened?  ' });
+  assert.equal(result.operation.state, 'complete');
+  assert.equal(calls, 1);
+  assert.equal(active, false);
+});
+
+test('peer intent assertions are opaque and include legacy Ask outside the activity window', t => {
+  const f = fixture(t), principal = f.library.principal, store = f.library.store;
+  const legacy = store.claim(principal, 'ask', 'rec_one:old-hash', { recordingId: 'rec_one', private: 'PRIVATE_PEER' }).operation;
+  for (let index = 0; index < 51; index++) store.claim(principal, 'summary', `txn_other${index}:tmpl_general_notes`, {});
+  assert(!store.list(principal).some(row => row.id === legacy.id));
+  for (const [kind, anchor, recordingId] of [
+    ['ask', 'rec_one:new-hash', 'rec_one'],
+    ['summary', 'txn_other0:tmpl_general_notes', undefined],
+  ]) assert.throws(() => f.library.assertPeerIntent(kind, anchor, recordingId), error => {
+    assert.equal(error.status, 409);
+    assert.equal(error.code, 'cross_intent_reconciliation_required');
+    assert.equal(error.operation, undefined);
+    assert(!error.message.includes('PRIVATE_PEER') && !error.message.includes(legacy.id) && !error.message.includes(anchor));
+    return true;
+  });
+  assert.doesNotThrow(() => f.library.assertPeerIntent('transcription', 'rec_one'));
+  assert.doesNotThrow(() => f.library.assertPeerIntent('ask', 'rec_two:new-hash', 'rec_two'));
+  assert.throws(() => f.library.assertPeerIntent('ask', 'rec_two:new-hash'), error => error.code === 'cross_intent_reconciliation_required');
+  const known = store.claim(principal, 'transcription', 'rec_one', {}).operation;
+  store.save(principal, known.id, { state: 'complete', resourceId: 'txn_known' });
+  assert.throws(() => f.library.assertPeerIntent('transcription', 'rec_one'), error => error.code === 'cross_intent_reconciliation_required');
+  assert.equal(f.calls.length, 0);
+});
 
 test('library works with no device and emits selected metadata only', async t => {
   const f = fixture(t);
@@ -448,9 +611,10 @@ test('a known native transcription cannot be replaced if absent from the API lis
   assert.equal(f.posts('/transcriptions').length, 0);
 });
 
-async function httpFixture(t, f) {
+async function httpFixture(t, f, { extracted = false } = {}) {
   const native = new SyncService(config, { database: ':memory:', fetchImpl: () => { throw new Error('No native upstream call expected'); } });
-  const server = createApp(native, config.appToken, f.library);
+  const server = extracted ? createServer(createRequestHandler(native, config.appToken, f.library))
+    : createApp(native, config.appToken, f.library);
   server.listen(0, '127.0.0.1'); await once(server, 'listening');
   t.after(async () => { await new Promise(resolve => server.close(resolve)); native.close(); });
   const origin = `http://127.0.0.1:${server.address().port}`;

@@ -3,9 +3,9 @@ name: Web reference app
 on:
   push:
     branches: [main]
-    paths: ['end-to-end/web-reference/**', 'end-to-end/recordings/**', '.github/workflows/web-reference.yml']
+    paths: ['end-to-end/web-reference/**', 'end-to-end/recordings/**', 'end-to-end/react-native-recording-sync/backend/**', '.github/workflows/web-reference.yml']
   pull_request:
-    paths: ['end-to-end/web-reference/**', 'end-to-end/recordings/**', '.github/workflows/web-reference.yml']
+    paths: ['end-to-end/web-reference/**', 'end-to-end/recordings/**', 'end-to-end/react-native-recording-sync/backend/**', '.github/workflows/web-reference.yml']
   workflow_dispatch:
 
 permissions:

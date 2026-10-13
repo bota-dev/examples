@@ -52,7 +52,18 @@ Their dated source and verification findings remain history.
 - Use one concrete sample backend, not a new API SDK, generic forwarding service,
   universal UI framework or copied private Bota application code.
 
-## First implementation step
+## Current migration status
+
+The [combined backend](../../end-to-end/recordings/README.md) now composes the
+original Web/mobile factories on one listener. It retains separate cookie/Bearer
+adapters and three journals, coordinates processing/Ask in this process, refuses
+matching retained peer intent, and preflights original paths/schemas/scopes before
+writable startup. Explicit initialization accepts only an all-missing fresh set.
+Clients have not moved. The [combined qualification review](../design-reviews/2026-10-12-unified-recordings.md)
+records actual checks, the conservative input-timeout difference and limits.
+The sections below record the preceding extraction and its migration gate.
+
+## Earlier first implementation step
 
 The [canonical core](../../end-to-end/recordings/README.md) now implements
 recording reads, processing/general notes, recording-scoped Ask and error
@@ -77,7 +88,7 @@ inside uncertainty handling. Web 401/403/404 responses omit operation metadata;
 the private journal remains available for safe recovery. No new write is sent to
 replace a retained uncertain operation.
 
-## Next migration gate: one listener
+## Earlier migration gate: one listener
 
 Before combining listeners:
 
