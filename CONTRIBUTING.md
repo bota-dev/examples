@@ -6,38 +6,49 @@ and the current [design](DESIGN.md), [roadmap](ROADMAP.md) and selected README
 before changing this repository.
 
 There are exactly two product layers: general platform capabilities now, then
-vertical use cases and app types later. The general layer has three formats:
-independent API workflow recipes under `api/`, small platform SDK starters under
-`app-sdk/`, and optional coherent app/backend references under `end-to-end/`.
-These formats are not extra layers. Catalog count is not a delivery goal.
+vertical use cases and app types later. The general layer's foundation is one
+integrated **Bota Recordings** sample: a shared customer backend, platform clients
+and copyable features. Web, RN, Flutter, native Android/Kotlin and Apple/Swift
+are client targets with normal platform UI and public SDK calls. Focused guides
+link maintained feature code; a few standalone quickstarts serve distinct
+languages/runtimes. Existing `api/`, `app-sdk/` and `end-to-end/` paths are source
+formats, not additional product layers. Catalog count is not a delivery goal.
 
-## Choose the smallest useful example
+## Work within the integrated foundation
 
-- For server integrations, start with an existing API workflow recipe.
-- For device capabilities, start with the published facade's SDK starter.
-  Kotlin, Swift, RN, Flutter and Web are first-class choices. Extend a useful
-  supported workflow with plain feature modules and a small runnable UI/harness;
-  do not create an install root for every SDK method.
-- For frontend/backend composition, use an optional Bota Recordings reference.
-  Its UI should serve a recognizable end-user task. A reference can share
-  concrete backend features within its family when compatibility is verified.
+Start with the existing web/mobile recording clients and the selected platform's
+public-call files. Put a feature in its maintained module and document how to run
+and copy it. Keep API explanation/source links in guides and use familiar
+end-user recording controls in each client. Native Kotlin and Swift are
+first-class client targets, not a reason to reproduce a universal UI framework.
 
-Use the [workflow/platform tables](README.md#choose-your-starting-point) or
-[examples.json](examples.json). Follow the selected README and install in its
+Use the [sample entry](README.md#start-with-bota-recordings),
+[feature map](README.md#focused-recipes) and
+[platform sources](README.md#current-platform-coverage). Existing standalone
+quickstarts and advanced examples remain in [examples.json](examples.json).
+Follow the selected README and install in its
 documented directory. Root npm commands belong to the retained legacy `apps/`
 workspace. Keep source, manifest and lockfile versions aligned with the public
 package being demonstrated.
 
-A useful API recipe or SDK feature does not depend on all platforms having the
-same UI, a complete import/playback journey or a shared backend DTO. Missing
-public capability, missing example host and missing verification are distinct
-gaps. State the actual supported subset; never use private helpers, custom
-transports/crypto or unpublished methods to hide a gap.
+Device connection/status can run without a backend; cloud features and authorized
+upload require the customer backend. Different published facades do not imply
+identical UI or full device-feature parity. Missing public capability, missing
+host and missing verification are distinct gaps. State the supported subset;
+never use private helpers, custom transports/crypto or unpublished methods to
+hide a gap. A useful SDK feature need not wait for every client to be complete.
 
-The web and mobile references currently have separate backends; RN/Flutter share
-the mobile one. Preserve current paths, authentication, journals and unresolved
-intent. Backend reuse is a scoped improvement, not a prerequisite for platform
-examples. Do not create a repository-wide framework or unofficial wrapper SDK.
+**The [shared feature core](end-to-end/recordings/README.md) is implemented.**
+Web/mobile recording, processing and Ask files are now compatibility shims over
+one implementation. Two listeners/auth adapters and three journal models remain;
+upload/webhook/native service modules are still local. Single-listener migration
+must reconcile auth/body/Origin gates and cross-store arbitration before runtime
+consolidation. Preserve routes/DTOs, journal scope/anchors, known IDs, unresolved
+writes and native receipt/cleanup gates. Use the full repository checkout or copy
+the compatibility family including `end-to-end/recordings/backend/`; the old
+web/mobile folders alone are no longer complete runtime copies. Standalone
+API/App SDK quickstarts remain self-contained. No mass move/deletion is needed. See the
+[approved decision](docs/design-decisions/2026-10-12-integrated-recordings.md).
 
 ## Code that is easy to adapt
 
@@ -49,12 +60,15 @@ examples. Do not create a repository-wide framework or unofficial wrapper SDK.
 - Name the files/helpers a developer must copy and the customer-owned pieces
   they replace. A short entry file may still require HTTP, authentication,
   ownership and durable-state helpers; explain the complete import graph.
-- Keep independent recipes self-contained in their install roots. Reuse inside
-  a coherent reference is allowed, but avoid hidden cross-example imports and
-  sibling-repository installation/runtime dependencies.
-- Keep app-reference controls about the end-user's recording task. Put API
-  explanations and copy instructions in source/README. A platform starter needs
-  only controls that exercise its supported workflow, not a duplicate consumer app.
+- Change recording/processing/Ask public-call logic in the canonical core;
+  consumer shims own explicit policy/projections, not duplicate implementations.
+  Preserve the web omitted-project compatibility policy and mobile default strict
+  recording/job checks. Include core/errors plus HTTP/auth/store adapters in the
+  documented copy graph; do not introduce hidden/private sibling dependencies.
+  Do not create a general wrapper SDK or example-only framework to conceal calls.
+- Keep client controls about the end-user's recording task, with normal native
+  UI. A device-only flow may have just connection/status controls. Public-call
+  explanations and complete copy instructions belong in README/source.
 
 ## Preserve integration boundaries
 
@@ -67,6 +81,9 @@ examples. Do not create a repository-wide framework or unofficial wrapper SDK.
 - Retain durable intent before uncertain writes. Use the supported known-resource
   GET reconciliation path; do not resend a create/upload/command or delete its
   journal to force apparent success.
+  Retain a syntactically valid returned job/session ID before later response
+  validation, and await known-resource GETs inside the guarded failure path.
+  Recovery metadata does not authorize content; web 401/403/404 responses omit it.
 - Keep cloud upload commitment, device cleanup and processing separate. Legacy
   `uploaded` or cloud job metadata cannot authorize cleanup; preserve SDK receipt,
   exact-generation and host authorization gates.
@@ -77,6 +94,10 @@ examples. Do not create a repository-wide framework or unofficial wrapper SDK.
 - Keep lifecycle scripts enabled and preserve required postinstall/security-test
   chains. See [dependency security](DEPENDENCY_SECURITY.md) before changing locks,
   overrides or source guards; passing a patch test is not scanner closure.
+  The three RN roots retain the mandatory native Expo signing integrity guard,
+  braces guards and existing test chains; the reviewed signing-tool replacement
+  removes Forge without changing public SDK/Expo pins. See
+  [current signing-tool scope](docs/native-expo-signing-replacement.md).
 
 Read [example contracts](docs/example-contracts.md) for operation-specific rules.
 Windows/Electron native SDK support is an upstream plan, distinct from adding a
@@ -97,7 +118,7 @@ node scripts/check-catalog.mjs
 node --test scripts/test-catalog.mjs
 ```
 
-For the optional web reference, its checks run from `end-to-end/web-reference`:
+For the current web client, checks run from `end-to-end/web-reference`:
 
 ```sh
 npm ci

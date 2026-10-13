@@ -1,83 +1,42 @@
 # Bota Examples
 
-Runnable examples and copyable sample code for developers building applications
-with the public Bota API and App SDK. Choose the workflow or platform you need;
-no private Bota app, special coding tool or repository-wide install is required.
+Demo/sample/template code for developers building end-user applications with the
+public Bota API and App SDK.
 
-## Choose your starting point
+The foundation is **Bota Recordings**: one integrated recording sample with
+copyable features, one shared customer backend and clients for React web,
+React Native, Flutter, native Android/Kotlin and Apple/Swift. Use normal platform
+UI and the published SDK; each client exposes its actual supported capabilities.
 
-| You want to… | Start here |
-| --- | --- |
-| Call the backend API from your server | [API workflow recipes](#focused-recipes): upload/transcribe, recordings, notes, Ask and webhooks |
-| Embed device capabilities in your app | [Platform SDK starters](#current-platform-coverage): Kotlin, Swift, React Native, Flutter or Web |
-| See how app UI and a customer backend fit together | [Optional Bota Recordings references](#whole-app-references): React web or Android mobile |
+**The foundation is partially implemented.** The [shared backend core](end-to-end/recordings/README.md)
+now owns recording, transcription/general-notes and Ask logic plus error types.
+Web and Android RN/Flutter clients consume it through compatibility adapters.
+There are still two HTTP listeners/auth adapters and three separate journal
+models; upload/webhooks/native service code remains in its existing roots.
+A single backend runtime and integrated Kotlin/Swift clients are not built.
+Current client paths, public SDK pins and journal identities remain unchanged.
 
-This is one repository with exactly two product layers: **general platform
-capabilities now**, then **vertical and app-type examples later**. API recipes,
-SDK starters and combined references are three formats within the general layer,
-stored under `api/`, `app-sdk/` and `end-to-end/`; they are not three layers.
+There are exactly two product layers: **general platform capabilities now**,
+then **vertical and app-type examples later**. The integrated sample and its
+focused guides/quickstarts belong to the general layer. `api/`, `app-sdk/` and
+`end-to-end/` are current source formats, not extra product layers.
 
-## Focused recipes
+## Start with Bota Recordings
 
-Use a bounded workflow rather than installing a separate example for every
-method. These recipes run on a server or development machine; Bota keys stay
-there.
-
-| Workflow | Setup and limits | Public-call source |
+| Client | Run and adapt | Implemented today |
 | --- | --- | --- |
-| Import audio, verify completion and transcribe | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) | [Node workflow](api/upload-and-transcribe-node/index.mjs), `uploadAndTranscribe` |
-| Find/read recordings and retrieve original bytes | [Recording list](api/list-recordings-node/README.md), [Node download](api/download-recording-node/README.md) or [Python download](api/download-recording-python/README.md) | [List workflow](api/list-recordings-node/index.mjs), `listRecordings`; [download workflow](api/download-recording-node/index.mjs) |
-| Create general notes from a completed transcript | [Node.js summaries](api/summarize-transcription-node/README.md) | [Summary workflow](api/summarize-transcription-node/index.mjs), `summarize` |
-| Ask about one recording | [Node.js recording-scoped Ask](api/ask-recording-node/README.md) | [Ask workflow](api/ask-recording-node/index.mjs) |
-| Receive processing events and refresh existing jobs | [Node.js webhook](api/webhook-receiver-node/README.md), [Python webhook](api/webhook-receiver-python/README.md) or [transcription watcher](api/watch-transcription-python/README.md) | [Raw-byte receiver](api/webhook-receiver-node/server.mjs); [GET watcher](api/watch-transcription-python/main.py) |
+| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, library, Transcript/Summary/Ask; API-only |
+| React Native Android | [RN sample](end-to-end/react-native-recording-sync/app/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
+| Flutter Android | [Flutter sample](end-to-end/react-native-recording-sync/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
+| Kotlin / Android | [SDK connection](app-sdk/android-device-connect/README.md) and [recording catalog](app-sdk/android-recording-catalog/README.md) | Native device workflows; integrated recording client is planned |
+| Swift / Apple | [SDK connection](app-sdk/apple-device-connect/README.md) and [recording catalog](app-sdk/apple-recording-catalog/README.md) | Native macOS device workflows; integrated recording client/iOS host is planned |
 
-Each README identifies the public calls, prerequisites, expected result and
-verification limits. Copy the integration with its complete imports and required
-HTTP, authorization and durable-state helpers; replace the application-owned
-identity mapping. An original download is not necessarily playable or decrypted
-audio. Use the [extended catalog](#example-catalog) for advanced readers/exports.
+Try the web sample without credentials or hardware using Node **22.23.2+**:
 
-## Current platform coverage
-
-Kotlin, Swift, React Native, Flutter and Web are first-class SDK entry points.
-The direction is one small starter per published facade, with plain feature
-modules for useful supported workflows. Existing connection/catalog paths remain
-in place. A starter needs only enough UI to run its workflow; it does not need a
-complete recording app, common backend DTOs or another platform's UI.
-
-| Platform | Start here | Current host and capability limits |
-| --- | --- | --- |
-| Kotlin / Android | [Connection/status](app-sdk/android-device-connect/README.md); [recording catalog](app-sdk/android-recording-catalog/README.md) | Native Android hosts, API 26+; catalog reads metadata, not audio transfer |
-| Swift / Apple | [Connection/status](app-sdk/apple-device-connect/README.md); [recording catalog](app-sdk/apple-recording-catalog/README.md) | Current SwiftUI hosts are macOS; no native iOS starter host yet; catalog does not transfer audio |
-| React Native | [Connection/status](app-sdk/react-native-device-connect/README.md); [encrypted-sync workflow](end-to-end/react-native-recording-sync/README.md) | Connection starter has Android/iOS hosts; encrypted sync is Android-only, already-provisioned encrypted-v2 with its documented backend/firmware gates |
-| Flutter | [Connection/status](app-sdk/flutter-device-connect/README.md) | Android host only; beta.13 facade lacks the fresh-pairing/encrypted-v2 interfaces needed for the RN sync workflow; no iOS starter host yet |
-| Web / desktop Chromium | [Connection/status](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; separate from the API web reference |
-| Windows | The API web reference; Chromium SDK connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host is supplied here |
-
-All eight independent device examples pin published **2.0.0-beta.13**. Read the
-selected manifest/lockfile and README for exact tooling, host support and public
-methods. Missing facade capability, missing host and missing verification are
-different gaps. Do not fill them with private transports or an unofficial SDK.
-
-[Adoption evidence](docs/independent-examples-review.md#beta13-adoption) and the
-[implementation review](docs/independent-examples-review.md) distinguish source,
-native builds, live API and physical acceptance. Historical phone results apply
-only to their tested source/SDK/firmware/device; beta.13 physical acceptance is
-not inferred from them.
-
-## Whole-app references
-
-**Bota Recordings** illustrates a familiar recording experience inspired by Demo
-and Bota One. These optional references show how selected integrations fit an
-end-user app; use them as templates or copy a feature with its helpers.
-
-| Reference | Run and adapt | Current scope |
-| --- | --- | --- |
-| React web | [Web reference](end-to-end/web-reference/README.md) | Audio import, library, Transcript/Summary/Ask; API-only |
-| React Native Android | [RN reference](end-to-end/react-native-recording-sync/app/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
-| Flutter Android | [Flutter reference](end-to-end/react-native-recording-sync/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
-
-Try the web reference without credentials or hardware using Node **22.23.2+**:
+Use a full repository checkout: the web/mobile compatibility roots now import
+`end-to-end/recordings/backend/`. Copying only an old client/backend folder is
+insufficient. Install in the selected root; no root legacy workspace install is
+required. The shared core's own README defines its separate checks.
 
 ```sh
 cd end-to-end/web-reference
@@ -85,31 +44,98 @@ npm ci
 npm run demo
 ```
 
-Open **http://127.0.0.1:5173** and select **Open demo**. The mobile READMEs cover
-native builds and **Try sample recordings**. Sample actions/content are synthetic
+Open **http://127.0.0.1:5173** and select **Open demo**. Mobile READMEs cover
+native builds and **Try sample recordings**. Sample content/actions are synthetic
 and make no external calls; they establish no live upload, provider or hardware
 success.
 
-These references are runnable partial implementations. Web has no audio playback;
-mobile has no ordinary audio import/playback and its recording hosts are Android
-only. RN/Flutter share the mobile backend; web has a separate backend. Concrete
-backend reuse may improve that reference family when its compatibility gates
-pass. Full UI parity, a complete import/playback journey and backend consolidation
-are not prerequisites for a useful API recipe or SDK feature.
+The recording experience connects audio input, library, supported audio playback
+and source review, transcript, general notes and recording-scoped Ask. Current
+web has no playback; mobile has no ordinary file import/playback and its recording
+hosts are Android only. Standalone device connection/status needs no backend.
+Cloud features and authorized device upload need the customer backend; device
+presence never gates browsing existing cloud recordings.
 
-Choose one directory, install only its documented dependencies and inspect the
-public call before adapting it. The [AI guide](docs/using-examples-with-ai.md) and
-[machine-readable index](examples.json) help tools find source and setup.
-[DESIGN.md](DESIGN.md) and [ROADMAP.md](ROADMAP.md) describe contributor direction;
-[AGENTS.md](AGENTS.md) governs repository changes. Catalog count is not a delivery
-goal.
+The [implemented core](end-to-end/recordings/README.md) is one feature
+implementation, not a unified listener/store. Compatibility adapters retain
+application authentication, routes/DTOs, journal scope/anchors, known IDs and
+unresolved writes. Single-listener consolidation still needs cross-store
+arbitration and compatible cookie/bearer, Origin and body gates. Shared code
+does not coordinate writes across the existing listeners. SDK receipts and
+exact-generation gates still govern cleanup. The remaining client/layout migration
+is planned; current paths/catalog/journals stay valid. See the [design](DESIGN.md), [roadmap](ROADMAP.md) and
+[approved decision](docs/design-decisions/2026-10-12-integrated-recordings.md).
+
+## Focused recipes
+
+Find the feature's public call, run the relevant sample path, then copy the
+feature with its complete imports. These maintained modules are the starting
+points for focused guides/snippets; they are not standalone files to paste
+without their HTTP, authorization, ownership and durable-state helpers.
+
+| Feature | Public API/SDK boundary | Current public-call source |
+| --- | --- | --- |
+| List/read recordings | `GET /v1/recordings`, `GET /v1/recordings/{id}` | [Shared recordings](end-to-end/recordings/backend/features/recordings.mjs); [React library](end-to-end/web-reference/web/features/recordings/Recordings.tsx) |
+| Import audio | Create recording, get upload URL, storage `PUT`, verified upload completion | [Backend upload](end-to-end/web-reference/server/features/upload.mjs); [React upload](end-to-end/web-reference/web/features/uploads/Upload.tsx) |
+| Transcribe/read text and create general notes | Public transcription/summary GET/POST calls | [Shared processing](end-to-end/recordings/backend/features/processing.mjs); [Transcript](end-to-end/web-reference/web/features/transcription/Transcript.tsx) / [Summary](end-to-end/web-reference/web/features/summaries/Summaries.tsx) |
+| Ask about one recording | Recording-scoped session/message calls and source/citation checks | [Shared Ask](end-to-end/recordings/backend/features/ask.mjs); [React Ask](end-to-end/web-reference/web/features/ask/Ask.tsx) |
+| Receive events and recover known operations | Signed customer webhook; GET-only saved-operation refresh | [Webhook receiver](end-to-end/web-reference/server/features/webhooks.mjs); [Activity](end-to-end/web-reference/web/features/webhooks/Activity.tsx) |
+| Sync a supported device recording | Published RN encrypted-v2 SDK plus authorized native host/backend | [DeviceSync.tsx](end-to-end/react-native-recording-sync/app/DeviceSync.tsx); [setup and complete dependency boundary](end-to-end/react-native-recording-sync/README.md) |
+
+The web [recipe table](end-to-end/web-reference/README.md#pick-a-recipe) and
+[mobile setup](end-to-end/react-native-recording-sync/README.md) explain the
+required helpers and limits. Replace the customer auth adapter with your
+application's verified identity mapping. Keep Bota keys server-side and preserve
+source checks and durable-before-write ordering. Include the canonical core,
+compatibility shim/projection, HTTP/auth adapter and store used by that feature.
+The web shim explicitly tolerates omitted `project_id` while retaining supplied
+project and exact owner/source checks; mobile uses strict default recording/job
+project checks. Do not broaden either policy while copying.
+
+A few standalone quickstarts remain useful for distinct languages/runtimes:
+[Node upload/transcribe](api/upload-and-transcribe-node/README.md),
+[Python upload/transcribe](api/upload-and-transcribe-python/README.md) and
+[Node](api/webhook-receiver-node/README.md)/[Python](api/webhook-receiver-python/README.md)
+webhooks. Existing advanced API/SDK examples remain in the
+[catalog](#example-catalog); there is no mass deletion or move. Add shared features
+and guides before another install root for overlapping behavior.
+
+## Current platform coverage
+
+Web, RN, Flutter, Kotlin and Swift are integrated-client targets with ordinary
+platform UI and copyable public-call files. Current device sources below also
+run independently: discovery/identity/status does not require a backend.
+Different public SDK capabilities do not imply identical UI or full device parity.
+
+| Platform | Current SDK public-call source | Current host and capability limits |
+| --- | --- | --- |
+| Kotlin / Android | [MainActivity.kt](app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](app-sdk/android-device-connect/README.md) | Native Android, API 26+; catalog reads metadata, not audio transfer; integrated recording client is planned |
+| Swift / Apple | [App.swift](app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](app-sdk/apple-device-connect/README.md) | Current SwiftUI hosts are macOS; no native iOS host or integrated recording client yet |
+| React Native | [App.tsx](app-sdk/react-native-device-connect/App.tsx); [setup](app-sdk/react-native-device-connect/README.md) | Connection has Android/iOS hosts; recording/sync sample is Android-only, already-provisioned encrypted-v2 with documented backend/firmware gates |
+| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android host only; beta.13 lacks the fresh-pairing/encrypted-v2 interfaces required for the RN sync workflow |
+| Web / desktop Chromium | [page.ts](app-sdk/web-device-connect/page.ts) and [main.ts](app-sdk/web-device-connect/main.ts); [setup](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; not integrated into the API recording client yet |
+| Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
+
+All eight independent device examples pin published **2.0.0-beta.13**.
+Inspect the selected manifest/lockfile and README for tooling and public methods.
+Missing facade capability, missing host and missing verification are different
+gaps; do not fill them with private transports or an unofficial SDK.
+
+[Adoption evidence](docs/independent-examples-review.md#beta13-adoption) and the
+[implementation review](docs/independent-examples-review.md) distinguish source,
+native builds, live API and physical acceptance. Historical phone results apply
+only to their tested source/SDK/firmware/device; they do not establish beta.13
+physical acceptance. The [AI guide](docs/using-examples-with-ai.md) helps tools
+locate feature code and setup; [AGENTS.md](AGENTS.md) governs repository changes.
 
 ## Example catalog
 
-The extended inventory retains focused and advanced references. Its entries
-install independently and have different verification levels; many readers and
+The extended inventory retains focused and advanced references. Entries have
+documented install roots and different verification levels; many readers and
 exports have source/syntax evidence only. Follow the selected README rather than
 inferring runtime support from inclusion in this table.
+Integrated web/mobile roots require the shared core in the same checkout;
+standalone API/App SDK quickstarts remain self-contained.
 The [public example guide](https://docs.bota.dev/api-reference/client-sdks#example-apps)
 provides API/SDK installation guidance.
 
@@ -194,6 +220,7 @@ provides API/SDK installation guidance.
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | React Native + Flutter Android library, Transcript/Summary/Ask; one authenticated backend; synthetic mode; optional RN encrypted sync and Flutter connection/status | No; device path optional |
 | [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
+| [Integrated Recordings backend core](end-to-end/recordings/README.md) | Shared recording, processing and Ask implementation used by web/mobile compatibility adapters; listeners, auth and journals remain separate | No |
 
 </details>
 
@@ -216,7 +243,8 @@ Keep lifecycle scripts enabled in affected npm install roots. Required
 query-string, native Expo signing, braces and build-dependency guards are part of their
 documented installation/test chains; do not remove them to simplify a template.
 [Dependency security](DEPENDENCY_SECURITY.md),
-[Forge mitigation](docs/node-forge-parser-mitigation.md),
+[native Expo signing replacement](docs/native-expo-signing-replacement.md),
+[historical Forge mitigation](docs/node-forge-parser-mitigation.md),
 [braces mitigation](docs/braces-depth-mitigation.md) and
 [build-dependency review](docs/build-dependency-remediation.md) record scope,
 scanner limits and required checks. Passing a source guard or CI does not close
@@ -267,11 +295,11 @@ and open acceptance gaps.
 
 ## Documentation
 
-- [Design](DESIGN.md): product purpose, two layers and recipe/starter/reference formats.
+- [Design](DESIGN.md): the integrated sample foundation and its two product layers.
 - [Roadmap](ROADMAP.md): ordered remaining work and acceptance criteria.
 - [Architecture](ARCHITECTURE.md): technical boundaries and implementation status.
-- [Plan reset review](docs/design-reviews/2026-10-12-plan-reset.md): design decisions,
-  source evidence and remaining verification.
+- [Integrated recordings decision](docs/design-decisions/2026-10-12-integrated-recordings.md):
+  approved structure, current gaps and migration boundaries.
 - [Contributing](CONTRIBUTING.md): readability, focused validation and documentation.
 - [AI guide](docs/using-examples-with-ai.md), [AGENTS.md](AGENTS.md) and
   [CLAUDE.md](CLAUDE.md): entry points for coding tools.
@@ -287,5 +315,5 @@ through self-contained public-upstream development-tool archives. Public SDK and
 Expo pins stay fixed. See [local qualification and remaining hosted/scanner
 gates](docs/native-expo-signing-replacement.md); this does not qualify mobile
 binaries, devices, EAS or certificate management. The retained 985 qualification
-and fresh 934 documentation-only reconciliation preserve the current optional
-reference and first-class workflow/platform-starter architecture.
+and 934 documentation-only reconciliation remain historical source/installation
+evidence; they do not verify shared-core extraction, listener consolidation or integrated native clients.

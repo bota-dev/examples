@@ -2,24 +2,30 @@
 
 ## Purpose and layout
 
-This optional end-to-end reference contains independently installed React Native (`app/`)
+This current integrated-sample source contains independently installed React Native (`app/`)
 and Flutter (`flutter/`) clients sharing one Node backend (`backend/`). They
-belong to the **Bota Recordings** references alongside the web client. This reference's target
-journey is audio input → library → supported playback → transcript → general
-notes → Ask. Use familiar mobile navigation, ordinary platform controls and short
-state messages. Public API/SDK recipes belong in README/source.
+belong to the **Bota Recordings** foundation alongside the web client. The target
+has one shared customer backend and clients for Web, RN, Flutter, native
+Android/Kotlin and Apple/Swift. The [shared feature core](../recordings/README.md)
+is implemented, but a single backend runtime and integrated Kotlin/Swift clients
+are not. The recording experience connects
+audio input → library → supported playback/source review → transcript → general
+notes → recording-scoped Ask. Use familiar mobile navigation, normal native SDK
+UI and short state messages. Public-call/copy guides belong in README/source.
 
 There are exactly two repository layers: general platform examples now, then
-vertical use cases and consumer app types later. A common recording app belongs
-to the general layer. Independent API workflow recipes and small starters per
-published SDK facade are the primary learning paths; this reference shows their
-app/backend composition. These are formats, not extra product layers. See the
-[architecture decision](../../docs/design-decisions/2026-10-12-example-architecture.md).
+vertical use cases and app types later. The integrated recording sample and
+focused guides belong to the general layer; current `api/`, `app-sdk/` and
+`end-to-end/` paths are formats, not extra layers. Guides/snippets link maintained
+feature modules, with a few standalone quickstarts for distinct runtimes/languages.
+See the [approved decision](../../docs/design-decisions/2026-10-12-integrated-recordings.md).
 
 Keep the existing directory and native sync implementation so published links
 and recovery journals retain their meaning. Each client installs separately.
-Sharing this example's backend does not permit imports from another example or
-private Bota applications. Demo/Bota One inform the user journey only.
+This compatibility backend imports the canonical core in
+`end-to-end/recordings/backend/`. Use a full checkout or copy those family roots
+together; the mobile backend folder alone is no longer complete. This does not
+permit private Bota application imports. Demo/Bota One inform the journey only.
 
 ## Implemented subset and backend direction
 
@@ -32,21 +38,32 @@ private Bota applications. Demo/Bota One inform the user journey only.
 | Hosts | Android hosts are supplied. Common-app iOS hosts are missing; that is separate from the SDKs' iOS support. |
 | Synthetic mode | Local DTO fixtures and synthetic results with no network or SDK work. They do not prove live processing, upload or cleanup. |
 
-Today this mobile backend and the web reference's backend are separate
-implementations with different local routes/auth adapters. Sharing their concrete
-recording/processing/Ask features is planned where compatible contracts reduce
-real duplication within these optional references; a canonical reference backend
-is not implemented. No independent SDK starter needs this backend, its DTOs or a
-matching UI. Reuse belongs to the [root roadmap](../../ROADMAP.md).
-Preserve the current contract, bearer authentication,
-install roots and journals until that migration is reviewed and verified. Do not
-add another independent backend or invent a new catalog/metadata schema.
+Mobile and web now use one recording/processing/Ask implementation and common
+error types under [the integrated core](../recordings/README.md), through thin
+compatibility shims. Two active listeners/auth adapters and three journal models
+remain unchanged; upload/webhook/native service modules remain local. Mobile
+uses default strict recording/job project checks, while web's explicit legacy
+policy permits missing `project_id` but preserves supplied-project/source/owner
+checks and its existing DTO projection. This is not a unified runtime.
+
+Single-listener migration belongs to the [root roadmap](../../ROADMAP.md). It
+needs cross-store arbitration and compatible auth, Origin and strict body gates.
+Preserve bearer authentication, routes/DTOs, install roots, CWD-relative journal
+paths and scope/anchors. Retain known IDs and unresolved-write locks without
+reinterpreting account/key ownership; do not move or merge databases implicitly.
+The shared core folder exists; additional clients/listener layout is planned.
 
 Live responses and synthetic fixtures should follow their client's DTO contract.
-Any reference reuse must preserve source identities and customer authorization.
-Independent SDK examples keep plain feature files, normal platform controls and
-their own public facade models. Shared DTO shapes do not imply identical SDK
-capabilities or live acceptance.
+Shared cloud features must preserve source identities and customer authorization.
+Keep native capture journals separate from cloud processing intent, with SDK
+receipt/exact-generation cleanup gates unchanged. Platform clients use plain
+feature files, normal native UI and their own public facade models; a shared
+backend contract does not imply identical SDK capabilities, full UI/device parity
+or live acceptance. Device-only connection/status can run without a backend;
+cloud content and authorized upload require it.
+The core records syntactically valid returned job/session IDs before later reply
+validation; awaited known-resource GET failures retain the same recovery identity
+and uncertain action. Saved IDs remain metadata, not content/cleanup authority.
 
 ## Modes and platform support
 
@@ -83,11 +100,12 @@ independent of device presence and grants no device-cleanup authority.
 5. Return to the library without losing uncertain-write locks. A known saved
    operation may be refreshed through GET; an unknown outcome must not be sent again.
 
-Audio intake and playback gaps are tracked for this optional reference in the
-root roadmap. They do not gate qualified iOS, Swift or Kotlin SDK starter/host
-work, or require every platform to implement a full consumer app. Device paths
-remain optional where the published contract supports the selected workflow;
-cloud-content access does not depend on Bluetooth presence.
+Audio intake/playback and new integrated clients are tracked in the root roadmap.
+Implement each platform's supported subset through normal native SDK UI; do not
+require identical controls or invent an unavailable facade. Existing SDK-only
+sources can teach connection/status without a backend. Device input remains
+optional where the public contract supports the workflow; cloud-content access
+does not depend on Bluetooth presence.
 
 ## Customer API contract
 
@@ -136,8 +154,9 @@ customer responsibilities.
 - Treat a family feature as a feature, not a new install root or catalog entry.
   A copied integration includes its complete import graph, authorization and
   durable-state requirements; it is not necessarily one tiny file.
-- Keep the reference's ordinary recording-user UI coherent. Small independent
-  API/SDK examples may instead use a minimal runnable harness for the selected
-  public call. Intentionally repeated short helpers are acceptable when they
-  keep those examples copyable; do not require a global wrapper framework or
-  private imports to share them.
+- Keep the integrated client's recording-user UI coherent and feature/public-call
+  files copyable with their full imports. Guides link maintained feature code;
+  retain useful distinct-runtime quickstarts and current advanced inventory.
+  Do not add overlapping feature implementations or a universal UI/wrapper SDK
+  to share concrete backend logic. SDK-only flows need no backend or forced
+  full device parity.

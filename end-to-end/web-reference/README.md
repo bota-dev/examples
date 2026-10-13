@@ -7,6 +7,13 @@ backend demonstrate public recordings, upload, transcription, general notes,
 recording-scoped Ask and webhook integrations. Shared HTTP, authentication and
 durable intent code lives in one install root.
 
+Recording, processing and Ask public calls now use the
+[canonical backend core](../recordings/README.md) through local compatibility
+shims. Two listeners/auth adapters and three journal models remain; this extraction
+does not create one unified server or move state. Use a full repository checkout
+or copy this root together with `end-to-end/recordings/backend/`; copying the web
+folder alone is no longer a complete runtime copy. Install commands/CWD stay the same.
+
 Use it as a starting template or copy a small recipe with its helpers. This is a
 general Layer 1 capability sample, not a vertical application or production SaaS
 starter. API documentation and source recipes are below; the everyday UI focuses
@@ -21,7 +28,9 @@ templates; current connection/catalog snippets do not implement that full journe
 
 ## Try it without credentials
 
-Use Node **22.23.2 or newer**, then run from this directory:
+Use Node **22.23.2 or newer**, then run from this directory. The checkout must
+include the shared core described above; its README defines separate core checks.
+No legacy root workspace install is needed.
 
 ```sh
 npm ci
@@ -41,29 +50,38 @@ or select an unused port before running again.
 
 ## Pick a recipe
 
-| Feature                       | Public calls                                                                                                            | Backend sample                                   | Frontend sample                                             |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | ----------------------------------------------------------- |
-| List/read recordings          | `GET /v1/recordings`, `GET /v1/recordings/{id}`                                                                         | [recordings.mjs](server/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx)    |
-| Upload audio                  | `POST /v1/recordings`, `POST /v1/recordings/{id}/upload-url`, storage `PUT`, `POST /v1/recordings/{id}/upload-complete` | [upload.mjs](server/features/upload.mjs)         | [Upload.tsx](web/features/uploads/Upload.tsx)               |
-| Transcribe and read text      | `GET /v1/transcriptions`, `GET /v1/transcriptions/{id}`, `POST /v1/transcriptions`                                      | [processing.mjs](server/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx) |
-| Create/read general notes     | `GET /v1/summaries`, `GET /v1/summaries/{id}`, `POST /v1/summaries`                                                     | [processing.mjs](server/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx)       |
-| Ask one recording             | `POST /v1/ask/sessions`, `POST /v1/ask/sessions/{id}/messages`, scoped session/history `GET`                            | [ask.mjs](server/features/ask.mjs)               | [Ask.tsx](web/features/ask/Ask.tsx)                         |
-| Receive/display notifications | Bota delivers to your `POST /webhooks/bota` callback                                                                    | [webhooks.mjs](server/features/webhooks.mjs)     | [Activity.tsx](web/features/webhooks/Activity.tsx)          |
+| Feature                       | Public calls                                                                                                            | Backend sample                                                  | Frontend sample                                             |
+| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------- |
+| List/read recordings          | `GET /v1/recordings`, `GET /v1/recordings/{id}`                                                                         | [recordings.mjs](../recordings/backend/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx)    |
+| Upload audio                  | `POST /v1/recordings`, `POST /v1/recordings/{id}/upload-url`, storage `PUT`, `POST /v1/recordings/{id}/upload-complete` | [upload.mjs](server/features/upload.mjs)                        | [Upload.tsx](web/features/uploads/Upload.tsx)               |
+| Transcribe and read text      | `GET /v1/transcriptions`, `GET /v1/transcriptions/{id}`, `POST /v1/transcriptions`                                      | [processing.mjs](../recordings/backend/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx) |
+| Create/read general notes     | `GET /v1/summaries`, `GET /v1/summaries/{id}`, `POST /v1/summaries`                                                     | [processing.mjs](../recordings/backend/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx)       |
+| Ask one recording             | `POST /v1/ask/sessions`, `POST /v1/ask/sessions/{id}/messages`, scoped session/history `GET`                            | [ask.mjs](../recordings/backend/features/ask.mjs)               | [Ask.tsx](web/features/ask/Ask.tsx)                         |
+| Receive/display notifications | Bota delivers to your `POST /webhooks/bota` callback                                                                    | [webhooks.mjs](server/features/webhooks.mjs)                    | [Activity.tsx](web/features/webhooks/Activity.tsx)          |
 
 React calls this example's authenticated `/api/*` routes. The backend files show
 the public Bota calls with fixed owner/source filters; the webhook path above is
 your application's receiver, not an endpoint for creating an event in Bota.
 
-The shared backend [client](server/client.mjs) performs bounded public HTTP calls;
+The web HTTP [client](server/client.mjs) performs bounded public HTTP calls;
 [auth](server/auth.mjs) derives the application principal, and [store](server/store.mjs)
 persists write intent and notification metadata. [app.mjs](server/app.mjs) is the
 small route map. Browser features share [api.ts](web/api.ts) and
 [workflow.tsx](web/workflow.tsx), which fence late results and duplicate clicks.
 
-Copy the selected feature with the shared pieces it imports. Replace the auth
+Local [recording](server/features/recordings.mjs),
+[processing](server/features/processing.mjs) and [Ask](server/features/ask.mjs)
+files are compatibility shims over the core. They preserve web DTO projections
+and explicitly allow omitted `project_id`; supplied projects, exact recording
+owner/source chains, session membership and citations still match. Mobile uses
+the core's strict default recording/job project checks. Upload/webhooks remain
+web-local. This is not a policy to bypass ownership checks.
+
+Copy the selected canonical feature, shared errors, web shim/projection and
+HTTP/auth/store pieces it imports. Replace the auth
 adapter with your application's authenticated identity and server-derived
 end-user mapping. Keep the ownership checks and durable-before-write ordering.
-These modules belong to this one app; they are not a published generic API SDK
+These modules belong to the integrated sample family; they are not a published generic API SDK
 or independently runnable standalone snippets. Never copy an API key into React.
 
 ## Connect your authorized project
@@ -138,6 +156,12 @@ replacement. Upload `425 upload_verification_pending` stays pending: this sample
 intentionally uses GET-only recovery, even where completion replay is supported.
 It cannot finish a completion that requires an operator-authorized replay.
 
+The shared processing/Ask code retains syntactically valid returned resource IDs
+before later response validation. Awaited known-resource GET failures preserve
+that identity and uncertain intent; saved IDs do not authorize content or another
+POST. Web 401/403/404 errors omit operation metadata. There is still no cross-store
+lock between the web and mobile listeners; coordinate other processing writers.
+
 API responses are capped at 8 MiB, requests at 10 seconds, storage at 120 seconds
 and each request context at 180 seconds. Async scheduling and filesystem waits
 are not universal hard deadlines. List traversal and the notification view are
@@ -182,6 +206,10 @@ authorization, device cleanup, encrypted-v2, firmware or full SDK-lifecycle clai
 No infrastructure, physical-device operation or package publication occurs here.
 
 ## Checks and evidence
+
+The [core README](../recordings/README.md) records shared-core checks and its
+compatibility boundary. The dated presentation/quality results below predate
+this extraction and are not new validation of the changed import graph.
 
 ```sh
 npm run format:check

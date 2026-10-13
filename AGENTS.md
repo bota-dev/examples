@@ -4,9 +4,9 @@
 
 - Build public demo/sample/template code for customer developers building apps for their own end users. Read [DESIGN.md](DESIGN.md), [ROADMAP.md](ROADMAP.md) and [ARCHITECTURE.md](ARCHITECTURE.md) first.
 - Exactly two product layers: general capabilities now; vertical use cases and consumer app types later. API, SDK and combined examples are formats within the first layer.
-- Prioritize useful API workflows and small idiomatic SDK starters for Swift, Kotlin, React Native, Flutter and Web where publicly supported. Bota Recordings is an optional end-to-end reference; complete app parity or a shared backend is not a prerequisite for useful platform examples.
+- Owner-approved architecture: one integrated Bota Recordings sample with one shared backend and platform-specific web, React Native, Flutter, Kotlin and Swift clients. Keep public calls in copyable feature modules. SDK-only connection/status works without the backend; each client declares its actual capabilities and host evidence.
 - Ordinary app UI serves recording users. Public-call explanations and technical details belong in README/source. Do not create another API Explorer or expand toward a catalog count.
-- Preserve current paths, journals and locks during this design reset. No runtime migration or SDK upgrade is implied by documentation changes.
+- Preserve existing launch paths, journals, locks and SDK pins. The shared cloud-core extraction is implemented; one executable backend and client relocation remain pending and require compatibility checks.
 
 ## Select and inspect
 
@@ -14,7 +14,7 @@
 - Install only inside the selected documented install root. Root npm commands apply to the legacy `apps/` workspace.
 - Use published Bota SDK packages and public API contracts. Exact independent SDK pins are beta.13; the legacy workspace remains beta.6. Manifest/lockfile evidence takes precedence over historical prose.
 - Demo/Bota One are read-only behavioral references. No private helpers, unpublished facade methods, custom GATT/crypto or sibling-repo runtime/install dependencies.
-- Share substantial concrete feature code within references when it reduces duplication and compatibility gates pass. Independent recipes/starters stay self-contained; small local glue can repeat. No mandatory example service, wrapper SDK or universal UI framework.
+- Consolidate the integrated sample's backend feature implementation at `end-to-end/recordings/backend/`. Existing web/mobile paths may import that shared core as compatibility adapters. Preserve their auth, DTOs, launch CWD and journal anchors until tested migration. Independent API/SDK quickstarts stay self-contained; no private dependencies, wrapper SDK or universal UI framework.
 - Windows/Electron native device SDKs are upstream roadmap targets. Do not invent a native facade or infer full app parity from a connection example.
 
 ## Preserve integration contracts

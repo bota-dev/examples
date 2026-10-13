@@ -2,13 +2,19 @@
 
 The [design](DESIGN.md) defines one common recording app with React Native and
 Flutter clients. Each client has its own manifest/lock and Android host. One
-backend within this example serves both; no runtime import comes from another
-example. Platform UI stays idiomatic and integration files stay easy to locate.
+local HTTP backend serves both, through shims importing the
+[canonical recording/processing/Ask core](../recordings/README.md) also used by web.
+Use the full checkout or copy the compatibility family including
+`end-to-end/recordings/backend/`; this backend folder alone is incomplete.
+Platform UI stays idiomatic and integration files stay easy to locate.
 
 ```text
 React Native app/ ─┐
-                  ├─ application bearer ─ backend/library ─ public Bota /v1
-Flutter flutter/ ─┘                      └─ durable library intent journal
+                  ├─ application bearer ─ backend/library ─ shared recordings core
+Flutter flutter/ ─┘                      └─ mobile library intent journal
+
+Web listener ─ cookie/auth + policy/DTO shim ─ same core ─ public Bota /v1
+             └─ separate web operation store
 
 React Native Device ─ public App SDK ─ native encrypted-v2 upload host
                                       └─ backend/native routes + capture journal
@@ -22,10 +28,23 @@ separate from the Bota key. Clients retain it only in memory, render content as
 text, fence retired sessions/selections and retain uncertain action locks.
 GET recovery reads a saved operation and cannot replay its original action.
 
+Core public calls/error types have one implementation. Mobile keeps default
+strict recording/job project checks and its source-linked DTOs; web's explicit
+legacy policy tolerates omitted `project_id`, but supplied projects and exact
+owner/source chains still match. Upload/webhook/native service modules remain
+local. This is two listeners/auth adapters and three journal models, not a unified
+server/store. SDK/native package pins, routes, CWD and journal scopes/anchors stay
+unchanged.
+
 The library journal is separate from the original native capture/session
 journal. Both retain immutable scope and known IDs before returning results;
 unknown outcomes stop for reconciliation. Readiness checks and journals do not
 establish an atomic snapshot against external writers or administrators.
+Shared processing/Ask retain syntactically valid returned IDs before later reply
+validation; awaited known-ID GET failures preserve the operation's identity and
+uncertainty. Saved IDs are recovery metadata rather than authorization or cleanup
+proof. A single listener still needs cross-store arbitration and compatible
+auth/Origin/body gates; shared code creates no lock across the web listener/store.
 
 Native and library transcription routes share a recording lock in this server
 process and inspect both journals before creating a replacement. An unknown

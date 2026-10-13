@@ -2,19 +2,27 @@
 
 ## Purpose
 
-A familiar optional recording reference for customer developers to run, learn
-from and adapt for their own end users. It is a general platform sample/template in repository
-Layer 1, inspired by Demo and Bota One. Its user imports audio, chooses a
-recording, reads a transcript and summary, and asks about the recording.
-This client belongs to the optional **Bota Recordings** references alongside
-React Native and Flutter clients. Its reference target is audio input → library → supported playback
-→ transcript → general notes → Ask. The two repository layers remain general
-platform examples now, then vertical use cases and consumer app types later.
-Independent API workflow recipes and small platform SDK starters are the primary
-learning paths. This reference shows a coherent app/backend composition; it is
-another format within Layer 1, not a prerequisite or another product layer.
-The [architecture decision](../../docs/design-decisions/2026-10-12-example-architecture.md)
-records this balance. Platform starters may use different normal UI and SDK DTOs.
+A familiar recording sample for customer developers to run, learn from and
+adapt for their own end users, inspired by Demo and Bota One. This is the current
+web client of the integrated **Bota Recordings** foundation: one shared customer
+backend, platform clients and copyable features. Client targets include React
+web, RN, Flutter, native Android/Kotlin and Apple/Swift. The
+[shared feature core](../recordings/README.md) is implemented; a single backend
+runtime and integrated Kotlin/Swift recording clients are not implemented yet.
+
+The recording experience is audio input → library → supported playback/source
+review → transcript → general notes → recording-scoped Ask. Use normal platform
+UI and actual published capabilities; shared cloud features do not require
+identical UI, SDK models or full device parity. Device-only connection/status
+does not require a backend, while cloud features and authorized upload do.
+
+Exactly two repository layers remain: general capabilities now, then vertical
+use cases and app types later. This integrated sample and its focused guides
+belong to the general layer. Guides/snippets link maintained feature modules;
+a few standalone quickstarts serve distinct languages/runtimes. Current catalog
+paths remain intact. The [approved decision](../../docs/design-decisions/2026-10-12-integrated-recordings.md)
+defines the foundation. `end-to-end/recordings/backend/` now contains the shared
+core; the rest of the target client/runtime layout remains planned.
 
 ## Implemented subset and target
 
@@ -26,25 +34,47 @@ records this balance. Platform starters may use different normal UI and SDK DTOs
 | Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template. |
 | Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.         |
 
-The [root roadmap](../../ROADMAP.md) owns the remaining reference and platform work.
+The [root roadmap](../../ROADMAP.md) owns the remaining integrated-sample/platform work.
 Do not describe target features as available controls or add overlapping app
 roots to satisfy a coverage count.
 
 ## Backend direction
 
-Currently this install root contains its own Node backend and the mobile clients
-use a separate shared backend. Sharing concrete recording, processing and Ask
-features is planned where a compatible contract reduces duplication among these
-optional references. It does not supply a mandatory backend for independent API
-or SDK examples. Preserve current cookie/account authentication,
-public routes, durable upload/job/Ask journals and webhook acceptance until a
-reviewed migration replaces them. Do not import a sibling example's runtime code
-or silently point a client at another backend.
+Recording, processing and Ask public calls now live in
+[canonical feature modules](../recordings/backend/features/recordings.mjs), with
+shared [errors](../recordings/backend/errors.mjs). This server's feature files
+are compatibility shims. The mobile backend imports the same implementation.
+Web upload/webhook, HTTP/auth and store modules remain local; there are still two
+listeners/auth adapters and three journal models. This is shared code, not a
+single backend runtime. Preserve cookie/account authentication, routes/DTOs,
+upload/job/Ask journals and webhook acceptance; do not silently redirect clients.
 
-Reference reuse should align live responses and synthetic fixtures with the
-selected client contract and exact source identities. Independent SDK starters
-need no forced common DTO/UI. Shared fixture behavior is a testing and demo
-boundary, not proof of live API, provider or physical-device conformance.
+The web shims explicitly permit omitted `project_id` for the legacy response
+contract, but a supplied project must match. Exact recording owner, source chain,
+session membership and citations remain required. Mobile uses the core's default
+strict recording/job project checks. The web projection preserves its existing
+operation-only mutation and summary DTO shape. Core checks/IDs do not authorize
+content without the selected adapter's current principal/source gates.
+
+Use the full repository checkout, or copy this compatibility root together with
+`end-to-end/recordings/backend/` and the complete imports. Copying the web folder
+alone no longer produces a runnable app. Standalone API/App SDK quickstarts
+remain self-contained.
+
+Single-listener migration must add cross-store arbitration and compatible
+cookie/bearer, Origin and body gates; shared code supplies no cross-listener lock.
+It must define compatible auth/principal mapping and routes/DTOs, retain
+journal scope/anchors and known IDs, and preserve unresolved-write locks. A new
+account/key/store must not reinterpret an old operation or permit replacement
+writes. Native capture state remains separate from cloud processing intent;
+shared backend status cannot replace SDK receipt/exact-generation cleanup gates.
+Align live responses and synthetic fixtures with the reviewed cloud contract and
+exact source identities. Platform SDK models remain idiomatic to their public
+facades. Fixture agreement proves neither live API/provider nor hardware success.
+Syntactically valid returned job/session IDs are retained before further reply
+validation. Awaited known-resource GET failures preserve recovery identity and
+uncertainty; they never authorize a replacement write. Web 401/403/404 responses
+withhold operation metadata as well as content.
 
 ## Experience
 
@@ -77,12 +107,14 @@ results clearly. Render untrusted transcript/summary/Ask strings as text. Preser
 account/scope fences, action locks and honest uncertain-outcome states. Never
 expose API credentials or internal error details in product UI.
 
-The recording reference should remain useful to its end user rather than become
-an API Explorer. Its import/playback work is specific to this app and must not
-delay qualified iOS/Swift/Kotlin SDK examples. Those examples may teach one direct
-public call through a small normal platform harness. Intentional short helper
-duplication across copyable roots is acceptable; no global sample framework or
-private runtime dependency should be introduced to eliminate it.
+The integrated sample should remain useful to its end user rather than become
+an API Explorer. Keep web intake/playback gaps honest and make maintained feature
+modules easy to locate and copy with their full imports. Kotlin/Swift and other
+clients use normal native UI and supported SDK calls; device-only flows can run
+without a backend and do not wait for identical app coverage. Retain existing
+quickstarts/catalog sources, but prefer a guide linked to a maintained feature
+over another overlapping implementation. No universal UI framework, wrapper SDK
+or private runtime dependency is introduced to share concrete backend logic.
 
 Use normal platform UI and published public SDK surfaces for optional device
 paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.13/frameworks/web)

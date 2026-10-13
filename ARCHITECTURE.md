@@ -1,55 +1,67 @@
 # Bota examples architecture
 
 [DESIGN.md](DESIGN.md) defines the developer audience and product direction.
-This document defines a flexible structure for finding, running and adapting
-public API/SDK integrations across platforms. Customer developers should need
-only the selected example and public packages, not Bota's internal repositories.
-The [architecture decision](docs/design-decisions/2026-10-12-example-architecture.md)
-records the chosen balance between independent recipes and optional references.
+This document defines the approved integrated Bota Recordings sample foundation
+for finding, running and adapting public API/SDK integrations across platforms.
+Customer developers need only this public repository, their chosen sample
+modules and public packages, not Bota's internal repositories.
+The [approved architecture decision](docs/design-decisions/2026-10-12-integrated-recordings.md)
+supersedes the earlier focused-workflow/optional-reference structure.
 
 ## Product scope
 
 There are exactly two product layers:
 
-1. **General platform examples — current work.** Independent API workflow
-   recipes and small platform SDK starters are the primary learning paths.
-   Optional end-to-end references show how an app and backend compose them.
+1. **General platform examples — current work.** One integrated sample
+   foundation provides a shared customer backend, platform clients and copyable
+   feature modules. Useful standalone quickstarts remain available.
 2. **Vertical and consumer-app examples — later.** Compose the general
    integrations into a specific use case or app type in a later phase.
 
-The current `api/`, `app-sdk/` and `end-to-end/` paths represent three formats
-inside the first layer, not additional product layers. Select by the public call,
-workflow, language and actual host a customer needs. Stop growing the catalog by
-case count; improve existing code or fill a real platform/capability gap.
+The current `api/`, `app-sdk/` and `end-to-end/` paths remain formats inside the
+first layer, not additional product layers. Select by the public call, workflow,
+language and actual host a customer needs. Stop growing the catalog by case
+count; improve maintained feature code or fill a real platform/capability gap.
 
-## Primary examples and optional references
+## Integrated foundation: approved target, partially implemented
 
-- **API recipes:** one bounded public workflow with its own setup, inputs,
-  expected output and recovery limits. Keep calls and required helper files easy
-  to find and copy; do not promise that an entry file works without its imports.
-- **App SDK starters:** aim for one small maintained starter per published facade,
-  with its supported native/browser hosts and plain feature files for direct SDK
-  calls. A minimal runnable harness supplies permissions, selection, result
-  presentation and teardown. Add a feature where the public facade supports it;
-  do not invent a protocol or require an unrelated backend/app journey.
-- **End-to-end references:** optional Bota Recordings apps demonstrate an ordinary
-  user experience plus customer backend integration. Share concrete feature code
-  where that reduces real maintenance within the reference, while retaining the
-  focused examples for customers who need only one integration.
+```text
+end-to-end/recordings/
+  backend/
+    features/
+      recordings/ uploads/ transcriptions/ summaries/ ask/ webhooks/
+    auth/                       # Browser-cookie and mobile-bearer adapters
+    persistence/                # Scoped stores and separate durable journals
+  clients/
+    web/ react-native/ flutter/ android-kotlin/ apple-swift/
+  contracts/                    # Narrow DTOs and synthetic contract fixtures
+```
 
-This is a logical maintenance direction, not a directory move, empty starter or
-catalog addition. Independent SDK recipes need neither identical UI/DTOs nor a
-recording player. Qualified iOS, Swift and Kotlin starters can progress without
-waiting for every reference client to finish import/playback or share a backend.
+The single Node backend owns concrete public API feature integration, caller
+authorization and durable stores. Platform clients expose plain feature files
+with normal UI, native permissions and published SDK lifecycle code. Each client
+keeps its own manifest, lock and build; SDK-only connection/status modules can
+run without the backend. The target names declare logical ownership, not current
+directories, equivalent capabilities or verified hosts.
 
-Short HTTP/configuration helpers may intentionally repeat between independent
-copyable roots. Prefer that small visible cost over a mandatory global example
-framework. Substantial device protocol logic stays in the published SDK; shared
-reference business logic must not become a new unofficial API SDK.
+Copyable feature modules and compact source snippets link to maintained
+integration code where beneficial. Include the minimal runnable harness and
+required helper graph, rather than an install root per method. Retain standalone
+Node/Python quickstarts where a different language or independent workflow adds
+distinct value. Their current paths and catalog entries remain valid until a
+compatible migration includes links, setup, CI and state handling.
 
-The optional recording reference's end-user flow is **add/import audio → library → playback/source →
+Share backend features and narrow DTO/fixture contracts, not a universal UI or
+cross-language controller framework. Short local configuration/HTTP/UI glue can
+repeat to keep modules understandable. Substantial device protocol logic stays
+in the published SDK; the sample is not a new API SDK or privileged generic
+proxy. Native Kotlin/Swift clients begin with supported SDK workflows; missing
+iOS/native hosts do not wait for full app import/playback or identical UI.
+
+The common app's end-user flow is **add/import audio → library → playback/source →
 transcript → notes → recording-scoped Ask**. Everyday screens show recordings
-and content; API recipes and source explanations belong in README/source.
+and content; public-call explanations and adaptation instructions belong in
+README/source. Technical request/recovery metadata remains secondary.
 Playback is **not implemented** in the current references. Qualify the public audio
 retrieval, format, encryption and authorization contract before adding it:
 an encrypted original or URL issuance does not prove playable/decrypted audio, and
@@ -57,10 +69,13 @@ synthetic output must not imply successful live playback or device transfer.
 
 ## Current implementation
 
-Current paths and independent installation remain unchanged:
+Existing launch/install paths remain available. The web/mobile compatibility
+family now requires the shared core from this checkout; standalone API/SDK
+quickstarts still install independently:
 
 | Location | Implemented role and limits |
 | --- | --- |
+| [Integrated core](end-to-end/recordings/README.md) | One recording/processing/Ask implementation, shared errors and contract tests; no standalone listener or runtime dependencies. |
 | [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK, capture or playback. |
 | [Mobile](end-to-end/react-native-recording-sync/README.md) | React Native and Flutter clients share this example's customer backend. Both common app hosts are Android only. |
 | [React Native](end-to-end/react-native-recording-sync/app/README.md) | Common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
@@ -68,11 +83,13 @@ Current paths and independent installation remain unchanged:
 | [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
 | [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its beta.6 compatibility path and dependency guards are retained; its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
 
-The web and mobile backends currently duplicate recording ownership, processing,
-Ask and journal integration code. Their authentication and persisted scope models
-also differ. Sharing these concrete features is planned where a compatible
-contract reduces duplication; **one canonical reference backend does not exist
-yet**. This consolidation is not a prerequisite for independent API/SDK recipes.
+The web and mobile backends now import the integrated core through compatible
+feature paths and DTO projections. Authentication, bounded HTTP clients, upload,
+webhook and persisted scope models remain in their existing hosts. **One feature
+implementation is delivered; one executable backend is not.** Combining the
+listeners requires retained-intent checks and same-owner arbitration across the
+web, mobile-library and native journals before routing writes through one host.
+SDK-only modules remain usable without that service.
 Independent device examples retain exact public beta.13 pins. Native iOS common
 apps, Flutter iOS and native Windows samples are not supplied here; Windows
 native SDK availability is planned upstream and requires public-contract
@@ -80,13 +97,13 @@ qualification before an example can depend on it. Current local, hosted, live
 and hardware evidence remains in each README and the
 [implementation review](docs/independent-examples-review.md).
 
-## Optional reference reuse: planned
+## Shared backend boundaries and migration
 
 ```text
 Web client ────────── browser cookie adapter ─┐
 React Native client ─ mobile bearer adapter ─┼─ derived principal
 Flutter client ────── mobile bearer adapter ─┘       │
-                                           canonical API feature backend
+                                           shared Node API feature backend
                                            ├─ recordings / audio import
                                            ├─ transcripts / notes / scoped Ask
                                            ├─ webhook observation
@@ -95,30 +112,35 @@ Platform device module ─ published App SDK ─ native host callbacks
                                            └─ native capture/session journal
 ```
 
-The diagram describes possible reuse among recording references, not a required
-backend for platform starters. Share concrete public API integration functions,
-narrow DTOs and synthetic contract fixtures within an optional reference when
-the benefit is clear. Keep normal UI, package managers, permissions and SDK
-lifecycle code native to each client. Independent SDK examples need no common
-UI or DTO contract. This is not a new Bota API SDK, shared UI framework, generic
+The diagram is the approved target for API-backed platform clients. Each backend
+feature exposes its actual public API calls and application-owned authorization,
+scope and persistence boundaries. Share only the DTOs/fixtures required by those
+routes; SDK-only modules have no obligation to use this contract or backend.
+Keep UI, package managers, permissions and SDK lifecycle implementation native
+to each platform. This is not a new Bota API SDK, shared UI framework, generic
 proxy or reusable example engine.
-Standalone recipes still copy/install independently; root automation is not a
-runtime prerequisite. No private package, sibling-source import, submodule or
-local dependency on an internal Bota repository may be required.
+The foundation and retained standalone quickstarts are self-contained public
+code; root automation is not a runtime prerequisite. Imports within the public
+web/mobile/core family are required during compatibility migration. No private
+package, sibling-repository source import, submodule or local dependency on an
+internal Bota repository may be required.
 
 Browser-cookie and mobile-bearer adapters must each authenticate the caller and
 derive the backend principal. Consolidating feature code must not turn a client
 end-user/device/workspace selector into authorization or silently replace web
 account isolation with the mobile sample's fixed test identity.
 
-Keep ordinary cloud intent and native capture/session journals distinct.
+Consolidate feature implementations behind compatible routes and auth/store
+adapters before moving current install roots. Keep ordinary cloud intent and
+native capture/session journals distinct.
 Preserve their paths, scope hashes, account/resource identities, anchors,
 known IDs and uncertainty states. Cloud completion, device confirmation and AI
 processing are separate phases. Do not merge databases or discard an uncertain
 operation to make a new POST possible. Compatibility routes and store adapters
 come before any storage or folder migration; current URLs and setup links remain
-valid. Move folders only when that improves clarity, with catalog, CI and link
-migration in the same reviewed change.
+valid. Only after compatibility is demonstrated should files move to the target
+layout, with catalog, CI and link migration in the same reviewed change. SDK
+upgrades and physical-device operations are outside this architecture migration.
 
 ## Integration rules
 
@@ -187,19 +209,22 @@ export and public-surface restrictions; this reset does not relax them. Applicab
 [AGENTS.md](AGENTS.md) and [CONTRIBUTING.md](CONTRIBUTING.md) remain operative.
 Dependency mitigation requirements are maintained in
 [DEPENDENCY_SECURITY.md](DEPENDENCY_SECURITY.md),
-[Forge guard policy](docs/node-forge-parser-mitigation.md),
+[native Expo signing replacement](docs/native-expo-signing-replacement.md),
 [braces guard policy](docs/braces-depth-mitigation.md) and
 [build dependency policy](docs/build-dependency-remediation.md).
 
 ## Delivery and qualification
 
-Prioritize customer discovery/copyability, qualified platform SDK starters and
-useful API workflows. Missing supported iOS/native hosts and bounded feature
-modules can be filled independently of the recording references. Complete
-reference intake/playback and consolidate duplicated backend features when their
-public contracts and maintenance benefit justify that work. Vertical apps remain
-the later product layer. Reuse, playback and new hosts are planned work, not
-achievements of this documentation change.
+The first compatible consolidation of recording/processing/Ask features is
+delivered. Existing clients use the core through their original adapters, with
+direct feature-source entry points in README. Next qualify shared write
+arbitration and auth/path compatibility before combining the listeners.
+Fill qualified iOS/native hosts and useful SDK modules without waiting for every
+client's full recording UI. Complete ordinary intake/playback only after its
+public contract is qualified. Vertical apps remain the later product layer.
+One executable backend, playback and new hosts remain planned work. The
+[consolidation review](docs/design-reviews/2026-10-12-integrated-recordings.md)
+records the current implementation and its bounded verification.
 
 Each client/recipe retains its manifest, lock, setup and meaningful CI. Changes
 to shared code must exercise every affected client/backend contract. Preserve
@@ -232,9 +257,9 @@ SDK, application authentication, upload journals and device cryptography remain
 outside this change. The [qualification review](docs/native-expo-signing-replacement.md)
 distinguishes local guards/exports from hosted/native/scanner acceptance.
 
-The October 12 architecture decision remains authoritative: focused workflows
-and platform starters are first-class; Bota Recordings is an optional reference.
-This dependency replacement preserves those choices and all current install roots.
+The approved integrated Recordings decision supersedes the earlier architecture
+choice. This dependency replacement preserves all current install roots and its
+independently qualified signing guards; it does not implement the new foundation.
 Its runtime qualification was frozen on 985; the later 934 owner delta changes
 documentation only and is joined separately before delivery.
 

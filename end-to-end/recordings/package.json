@@ -1,0 +1,23 @@
+{
+  "name": "@bota-dev/example-recordings",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.23.2"
+  },
+  "scripts": {
+    "check": "node --check backend/errors.mjs && node --check backend/features/recordings.mjs && node --check backend/features/processing.mjs && node --check backend/features/ask.mjs",
+    "lint": "eslint backend contracts scripts eslint.config.mjs",
+    "format:check": "prettier --check .",
+    "test": "node --test contracts/*.test.mjs scripts/test-licenses.mjs",
+    "license-check": "node scripts/check-licenses.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "eslint": "10.12.0",
+    "globals": "16.5.0",
+    "prettier": "3.8.5"
+  }
+}

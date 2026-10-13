@@ -1,5 +1,7 @@
 import { createHash } from 'node:crypto';
 import { DatabaseSync } from 'node:sqlite';
+import { RequestError } from '../../recordings/backend/errors.mjs';
+export { RequestError } from '../../recordings/backend/errors.mjs';
 
 const ID = { device: /^dev_[A-Za-z0-9]+$/, recording: /^rec_[A-Za-z0-9]+$/, user: /^eu_[A-Za-z0-9]+$/, transcription: /^txn_[A-Za-z0-9]+$/ };
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
@@ -7,9 +9,6 @@ const SHA = /^[0-9a-f]{64}$/;
 const STATES = ['created', 'staging', 'staged', 'ready', 'processing', 'published', 'failed', 'cancelled', 'expired'];
 const digest = value => createHash('sha256').update(JSON.stringify(value)).digest('hex');
 
-export class RequestError extends Error {
-  constructor(status, code, message = code.replaceAll('_', ' ')) { super(message); this.status = status; this.code = code; }
-}
 const fail = (status, code, message) => { throw new RequestError(status, code, message); };
 const valid = (condition, code = 'invalid_request') => { if (!condition) fail(400, code); };
 const integer = (value, min = 0, max = Number.MAX_SAFE_INTEGER) => Number.isSafeInteger(value) && value >= min && value <= max;

@@ -4,7 +4,16 @@ Two Android sample apps share one customer Node backend. Both provide a common
 recording library with Transcript, Summary and Ask views, inspired by the familiar
 Demo/Bota One recording flow. Run a client with synthetic sample recordings and
 no credentials, or connect it to your authorized backend. Each client installs
-independently; no private Bota app or cross-example runtime import is required.
+in its own install root. The mobile backend imports the
+[canonical recording/processing/Ask core](../recordings/README.md) shared with
+web. Use a full repository checkout or copy the mobile roots together with
+`end-to-end/recordings/backend/`; copying only `backend/` is insufficient. No
+private Bota package is required, and SDK/client install commands stay unchanged.
+
+This is one feature implementation with two listeners/auth adapters and three
+journal models still separate. It is not a unified runtime. Upload/webhooks/native
+service paths remain local; auth/routes/DTOs, CWD-relative journal scope/anchors,
+known IDs, uncertainty and SDK receipt/cleanup gates retain their contracts.
 
 | Client | Common app | Device capability |
 | --- | --- | --- |
@@ -28,6 +37,9 @@ Device screen. No Bota API key belongs in either client.
 
 ## Connect the common app to your backend
 
+The checkout must include the shared core. Core checks have their own README;
+the mobile runtime still starts from its original `backend/` working directory.
+
 Start the [backend](backend/README.md) with your authorized project/end user,
 server-held Bota key and a distinct random `APP_ACCESS_TOKEN`. Forward its
 loopback port to a USB-connected Android host with `adb reverse tcp:8787 tcp:8787`.
@@ -39,6 +51,15 @@ GET recovery. It can read existing authorized cloud recordings without device
 configuration. Processing is explicit; upload verification and completed
 transcript prerequisites remain required. Coordinate with other writers and
 automatic processing are the integrator's responsibility.
+
+The public calls live in shared [recordings](../recordings/backend/features/recordings.mjs),
+[processing](../recordings/backend/features/processing.mjs) and
+[Ask](../recordings/backend/features/ask.mjs) modules. Mobile shims retain strict
+default recording/job project checks and existing source-linked DTOs; web has an
+explicit missing-project compatibility projection, not weaker owner/source gates.
+Shared code does not extend the mobile process's native/library recording lock
+across the web listener or its store. Single-listener/auth/store consolidation is
+later work with cross-store arbitration and Origin/body gates.
 
 The optional React Native device workflow requires additional configuration and
 firmware gates below. Flutter cannot perform that sync workflow in this release.
@@ -75,7 +96,10 @@ releasing known identity or creating a recording/transcription. Four regression
 tests cover rebinding during those reads. Separate API reads and writes still
 leave a race window; this is not atomic generation fencing.
 
-Expo's Node signing tools retain an [open node-forge security advisory](../../DEPENDENCY_SECURITY.md#node-forge-open-advisory) with no published fix; passing application checks do not establish that this dependency is safe or unreachable.
+Current frozen installs use the [native Expo signing replacement](../../docs/native-expo-signing-replacement.md)
+and [public Metro matching removal](../../docs/metro-public-matching-removal.md)
+with their mandatory asset/contract guards. The Forge/braces parser notes below
+describe historical checkpoints before those replacements.
 
 ## Scope
 
@@ -296,16 +320,19 @@ were retained. The synthetic clip still awaits device-positioning confirmation.
 
 Public references: [App SDK](https://docs.bota.dev/api-reference/client-sdks),
 [API reference](https://docs.bota.dev/api-reference/introduction).
-## October 7 signing-tool dependency checkpoint
+## Historical October 7 signing-tool dependency checkpoint
 
-The app's ordinary `npm ci` now applies a pinned node-forge parser guard;
-`npm test` includes nine Forge/Expo regressions. Keep install scripts enabled.
+At this checkpoint, ordinary `npm ci` applied a pinned node-forge parser guard
+and `npm test` included nine Forge/Expo regressions. This was superseded by the
+native Expo signing replacement linked above. Keep current install scripts enabled.
 See [qualification](../../docs/node-forge-parser-mitigation.md); scanner alerts,
 native delivery and physical acceptance remain separate.
 
 ## October 7 build dependency guard
 
-Frozen app installation applies standalone Forge and scoped braces guards.
+At this checkpoint, frozen app installation applied Forge and scoped braces
+guards. The native Expo signing guard now replaces Forge; the independent app's
+current braces script verifies its zero-braces Metro graph, as linked above.
 `npm test` requires `npm run test:braces-security`; package/lock/public SDK identity
 is unchanged. See the [source review](../../docs/braces-depth-mitigation.md).
 Hosted assembly and physical device/install acceptance remain separate.
@@ -318,11 +345,13 @@ Each install root has required public-consumer tests; Web CI now runs `npm test`
 See the [source compatibility review](../../docs/build-dependency-remediation.md) for aged tarballs, tests and
 bundled-parser limits. Hosted/scanner and physical acceptance remain separate.
 
-## October 11 braces migration
+## Historical October 11 braces migration
 
-Keep this app's ordinary frozen install and existing Forge/braces hooks.
-The reviewed six-file guard permits only known pristine/previous/current bytes;
-`npm run test:braces-security` now checks 22 cases and all six final hashes.
+Keep this app's ordinary frozen install and mandatory security hooks. At this
+checkpoint, the reviewed six-file guard permitted only known pristine/previous/
+current bytes; `npm run test:braces-security` checked 22 cases and all six hashes.
+The current zero-braces graph and 21-case integrity suite supersede that app graph;
+the legacy root retains its six-file guard.
 Direct AST/value-array limits and iterative-flatten behavior are documented in
 [the source review](../../docs/braces-depth-mitigation.md#october-11-six-file-migration).
 The public SDK/manifest/lock/native and workflow identities remain unchanged.

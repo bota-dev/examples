@@ -999,6 +999,20 @@
       "verification_reference": "end-to-end/web-reference/README.md",
       "platform": "Web",
       "workflow": ".github/workflows/web-reference.yml"
+    },
+    {
+      "id": "recordings",
+      "path": "end-to-end/recordings",
+      "title": "Integrated Recordings backend core",
+      "purpose": "Shared recording, processing and Ask implementation used by web/mobile compatibility adapters; listeners, auth and journals remain separate",
+      "category": "end-to-end",
+      "language": "JavaScript",
+      "physical_device_required": false,
+      "readme": "end-to-end/recordings/README.md",
+      "setup_reference": "end-to-end/recordings/README.md",
+      "verification_reference": "end-to-end/recordings/README.md",
+      "platform": "Web / React Native / Flutter compatibility adapters",
+      "workflow": ".github/workflows/recordings-backend.yml"
     }
   ]
 }

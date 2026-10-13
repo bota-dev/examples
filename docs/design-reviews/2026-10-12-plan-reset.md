@@ -101,3 +101,7 @@ the earlier exact sources in [implementation evidence](../independent-examples-r
 These checks establish documentation consistency, not application or hardware
 acceptance. Pushes update source on `main`; public docs deployment uses `prod`
 and is outside this pass.
+> Historical review: the owner-approved [integrated Recordings decision](../design-decisions/2026-10-12-integrated-recordings.md)
+> supersedes this earlier work ordering. Preserve the dated source findings;
+> follow the [current consolidation review](2026-10-12-integrated-recordings.md)
+> and root roadmap for implementation status and next steps.

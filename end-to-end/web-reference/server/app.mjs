@@ -204,7 +204,9 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
         code: error instanceof AppError ? error.code : 'REQUEST_FAILED',
         message: error instanceof AppError ? error.message : 'Request could not be completed.',
       },
-      ...(req.principal && req.operation ? { operation: operationView(req.operation) } : {}),
+      ...(req.principal && req.operation && ![401, 403, 404].includes(status)
+        ? { operation: operationView(req.operation) }
+        : {}),
     });
   });
   return app;

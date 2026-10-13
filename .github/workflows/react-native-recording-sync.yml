@@ -3,9 +3,9 @@ name: Mobile recording samples
 on:
   push:
     branches: [main]
-    paths: ['end-to-end/react-native-recording-sync/**', '.github/workflows/react-native-recording-sync.yml']
+    paths: ['end-to-end/react-native-recording-sync/**', 'end-to-end/recordings/**', '.github/workflows/react-native-recording-sync.yml']
   pull_request:
-    paths: ['end-to-end/react-native-recording-sync/**', '.github/workflows/react-native-recording-sync.yml']
+    paths: ['end-to-end/react-native-recording-sync/**', 'end-to-end/recordings/**', '.github/workflows/react-native-recording-sync.yml']
   workflow_dispatch:
 
 permissions:

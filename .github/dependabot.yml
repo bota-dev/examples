@@ -4,6 +4,13 @@
 version: 2
 
 updates:
+  - package-ecosystem: npm
+    directory: /end-to-end/recordings
+    schedule:
+      interval: weekly
+    groups:
+      recordings-minor-patch:
+        update-types: [minor, patch]
   - package-ecosystem: pub
     directory: /end-to-end/react-native-recording-sync/flutter
     schedule:

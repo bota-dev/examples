@@ -1,5 +1,9 @@
 # Decision: workflow recipes, platform starters and optional references
 
+Historical decision, superseded by the owner-approved
+[integrated Recordings architecture](2026-10-12-integrated-recordings.md).
+Its source/verification observations remain dated evidence.
+
 ## Requirement and decision
 
 The owner clarified that small separate examples and larger combined samples

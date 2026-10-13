@@ -6,17 +6,35 @@ recording. The separate Android encrypted-v2 routes retain the existing
 device-sync workflow. Both use a fixed server-owned project/end user and a
 separate application bearer token.
 
-The cloud integration is in [library.mjs](library.mjs) and small local
+The cloud adapter is [library.mjs](library.mjs). Local
 [recordings](library/recordings.mjs), [processing](library/processing.mjs) and
-[Ask](library/ask.mjs) modules. Native capture, binding and upload receipt logic
-remains in [service.mjs](service.mjs). There are no runtime imports from another
-example or private Bota package.
+[Ask](library/ask.mjs) files are thin shims over canonical
+[recordings](../../recordings/backend/features/recordings.mjs),
+[processing](../../recordings/backend/features/processing.mjs) and
+[Ask](../../recordings/backend/features/ask.mjs), with shared
+[error types](../../recordings/backend/errors.mjs). Native capture, binding and
+receipt logic remains in [service.mjs](service.mjs).
 
-**October 12, 2026:** 64 tests cover cloud-library, composition and real-loopback
+Use the full repository checkout or copy the compatibility family including
+`end-to-end/recordings/backend/`; this folder alone is no longer a complete runtime
+copy. Install/start commands and CWD-relative journal paths are unchanged. The
+core needs no separate runtime install for these existing adapters; its own
+[README](../../recordings/README.md) documents development checks. No private
+Bota package is used.
+
+One implementation serves the web/mobile adapters, but two listeners/auth
+adapters and three journal models remain. Mobile keeps strict default
+recording/job project checks; web explicitly tolerates omitted `project_id` and
+still verifies supplied projects and exact owner/source chains. This is not a
+unified listener/store or new multi-user auth contract.
+
+**Earlier October 12, 2026, before shared-core extraction:** 64 tests cover cloud-library, composition and real-loopback
 HTTP behavior plus the unchanged 22 native service tests. Local Windows checks
 pass 63 with one POSIX file-mode regression skipped; Linux CI verifies that
 regression. HTTP tests use mocked public API responses. Live providers, mobile
 integration and physical upload remain separate evidence.
+The core README records the new import graph and checks; these dated counts are
+not fresh verification of shared-core extraction.
 
 **Historical native status (October 2, 2026):** implemented and locally tested with 22 passing
 mocked public API tests on Node 22.23.2. Live API, Android native integration, and physical recording
@@ -189,6 +207,14 @@ library creation; a library unknown create blocks native replacement. Known
 identities can be reused only through matching GET observations. These guards
 cover this server process, not multiple instances or other API clients. The
 common app should use the library processing actions after device sync.
+
+Sharing feature code adds no lock across the web listener's store. Single-listener
+consolidation still requires explicit cross-store arbitration plus compatible
+cookie/bearer, Origin and body gates. All three existing journal models remain
+separate. Processing/Ask retain syntactically valid returned job/session IDs
+before later reply validation; awaited known-resource GET failures preserve
+identity and uncertainty. Neither saved metadata nor a read failure allows a
+replacement write or device cleanup.
 
 - Recording creation uses the documented public device UUID/generation replay
   contract. A lost response can repeat that exact request; no identity-free
