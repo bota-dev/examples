@@ -236,9 +236,10 @@ parent archives and the 20-case actual-parent suite. The old six-file guard and
 22 cases remain historical source; they are not package-removal evidence.
 All other roots/locks, SDK/runtime, guards and workflows are conserved. Read
 [full current source, resolver/output scopes and pending delivery gates](docs/legacy-public-parent-matching-removal.md).
-The original #113 scanner identity remains unverified until an exact post-delivery
-readback; no advisory-wide withdrawal, dismissal or inherited deployment approval
-is claimed.
+The exact post-delivery readback marks original #113 fixed at
+`2026-10-13T19:30:37Z` after main source `17c292e92b577a8096f6306ab14b96a075dc9513`.
+That scanner closure is separate from hosted, native and deployment acceptance;
+no advisory-wide withdrawal, dismissal or inherited approval is claimed.
 
 
 October 13 Chokidar public-boundary correction: the original maintained parent
@@ -248,3 +249,14 @@ with prospective full-array ignore ordering and unchanged literal/non-glob paths
 Run the required public-boundary cases through `npm run test:braces-security`;
 independent shared component clearance does not replace current-owner source,
 normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).
+
+The exact `17c292e` Linux verification job passed normal frozen installation but
+failed one of 110 tests: the `disableGlobbing` control used a 403-character
+literal component, producing filesystem `ENAMETOOLONG`. Typecheck, build and
+all-platform export were skipped. Its Android native example and two catalog
+jobs passed, giving three successes and one failure. The fixture now distributes the
+same balanced depth-200 string across 100/203/100-character components and
+asserts that removing the separators reproduces the original string. All
+enabled-glob rejection inputs and zero-error assertions remain intact. Runtime,
+archives, locks and workflows are unchanged. This fixture-only successor still
+requires its own fresh hosted results.

@@ -22,7 +22,13 @@ if(process.argv[2]==='--public-worker') {
   if(name==='ignored-all')options.ignored='**';
   if(name==='changing-ignore'){let calls=0;options.ignored=()=>calls++===0;}
   if(name==='stats-ignore')options.ignored=(_path,stats)=>stats===undefined;
-  if(name==='disable-globbing')options.disableGlobbing=true;
+  if(name==='disable-globbing') {
+    options.disableGlobbing=true;
+    // Preserve depth 200 while keeping literal components below NAME_MAX.
+    supplied=['{'.repeat(100),'{'.repeat(100)+'a,b'+'}'.repeat(100),'}'.repeat(100)].join('/');
+    assert.equal(supplied.replaceAll('/',''),complex);
+    assert.ok(supplied.split('/').every(part=>Buffer.byteLength(part)<=255));
+  }
   if(name==='ordinary')supplied='ordinary/*.{js,tsx}';
   if(['mixed','empty-add','existing-add','closed-add'].includes(name))supplied=['ordinary/**/*.js',complex];
   if(name==='positive-then-negative')supplied=[complex,'!'+complex];
