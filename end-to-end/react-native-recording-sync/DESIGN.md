@@ -2,17 +2,19 @@
 
 ## Purpose and layout
 
-This combined example contains independently installed React Native (`app/`)
+This optional end-to-end reference contains independently installed React Native (`app/`)
 and Flutter (`flutter/`) clients sharing one Node backend (`backend/`). They
-belong to the same **Bota Recordings** family as the web client. The target
+belong to the **Bota Recordings** references alongside the web client. This reference's target
 journey is audio input → library → supported playback → transcript → general
 notes → Ask. Use familiar mobile navigation, ordinary platform controls and short
 state messages. Public API/SDK recipes belong in README/source.
 
 There are exactly two repository layers: general platform examples now, then
 vertical use cases and consumer app types later. A common recording app belongs
-to the general layer. Focused API/SDK recipes are secondary ways to learn a
-public call, not another product layer or a reason to create overlapping apps.
+to the general layer. Independent API workflow recipes and small starters per
+published SDK facade are the primary learning paths; this reference shows their
+app/backend composition. These are formats, not extra product layers. See the
+[architecture decision](../../docs/design-decisions/2026-10-12-example-architecture.md).
 
 Keep the existing directory and native sync implementation so published links
 and recovery journals retain their meaning. Each client installs separately.
@@ -30,16 +32,21 @@ private Bota applications. Demo/Bota One inform the user journey only.
 | Hosts | Android hosts are supplied. Common-app iOS hosts are missing; that is separate from the SDKs' iOS support. |
 | Synthetic mode | Local DTO fixtures and synthetic results with no network or SDK work. They do not prove live processing, upload or cleanup. |
 
-The target family uses one canonical customer backend. Today this mobile backend
-and the web sample's backend are separate implementations with different local
-routes/auth adapters. Consolidation belongs to the [root roadmap](../../ROADMAP.md)
-and is not implemented. Preserve the current contract, bearer authentication,
+Today this mobile backend and the web reference's backend are separate
+implementations with different local routes/auth adapters. Sharing their concrete
+recording/processing/Ask features is planned where compatible contracts reduce
+real duplication within these optional references; a canonical reference backend
+is not implemented. No independent SDK starter needs this backend, its DTOs or a
+matching UI. Reuse belongs to the [root roadmap](../../ROADMAP.md).
+Preserve the current contract, bearer authentication,
 install roots and journals until that migration is reviewed and verified. Do not
 add another independent backend or invent a new catalog/metadata schema.
 
-Live responses and synthetic fixtures should follow their client's DTO contract;
-the planned canonical backend aligns those contracts across the family. Shared
-DTO shapes do not imply identical SDK capabilities or live acceptance.
+Live responses and synthetic fixtures should follow their client's DTO contract.
+Any reference reuse must preserve source identities and customer authorization.
+Independent SDK examples keep plain feature files, normal platform controls and
+their own public facade models. Shared DTO shapes do not imply identical SDK
+capabilities or live acceptance.
 
 ## Modes and platform support
 
@@ -76,7 +83,9 @@ independent of device presence and grants no device-cleanup authority.
 5. Return to the library without losing uncertain-write locks. A known saved
    operation may be refreshed through GET; an unknown outcome must not be sent again.
 
-Audio intake and playback gaps are tracked in the root roadmap. Device paths
+Audio intake and playback gaps are tracked for this optional reference in the
+root roadmap. They do not gate qualified iOS, Swift or Kotlin SDK starter/host
+work, or require every platform to implement a full consumer app. Device paths
 remain optional where the published contract supports the selected workflow;
 cloud-content access does not depend on Bluetooth presence.
 
@@ -127,3 +136,8 @@ customer responsibilities.
 - Treat a family feature as a feature, not a new install root or catalog entry.
   A copied integration includes its complete import graph, authorization and
   durable-state requirements; it is not necessarily one tiny file.
+- Keep the reference's ordinary recording-user UI coherent. Small independent
+  API/SDK examples may instead use a minimal runnable harness for the selected
+  public call. Intentionally repeated short helpers are acceptable when they
+  keep those examples copyable; do not require a global wrapper framework or
+  private imports to share them.

@@ -1,161 +1,136 @@
 # Bota Examples: repository design
 
-## Purpose
+## Goal
 
-Help customer developers build applications for their own end users with the
-public Bota API and App SDK. The main template is **Bota Recordings**, a familiar
-recording app inspired by Demo and Bota One. It should be useful to run, easy to
-adapt and small enough to maintain across platforms.
+Give customer developers code they can easily find, run and adapt to build
+applications across supported platforms using the public Bota API and App SDK.
+The example's architecture serves that goal; a single large app or a particular
+number of small examples is not a requirement.
 
-The app demonstrates an ordinary user journey. Its source and documentation
-explain the integration. It is a demo/sample/template, not a complete Bota One
-replacement, production SaaS starter or new API SDK.
+Success means a developer can choose a workflow and language/platform, locate
+its public calls, run the smallest useful example, and identify the files and
+application-owned pieces to copy or replace.
 
-## Exactly two layers
+## Exactly two product layers
 
 | Layer | Purpose | Scope |
 | --- | --- | --- |
-| 1. General platform capabilities | Show the common recording journey and the public calls needed to build it | Current work: Bota Recordings, focused SDK/device workflows and curated public API recipes |
-| 2. Vertical and app-type examples | Adapt those capabilities to a particular end-user workflow | Later work: sales visits, field-service reports, healthcare notes, meeting assistants or personal voice notebooks |
+| 1. General platform examples | Teach public capabilities and common integration workflows | Current work: API workflows, platform SDK starters and optional end-to-end references |
+| 2. Vertical and app-type examples | Compose those integrations around a specific user and workflow | Later work: sales visits, field-service reports, meeting assistants or other consumer app types |
 
-Templates, SDK samples and API recipes are formats within Layer 1. They are not
-additional layers. Layer 2 composes the general integrations after the baseline
-is coherent; it does not drive new implementations in the current phase.
+API recipes, platform starters and reference apps are formats within Layer 1,
+not additional product layers. Layer 2 remains later work.
 
-## One template family
+## Chosen architecture: focused workflows plus platform starters
 
-Maintain one Bota Recordings family with React web, React Native and Flutter
-clients. Give each client normal platform controls and navigation, while keeping
-the same user journey and feature meaning. Device input is optional where the
-published facade supports it. A developer should be able to start the common app
-without owning hardware.
+Keep one repository with three complementary formats:
 
-The minimum complete baseline is:
+| Format | Developer's question | Shape | Current location |
+| --- | --- | --- | --- |
+| API workflow | How do I upload/transcribe, read results, summarize, Ask or handle an event? | A small independently runnable server/CLI recipe, organized by meaningful workflow and language | [api/](api/) |
+| Platform SDK starter | How do I use this SDK in my application on this platform? | A small idiomatic runnable host with plainly named feature files for supported device workflows | [app-sdk/](app-sdk/) |
+| End-to-end reference | How do UI, SDK and customer backend fit together? | A thin, familiar recording app composing those capabilities, with backend code where needed | [end-to-end/](end-to-end/) |
 
-**Import ordinary audio → recording library → supported audio playback and
-source review → transcript → general notes → recording-scoped Ask.**
+API workflows and platform starters are first-class entry points. The reference
+app is optional learning context and an adaptable starting point. A developer
+must not need to understand its account model, backend DTOs or complete consumer
+UI to use an SDK connection example or an API recipe.
 
-Import and verified upload completion precede processing. Transcription, general
-notes and Ask are explicit actions with clear readiness and progress. Source
-review connects results to their recording and, where available, timed transcript
-excerpts. Playback supports only the media formats and authorized delivery path
-that the template documents; original-byte download does not establish playable
-or decrypted audio. Microphone capture is an optional later enhancement.
+Organize by a useful workflow rather than creating an install root for each
+method, endpoint or export variation. Within a platform starter, extend focused
+feature files when the same host/setup serves the task. Kotlin, Swift, React
+Native, Flutter and Web are first-class SDK examples where public support exists.
+Use platform-native controls, permissions, tooling and languages; identical UI
+or feature parity is not required.
 
-The everyday UI serves a person finding recordings, listening and reading
-results. Show titles, dates, durations, useful progress, content and clear
-actions. Completed request metadata belongs in a secondary collapsed view.
-API endpoints, copy instructions and operator recovery details belong in the
-README/source. Keep errors and uncertain outcomes visible without encouraging
-duplicate processing.
+The current paths and catalog IDs stay valid. The one-starter-per-facade target
+is a maintenance direction, not a claim that existing connection/catalog roots
+are already consolidated. Add hosts or consolidate roots only with compatibility,
+README, catalog and CI changes. No empty proposed directories enter the index.
 
-Use a small, concrete screen structure:
+## Core teaching paths
 
-- **Library:** recording list, refresh and an ordinary audio import entry.
-- **Recording detail:** supported audio player/source context, then
-  Transcript, Notes and Ask views for the selected recording.
-- **Devices:** an optional separate screen for capabilities supported by the
-  published facade and current host; return to the library after supported sync.
-- **Setup/account:** sample/live choice and authentication, separate from the
-  everyday recording task. Show useful pending/uncertain progress in context;
-  keep technical request tables secondary.
+1. Connect to a device, verify identity, read status and handle disconnect.
+2. Read device recordings; transfer and confirm only through supported SDK and
+   backend contracts. Metadata access does not grant cleanup authority.
+3. Import ordinary audio, verify upload completion and request a transcription.
+4. List/read owned recordings and results; generate general notes from an exact
+   completed transcription.
+5. Ask about one recording with exact source/citation scope and recover known
+   operations without repeating uncertain writes.
+6. Receive authenticated events and refresh current authorized resource state.
 
-## One customer feature backend: planned
+Curate these paths in the README with direct source links and platform/language
+choices. Keep configuration, firmware, observation and export variants available
+in the extended inventory. Add a new example when it fills a real developer gap
+or explains a materially different integration; catalog count is not a target.
 
-The target has one canonical implementation of common recording features behind
-all three clients. It calls public Bota APIs, holds secret keys and derives the
-Bota end-user mapping from the customer's authenticated application identity.
-Keep the identity adapter replaceable; this repo does not need to build a new
-account-management product.
+## Readability, independence and sharing
 
-Before consolidation, define the shared recording/transcription/notes/Ask DTOs,
-resource ownership, application authentication adapters, operation status and
-media delivery contract. Web cookies and mobile application Bearer tokens may
-remain different transport adapters. The feature logic and authorization
-meaning should be consistent.
+- Show the actual public API/SDK call in plain feature code. Keep its runnable
+  harness and setup small; do not hide the lesson behind a generic wrapper.
+- Name inputs, results and required helpers. Document the complete import graph
+  and application-owned auth, identity, storage and UI pieces a developer replaces.
+- A focused example installs independently without private repositories, root
+  package installation or another example's runtime files.
+- Repeat short setup/HTTP/UI glue across independent languages/platforms when
+  that keeps an example self-contained. Share tooling, fixtures and conventions
+  only where they reduce real maintenance; do not invent a framework.
+- Substantial repeated feature logic within the end-to-end references can use
+  one concrete sample backend. This is not a new API SDK or a mandatory service
+  for standalone SDK/API examples. Backend consolidation needs its own compatible
+  auth/DTO/journal plan and does not block useful platform coverage.
+- Keep exact public package pins, installation guards and source-level ownership,
+  durable uncertainty and lifecycle safeguards. Small must not mean unsafe.
 
-This backend is **planned, not implemented**. The current web backend and the
-shared mobile backend are separate implementations with overlapping logic and
-some different routes/DTOs. Consolidate conservatively after the contract is
-defined. Preserve existing links, owner/source checks, journals and unresolved
-write intent. Do not move state, erase uncertainty or allow a second write as a
-side effect of migration.
+## Optional app reference
 
-The existing `api/`, `app-sdk/` and `end-to-end/` paths remain in place during
-this design reset. Any future `templates/recordings/` layout is a proposal, not
-an existing directory. `apps/` is the retained legacy workspace; it is not the
-destination for the new family.
+Bota Recordings, inspired by Demo/Bota One, shows how these integrations serve
+an end user. Its intended flow is import/device input → library → supported
+playback/source review → transcript → general notes → recording-scoped Ask.
 
-## Small supporting recipes
+Use a compact library, a recording detail/player with Transcript/Notes/Ask,
+optional supported Devices controls and separate setup/account screens. Ordinary
+controls serve the recording user's task. API endpoints and copy instructions
+belong in README/source; technical request metadata stays secondary. A focused
+SDK demo can have only a device picker, status and recording controls appropriate
+to the capability it teaches.
 
-Keep a curated API cookbook for upload/transcription, listing and reading,
-general notes, recording-scoped Ask, webhooks and authorized original downloads.
-Keep focused App SDK examples for connection/status, recording metadata and
-supported device transfer/lifecycle steps. Each recipe should identify the public
-call, its inputs, the required helper files and the customer-owned boundary.
+Playback and ordinary mobile import are useful reference-app work, not a gate
+for every API/SDK example. Qualify media formats, ownership, expiry and encryption
+before claiming playback: original bytes or URL issuance do not prove playable
+or decrypted audio. Microphone capture is optional. No full Bota One replica,
+production account product or forced cross-platform consumer-app parity is needed.
 
-A runnable template can use shared helpers inside its install root. A small
-recipe must not be described as a single-file copy when it imports authentication,
-ownership, HTTP or durable-state helpers. Explain what to copy and what to replace.
-Do not introduce cross-example runtime imports or an example-only framework.
+## Current implementation versus target
 
-The extended catalog remains an inventory. Stop count-driven expansion and
-prefer improving an existing recipe over creating another install root for an
-export, configuration reader or observer variant. A new example needs a concrete
-developer need, a supported public contract and a maintenance benefit beyond
-the existing code.
-
-## Current implementation and gaps
-
-| Implementation | Runnable today | Missing from the baseline |
+| Area | Available now | Important gap |
 | --- | --- | --- |
-| [React web](end-to-end/web-reference/README.md) | Audio import, library, Transcript/Summary/Ask, synthetic demo and scoped live API mode | Audio playback/source listening; canonical shared backend |
-| [React Native Android](end-to-end/react-native-recording-sync/app/README.md) | Local sample recordings or live cloud library, Transcript/Summary/Ask; optional already-provisioned encrypted-v2 device sync | Ordinary audio import, playback and iOS host; canonical shared backend |
-| [Flutter Android](end-to-end/react-native-recording-sync/flutter/README.md) | Local sample recordings or live cloud library, Transcript/Summary/Ask; optional device connection/status | Ordinary audio import, playback and iOS host; public facade does not support the RN encrypted-sync workflow |
+| API workflows | Node/Python workflow recipes and an extended inventory | Curated entry points, clearer copy boundaries and consistent evidence remain ongoing work |
+| SDK starters | RN Android/iOS connection; Flutter Android connection; Kotlin Android and Swift macOS connection/catalog; desktop Chromium connection | Native Swift iOS and Flutter iOS hosts are missing; supported workflow coverage varies |
+| React web reference | Audio import, library, Transcript/Summary/Ask, synthetic mode and configured API path | Playback is missing; web is API-only |
+| RN/Flutter Android references | Cloud library/results/Ask, sample mode and one shared mobile backend; optional RN encrypted-v2 sync or Flutter connection/status | Ordinary import/playback and common-app iOS hosts are missing; Flutter lacks the selected encrypted-sync facade contract |
+| Reference backend | Separate web backend and shared mobile backend | Concrete feature duplication; a common reference backend is planned, not implemented |
+| Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
-These are runnable **partial implementations**, not the completed journey. The
-web app is API-only. RN and Flutter share the current mobile backend, but they
-do not share the web backend. Sample content is synthetic; successful fixture
-actions prove no live upload, provider result or physical-device behavior.
+Keep SDK capability, implemented host and verification as separate facts.
+Current independent device examples pin public beta.13; legacy `apps/` remains
+beta.6 compatibility code with its local-only authentication/provisioning limits.
+No package update, runtime consolidation, device operation or state migration
+is part of this architecture clarification. Source, build, live API and hardware
+evidence remains specific to each README and the
+[implementation review](docs/independent-examples-review.md).
 
-Focused Kotlin/Android and Swift/macOS connection/catalog examples teach native
-SDK integration. They are not full duplicate consumer apps. Add bounded device
-workflows before considering another full UI, and require a concrete customer
-need for such duplication. Existing React Native connection builds include an
-iOS host; that does not provide an iOS host for Bota Recordings.
+## Acceptance
 
-Windows users can use the API web app. The separate Web SDK connection example
-requires desktop Chromium and supported Web Bluetooth/browser/OS behavior.
-Native Windows/Electron App SDK support is planned upstream; this repo supplies
-no public native Windows recording host.
+Each core example identifies the workflow, supported platform, direct public-call
+files, prerequisites, run/check commands, expected result, copy/replace boundaries
+and recovery limits. Appropriate CI checks install/build and important behaviors
+without live credentials or hardware. Synthetic output is labelled and proves
+no live service or physical result. Resource identities stay configurable and
+server secrets never enter clients or committed fixtures.
 
-Independent device examples remain pinned to published **2.0.0-beta.13**. Do not
-change that pin as part of documentation or layout work. Per-example READMEs and
-the [implementation review](docs/independent-examples-review.md) distinguish
-source, build, live API and physical-device evidence. The legacy `apps/` pair
-remains isolated compatibility code with its documented authentication and
-provisioning limits; it is not the recommended customer backend.
-
-## Quality and acceptance
-
-- Use public packages and public API contracts; no private Bota app dependencies.
-- Keep Bota keys on the server. Verify exact owner/source relationships before
-  exposing recordings, content, media or citations.
-- Separate cloud upload commitment, device cleanup and processing. Legacy
-  `uploaded` alone is not verification proof or cleanup authority.
-- Retain intent before uncertain writes. Known resources permit GET recovery;
-  an unknown outcome does not permit automatic replacement POSTs.
-- Bound requests, responses and list traversal. Fence late results after
-  selection changes, account reset or logout, including device teardown.
-- Keep sample mode explicit and runnable without credentials, hardware or
-  external calls. Keep sample and live evidence separate.
-- Keep installation instructions, required security scripts and published SDK
-  pins accurate. Add meaningful tests for ownership, uncertainty and state
-  handling; run the selected platform's appropriate build checks.
-- Describe incomplete contracts and unavailable verification honestly. Passing
-  source or build checks does not establish live or hardware conformance.
-
-The [roadmap](ROADMAP.md) orders the remaining work.
-[ARCHITECTURE.md](ARCHITECTURE.md) defines technical boundaries and acceptance
-gates; [AGENTS.md](AGENTS.md) governs changes. This document is the authoritative
-product direction for the repository.
+[ARCHITECTURE.md](ARCHITECTURE.md) owns integration boundaries;
+[ROADMAP.md](ROADMAP.md) orders work;
+[the architecture decision](docs/design-decisions/2026-10-12-example-architecture.md)
+records the tradeoffs. This document is the current product direction.

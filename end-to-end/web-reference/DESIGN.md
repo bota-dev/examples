@@ -2,16 +2,19 @@
 
 ## Purpose
 
-A familiar recording app for customer developers to run, learn from and adapt
-for their own end users. It is a general platform sample/template in repository
+A familiar optional recording reference for customer developers to run, learn
+from and adapt for their own end users. It is a general platform sample/template in repository
 Layer 1, inspired by Demo and Bota One. Its user imports audio, chooses a
 recording, reads a transcript and summary, and asks about the recording.
-This client belongs to one **Bota Recordings** family with React Native and
-Flutter clients. The family target is audio input → library → supported playback
+This client belongs to the optional **Bota Recordings** references alongside
+React Native and Flutter clients. Its reference target is audio input → library → supported playback
 → transcript → general notes → Ask. The two repository layers remain general
 platform examples now, then vertical use cases and consumer app types later.
-Focused API/SDK recipes support the current family; they are secondary entry
-points, not another app layer.
+Independent API workflow recipes and small platform SDK starters are the primary
+learning paths. This reference shows a coherent app/backend composition; it is
+another format within Layer 1, not a prerequisite or another product layer.
+The [architecture decision](../../docs/design-decisions/2026-10-12-example-architecture.md)
+records this balance. Platform starters may use different normal UI and SDK DTOs.
 
 ## Implemented subset and target
 
@@ -23,22 +26,25 @@ points, not another app layer.
 | Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template. |
 | Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.         |
 
-The [root roadmap](../../ROADMAP.md) owns the remaining journey and platform work.
+The [root roadmap](../../ROADMAP.md) owns the remaining reference and platform work.
 Do not describe target features as available controls or add overlapping app
 roots to satisfy a coverage count.
 
 ## Backend direction
 
-The family target uses one canonical customer backend. Currently this install
-root contains its own Node backend and the mobile clients use a separate shared
-backend. Consolidation is planned. Preserve current cookie/account authentication,
+Currently this install root contains its own Node backend and the mobile clients
+use a separate shared backend. Sharing concrete recording, processing and Ask
+features is planned where a compatible contract reduces duplication among these
+optional references. It does not supply a mandatory backend for independent API
+or SDK examples. Preserve current cookie/account authentication,
 public routes, durable upload/job/Ask journals and webhook acceptance until a
 reviewed migration replaces them. Do not import a sibling example's runtime code
 or silently point a client at another backend.
 
-The canonical contract should let live and synthetic client fixtures follow the
-same DTO shapes and source identities. Shared fixture behavior is a testing and
-demo boundary, not proof of live API, provider or physical-device conformance.
+Reference reuse should align live responses and synthetic fixtures with the
+selected client contract and exact source identities. Independent SDK starters
+need no forced common DTO/UI. Shared fixture behavior is a testing and demo
+boundary, not proof of live API, provider or physical-device conformance.
 
 ## Experience
 
@@ -70,6 +76,13 @@ an Ask entry file as a tiny, independently usable integration. Label synthetic
 results clearly. Render untrusted transcript/summary/Ask strings as text. Preserve
 account/scope fences, action locks and honest uncertain-outcome states. Never
 expose API credentials or internal error details in product UI.
+
+The recording reference should remain useful to its end user rather than become
+an API Explorer. Its import/playback work is specific to this app and must not
+delay qualified iOS/Swift/Kotlin SDK examples. Those examples may teach one direct
+public call through a small normal platform harness. Intentional short helper
+duplication across copyable roots is acceptable; no global sample framework or
+private runtime dependency should be introduced to eliminate it.
 
 Use normal platform UI and published public SDK surfaces for optional device
 paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.13/frameworks/web)

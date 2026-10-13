@@ -1,24 +1,83 @@
 # Bota Examples
 
-Demo apps, sample code and templates for customer developers building end-user
-applications with the public Bota API and App SDK.
+Runnable examples and copyable sample code for developers building applications
+with the public Bota API and App SDK. Choose the workflow or platform you need;
+no private Bota app, special coding tool or repository-wide install is required.
 
-The main template is **Bota Recordings**, a familiar recording app inspired by
-Demo and Bota One. The repository has exactly two layers: **general platform
-capabilities now**, then **vertical and app-type examples later**. One recording
-template family spans React web, React Native and Flutter; small SDK workflows
-and API recipes support it. Read the [design](DESIGN.md) and [roadmap](ROADMAP.md)
-for the target and remaining work.
+## Choose your starting point
 
-## Start with Bota Recordings
+| You want to… | Start here |
+| --- | --- |
+| Call the backend API from your server | [API workflow recipes](#focused-recipes): upload/transcribe, recordings, notes, Ask and webhooks |
+| Embed device capabilities in your app | [Platform SDK starters](#current-platform-coverage): Kotlin, Swift, React Native, Flutter or Web |
+| See how app UI and a customer backend fit together | [Optional Bota Recordings references](#whole-app-references): React web or Android mobile |
 
-| Client | Run and adapt | Current scope |
+This is one repository with exactly two product layers: **general platform
+capabilities now**, then **vertical and app-type examples later**. API recipes,
+SDK starters and combined references are three formats within the general layer,
+stored under `api/`, `app-sdk/` and `end-to-end/`; they are not three layers.
+
+## Focused recipes
+
+Use a bounded workflow rather than installing a separate example for every
+method. These recipes run on a server or development machine; Bota keys stay
+there.
+
+| Workflow | Setup and limits | Public-call source |
 | --- | --- | --- |
-| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, recording library, Transcript/Summary/Ask; API-only |
-| React Native Android | [RN sample](end-to-end/react-native-recording-sync/app/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
-| Flutter Android | [Flutter sample](end-to-end/react-native-recording-sync/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
+| Import audio, verify completion and transcribe | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) | [Node workflow](api/upload-and-transcribe-node/index.mjs), `uploadAndTranscribe` |
+| Find/read recordings and retrieve original bytes | [Recording list](api/list-recordings-node/README.md), [Node download](api/download-recording-node/README.md) or [Python download](api/download-recording-python/README.md) | [List workflow](api/list-recordings-node/index.mjs), `listRecordings`; [download workflow](api/download-recording-node/index.mjs) |
+| Create general notes from a completed transcript | [Node.js summaries](api/summarize-transcription-node/README.md) | [Summary workflow](api/summarize-transcription-node/index.mjs), `summarize` |
+| Ask about one recording | [Node.js recording-scoped Ask](api/ask-recording-node/README.md) | [Ask workflow](api/ask-recording-node/index.mjs) |
+| Receive processing events and refresh existing jobs | [Node.js webhook](api/webhook-receiver-node/README.md), [Python webhook](api/webhook-receiver-python/README.md) or [transcription watcher](api/watch-transcription-python/README.md) | [Raw-byte receiver](api/webhook-receiver-node/server.mjs); [GET watcher](api/watch-transcription-python/main.py) |
 
-Try the web app without credentials or hardware:
+Each README identifies the public calls, prerequisites, expected result and
+verification limits. Copy the integration with its complete imports and required
+HTTP, authorization and durable-state helpers; replace the application-owned
+identity mapping. An original download is not necessarily playable or decrypted
+audio. Use the [extended catalog](#example-catalog) for advanced readers/exports.
+
+## Current platform coverage
+
+Kotlin, Swift, React Native, Flutter and Web are first-class SDK entry points.
+The direction is one small starter per published facade, with plain feature
+modules for useful supported workflows. Existing connection/catalog paths remain
+in place. A starter needs only enough UI to run its workflow; it does not need a
+complete recording app, common backend DTOs or another platform's UI.
+
+| Platform | Start here | Current host and capability limits |
+| --- | --- | --- |
+| Kotlin / Android | [Connection/status](app-sdk/android-device-connect/README.md); [recording catalog](app-sdk/android-recording-catalog/README.md) | Native Android hosts, API 26+; catalog reads metadata, not audio transfer |
+| Swift / Apple | [Connection/status](app-sdk/apple-device-connect/README.md); [recording catalog](app-sdk/apple-recording-catalog/README.md) | Current SwiftUI hosts are macOS; no native iOS starter host yet; catalog does not transfer audio |
+| React Native | [Connection/status](app-sdk/react-native-device-connect/README.md); [encrypted-sync workflow](end-to-end/react-native-recording-sync/README.md) | Connection starter has Android/iOS hosts; encrypted sync is Android-only, already-provisioned encrypted-v2 with its documented backend/firmware gates |
+| Flutter | [Connection/status](app-sdk/flutter-device-connect/README.md) | Android host only; beta.13 facade lacks the fresh-pairing/encrypted-v2 interfaces needed for the RN sync workflow; no iOS starter host yet |
+| Web / desktop Chromium | [Connection/status](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; separate from the API web reference |
+| Windows | The API web reference; Chromium SDK connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host is supplied here |
+
+All eight independent device examples pin published **2.0.0-beta.13**. Read the
+selected manifest/lockfile and README for exact tooling, host support and public
+methods. Missing facade capability, missing host and missing verification are
+different gaps. Do not fill them with private transports or an unofficial SDK.
+
+[Adoption evidence](docs/independent-examples-review.md#beta13-adoption) and the
+[implementation review](docs/independent-examples-review.md) distinguish source,
+native builds, live API and physical acceptance. Historical phone results apply
+only to their tested source/SDK/firmware/device; beta.13 physical acceptance is
+not inferred from them.
+
+## Whole-app references
+
+**Bota Recordings** illustrates a familiar recording experience inspired by Demo
+and Bota One. These optional references show how selected integrations fit an
+end-user app; use them as templates or copy a feature with its helpers.
+
+| Reference | Run and adapt | Current scope |
+| --- | --- | --- |
+| React web | [Web reference](end-to-end/web-reference/README.md) | Audio import, library, Transcript/Summary/Ask; API-only |
+| React Native Android | [RN reference](end-to-end/react-native-recording-sync/app/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
+| Flutter Android | [Flutter reference](end-to-end/react-native-recording-sync/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
+
+Try the web reference without credentials or hardware using Node **22.23.2+**:
 
 ```sh
 cd end-to-end/web-reference
@@ -26,74 +85,24 @@ npm ci
 npm run demo
 ```
 
-Open **http://127.0.0.1:5173** and select **Open demo**. Use Node **22.23.2 or
-newer**. The mobile READMEs explain their native builds and **Try sample
-recordings** entry. Sample content/actions are synthetic and make no external
-calls; they do not prove live API, provider or device behavior.
+Open **http://127.0.0.1:5173** and select **Open demo**. The mobile READMEs cover
+native builds and **Try sample recordings**. Sample actions/content are synthetic
+and make no external calls; they establish no live upload, provider or hardware
+success.
 
-These apps are runnable **partial implementations**. The complete target is:
+These references are runnable partial implementations. Web has no audio playback;
+mobile has no ordinary audio import/playback and its recording hosts are Android
+only. RN/Flutter share the mobile backend; web has a separate backend. Concrete
+backend reuse may improve that reference family when its compatibility gates
+pass. Full UI parity, a complete import/playback journey and backend consolidation
+are not prerequisites for a useful API recipe or SDK feature.
 
-**Import ordinary audio → library → supported audio playback and source review
-→ transcript → general notes → recording-scoped Ask.**
-
-The web app does not yet play audio. The mobile clients do not yet import
-ordinary audio or play it, and their current hosts are Android only. They can
-use existing authorized cloud recordings; RN also supports its documented device
-path. Microphone capture is optional later work.
-
-RN and Flutter share the current mobile backend. The web backend is separate.
-**One canonical customer feature backend is planned**, after defining common
-DTOs, identity/authentication, uncertainty and playable-media contracts.
-No runtime directories or journals move as part of this design reset.
-
-## Focused recipes
-
-Use a small recipe when you need one integration rather than an app template.
-
-| Your task | Start here |
-| --- | --- |
-| Upload audio and get a transcript | [Node.js](api/upload-and-transcribe-node/README.md) or [Python](api/upload-and-transcribe-python/README.md) |
-| List/read cloud recordings | [Node.js recording list](api/list-recordings-node/README.md) |
-| Create general notes | [Node.js structured summaries](api/summarize-transcription-node/README.md) |
-| Ask about one recording | [Node.js recording-scoped Ask](api/ask-recording-node/README.md) |
-| Receive processing events | [Node.js webhook](api/webhook-receiver-node/README.md) or [Python](api/webhook-receiver-python/README.md) |
-| Download authorized original bytes | [Node.js](api/download-recording-node/README.md) or [Python](api/download-recording-python/README.md); original bytes are not necessarily playable audio |
-| Connect to a physical device | Choose the supported platform below |
-
-Each README links the public calls and required helpers. Copy the feature with
-the helpers it imports, and replace the customer identity adapter as documented.
-These examples use published packages/public APIs; no private Bota application
-repository is required.
-
-Choose one example, install from its directory and follow its documented checks.
-Root npm commands apply only to the retained legacy workspace. The
-[machine-readable index](examples.json) and [AI guide](docs/using-examples-with-ai.md)
-help coding tools find setup, source and evidence; [AGENTS.md](AGENTS.md) supplies
-the repository instructions.
-
-## Current platform coverage
-
-| Platform | Available device example | Boundary |
-| --- | --- | --- |
-| React Native | [Android/iOS connection](app-sdk/react-native-device-connect/README.md), plus the optional Android sync path in Bota Recordings | The recording template has no iOS host yet; sync is already-provisioned encrypted-v2, not a complete provisioning lifecycle |
-| Flutter | [Android connection](app-sdk/flutter-device-connect/README.md) | The published facade supports connection/status here, not the RN encrypted-sync workflow; no recording-template iOS host yet |
-| Kotlin / Android | [Connection](app-sdk/android-device-connect/README.md) and [recording metadata](app-sdk/android-recording-catalog/README.md) | Focused SDK samples, not another full consumer app |
-| Swift / Apple | [macOS connection](app-sdk/apple-device-connect/README.md) and [recording metadata](app-sdk/apple-recording-catalog/README.md) | Current sample hosts are macOS, not native iOS recording apps |
-| Desktop Chromium | [Web SDK connection](app-sdk/web-device-connect/README.md) | Requires supported Web Bluetooth/browser/OS behavior; separate from the API web template |
-| Windows | The API web template, and Chromium connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native recording host is supplied here |
-
-All eight independent device examples pin published **2.0.0-beta.13**.
-Read each README for its actual build targets and device gates.
-[Current adoption evidence](docs/independent-examples-review.md#beta13-adoption)
-and [implementation reviews](docs/independent-examples-review.md) keep source,
-native builds, live API and physical acceptance distinct. Earlier phone results
-remain tied to the tested SDK/firmware/device versions; they do not establish
-beta.13 physical acceptance.
-
-Next work is to define the common backend/media contract, complete import and
-playback across the existing clients, then add iOS hosts and bounded native SDK
-workflows. Vertical/app-type demos follow the general baseline. See
-[ROADMAP.md](ROADMAP.md); new catalog entries are not a completeness goal.
+Choose one directory, install only its documented dependencies and inspect the
+public call before adapting it. The [AI guide](docs/using-examples-with-ai.md) and
+[machine-readable index](examples.json) help tools find source and setup.
+[DESIGN.md](DESIGN.md) and [ROADMAP.md](ROADMAP.md) describe contributor direction;
+[AGENTS.md](AGENTS.md) governs repository changes. Catalog count is not a delivery
+goal.
 
 ## Example catalog
 
@@ -258,7 +267,7 @@ and open acceptance gaps.
 
 ## Documentation
 
-- [Design](DESIGN.md): product purpose, two layers and the Bota Recordings family.
+- [Design](DESIGN.md): product purpose, two layers and recipe/starter/reference formats.
 - [Roadmap](ROADMAP.md): ordered remaining work and acceptance criteria.
 - [Architecture](ARCHITECTURE.md): technical boundaries and implementation status.
 - [Plan reset review](docs/design-reviews/2026-10-12-plan-reset.md): design decisions,

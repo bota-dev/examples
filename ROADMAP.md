@@ -1,120 +1,102 @@
 # Bota Examples roadmap
 
-This roadmap follows [DESIGN.md](DESIGN.md): exactly two layers, one Bota
-Recordings template family and small supporting SDK/API recipes. It orders work
-by the customer developer's path to a useful end-user app, not by example count.
-It does not move code, upgrade the published beta.13 pin or claim missing runtime
-features are complete.
+The goal in [DESIGN.md](DESIGN.md) is easy-to-use SDK/API code across platforms.
+Use focused API workflows and small platform starters as first-class entry
+points, with end-to-end references for application composition. General
+capabilities are the current product layer; vertical/app-type examples come later.
 
-## 1. Curate the current general examples
+## 1. Make the developer entry path clear
 
-Lead the README and AI guidance with Bota Recordings and a short set of useful
-API/device recipes. Keep the full catalog as a reference inventory. State the
-current web/mobile gaps and move historical verification detail out of the
-starting path into the existing reviews.
+Lead with workflow → language/platform → source → run/adapt instructions.
+Curate the core paths: connection/status/loss, recording metadata/supported
+transfer, import/transcription, results/notes, scoped Ask and webhooks/recovery.
+Keep the extended catalog and existing paths/IDs. Explain a feature's required
+helpers and replaceable customer-owned pieces; do not describe an entire guarded
+feature graph as a single-file snippet.
 
-**Acceptance:** the docs agree on the two layers, the one template family,
-current versus planned behavior and where a developer starts. Catalog paths,
-links, independent installation and required security instructions remain valid.
-This documentation reset supplies the direction; it does not finish the app.
-The [plan reset review](docs/design-reviews/2026-10-12-plan-reset.md) records
-the decisions, source evidence and remaining verification.
+**Acceptance:** README and agent guidance direct an API task to its recipe,
+an SDK task to its platform starter, and an application task to a reference.
+Each core entry links actual public-call source, setup and evidence. No root
+install, private sibling repository or example framework is required.
 
-## 2. Define the shared backend and playable-media contract
+## 2. Fill useful SDK platform and workflow gaps
 
-Before moving runtime code, settle a small common contract for all three clients:
+Kotlin, Swift, React Native, Flutter and Web examples have equal importance.
+Complete small supported host/workflow paths; prioritize missing Swift iOS and
+Flutter iOS hosts alongside documented RN iOS support. Use ordinary platform
+code and focused connection/status/recording feature files. Extend an existing
+starter where its setup already fits; do not create another root per SDK method.
 
-- Recording pages/details, transcript and general-notes source links, scoped
-  Ask answers/citations and safe error/operation projections.
-- A replaceable customer identity adapter and server-derived project/end-user
-  mapping. Web cookie and mobile Bearer transport can differ while enforcing
-  the same ownership rules.
-- Durable intent identity, bounded progress/status reads and GET-only recovery
-  for known resources. Unknown write outcomes stay retained and blocked until
-  reconciled; migration must not create replacement writes.
-- Ordinary audio import: supported MIME types, nonempty/size limits, upload
-  verification and the point at which processing becomes available.
-- Authorized playable media: supported codecs/containers, URL lifetime and
-  storage credential isolation, exact owner/source checks and safe expiry/error
-  behavior. Distinguish playable audio from original download and encrypted
-  device bytes; do not promise unimplemented decryption or conversion.
-- The public calls and helper files a developer copies for each feature, with
-  the application-owned pieces they replace.
+Keep capability, host and verification separate. Flutter's selected facade
+cannot provide the RN encrypted-sync path; adding an iOS host or bumping a
+version does not solve that contract gap. Web Bluetooth is limited to supported
+desktop Chromium environments. Native Windows device examples depend on the
+upstream public SDK; the API web sample already serves Windows users.
 
-**Acceptance:** document representative success, pending, unauthorized,
-unsupported-media and uncertain-write responses; trace them to current public
-API contracts. Resolve incompatible web/mobile DTOs before consolidation.
+**Acceptance:** a developer can install/build the host and locate the public SDK
+calls for its declared workflow. Permissions, device identity, lifecycle and
+native cleanup tests cover important boundaries. Record physical claims only
+for the tested package/OS/device/firmware. This work does not wait for every
+reference client to implement import, playback or a full consumer UI.
 
-## 3. Complete the existing recording clients and consolidate conservatively
+## 3. Improve the curated API workflows
 
-Use the agreed contract to create one canonical customer feature backend and
-complete the existing React web, RN Android and Flutter Android clients. Finish
-ordinary import and supported playback/source review so device hardware is an
-optional input, then refine the already-present Transcript/Summary/Ask flow.
+Keep independent Node/Python server examples for the core calls and meaningful
+workflows. Improve existing recipes before adding another export/observer
+variant. Expose direct integration functions, a small CLI/server harness,
+configuration and full helper requirements. Preserve honest scope: a one-shot
+script with documented manual recovery is not a durable resume service.
+The existing upload/transcription CLI has no durable journal; that is a current
+limitation, not evidence of pre-write intent conformance. New or extended write
+workflows still need the required intent/reconciliation safeguards. Never remove
+an existing journal or treat another invocation as safe recovery from uncertainty.
 
-Start from the existing implementations. Preserve scope, journals, unresolved
-intent, source guards and recovery behavior; migrate state only through an
-explicit compatible plan. Keep links and install roots stable until a move has
-a concrete benefit. A proposed `templates/recordings/` layout is **planned**;
-no such runtime move is part of the documentation reset. Keep legacy `apps/`
-separate from the new family.
+**Acceptance:** each recipe demonstrates its stated input → public calls →
+result with bounded requests, authorized sources, safe credential handling and
+clear uncertainty recovery. Syntax, behavioural tests and live evidence remain
+separate. New roots require a distinct developer need and maintenance rationale.
 
-**Acceptance:** each client completes import → library → supported playback and
-source review → transcript → general notes → recording-scoped Ask. Sample mode
-requires no credentials/device/external calls. Targeted tests cover ownership,
-media access/expiry, source links, account changes and uncertain actions.
-Appropriate client/backend CI passes. Record authorized live API evidence
-separately; optional device acceptance does not gate the API-only baseline.
+## 4. Improve end-to-end references when they add learning value
 
-## 4. Add mobile iOS hosts
+Keep Bota Recordings as a familiar app-composition reference. Add ordinary input
+and qualified playback where that makes the existing reference useful. Its web,
+RN and Flutter clients need not demonstrate identical device capabilities or
+wait for each other to deliver a useful example.
 
-Add RN and Flutter iOS hosts for the completed common API journey. Reuse the
-feature contract and UI rather than creating a separate consumer app. Gate any
-Device entry by the published facade and the actual host implementation.
-Android encrypted-transfer module support is not iOS parity evidence.
+The separate web/mobile backends have substantial overlapping processing/Ask
+logic. Define the small common feature, ownership and operation contract before
+consolidating that logic behind their existing cookie/Bearer adapters. Reuse one
+concrete sample backend where it reduces maintenance; it is optional to standalone
+SDK/API examples. Keep cloud intent and native capture journals separate,
+preserving scope, IDs, paths, anchors and unresolved writes. No cosmetic folder
+move or new unofficial API SDK is a prerequisite.
 
-**Acceptance:** documented Apple toolchain/deployment requirements, clean
-public-package installs, simulator/native builds and sample/live API behavior.
-Bluetooth/pairing/transfer claims require their own supported host and physical
-evidence; a simulator build alone proves none of those capabilities.
+**Acceptance:** the reference demonstrates an understandable declared end-user
+flow and documents its gaps. If a backend is shared, every affected client and
+auth/store adapter has compatibility evidence. Media playback requires a
+supported public representation, owner checks and safe expiry/errors. Reference
+improvements must not delay an independently useful API/SDK sample.
 
-## 5. Extend bounded native device workflows where useful
+## 5. Add vertical and app-type examples later
 
-Improve the existing Kotlin/Android and Swift/Apple SDK samples with small
-supported workflows such as connection, status, recording metadata and
-authorized transfer/lifecycle steps. Keep each public SDK call easy to locate.
-Do not duplicate the whole consumer UI without a demonstrated customer need.
+Select a concrete user/workflow, then compose the qualified general integrations
+around it. Reuse relevant features; do not clone all clients/backends for every
+scenario. Choose the platforms needed by that use case.
 
-Optionally connect the common web app to the Web SDK for desktop Chromium when
-the public contract and supported browser/OS behavior justify it. The API web
-app already serves Windows users. Native Windows/Electron SDK work is planned
-upstream and is not an implemented host in this repository.
+**Acceptance:** a named user, meaningful workflow, supported public contracts,
+clear reuse/adaptation points and a maintenance rationale. This roadmap does
+not implement or approve a particular vertical app.
 
-**Acceptance:** exact public SDK pins, explicit capability gates, focused
-behavioral checks and platform builds. Scope any physical results to the tested
-hardware/firmware/version. Preserve separate upload-commitment, cleanup and
-processing phases; no metadata-only sample gains device cleanup authority.
+## Delivery rules
 
-## 6. Add the later vertical/app-type layer
+Current source paths, catalog entries, locks and SDK pins stay unchanged during
+this design clarification. Consolidation or moves require compatible links,
+catalog/workflow updates and preserved state; legacy retirement retains its
+existing gates. Do not erase uncertainty, weaken cleanup/ownership safeguards,
+add speculative hosts or claim platform parity from a connection build.
 
-After the general baseline is coherent, select a concrete end-user workflow
-such as sales visits, field service or a meeting assistant. Compose the existing
-recording/backend integrations around that journey. Add only the scenario's
-meaningful behavior; reuse the maintained general code rather than cloning all
-platform clients and backend features for every case.
-
-**Acceptance:** a named user and workflow, clear reuse boundary, supported public
-contracts and a maintenance rationale. No vertical implementation is approved
-by this roadmap alone.
-
-## Scope discipline
-
-Pause standalone export/configuration/observer expansion unless it solves a
-documented developer need beyond the curated recipes. Preserve existing useful
-examples and their evidence; do not remove catalog entries merely to reduce a
-count. Do not add a new framework, speculative SDK version, duplicate full
-native consumer app or account/deployment product to complete this plan.
-
-Use the [technical architecture](ARCHITECTURE.md) and the selected README for
-the acceptance gates. Keep source checks, builds, live API validation and
-physical-device testing distinct in the [review](docs/independent-examples-review.md).
+Run the selected example's appropriate checks. For shared changes, exercise all
+affected consumers; default CI uses no live credentials, hardware mutation or
+deployment. Record actual source, build, live and physical evidence separately.
+See [ARCHITECTURE.md](ARCHITECTURE.md), [AGENTS.md](AGENTS.md) and the
+[architecture decision](docs/design-decisions/2026-10-12-example-architecture.md).

@@ -4,7 +4,7 @@
 
 - Build public demo/sample/template code for customer developers building apps for their own end users. Read [DESIGN.md](DESIGN.md), [ROADMAP.md](ROADMAP.md) and [ARCHITECTURE.md](ARCHITECTURE.md) first.
 - Exactly two product layers: general capabilities now; vertical use cases and consumer app types later. API, SDK and combined examples are formats within the first layer.
-- Prioritize one Bota Recordings family: web, React Native and Flutter clients with one planned customer backend. Current web/mobile backends remain separate; consolidation is pending. Complete audio intake, library, playback, transcript, notes and Ask before adding overlapping install roots.
+- Prioritize useful API workflows and small idiomatic SDK starters for Swift, Kotlin, React Native, Flutter and Web where publicly supported. Bota Recordings is an optional end-to-end reference; complete app parity or a shared backend is not a prerequisite for useful platform examples.
 - Ordinary app UI serves recording users. Public-call explanations and technical details belong in README/source. Do not create another API Explorer or expand toward a catalog count.
 - Preserve current paths, journals and locks during this design reset. No runtime migration or SDK upgrade is implied by documentation changes.
 
@@ -14,7 +14,7 @@
 - Install only inside the selected documented install root. Root npm commands apply to the legacy `apps/` workspace.
 - Use published Bota SDK packages and public API contracts. Exact independent SDK pins are beta.13; the legacy workspace remains beta.6. Manifest/lockfile evidence takes precedence over historical prose.
 - Demo/Bota One are read-only behavioral references. No private helpers, unpublished facade methods, custom GATT/crypto or sibling-repo runtime/install dependencies.
-- Sharing concrete feature code is allowed within the planned recording-template family after its compatibility gates pass. Independent recipes remain self-contained; do not introduce a general wrapper SDK or universal UI framework.
+- Share substantial concrete feature code within references when it reduces duplication and compatibility gates pass. Independent recipes/starters stay self-contained; small local glue can repeat. No mandatory example service, wrapper SDK or universal UI framework.
 - Windows/Electron native device SDKs are upstream roadmap targets. Do not invent a native facade or infer full app parity from a connection example.
 
 ## Preserve integration contracts
@@ -43,6 +43,10 @@
 - Update affected README/design/architecture/agent guidance. Keep proposed directories out of the catalog. Preserve existing index IDs and file links unless an explicit migration includes compatibility and CI path changes.
 - Before completion, use `bota-skills:compound-engineering` 1.2.5+ if available, otherwise review directly. Record requirement → evidence → verification → status and remaining gaps in a dated review.
 - Distinguish source/syntax, unit, native build, live API and physical evidence. See [implementation evidence](docs/independent-examples-review.md); historical phone results qualify only the recorded source/packages/hardware.
-- Owner delivery preference: commit and push completed, verified changes directly to the intended integration branch; no PR, force push or deployment-only branch update. Include the actual model's `Co-Authored-By` attribution on AI-authored commits.
+- Owner delivery preference: commit and push completed, verified changes directly to the intended integration branch; no PR, force push or deployment-only branch update.
+
+## Commit attribution
+
+- Include the actual model's `Co-Authored-By` attribution on AI-authored commits.
 
 The [previous instructions](docs/design-history/2026-10-12-agent-instructions-before-reset.md) are historical context, not current rules.

@@ -1,28 +1,56 @@
 # Bota examples architecture
 
 [DESIGN.md](DESIGN.md) defines the developer audience and product direction.
-This document defines the current structure, planned consolidation and trust
-boundaries. Customer developers should be able to run a common recording app or
-copy a small public API/SDK integration without Bota's internal repositories.
+This document defines a flexible structure for finding, running and adapting
+public API/SDK integrations across platforms. Customer developers should need
+only the selected example and public packages, not Bota's internal repositories.
+The [architecture decision](docs/design-decisions/2026-10-12-example-architecture.md)
+records the chosen balance between independent recipes and optional references.
 
 ## Product scope
 
 There are exactly two product layers:
 
-1. **General platform examples — current work.** One Bota Recordings app family
-   demonstrates common capabilities through web and platform-specific clients;
-   focused API/SDK recipes remain available for smaller tasks.
+1. **General platform examples — current work.** Independent API workflow
+   recipes and small platform SDK starters are the primary learning paths.
+   Optional end-to-end references show how an app and backend compose them.
 2. **Vertical and consumer-app examples — later.** Compose the general
-   integrations into a specific use case or app type after the common flow works.
+   integrations into a specific use case or app type in a later phase.
 
-API recipes, SDK modules and app templates are formats inside the first layer,
-not additional product layers. Stop growing the catalog by case count. Complete
-and simplify the existing recording journey before adding overlapping examples.
+The current `api/`, `app-sdk/` and `end-to-end/` paths represent three formats
+inside the first layer, not additional product layers. Select by the public call,
+workflow, language and actual host a customer needs. Stop growing the catalog by
+case count; improve existing code or fill a real platform/capability gap.
 
-The intended end-user flow is **add/import audio → library → playback/source →
+## Primary examples and optional references
+
+- **API recipes:** one bounded public workflow with its own setup, inputs,
+  expected output and recovery limits. Keep calls and required helper files easy
+  to find and copy; do not promise that an entry file works without its imports.
+- **App SDK starters:** aim for one small maintained starter per published facade,
+  with its supported native/browser hosts and plain feature files for direct SDK
+  calls. A minimal runnable harness supplies permissions, selection, result
+  presentation and teardown. Add a feature where the public facade supports it;
+  do not invent a protocol or require an unrelated backend/app journey.
+- **End-to-end references:** optional Bota Recordings apps demonstrate an ordinary
+  user experience plus customer backend integration. Share concrete feature code
+  where that reduces real maintenance within the reference, while retaining the
+  focused examples for customers who need only one integration.
+
+This is a logical maintenance direction, not a directory move, empty starter or
+catalog addition. Independent SDK recipes need neither identical UI/DTOs nor a
+recording player. Qualified iOS, Swift and Kotlin starters can progress without
+waiting for every reference client to finish import/playback or share a backend.
+
+Short HTTP/configuration helpers may intentionally repeat between independent
+copyable roots. Prefer that small visible cost over a mandatory global example
+framework. Substantial device protocol logic stays in the published SDK; shared
+reference business logic must not become a new unofficial API SDK.
+
+The optional recording reference's end-user flow is **add/import audio → library → playback/source →
 transcript → notes → recording-scoped Ask**. Everyday screens show recordings
 and content; API recipes and source explanations belong in README/source.
-Playback is **not implemented** in the current apps. Qualify the public audio
+Playback is **not implemented** in the current references. Qualify the public audio
 retrieval, format, encryption and authorization contract before adding it:
 an encrypted original or URL issuance does not prove playable/decrypted audio, and
 synthetic output must not imply successful live playback or device transfer.
@@ -42,7 +70,9 @@ Current paths and independent installation remain unchanged:
 
 The web and mobile backends currently duplicate recording ownership, processing,
 Ask and journal integration code. Their authentication and persisted scope models
-also differ. **One canonical feature backend is planned; it does not exist yet.**
+also differ. Sharing these concrete features is planned where a compatible
+contract reduces duplication; **one canonical reference backend does not exist
+yet**. This consolidation is not a prerequisite for independent API/SDK recipes.
 Independent device examples retain exact public beta.13 pins. Native iOS common
 apps, Flutter iOS and native Windows samples are not supplied here; Windows
 native SDK availability is planned upstream and requires public-contract
@@ -50,7 +80,7 @@ qualification before an example can depend on it. Current local, hosted, live
 and hardware evidence remains in each README and the
 [implementation review](docs/independent-examples-review.md).
 
-## Planned Bota Recordings family
+## Optional reference reuse: planned
 
 ```text
 Web client ────────── browser cookie adapter ─┐
@@ -65,10 +95,13 @@ Platform device module ─ published App SDK ─ native host callbacks
                                            └─ native capture/session journal
 ```
 
-Share concrete public API integration functions, narrow DTOs and synthetic
-contract fixtures **within this app family**. Keep normal UI, package managers,
-permissions and SDK lifecycle code native to each client. This is not a new Bota
-API SDK, shared UI framework, generic proxy or reusable example engine.
+The diagram describes possible reuse among recording references, not a required
+backend for platform starters. Share concrete public API integration functions,
+narrow DTOs and synthetic contract fixtures within an optional reference when
+the benefit is clear. Keep normal UI, package managers, permissions and SDK
+lifecycle code native to each client. Independent SDK examples need no common
+UI or DTO contract. This is not a new Bota API SDK, shared UI framework, generic
+proxy or reusable example engine.
 Standalone recipes still copy/install independently; root automation is not a
 runtime prerequisite. No private package, sibling-source import, submodule or
 local dependency on an internal Bota repository may be required.
@@ -160,10 +193,13 @@ Dependency mitigation requirements are maintained in
 
 ## Delivery and qualification
 
-Consolidate the common backend and complete the existing app flow first. Then
-add qualified iOS hosts and missing platform SDK modules; vertical apps remain
-the later product layer. Backend convergence, playback and new hosts are planned
-work, not achievements of this documentation change.
+Prioritize customer discovery/copyability, qualified platform SDK starters and
+useful API workflows. Missing supported iOS/native hosts and bounded feature
+modules can be filled independently of the recording references. Complete
+reference intake/playback and consolidate duplicated backend features when their
+public contracts and maintenance benefit justify that work. Vertical apps remain
+the later product layer. Reuse, playback and new hosts are planned work, not
+achievements of this documentation change.
 
 Each client/recipe retains its manifest, lock, setup and meaningful CI. Changes
 to shared code must exercise every affected client/backend contract. Preserve
