@@ -976,7 +976,7 @@
       "id": "react-native-recording-sync",
       "path": "end-to-end/react-native-recording-sync",
       "title": "Mobile recording apps",
-      "purpose": "React Native + Flutter Android library, Transcript/Summary/Ask; shared customer backend; sample mode and optional device paths",
+      "purpose": "RN Android library, Transcript/Summary/Ask and retained mobile backend; links to relocated Flutter client; sample modes and optional device paths",
       "category": "end-to-end",
       "language": "TypeScript / Dart",
       "physical_device_required": false,
@@ -1003,15 +1003,15 @@
     {
       "id": "recordings",
       "path": "end-to-end/recordings",
-      "title": "Integrated Recordings backend",
-      "purpose": "One Node listener composes Web/mobile adapters, shared recording/processing/Ask and three retained journals; original-state preflight and peer-intent refusal",
+      "title": "Integrated Recordings sample",
+      "purpose": "Combined Node backend with retained auth/journals and relocated Flutter Android client; Web/RN compatibility paths remain",
       "category": "end-to-end",
-      "language": "JavaScript",
+      "language": "JavaScript / Dart",
       "physical_device_required": false,
       "readme": "end-to-end/recordings/README.md",
       "setup_reference": "end-to-end/recordings/README.md",
       "verification_reference": "end-to-end/recordings/README.md",
-      "platform": "Web / React Native / Flutter compatibility adapters",
+      "platform": "Flutter Android / Web and React Native compatibility adapters",
       "workflow": ".github/workflows/recordings-backend.yml"
     }
   ]

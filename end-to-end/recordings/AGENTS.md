@@ -3,7 +3,7 @@
 ## Read first
 
 - Follow [root instructions](../../AGENTS.md), [design](../../DESIGN.md) and [README](README.md).
-- The combined launcher composes existing Web/mobile service factories on one listener. Existing paths retain auth/store/DTO adapters and all three journals; clients have not moved.
+- The combined launcher composes existing Web/mobile service factories on one listener. Existing paths retain auth/store/DTO adapters and all three journals. [Flutter](clients/flutter/README.md) is the first relocated client; Web/RN remain at compatibility paths. Do not relocate backend launch bases or journals with client folders.
 - Keep direct public calls in feature files, server-derived scope and durable GET-only recovery. Preserve exact SDK receipt/native cleanup boundaries.
 
 ## Package manager and checks

@@ -15,15 +15,18 @@ The [combined launcher](../recordings/README.md) now serves Web/mobile through
 one Node listener, composing existing service factories while retaining separate
 auth adapters, DTOs and three journals. Upload/webhook/native service source paths
 remain local; scope/anchors, known IDs, uncertainty and SDK receipt/cleanup gates
-retain their contracts. Clients and SDK/native identities/locks have not moved.
+retain their contracts. Flutter has moved to `../recordings/clients/flutter/`;
+this root retains RN and the mobile backend. SDK/native identities, pins/locks,
+backend launch bases and journals are unchanged.
 
 | Client | Common app | Device capability |
 | --- | --- | --- |
 | [React Native](app/README.md) | Sample/live library, transcription, general notes, recording-scoped Ask and GET-only request recovery | Existing Android encrypted-v2 sync for an already-provisioned device |
-| [Flutter](flutter/README.md) | Same sample/live recording journey and customer API | Connection/status only; published facade lacks the fresh pairing/verified encrypted-upload interfaces for sync |
+| [Flutter](../recordings/clients/flutter/README.md) | Relocated Android client with the same sample/live recording journey and customer API | Connection/status only; published facade lacks the fresh pairing/verified encrypted-upload interfaces for sync |
 
-The existing directory name preserves links and journals. This is one combined
-mobile example within Layer 1; vertical workflows remain later work. Current
+The existing directory name preserves RN/backend links and journals; the old
+[Flutter README](flutter/README.md) forwards to the relocated install root.
+These are mobile clients of the integrated Layer 1 sample; vertical workflows remain later work. Current
 hosts are Android only. Native iOS, Flutter iOS and Windows app samples remain
 separate implementation gaps. The [design](DESIGN.md) and
 [architecture](ARCHITECTURE.md) define the shared flow and integration boundaries.
@@ -31,7 +34,7 @@ separate implementation gaps. The [design](DESIGN.md) and
 ## Try sample recordings
 
 For React Native, follow [app setup](app/README.md), then choose **Try sample recordings**.
-For Flutter, follow [Flutter setup](flutter/README.md) and choose its sample entry.
+For Flutter, follow [Flutter setup](../recordings/clients/flutter/README.md) and choose its sample entry.
 The clients use synthetic in-memory content. Sample actions make no network or
 device calls, simulate no device upload/receipt/cleanup, and reset when the app
 session is exited. SDK operations are available only through the explicit live
@@ -55,7 +58,8 @@ matching peer intent, including known/complete work, with no Web ID adoption;
 own GET recovery and native/library exact-known-ID paths remain. Common incoming
 header/body limits are 10/30 seconds; upstream processing limits are unchanged.
 These guards do not synchronize external writers or make file checks atomic.
-The next client move is the whole Flutter install root after qualification.
+Flutter's complete install root and license helpers now live under `recordings/clients/`.
+Its URL input still defaults to `8787`; choose the combined URL explicitly as above.
 
 The common app uses `/api/library/*` for fixed-owner recordings, completed
 transcripts, `tmpl_general_notes`, recording-scoped Ask and saved-operation
@@ -263,10 +267,10 @@ npm run export
 npx expo prebuild --platform android --no-install
 cd android
 ./gradlew :recording-sync:testDebugUnitTest :app:assembleDebug --no-daemon -PreactNativeArchitectures=arm64-v8a
-cd ../../flutter
+cd ../../../recordings/clients/flutter
 flutter pub get --enforce-lockfile
-node --test ../scripts/test-flutter-licenses.mjs
-node ../scripts/check-flutter-licenses.mjs
+node --test scripts/test-flutter-licenses.mjs
+node scripts/check-flutter-licenses.mjs
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test

@@ -17,7 +17,10 @@ formats, not additional product layers. Catalog count is not a delivery goal.
 ## Work within the integrated foundation
 
 Start with the existing web/mobile recording clients and the selected platform's
-public-call files. Put a feature in its maintained module and document how to run
+public-call files. Flutter's complete install root is now at
+[recordings/clients/flutter](end-to-end/recordings/clients/flutter/README.md);
+Web/RN and mobile backend launch bases/journals retain their existing paths.
+Put a feature in its maintained module and document how to run
 and copy it. Keep API explanation/source links in guides and use familiar
 end-user recording controls in each client. Native Kotlin and Swift are
 first-class client targets, not a reason to reproduce a universal UI framework.

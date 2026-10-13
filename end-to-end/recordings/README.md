@@ -1,4 +1,4 @@
-# Bota Recordings: combined sample backend
+# Bota Recordings: integrated sample
 
 One Node listener composes the existing Web and mobile service factories for the
 integrated Recordings sample. Recording reads, transcription, general notes and
@@ -8,8 +8,9 @@ cookie/Bearer adapters, response projections and all three journals are retained
 **Current scope:** one combined listener with in-process processing/Ask
 coordination and peer-intent refusal. Auth, persistence, upload/webhook and native
 service code retains its existing public-family paths. Older launchers remain
-available for compatibility; clients have not moved. There are no SDK calls or
-duplicated runtime dependencies here: Express/Vite resolve from the installed
+available for compatibility. The first relocated client is [Flutter Android](clients/flutter/README.md);
+Web/RN and backend service paths remain. The backend makes no SDK calls and adds no
+duplicated runtime dependencies: Express/Vite resolve from the installed
 Web root. Pinned development tools provide local checks. Fixtures need no live
 key, account, audio or device.
 
@@ -26,6 +27,21 @@ This is first-party sample application code, not a new Bota API SDK. It teaches
 ordinary public HTTP integrations. Read the [root design](../../DESIGN.md) and
 [approved decision](../../docs/design-decisions/2026-10-12-integrated-recordings.md)
 for the integrated architecture and remaining phases.
+
+## Run a client
+
+| Client               | Current setup                                             | Scope                                                                                                                         |
+| -------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Flutter Android      | [Flutter README](clients/flutter/README.md)               | First relocated client; local sample recordings or live cloud library, Transcript/Summary/Ask; optional SDK connection/status |
+| React web            | [Web README](../web-reference/README.md)                  | Existing compatibility root; audio import and cloud recording views                                                           |
+| React Native Android | [RN README](../react-native-recording-sync/app/README.md) | Existing compatibility root; cloud recording views and optional gated encrypted-v2 sync                                       |
+
+Each client retains its own manifest, lock and native identity. Flutter's old
+[README](../react-native-recording-sync/flutter/README.md) forwards to the client setup. For a phone
+using the combined listener's default port, run `adb reverse tcp:5173 tcp:5173`
+and enter `http://127.0.0.1:5173` with the separate `APP_ACCESS_TOKEN` in live mode.
+Flutter's input retains `8787` as the older mobile launcher's default; configure
+the combined URL explicitly. Its sample mode uses local memory and needs no backend.
 
 ## Check the core
 
@@ -135,9 +151,10 @@ work whose client socket has disconnected; socket closure alone is not completio
 Older [Web](../web-reference/README.md) and
 [mobile](../react-native-recording-sync/backend/README.md) launch commands remain
 compatibility entry points with their original CWD/state rules. SDK/client/native
-manifests, locks and app identities are unchanged. The next client move is the
-whole Flutter install root after combined-host qualification, with its setup,
-license helpers, CI and discovery links migrated together.
+manifests, locks and app identities are unchanged. Flutter's complete install root,
+license helpers and CI/discovery paths have moved together to `clients/flutter/`.
+Web/RN remain at their compatibility paths. This move does not relocate the mobile
+backend launch base or journals, add iOS/playback/import, or expand SDK capability.
 Only SDK-only connection/status workflows are backend-free; the native encrypted
 upload path retains its documented backend and completion requirements.
 

@@ -9,7 +9,8 @@ backend, platform clients and copyable features. Client targets include React
 web, RN, Flutter, native Android/Kotlin and Apple/Swift. The
 [combined backend](../recordings/README.md) now composes the existing Web/mobile
 factories on one listener with original journals/auth/DTOs retained. Integrated
-Kotlin/Swift recording clients and client relocation are not implemented yet.
+Flutter is the first relocated client at [recordings/clients/flutter](../recordings/clients/flutter/README.md).
+Web/RN retain existing paths; integrated Kotlin/Swift recording clients are not built.
 
 The recording experience is audio input → library → supported playback/source
 review → transcript → general notes → recording-scoped Ask. Use normal platform

@@ -65,14 +65,14 @@ native/dependency guards intact.
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
-| One listener and compatible credential/DTO dispatch | `backend/server.mjs`; real HTTP cookie/Bearer/library DTO fixtures in `integrated-host.test.mjs` | Matched locally; hosted gate pending |
+| One listener and compatible credential/DTO dispatch | `backend/server.mjs`; real HTTP cookie/Bearer/library DTO fixtures in `integrated-host.test.mjs` | Matched locally and in replacement hosted gate below |
 | Exact ownership and credential boundaries | Original adapters; mixed/duplicate/invalid headers, Origin and denial fixtures; unchanged exact source checks | Matched locally |
 | Request bounds and raw media/webhook handling | Original parsers, byte-audio storage fixture, signed raw webhook and body/path/query/binding regressions | Matched locally; intentionally stricter incoming 10/30-second budgets above |
 | Cross-journal refusal and process arbitration | Full private probes beyond Activity/removed accounts/scopes; retained known/unknown/legacy intent and concurrent create fixtures | Matched in one process; external writers unverified/unsupported |
-| Restart/CWD/state preservation | Read-only column/order/PK/unique/scope preflight; actual child-process restarts preserve seeded IDs and fail on missing original files | Matched locally; POSIX privacy checks await Linux CI |
+| Restart/CWD/state preservation | Read-only column/order/PK/unique/scope preflight; actual child-process restarts preserve seeded IDs and fail on missing original files | Matched locally and on Linux/Windows CI |
 | New-install usability without accidental recovery reset | Actual all-missing initialization, every partial/existing set refused without replacement | Matched locally |
 | Private publication and durable shutdown | Demo/live alias fixtures; actual Vite raw/fs/URL denials; EADDRINUSE, HMR/signal, active/aborted Web/Mobile write regressions | Matched locally; Windows ACLs and external file races are operator gates |
-| Runnable public copy graph | Combined setup/account/environment guide; full public Web install + mobile backend + core; consumer CI path filters | Matched locally; hosted gate pending |
+| Runnable public copy graph | Combined setup/account/environment guide; full public Web install + mobile backend + core; consumer CI path filters | Matched locally and in replacement hosted gate |
 | Native transport/cleanup authority | No SDK, firmware, client, native manifest or lock changes | Matched source boundary; physical acceptance unverified |
 
 ## Qualification
@@ -117,6 +117,29 @@ inspection, and adds native-real path variants to Vite's resolver denials.
 Regressions retain strict 403 plus no-private-marker/no-SQLite assertions and add
 actual hardlink/directory aliases. Local Web server tests now pass 143/143;
 syntax, lint and formatting pass. The replacement hosted gate remains pending.
+
+### Replacement hosted qualification
+
+Source `9de91651f531b9e1d700850d2a8f4f7af2df319e` now passes:
+
+- [Core Linux/Windows](https://github.com/bota-dev/examples/actions/runs/38356678660),
+  including Linux's POSIX permission checks.
+- [Web Linux/Windows](https://github.com/bota-dev/examples/actions/runs/38356678725),
+  including the runner's actual short-name/cross-drive privacy fixtures.
+- [Mobile backend Linux/Windows, RN Android and Flutter Android](https://github.com/bota-dev/examples/actions/runs/38356678667).
+- [Catalog Linux/Windows](https://github.com/bota-dev/examples/actions/runs/38356678714).
+
+The [legacy CI](https://github.com/bota-dev/examples/actions/runs/38356678758)
+verification job passes; its Android assembly is still running at this observation.
+No native source or lock changed in this host pass. A local in-app-browser check
+also opened the combined demo, loaded two recordings and reviewed Transcript,
+Summary and a synthetic Ask answer with its recording citation. This is local
+synthetic UI evidence, not a live API/provider or device result. The temporary
+tab and server were closed afterward.
+
+The combined-host migration gate is met. The remaining client layout work begins
+with the [Flutter relocation review](2026-10-12-flutter-client-move.md); exact-source
+delivery/build results for each relocation stay separate from this host evidence.
 
 Passing synthetic HTTP/SQLite tests does not prove live API/provider/storage,
 multi-process coordination, installed applications or physical-device behavior.

@@ -8,7 +8,7 @@ application or a replacement for Bota One.
 Flutter Material UI → account/recording state → RecordingsApi
                                                 ├─ SampleApi (local fixtures)
                                                 └─ BackendApi (app Bearer HTTP)
-                                                      → ../backend
+                                                      → ../../backend
                                                       → public Bota /v1 API
 Live-only device screen → public beta.13 Flutter SDK → Bluetooth
 ```
@@ -39,6 +39,9 @@ error. Busy/error/uncertain requests keep their recovery notice, while completed
 metadata remains available in the collapsed Recent requests section.
 The shared backend owns durable intent, project/end-user authorization and public
 API calls. App memory is a UI fence, not durable replay or authorization storage.
+Use the [combined backend](../../README.md) launcher. Its mobile route adapter
+and original journals stay at their compatibility paths; moving this client
+does not move backend state or change authorization.
 
 `device_page.dart` owns a public SDK client only after visiting Live settings;
 configuration/permission requests occur only on an explicit action. Its cached

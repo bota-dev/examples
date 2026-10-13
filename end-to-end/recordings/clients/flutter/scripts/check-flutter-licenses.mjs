@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { resolve, basename, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const project = resolve(fileURLToPath(new URL('../flutter/', import.meta.url)));
+const project = resolve(fileURLToPath(new URL('../', import.meta.url)));
 const configFile = join(project, '.dart_tool/package_config.json');
 const config = JSON.parse(readFileSync(configFile, 'utf8'));
 if (config.configVersion !== 2 || !Array.isArray(config.packages) || !config.packages.length)

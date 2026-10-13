@@ -78,7 +78,7 @@ jobs:
     timeout-minutes: 35
     defaults:
       run:
-        working-directory: end-to-end/react-native-recording-sync/flutter
+        working-directory: end-to-end/recordings/clients/flutter
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -99,8 +99,8 @@ jobs:
       - run: flutter pub get --enforce-lockfile
       - name: Dependency licenses
         run: |
-          node --test ../scripts/test-flutter-licenses.mjs
-          node ../scripts/check-flutter-licenses.mjs
+          node --test scripts/test-flutter-licenses.mjs
+          node scripts/check-flutter-licenses.mjs
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
       - run: flutter test
@@ -108,5 +108,5 @@ jobs:
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: mobile-recordings-flutter-android-${{ github.sha }}
-          path: end-to-end/react-native-recording-sync/flutter/build/app/outputs/flutter-apk/app-debug.apk
+          path: end-to-end/recordings/clients/flutter/build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error

@@ -2,7 +2,9 @@
 
 The combined Node listener is implemented. It composes the existing public-family
 Web/mobile factories, one cloud feature core and three separate original journals.
-Clients and underlying auth/store/service files have not moved.
+Flutter is the first relocated client at `clients/flutter/`, with its complete
+install root and license helper graph. Web/RN and underlying auth/store/service
+files retain their compatibility paths; backend launch bases and journals stay put.
 
 ```text
 backend/main → config preflight → one 127.0.0.1 HTTP listener
@@ -10,6 +12,9 @@ backend/main → config preflight → one 127.0.0.1 HTTP listener
                                     └─ mobile Bearer/no-Origin adapter → library store
                                           └─ native capture journal / SDK callbacks
                                     └─ shared recording/processing/Ask → public Bota API
+
+clients/flutter → existing mobile Bearer adapter /api/library/*
+Web/RN compatibility clients → existing cookie/Bearer adapters
 ```
 
 Canonical recording/processing/Ask functions accept the existing trusted

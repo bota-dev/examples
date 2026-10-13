@@ -1,2 +1,4 @@
 node_modules/
 package-lock.json
+# Flutter is an independent install root with its own Dart formatter and checks.
+clients/flutter/**

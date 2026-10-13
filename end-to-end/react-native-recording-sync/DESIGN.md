@@ -3,12 +3,14 @@
 ## Purpose and layout
 
 This current integrated-sample source contains independently installed React Native (`app/`)
-and Flutter (`flutter/`) clients sharing one Node backend (`backend/`). They
+and Flutter ([setup](../recordings/clients/flutter/README.md))
+clients sharing the retained mobile adapter (`backend/`). They
 belong to the **Bota Recordings** foundation alongside the web client. The target
 has one shared customer backend and clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../recordings/README.md)
 and combined listener are implemented, preserving original auth/DTOs and three
-journals. Integrated Kotlin/Swift clients and client moves are not implemented.
+journals. Flutter is the first relocated client; Web/RN retain existing paths and
+integrated Kotlin/Swift clients are not implemented.
 The recording experience connects
 audio input → library → supported playback/source review → transcript → general
 notes → recording-scoped Ask. Use familiar mobile navigation, normal native SDK
@@ -46,7 +48,8 @@ auth adapters and three journal models remain unchanged. Older launchers remain
 for compatibility; upload/webhook/native service modules remain local. Mobile
 uses default strict recording/job project checks, while web's explicit legacy
 policy permits missing `project_id` but preserves supplied-project/source/owner
-checks and its existing DTO projection. Clients keep their existing install roots.
+checks and its existing DTO projection. RN retains its install root; Flutter's
+complete root and license helper graph are now under `recordings/clients/flutter/`.
 
 Combined-host qualification and client relocation follow the [root roadmap](../../ROADMAP.md).
 Fresh processing/Ask claims refuse matching peer intent, even known/complete,
@@ -59,9 +62,10 @@ do not change upstream processing deadlines or establish external-writer/file-ra
 Preserve bearer authentication, routes/DTOs, install roots, CWD-relative journal
 paths and scope/anchors. Retain known IDs and unresolved-write locks without
 reinterpreting account/key ownership; do not move or merge databases implicitly.
-The combined entry exists; additional client/auth/store folders are planned. The
-whole Flutter install root is the next client move after qualification, preserving
-its package/native identity, lock and dependency-license helper graph.
+The combined entry and relocated Flutter client exist; additional client/auth/store
+folders are planned. Flutter's package/native identity and pub pins/lock are
+preserved. The old Flutter README forwards to new setup; mobile backend launch
+bases, bearer authorization, scope hashes and journal locations are unchanged.
 
 Live responses and synthetic fixtures should follow their client's DTO contract.
 Shared cloud features must preserve source identities and customer authorization.

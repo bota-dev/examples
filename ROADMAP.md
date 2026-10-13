@@ -39,7 +39,7 @@ listener's source/local/hosted evidence separately from production or hardware
 acceptance. SDK version upgrades and hardware operations are
 outside this work.
 
-## 2. Qualify the combined host and move one existing client
+## 2. Maintain the first relocated client and qualify further moves
 
 Connect the web, React Native and Flutter clients to the shared backend through
 their existing auth adapters. Preserve independent manifests, locks, native
@@ -47,12 +47,16 @@ identities and install/build instructions. Expose actual public calls in plain
 backend/client feature files, with narrow contract fixtures shared where useful.
 Keep UI, permissions and SDK lifecycle native to each platform.
 
-After combined-host qualification, move the complete Flutter install root first
-to `end-to-end/recordings/clients/flutter/`. Move its license helper/check fixtures
-with matching path updates, preserve native identity and pub pins/lock, and update
-CI, Dependabot, setup/source links and catalog compatibility together. Web remains
-coupled to Vite/static/state paths; RN must retain its complete native/vendor/guard
-graph. Neither move requires new UI or a universal model layer.
+**First client relocated:** the complete Flutter Android install root now lives
+at `end-to-end/recordings/clients/flutter/`, with its license helpers/check fixtures,
+updated CI/Dependabot/discovery paths and an old README forwarding entry. Native
+identity, SDK/pub pins and lock are unchanged. Its client URL still defaults to
+the older mobile launcher's `8787`; combined setup explicitly uses `5173` and
+matching phone forwarding. Original Web/mobile launch bases and journals stay put.
+
+Web remains coupled to Vite/static/state paths; RN must retain its complete
+native/vendor/guard graph. Further moves require compatible source/build gates
+and updated links/install instructions. They need no new UI or universal model layer.
 
 Lead the README with workflow → language/platform → source → run/adapt
 instructions. Curate connection/status/loss, recording metadata/supported

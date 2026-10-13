@@ -1,7 +1,9 @@
 # Mobile recording samples architecture
 
 The [design](DESIGN.md) defines one common recording app with React Native and
-Flutter clients. Each client has its own manifest/lock and Android host. One
+Flutter clients. Flutter now lives at `../recordings/clients/flutter/`, while this
+compatibility root retains RN `app/` and `backend/`. Each client has its own
+manifest/lock and Android host; native identity and SDK pins/locks are unchanged. One
 combined HTTP backend can serve Web and both mobile clients, through shims importing the
 [canonical recording/processing/Ask core](../recordings/README.md) also used by web.
 Use the full checkout with the Web installation, mobile backend source and
@@ -11,7 +13,7 @@ Platform UI stays idiomatic and integration files stay easy to locate.
 ```text
 React Native app/ ─┐
                   ├─ application bearer ─ backend/library ─ shared recordings core
-Flutter flutter/ ─┘                      └─ mobile library intent journal
+Flutter ../recordings/clients/flutter/ ─┘ └─ mobile library intent journal
 
 Combined listener ─ cookie/auth + policy/DTO shim ─ same core ─ public Bota /v1
              └─ separate web operation store

@@ -59,8 +59,13 @@ original Web/mobile factories on one listener. It retains separate cookie/Bearer
 adapters and three journals, coordinates processing/Ask in this process, refuses
 matching retained peer intent, and preflights original paths/schemas/scopes before
 writable startup. Explicit initialization accepts only an all-missing fresh set.
-Clients have not moved. The [combined qualification review](../design-reviews/2026-10-12-unified-recordings.md)
-records actual checks, the conservative input-timeout difference and limits.
+The complete Flutter install root is now the first client at
+`end-to-end/recordings/clients/flutter`, with the old README forwarding there.
+Web and React Native retain their original roots. The
+[Flutter relocation review](../design-reviews/2026-10-12-flutter-client-move.md)
+records preservation and local/hosted qualification separately. The
+[combined qualification review](../design-reviews/2026-10-12-unified-recordings.md)
+records host checks, the conservative input-timeout difference and limits.
 The sections below record the preceding extraction and its migration gate.
 
 ## Earlier first implementation step

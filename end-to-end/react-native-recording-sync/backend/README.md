@@ -6,6 +6,13 @@ recording. The separate Android encrypted-v2 routes retain the existing
 device-sync workflow. Both use a fixed server-owned project/end user and a
 separate application bearer token.
 
+RN remains at [app/](../app/README.md); Flutter's complete install root is now at
+[recordings/clients/flutter](../../recordings/clients/flutter/README.md).
+This backend's launch base, native/library journals and scope hashes are unchanged.
+The combined listener uses `5173` by default; enter that URL explicitly in Flutter,
+whose input retains the older standalone `8787` default. Match USB forwarding to
+the selected listener, and stop old listeners before using the combined host.
+
 The cloud adapter is [library.mjs](library.mjs). Local
 [recordings](library/recordings.mjs), [processing](library/processing.mjs) and
 [Ask](library/ask.mjs) files are thin shims over canonical

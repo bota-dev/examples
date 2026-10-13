@@ -1,16 +1,27 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtempSync, mkdirSync, copyFileSync, writeFileSync, rmSync } from 'node:fs';
+import { mkdtempSync, mkdirSync, copyFileSync, writeFileSync, realpathSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { basename, isAbsolute, join, relative } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { spawnSync } from 'node:child_process';
 
 function check(t, license) {
   const root = mkdtempSync(join(tmpdir(), 'bota-dart-license-'));
-  t.after(() => rmSync(root, { recursive: true, force: true }));
+  t.after(() => {
+    const resolvedRoot = realpathSync(root);
+    const fromTemporaryDirectory = relative(realpathSync(tmpdir()), resolvedRoot);
+    assert.ok(
+      fromTemporaryDirectory && !isAbsolute(fromTemporaryDirectory)
+        && fromTemporaryDirectory !== '..' && !fromTemporaryDirectory.startsWith('../')
+        && !fromTemporaryDirectory.startsWith('..\\')
+        && basename(resolvedRoot).startsWith('bota-dart-license-'),
+      'License fixture cleanup must stay within its temporary directory.',
+    );
+    rmSync(resolvedRoot, { recursive: true, force: true });
+  });
   const scripts = join(root, 'scripts');
-  const config = join(root, 'flutter', '.dart_tool');
+  const config = join(root, '.dart_tool');
   const dependency = join(root, 'dependency');
   for (const dir of [scripts, config, dependency]) mkdirSync(dir, { recursive: true });
   copyFileSync(new URL('./check-flutter-licenses.mjs', import.meta.url), join(scripts, 'check.mjs'));

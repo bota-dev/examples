@@ -6,7 +6,7 @@
 - Exactly two product layers: general capabilities now; vertical use cases and consumer app types later. API, SDK and combined examples are formats within the first layer.
 - Owner-approved architecture: one integrated Bota Recordings sample with one shared backend and platform-specific web, React Native, Flutter, Kotlin and Swift clients. Keep public calls in copyable feature modules. SDK-only connection/status works without the backend; each client declares its actual capabilities and host evidence.
 - Ordinary app UI serves recording users. Public-call explanations and technical details belong in README/source. Do not create another API Explorer or expand toward a catalog count.
-- Preserve existing launch paths, journals, locks and SDK pins. The combined backend now provides one listener with retained cookie/Bearer adapters and three journals; client relocation is pending. Use its [setup](end-to-end/recordings/README.md).
+- Preserve launch bases, journals, locks and SDK pins. The combined backend provides one listener with retained cookie/Bearer adapters and three journals. Flutter is the first relocated client at [its new root](end-to-end/recordings/clients/flutter/README.md); Web/RN paths stay. Use the [combined setup](end-to-end/recordings/README.md).
 
 ## Select and inspect
 

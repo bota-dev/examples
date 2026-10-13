@@ -13,8 +13,9 @@ Android/Kotlin and Apple/Swift. The [shared feature core](../end-to-end/recordin
 now implements recording, processing/general-notes and Ask logic plus error
 types. The combined Node launcher now composes existing Web/mobile factories on
 one listener. Both credential-specific adapters, DTOs and all three journals
-remain, with upload/webhook/native source at existing paths. Clients have not
-moved and integrated Kotlin/Swift clients are not built.
+remain, with upload/webhook/native source at existing paths. Flutter is the first
+relocated client at [recordings/clients/flutter](../end-to-end/recordings/clients/flutter/README.md).
+Web/RN stay at their existing paths; integrated Kotlin/Swift clients are not built.
 
 Use the [README entry paths](../README.md#start-with-bota-recordings), then choose
 the feature/platform below. Run only the relevant documented install root(s)
@@ -154,8 +155,11 @@ adapters; preserve routes/DTOs, journal scope, known IDs and uncertain writes.
 Use original explicit paths/schema/scope/account mapping; initialize only a fresh
 all-missing set and stop old listeners. Refuse fresh peer known/complete claims
 without Web ID adoption; retain own GET/native-library exact-known-ID recovery.
-Client moves and integrated Kotlin/Swift clients remain planned; no external-writer
-or atomic file-race guarantee is added.
+Flutter now lives at end-to-end/recordings/clients/flutter; its old README forwards.
+Web/RN and backend launch bases/journals remain at existing paths. The Flutter URL
+default stays 8787; combined setup explicitly uses 5173 with matching phone forwarding.
+Further client moves and integrated Kotlin/Swift clients remain planned; no
+external-writer or atomic file-race guarantee is added.
 Keep keys server-side, SDK pins unchanged,
 owner/source and receipt/cleanup gates intact. No private helpers, hardcoded
 devices or duplicate uncertain writes. Use normal platform UI and supported

@@ -13,8 +13,9 @@ now provides one Node listener for the existing Web cookie and mobile Bearer
 adapters, with shared recording, transcription/general-notes and Ask features.
 The three original journals and response contracts remain separate; upload,
 webhook and native service modules are composed from their existing public paths.
-Clients have not moved, and integrated Kotlin/Swift clients are not built.
-Current client paths, public SDK pins and journal identities remain unchanged.
+Flutter is the first relocated client, at `end-to-end/recordings/clients/flutter/`.
+Web and React Native retain their existing paths; integrated Kotlin/Swift clients
+are not built. Public SDK pins, native identities and journal locations are unchanged.
 
 There are exactly two product layers: **general platform capabilities now**,
 then **vertical and app-type examples later**. The integrated sample and its
@@ -27,7 +28,7 @@ focused guides/quickstarts belong to the general layer. `api/`, `app-sdk/` and
 | --- | --- | --- |
 | React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, library, Transcript/Summary/Ask; API-only |
 | React Native Android | [RN sample](end-to-end/react-native-recording-sync/app/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
-| Flutter Android | [Flutter sample](end-to-end/react-native-recording-sync/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
+| Flutter Android | [Flutter sample](end-to-end/recordings/clients/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
 | Kotlin / Android | [SDK connection](app-sdk/android-device-connect/README.md) and [recording catalog](app-sdk/android-recording-catalog/README.md) | Native device workflows; integrated recording client is planned |
 | Swift / Apple | [SDK connection](app-sdk/apple-device-connect/README.md) and [recording catalog](app-sdk/apple-recording-catalog/README.md) | Native macOS device workflows; integrated recording client/iOS host is planned |
 
@@ -66,9 +67,12 @@ Fresh processing/Ask claims refuse a matching peer intent, including complete
 or known work; they never adopt a peer ID to create a new Web intent. Existing
 own GET recovery and native/library exact-known-ID paths remain available.
 These in-process guards do not coordinate other writers or make file races
-atomic. SDK receipts and exact-generation gates still govern cleanup. The next
-client move is the complete Flutter install root after qualification; current
-paths/catalog/journals remain valid. See the [design](DESIGN.md), [roadmap](ROADMAP.md) and
+atomic. SDK receipts and exact-generation gates still govern cleanup. The complete
+Flutter install root and its license helpers now live under `recordings/clients/`;
+its [old README](end-to-end/react-native-recording-sync/flutter/README.md) forwards
+to the new setup. Configure its backend URL explicitly: the client retains the
+older `8787` default, while the combined launcher uses `5173`. Web/RN paths,
+catalog IDs and journal locations remain valid. See the [design](DESIGN.md), [roadmap](ROADMAP.md) and
 [approved decision](docs/design-decisions/2026-10-12-integrated-recordings.md).
 The [combined-listener review](docs/design-reviews/2026-10-12-unified-recordings.md)
 records qualification separately from earlier core extraction and client evidence.
@@ -225,9 +229,9 @@ provides API/SDK installation guidance.
 | [Android recording catalog](app-sdk/android-recording-catalog/README.md) | Verify exact serial and list legacy/encrypted-v2 metadata without audio transfer | Yes |
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
-| [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | React Native + Flutter Android library, Transcript/Summary/Ask; one authenticated backend; synthetic mode; optional RN encrypted sync and Flutter connection/status | No; device path optional |
+| [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | RN Android library, Transcript/Summary/Ask and shared backend; links to relocated Flutter Android client; sample modes and optional device paths | No; device path optional |
 | [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
-| [Integrated Recordings backend](end-to-end/recordings/README.md) | One Node listener composes Web/mobile adapters, shared recording/processing/Ask and three retained journals; original-state preflight and peer-intent refusal | No |
+| [Integrated Recordings sample](end-to-end/recordings/README.md) | Combined Node backend with retained auth/journals and the relocated Flutter Android client; Web/RN compatibility paths remain | No |
 
 </details>
 
