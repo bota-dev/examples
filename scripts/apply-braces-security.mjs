@@ -1,61 +1,83 @@
 import { createHash } from 'node:crypto';
-import { existsSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
-import { dirname, isAbsolute, relative, resolve } from 'node:path';
+import { existsSync, readFileSync, readdirSync, realpathSync } from 'node:fs';
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+// The selected parent archives replace the vulnerable implementation at resolution.
+// This mandatory hook is an attestation and never patches installed bytes.
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const vendor = resolve(root, 'vendor/braces-security');
-const provenance = JSON.parse(readFileSync(resolve(vendor, 'provenance.json'), 'utf8'));
-const lock = JSON.parse(readFileSync(resolve(root, 'package-lock.json'), 'utf8'));
-const verify = process.argv.includes('--verify');
 if (process.argv.slice(2).some(arg => arg !== '--verify')) throw new Error('Unknown braces guard argument');
+const vendor = join(root, 'vendor/braces-free-public-parents');
+const provenance = JSON.parse(readFileSync(join(vendor, 'provenance.json'), 'utf8'));
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
-const contained = (base, target) => {
-  const path = relative(base, target);
-  return path !== '..' && !path.startsWith('../') && !path.startsWith('..\\') && !isAbsolute(path);
-};
-
-// Validate every asset and installed target before making any change.
-const assets = new Map(provenance.files.map(file => {
-  const path = resolve(vendor, file.asset);
-  if (!contained(vendor, realpathSync(path))) throw new Error('Braces vendor path escapes its directory');
-  const bytes = readFileSync(path);
-  if (hash(bytes) !== file.patchedSha256) throw new Error(`Unknown braces vendor bytes: ${file.path}`);
-  return [file.path, bytes];
-}));
-const entries = Object.entries(lock.packages ?? {}).filter(([path]) => path.endsWith('node_modules/braces'));
-if (!entries.length) throw new Error('Expected locked braces package is missing');
-const plan = [];
-const installed = [];
-for (const [path, metadata] of entries) {
-  if (path.split('/').some(part => part === '..') || isAbsolute(path)) throw new Error('Invalid braces lock path');
-  if (metadata.version !== provenance.version || metadata.integrity !== provenance.integrity) throw new Error(`Unknown locked braces identity: ${path}`);
-  const packageRoot = resolve(root, path);
-  if (!contained(root, packageRoot)) throw new Error('Braces lock path escapes repository');
-  // Workspace-scoped/production installs can legitimately omit this dev dependency.
-  if (!existsSync(packageRoot)) continue;
-  const actualRoot = realpathSync(packageRoot);
-  if (!contained(realpathSync(root), actualRoot)) throw new Error('Installed braces path escapes repository');
-  const manifestPath = realpathSync(resolve(actualRoot, 'package.json'));
-  if (!contained(actualRoot, manifestPath)) throw new Error('Braces manifest escapes package');
-  const manifest = readFileSync(manifestPath);
-  if (hash(manifest) !== provenance.manifestSha256) throw new Error(`Unknown braces manifest: ${path}`);
-  for (const file of provenance.unchanged) {
-    const target = realpathSync(resolve(actualRoot, file.path));
-    if (!contained(actualRoot, target) || hash(readFileSync(target)) !== file.sha256) throw new Error(`Unknown unchanged braces source: ${path}/${file.path}`);
+const forbidden = name => name === 'braces' || name === 'micromatch';
+const contained = path => { const part = relative(realpathSync(root), path); return part !== '..' && !part.startsWith(`..${sep}`) && !isAbsolute(part); };
+const lock = JSON.parse(readFileSync(join(root, 'package-lock.json'), 'utf8'));
+for (const path of ['package.json', 'apps/react-native/package.json', 'apps/backend/package.json']) {
+  const manifest = JSON.parse(readFileSync(join(root, path), 'utf8'));
+  for (const field of ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies']) {
+    if (Object.keys(manifest[field] ?? {}).some(forbidden)) throw new Error(`Forbidden owning edge: ${path}`);
   }
-  for (const file of provenance.files) {
-    const target = resolve(actualRoot, file.path);
-    if (!contained(actualRoot, realpathSync(dirname(target)))) throw new Error('Braces target parent escapes package');
-    if (existsSync(target) && !contained(actualRoot, realpathSync(target))) throw new Error('Braces target escapes package');
-    const current = existsSync(target) ? hash(readFileSync(target)) : null;
-    // Only the exact reviewed previous guard may migrate; verification requires the current assets.
-    if (current !== file.pristineSha256 && current !== file.patchedSha256 && current !== file.previousPatchedSha256) throw new Error(`Unknown braces runtime: ${path}/${file.path}`);
-    if (verify && current !== file.patchedSha256) throw new Error(`Unpatched braces runtime: ${path}/${file.path}`);
-    if (current !== file.patchedSha256) plan.push({ target, bytes: assets.get(file.path), expected: file.patchedSha256 });
-  }
-  installed.push(path);
 }
-for (const item of plan) writeFileSync(item.target, item.bytes);
-for (const item of plan) if (hash(readFileSync(item.target)) !== item.expected) throw new Error('Braces write verification failed');
-console.log(JSON.stringify({ guard: 'braces3.0.3 scoped PR82 and data-array guard', installed, changedFiles: plan.length, mode: verify ? 'verify' : 'apply', omittedInstallScope: installed.length === 0 }));
+for (const [path, entry] of Object.entries(lock.packages)) {
+  const name = entry.name ?? path.split('node_modules/').at(-1);
+  if (forbidden(name)) throw new Error(`Forbidden locked identity: ${path}`);
+  for (const field of ['dependencies', 'optionalDependencies', 'peerDependencies']) {
+    if (Object.keys(entry[field] ?? {}).some(forbidden)) throw new Error(`Forbidden locked edge: ${path}`);
+  }
+}
+for (const profile of provenance.profiles) {
+  const archive = readFileSync(join(vendor, profile.archive));
+  if (archive.length !== profile.archiveBytes || hash(archive) !== profile.archiveSha256) throw new Error(`Unknown maintained archive: ${profile.name}@${profile.version}`);
+}
+const seen = new Set();
+const populations = [];
+function inspectModules(path) {
+  if (!existsSync(path)) return;
+  for (const entry of readdirSync(path, { withFileTypes: true })) {
+    if (entry.name.startsWith('.') || (!entry.isDirectory() && !entry.isSymbolicLink())) continue;
+    if (forbidden(entry.name)) throw new Error(`Forbidden physical directory: ${path}/${entry.name}`);
+    const child = join(path, entry.name);
+    if (entry.name.startsWith('@')) {
+      for (const scoped of readdirSync(child, { withFileTypes: true })) {
+        if (scoped.isDirectory() || scoped.isSymbolicLink()) inspectPackage(join(child, scoped.name));
+      }
+    } else inspectPackage(child);
+  }
+}
+function inspectPackage(path) {
+  const actual = realpathSync(path);
+  if (!contained(actual)) throw new Error(`External installed package: ${path}`);
+  if (seen.has(actual)) return;
+  seen.add(actual);
+  const manifestPath = join(actual, 'package.json');
+  if (existsSync(manifestPath)) {
+    const manifest = JSON.parse(readFileSync(manifestPath, 'utf8'));
+    if (forbidden(manifest.name)) throw new Error(`Forbidden physical identity: ${path}`);
+    const matchingName = provenance.profiles.filter(profile => profile.name === manifest.name);
+    const profile = matchingName.find(profile => profile.version === manifest.version);
+    const inherited = provenance.unmodifiedOwnerProfiles?.find(row => row.path === relative(root, actual).replaceAll('\\', '/') && row.name === manifest.name && row.version === manifest.version);
+    if (matchingName.length && !profile && !inherited) throw new Error(`Unqualified parent version: ${manifest.name}@${manifest.version}`);
+    if (inherited) {
+      for (const file of inherited.files) {
+        const bytes = readFileSync(join(actual, file.path));
+        if (bytes.length !== file.bytes || hash(bytes) !== file.sha256) throw new Error(`Unmodified owner asset changed: ${inherited.path}/${file.path}`);
+      }
+    }
+    if (profile) {
+      for (const file of profile.files) {
+        const target = realpathSync(join(actual, file.installedPath ?? file.path));
+        if (!contained(target)) throw new Error(`External parent asset: ${target}`);
+        const bytes = readFileSync(target);
+        if (bytes.length !== file.bytes || hash(bytes) !== file.sha256) throw new Error(`Unknown parent asset: ${manifest.name}/${file.path}`);
+      }
+      populations.push({ name: manifest.name, version: manifest.version, path: relative(root, actual).replaceAll('\\', '/') });
+    }
+  }
+  inspectModules(join(actual, 'node_modules'));
+}
+for (const path of ['node_modules', 'apps/react-native/node_modules', 'apps/backend/node_modules']) inspectModules(join(root, path));
+for (const profile of provenance.profiles) {
+  if (!populations.some(row => row.name === profile.name && row.version === profile.version)) throw new Error(`Missing owning parent: ${profile.name}@${profile.version}`);
+}
+console.log(JSON.stringify({ status: 'legacy_root_braces_and_micromatch_absent', parentProfiles: provenance.profiles.length, parentAssets: provenance.profiles.reduce((n, profile) => n + profile.files.length, 0), packagesInspected: seen.size, populations, changedFiles: 0 }));

@@ -226,3 +226,25 @@ matching/watcher and exports are recorded in [the current scope](docs/metro-publ
 Legacy root #113 and its six-asset parser guard remain unchanged. Source
 admission, first-push/native results, scanner closure and physical acceptance
 are separate; this prospective local evidence claims no published fix.
+
+## October 13 current legacy public-parent replacement
+
+The prospective current4e05 legacy root replaces its six actual Braces/Micromatch
+parent profiles and the actual owning Metro-config/Metro bundle. Current normal
+and frozen source checks qualify local Braces/Micromatch absence, seven exact
+parent archives and the 20-case actual-parent suite. The old six-file guard and
+22 cases remain historical source; they are not package-removal evidence.
+All other roots/locks, SDK/runtime, guards and workflows are conserved. Read
+[full current source, resolver/output scopes and pending delivery gates](docs/legacy-public-parent-matching-removal.md).
+The original #113 scanner identity remains unverified until an exact post-delivery
+readback; no advisory-wide withdrawal, dismissal or inherited deployment approval
+is claimed.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

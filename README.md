@@ -333,3 +333,19 @@ gates](docs/native-expo-signing-replacement.md); this does not qualify mobile
 binaries, devices, EAS or certificate management. The retained 985 qualification
 and 934 documentation-only reconciliation remain historical source/installation
 evidence; they do not verify shared-core extraction, listener consolidation or integrated native clients.
+
+The current legacy workspace source replaces Braces/Micromatch through maintained
+owning public parents, including the actual bundled Metro 0.84.6 route. Run its
+mandatory install attestation and 20-case suite with ordinary lifecycle scripts.
+See [current source, checks and delivery limits](docs/legacy-public-parent-matching-removal.md).
+Independent install roots, SDK/runtime pins and all workflows remain conserved;
+local output checks do not establish scanner or installed/native acceptance.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

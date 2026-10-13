@@ -313,3 +313,25 @@ matching/watcher and exports are recorded in [the current scope](docs/metro-publ
 Legacy root #113 and its six-asset parser guard remain unchanged. Source
 admission, first-push/native results, scanner closure and physical acceptance
 are separate; this prospective local evidence claims no published fix.
+
+## October 13 current legacy matching replacement
+
+The prospective legacy workspace source now replaces the actual Braces/Micromatch
+development-tool routes through maintained public parents. Metro-config 0.84.6
+physically owns its original Metro 0.84.6 and adapted nested file-map; root
+file-map stays 0.84.5. Mandatory read-only parent-asset/absence verification
+supersedes the legacy six-file parser patch while retaining its exact history.
+Application/SDK/runtime, independent roots and workflows remain unchanged.
+See [local source qualification and remaining gates](docs/legacy-public-parent-matching-removal.md).
+This updates only the legacy #113 scope of the dated checkpoint above. Source
+admission, normal main publication, hosted Android/scanner and installed behavior
+remain separate; no production or certificate authority transfers.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

@@ -31,7 +31,7 @@
 ## Preserve dependency guards
 
 - Keep lifecycle scripts enabled and every existing postinstall/test chain. Read [dependency security](DEPENDENCY_SECURITY.md), [Forge parser mitigation](docs/node-forge-parser-mitigation.md), [braces migration](docs/braces-depth-mitigation.md) and [build-dependency remediation](docs/build-dependency-remediation.md) before changing manifests, locks, overrides or guards.
-- Three RN install roots require their own 803-asset native Expo signing guard and 32 public-contract/caller cases; Forge is removed by the reviewed self-contained development-tool replacement. Read [scope and evidence](docs/native-expo-signing-replacement.md). Legacy root retains its six-asset braces guard, 22-case suite and fixed depth/visit/accessor policy. The two independent RN roots use reviewed public Metro `.some` parents with unchanged picomatch 2.3.2, mandatory zero-braces/218-parent-asset verification and 21 removal/integrity cases. Read [qualification and delivery limits](docs/metro-public-matching-removal.md); unknown signing/source drift refuses.
+- Three RN install roots require their own 803-asset native Expo signing guard and 32 public-contract/caller cases; Forge is removed by the reviewed self-contained development-tool replacement. Read [scope and evidence](docs/native-expo-signing-replacement.md). The legacy root uses the maintained owning public-parent matching/expansion replacement, a mandatory read-only asset/absence guard and 20 actual-parent cases. Read [current legacy source and limits](docs/legacy-public-parent-matching-removal.md); the earlier six-asset parser guard and 22 cases remain historical. The two independent RN roots use reviewed public Metro `.some` parents with unchanged picomatch 2.3.2, mandatory zero-braces/218-parent-asset verification and 21 removal/integrity cases. Read [qualification and delivery limits](docs/metro-public-matching-removal.md); unknown signing/source drift refuses.
 - Keep four source-map-js suites in the respective root/app `npm test` chains, including Web CI. Root selector-parser overrides remain scoped to the two reviewed parents; no claim covers Tailwind's embedded fallback.
 - Package/scanner identities, native builds and physical acceptance are separate evidence. Do not suppress alerts or claim closure from a downstream source patch.
 
@@ -51,3 +51,12 @@
 - Include the actual model's `Co-Authored-By` attribution on AI-authored commits.
 
 The [previous instructions](docs/design-history/2026-10-12-agent-instructions-before-reset.md) are historical context, not current rules.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

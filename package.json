@@ -13,7 +13,7 @@
     "dev:react-native": "npm run start -w @bota-dev/example-react-native",
     "build": "npm run build --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "test:braces-security": "node --test scripts/test-braces-security.mjs",
+    "test:braces-security": "node --test scripts/test-braces-security.mjs scripts/test-chokidar-public-boundary-security.mjs",
     "test:source-map-security": "node --test scripts/test-source-map-security.mjs",
     "test:native-expo-signing": "node --test scripts/test-native-expo-signing.mjs"
   },
@@ -25,7 +25,8 @@
       "uuid": "11.1.1"
     },
     "tailwindcss@3.4.19": {
-      "postcss-selector-parser": "7.1.6"
+      "postcss-selector-parser": "7.1.6",
+      ".": "$tailwindcss"
     },
     "postcss-nested@6.2.0": {
       "postcss-selector-parser": "7.1.6"
@@ -38,6 +39,12 @@
   },
   "devDependencies": {
     "@expo/cli": "file:vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
-    "@expo/code-signing-certificates": "file:vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz"
+    "@expo/code-signing-certificates": "file:vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+    "@expo/metro-file-map": "file:vendor/braces-free-public-parents/expo--metro-file-map-57.0.3-maintained.tgz",
+    "metro-file-map": "file:vendor/braces-free-public-parents/metro-file-map-0.84.5-maintained.tgz",
+    "tailwindcss": "file:vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+    "chokidar": "file:vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz",
+    "fast-glob": "file:vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz",
+    "metro-config": "file:vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz"
   }
 }
