@@ -1,18 +1,17 @@
-# Bota Recordings: integrated sample backend core
+# Bota Recordings: combined sample backend
 
-The first implementation step toward one integrated Recordings sample with a
-shared backend and platform clients. Recording reads, transcription, general
-notes and recording-scoped Ask now have **one maintained feature implementation**.
-Both existing web and mobile backends call these modules through compatibility
-adapters.
+One Node listener composes the existing Web and mobile service factories for the
+integrated Recordings sample. Recording reads, transcription, general notes and
+recording-scoped Ask have **one maintained feature implementation**. The existing
+cookie/Bearer adapters, response projections and all three journals are retained.
 
-**Current scope:** one shared feature implementation, two existing HTTP
-listeners. Authentication, persistence and native capture coordination remain
-in their original adapters. A unified listener, shared write arbitration,
-upload/webhook consolidation and relocated clients are not implemented here.
-There are no runtime dependencies or SDK calls in this core; pinned dev tools
-provide its checks. No key, account, backend, audio or device is needed to run
-the local contract tests.
+**Current scope:** one combined listener with in-process processing/Ask
+coordination and peer-intent refusal. Auth, persistence, upload/webhook and native
+service code retains its existing public-family paths. Older launchers remain
+available for compatibility; clients have not moved. There are no SDK calls or
+duplicated runtime dependencies here: Express/Vite resolve from the installed
+Web root. Pinned development tools provide local checks. Fixtures need no live
+key, account, audio or device.
 
 ## Find the public calls
 
@@ -59,18 +58,83 @@ texts. CLI fixture regressions run in the normal `npm test` chain.
 
 ## Run an application
 
-Check out the repository so the compatibility adapters can resolve this shared
-core. Continue to install/run from their existing directories:
+Use the full public repository checkout: the combined launcher imports this
+backend, the [Web family](../web-reference/README.md) and the
+[mobile backend](../react-native-recording-sync/backend/README.md). Copying only
+one of these folders is insufficient. Install the Web runtime and this package's
+development tools, without installing the legacy root workspace:
 
-- [Web app](../web-reference/README.md): `npm ci`, `npm run demo` in
-  `end-to-end/web-reference`; synthetic mode needs no credentials.
-- [React Native and Flutter](../react-native-recording-sync/README.md): follow
-  their independent install instructions. The existing authenticated backend
-  launcher remains in `end-to-end/react-native-recording-sync/backend`.
+```sh
+cd end-to-end/web-reference
+npm ci
+cd ../recordings
+npm ci
+npm run demo
+```
 
-Keep the old launch working directory and explicit existing state paths. No
-new launcher opens a replacement journal. Web cookie accounts, mobile Bearer
-identity and the distinct web/cloud/native stores retain their original contracts.
+Open `http://127.0.0.1:5173` and select **Open demo**. Combined demo serves only
+the Web app with in-memory synthetic state. It supplies no mobile Bearer/device
+authority; RN/Flutter **Try sample recordings** modes remain independently local.
+The demo proves no live API/provider/storage or physical result.
+
+For configured use, prepare a private `.env` from the package's environment
+template, then use `npm run dev` for development or `npm start` after building
+the Web assets in their existing root. `npm run account -- <username> <eu_id>`
+uses the existing account helper at the explicit Web account location. Application
+sign-in and mobile Bearer tokens are separate from the server-held Bota key.
+
+| Setting                                                | Required contract                                                                                                                                                      |
+| ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `WEB_LAUNCH_DIR`, `MOBILE_LAUNCH_DIR`                  | Absolute existing original launch directories. No new-launcher CWD defaults.                                                                                           |
+| `WEB_ACCOUNTS_FILE`, `WEB_STATE_DIR`                   | Absolute existing locations, or original-base defaults `accounts.json` and `.state`. The account file is private under trusted parents; state parents are private.     |
+| `MOBILE_JOURNAL_PATH`, `MOBILE_LIBRARY_JOURNAL_PATH`   | Absolute original journals, or old defaults `data/recording-sync.sqlite` and that path plus `.library.sqlite`. Web retains `.state/reference.sqlite`.                  |
+| `BOTA_API_BASE_URL`, `BOTA_API_KEY`, `BOTA_PROJECT_ID` | Shared trusted public API configuration; the key remains server-side.                                                                                                  |
+| `BOTA_END_USER_ID`, `MOBILE_ACCOUNT_USERNAME`          | Fixed mobile end user must match a server-owned Web account. One match is required, or an explicit matching username when multiple accounts map to that user.          |
+| `APP_ACCESS_TOKEN`, `BOTA_DEVICE_ID`                   | Separate mobile application token; device configuration remains optional under the original validator.                                                                 |
+| `PORT`, `APP_ORIGIN`                                   | One listener binds `127.0.0.1`; local HTTP origin and port must match. Original HTTPS reverse-proxy origin policy remains, without a production deployment/auth claim. |
+
+Stop the older Web/mobile listeners before starting the combined server. Default
+startup requires all three original journals to exist. Read-only preflight checks
+private regular files, symlink/alias/hardlink rejection, original columns/order,
+primary/unique indexes and native/library scope identities before writable stores
+open. Restore the original configuration on failure; do not delete or replace
+journals to force startup. Windows Node stat cannot prove filesystem ACL privacy.
+
+Only a fresh installation with **all three journals absent**, existing trusted
+parents and an account file may use `npm run initialize` (`--initialize`). A
+partial or existing set is refused. Initialization is not migration or rekeying;
+ordinary restart never creates missing replacement journals. No path check is
+atomic against a concurrent filesystem writer.
+Use `npm run initialize -- --dev` when serving unbuilt Web assets through Vite;
+otherwise build the Web assets in their existing root before the static launcher.
+
+The common incoming-header/body budgets are **10/30 seconds**, stricter than the
+older standalone Web **15/180 seconds**. These cover input receipt; existing
+per-feature upstream processing deadlines are unchanged. Cookie/Bearer header
+presence selects one adapter, with mixed/duplicate credentials rejected and no
+fallback. Web Origin/body and mobile no-Origin/Bearer rules remain distinct.
+Combined development serving denies configured account/journal files and sidecars
+while retaining Vite's default denials. This remains a local sample host.
+Static serving, including static demo, preflights `dist` within 10,000 entries
+and depth 32. Nested symlinks/junctions, nonregular entries and hardlinks to
+configured account/journal files or sidecars are refused; genuine assets pass.
+This checks known file aliases, not arbitrary copied private content, and does
+not protect against another filesystem writer or races after preflight.
+
+Fresh processing/Ask claims refuse every matching peer intent, even if its ID is
+known or its state complete. No peer resource ID is adopted into a fresh Web
+intent. Existing own GET-only recovery and native/library exact-known-ID paths
+remain intact. These guards coordinate only this process; separate listeners,
+external writers and automatic platform processing are not synchronized.
+Shutdown drains pending Web/mobile route work before closing journals, including
+work whose client socket has disconnected; socket closure alone is not completion.
+
+Older [Web](../web-reference/README.md) and
+[mobile](../react-native-recording-sync/backend/README.md) launch commands remain
+compatibility entry points with their original CWD/state rules. SDK/client/native
+manifests, locks and app identities are unchanged. The next client move is the
+whole Flutter install root after combined-host qualification, with its setup,
+license helpers, CI and discovery links migrated together.
 Only SDK-only connection/status workflows are backend-free; the native encrypted
 upload path retains its documented backend and completion requirements.
 
@@ -102,10 +166,10 @@ checks and mark post-create reconciliation failures uncertain. Recovery never
 creates a replacement resource. Authorization denials expose no operation metadata.
 
 To adapt a complete running route, also copy its auth, bounded HTTP and persistence
-adapters from the corresponding web/mobile backend. Replace the application's
-identity mapping without weakening ownership. These adapters are temporary
-compatibility boundaries; the next migration must coordinate retained intent
-across all stores before serving web/mobile/native writes from one listener.
+adapters from the corresponding web/mobile backend and the combined host/config
+when using both credential paths. Replace the application's identity mapping
+without weakening ownership. Preserve the combined claim guards; sharing source
+does not authorize cross-journal resource adoption or replacement writes.
 
 ## Current delivery boundary
 
@@ -114,6 +178,6 @@ empty scaffolds in this directory. Existing SDK pins, native material/receipt
 handling, source-cleanup authority, app identifiers and compatibility launchers
 remain unchanged. Cloud job success or legacy `uploaded` grants no device cleanup.
 
-See [verification and migration review](../../docs/design-reviews/2026-10-12-integrated-recordings.md)
+See [combined-listener qualification](../../docs/design-reviews/2026-10-12-unified-recordings.md)
 for exact checks, source and remaining acceptance. Hosted CI, live API and physical
 results are separate from local contract evidence.
