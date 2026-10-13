@@ -42,7 +42,7 @@ and physical device upload are separate acceptance gates.
 ## Implementation review
 
 Current beta.13 package/build checks are recorded in the
-[adoption review](../../../../../docs/independent-examples-review.md#beta13-adoption).
+[adoption review](../../../../../../docs/independent-examples-review.md#beta13-adoption).
 The following beta.10 results are historical and do not prove beta.13 hardware acceptance.
 
 The public beta.10 native material/registry interfaces compile in this Expo

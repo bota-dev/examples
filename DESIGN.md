@@ -33,9 +33,9 @@ authorized principal; clients never hold Bota secret keys.
 The target layout is **partially implemented**. Shared recording, processing and
 Ask modules, contract tests and one combined Node listener now exist in
 `end-to-end/recordings/`. It composes existing cookie/Bearer service factories
-and all three journals. The complete Flutter Android install root is the first
-relocated client at `clients/flutter/`; Web/RN clients and auth/store service
-files retain their existing paths. The broader target remains:
+and all three journals. Complete Flutter and React Native Android install roots
+now live at `clients/flutter/` and `clients/react-native/`. Web and auth/store
+service files retain their existing paths. The broader target remains:
 
 ```text
 end-to-end/recordings/
@@ -136,8 +136,8 @@ production account product or forced cross-platform consumer-app parity is neede
 | API workflows | Node/Python workflow recipes and an extended inventory | Curated entry points, clearer copy boundaries and consistent evidence remain ongoing work |
 | SDK starters | RN Android/iOS connection; Flutter Android connection; Kotlin Android and Swift macOS connection/catalog; desktop Chromium connection | Native Swift iOS and Flutter iOS hosts are missing; supported workflow coverage varies |
 | React web reference | Audio import, library, Transcript/Summary/Ask, synthetic mode and configured API path | Playback is missing; web is API-only |
-| RN/Flutter Android references | Cloud library/results/Ask, sample mode and one shared mobile adapter; Flutter now lives in `recordings/clients/flutter/`, RN retains its compatibility path | Ordinary import/playback and common-app iOS hosts are missing; Flutter connection/status does not expose the selected encrypted-sync facade contract |
-| Combined backend | One listener composes Web/mobile service factories, shared recording/processing/Ask features and retained journals | Auth/store/Web/RN files retain existing paths; external writers and atomic file races are not coordinated |
+| RN/Flutter Android references | Complete install roots under `recordings/clients/`; cloud library/results/Ask, sample mode and one shared mobile adapter; optional RN encrypted-v2 sync or Flutter connection/status | Ordinary import/playback and common-app iOS hosts are missing; Flutter does not expose the selected encrypted-sync facade contract |
+| Combined backend | One listener composes Web/mobile service factories, shared recording/processing/Ask features and retained journals | Auth/store/Web files retain existing paths; external writers and atomic file races are not coordinated |
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
 Keep SDK capability, implemented host and verification as separate facts.
@@ -174,10 +174,12 @@ never falls back between credentials; peer-intent checks refuse fresh
 processing/Ask claims even for known/complete work, without Web peer-ID adoption.
 Existing own GET recovery and native/library exact-known-ID reconciliation remain.
 Stop older listeners first. This is in-process coordination, not a guarantee for
-other writers or concurrent file replacement. Flutter's complete install root
-and license helper graph have moved together without changing SDK/native identity,
-pub pins/lock or backend launch bases. The old Flutter README forwards to its new
-setup; Web/RN relocation remains separate work after compatible qualification.
+other writers or concurrent file replacement. Flutter and RN complete install
+roots and helper/guard graphs have moved without changing SDK/native identity,
+pins/locks, backend launch bases or journals. Old client READMEs forward to new
+setup. Retained native capture recovery preserves its original backend origin;
+the combined host may use `PORT=8787` and matching `APP_ORIGIN` instead of requiring
+a new origin or journal reset. Web relocation remains separately qualified work.
 
 [ARCHITECTURE.md](ARCHITECTURE.md) owns integration boundaries;
 [ROADMAP.md](ROADMAP.md) orders work;

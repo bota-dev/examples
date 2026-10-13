@@ -6,12 +6,15 @@ recording. The separate Android encrypted-v2 routes retain the existing
 device-sync workflow. Both use a fixed server-owned project/end user and a
 separate application bearer token.
 
-RN remains at [app/](../app/README.md); Flutter's complete install root is now at
-[recordings/clients/flutter](../../recordings/clients/flutter/README.md).
+Complete [RN](../../recordings/clients/react-native/README.md) and
+[Flutter](../../recordings/clients/flutter/README.md) install roots now live under
+`recordings/clients/`.
 This backend's launch base, native/library journals and scope hashes are unchanged.
-The combined listener uses `5173` by default; enter that URL explicitly in Flutter,
-whose input retains the older standalone `8787` default. Match USB forwarding to
-the selected listener, and stop old listeners before using the combined host.
+UI/native-host `8787` defaults stay. Retained native capture recovery keeps its
+original backend origin; configure the combined host with `PORT=8787` and
+`APP_ORIGIN=http://127.0.0.1:8787` for that original origin. Fresh cloud setup may
+explicitly use the combined `5173` default. Match USB forwarding, stop old listeners
+and never reset journals or rewrite capture scope merely to fit another port.
 
 The cloud adapter is [library.mjs](library.mjs). Local
 [recordings](library/recordings.mjs), [processing](library/processing.mjs) and

@@ -10,7 +10,7 @@ import { LibraryService } from './library.mjs';
 import { createApp, createRequestHandler, configureMobileCoordination } from './server.mjs';
 import { AppError } from './library/errors.mjs';
 import { readConfig, RequestError, SyncService } from './service.mjs';
-import { createLibraryApi, LibraryError } from '../app/library-api.ts';
+import { createLibraryApi, LibraryError } from '../../recordings/clients/react-native/library-api.ts';
 
 const environment = {
   BOTA_API_BASE_URL: 'https://api.example.test/v1', BOTA_API_KEY: 'sk_test_serverOnly',

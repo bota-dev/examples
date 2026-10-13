@@ -13,9 +13,10 @@ Android/Kotlin and Apple/Swift. The [shared feature core](../end-to-end/recordin
 now implements recording, processing/general-notes and Ask logic plus error
 types. The combined Node launcher now composes existing Web/mobile factories on
 one listener. Both credential-specific adapters, DTOs and all three journals
-remain, with upload/webhook/native source at existing paths. Flutter is the first
-relocated client at [recordings/clients/flutter](../end-to-end/recordings/clients/flutter/README.md).
-Web/RN stay at their existing paths; integrated Kotlin/Swift clients are not built.
+remain, with upload/webhook/native source at existing paths. Complete
+[Flutter](../end-to-end/recordings/clients/flutter/README.md) and
+[RN](../end-to-end/recordings/clients/react-native/README.md) install roots have relocated.
+Web/backend paths stay; integrated Kotlin/Swift clients are not built.
 
 Use the [README entry paths](../README.md#start-with-bota-recordings), then choose
 the feature/platform below. Run only the relevant documented install root(s)
@@ -42,7 +43,7 @@ app, follow that application's instructions and replace its identity/auth adapte
 | Transcript/general notes | [Shared processing](../end-to-end/recordings/backend/features/processing.mjs); [Transcript](../end-to-end/web-reference/web/features/transcription/Transcript.tsx) / [Summary](../end-to-end/web-reference/web/features/summaries/Summaries.tsx) | Web or [mobile README](../end-to-end/react-native-recording-sync/README.md) |
 | Recording-scoped Ask | [Shared Ask](../end-to-end/recordings/backend/features/ask.mjs); [React Ask](../end-to-end/web-reference/web/features/ask/Ask.tsx) | Exact owner/session/source checks and durable intent |
 | Webhook/saved-operation refresh | [webhooks.mjs](../end-to-end/web-reference/server/features/webhooks.mjs); [Activity](../end-to-end/web-reference/web/features/webhooks/Activity.tsx) | Signed customer callback; refresh never resends a write |
-| Android RN encrypted sync | [DeviceSync.tsx](../end-to-end/react-native-recording-sync/app/DeviceSync.tsx) | [Complete host/backend setup](../end-to-end/react-native-recording-sync/README.md) |
+| Android RN encrypted sync | [DeviceSync.tsx](../end-to-end/recordings/clients/react-native/DeviceSync.tsx) | [Complete host/backend setup](../end-to-end/react-native-recording-sync/README.md) |
 
 The web [recipe table](../end-to-end/web-reference/README.md#pick-a-recipe) names
 the public `/v1/*` calls and UI/backend modules. Those files also depend on HTTP,
@@ -155,9 +156,12 @@ adapters; preserve routes/DTOs, journal scope, known IDs and uncertain writes.
 Use original explicit paths/schema/scope/account mapping; initialize only a fresh
 all-missing set and stop old listeners. Refuse fresh peer known/complete claims
 without Web ID adoption; retain own GET/native-library exact-known-ID recovery.
-Flutter now lives at end-to-end/recordings/clients/flutter; its old README forwards.
-Web/RN and backend launch bases/journals remain at existing paths. The Flutter URL
-default stays 8787; combined setup explicitly uses 5173 with matching phone forwarding.
+Flutter and RN now live under end-to-end/recordings/clients; old READMEs forward.
+Web/backend launch bases and journals remain at existing paths. Client/native-host
+origin defaults stay 8787. Retained native capture recovery keeps its original
+origin: configure combined PORT=8787 and matching APP_ORIGIN where needed; do not
+reset journals or rewrite capture scope. Fresh cloud setup may explicitly select
+5173 with matching phone forwarding.
 Further client moves and integrated Kotlin/Swift clients remain planned; no
 external-writer or atomic file-race guarantee is added.
 Keep keys server-side, SDK pins unchanged,

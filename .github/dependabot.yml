@@ -16,7 +16,7 @@ updates:
     schedule:
       interval: weekly
   - package-ecosystem: npm
-    directory: /end-to-end/react-native-recording-sync/app
+    directory: /end-to-end/recordings/clients/react-native
     schedule:
       interval: weekly
     groups:

@@ -2,9 +2,15 @@
 
 This prospective source change targets Examples alert #111 in
 `app-sdk/react-native-device-connect` and #112 in
-`end-to-end/react-native-recording-sync/app`. Legacy root alert #113 retains
+`end-to-end/recordings/clients/react-native` (relocated from the original
+`end-to-end/react-native-recording-sync/app`). Legacy root alert #113 retains
 its separate Tailwind/Chokidar and other callers. Local source qualification
 does not establish scanner closure or an upstream patched braces release.
+
+The [client relocation review](design-reviews/2026-10-12-react-native-client-move.md)
+records the later whole-root move and its fresh qualification separately. It
+retains archives, provenance, source guards, pins and origin/journal identity;
+the dated security qualification below keeps its original source scope.
 
 Each independent app carries its own public artifacts and mandatory guards.
 Existing `@expo/metro-file-map` 57.0.3 and `metro-file-map` 0.84.5 retain names,

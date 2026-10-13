@@ -17,9 +17,11 @@ formats, not additional product layers. Catalog count is not a delivery goal.
 ## Work within the integrated foundation
 
 Start with the existing web/mobile recording clients and the selected platform's
-public-call files. Flutter's complete install root is now at
-[recordings/clients/flutter](end-to-end/recordings/clients/flutter/README.md);
-Web/RN and mobile backend launch bases/journals retain their existing paths.
+public-call files. Complete [Flutter](end-to-end/recordings/clients/flutter/README.md)
+and [RN](end-to-end/recordings/clients/react-native/README.md) install roots now
+live under `recordings/clients/`; Web and mobile backend launch bases/journals
+retain their existing paths. Preserve the original backend origin for native
+recovery; do not reset journals or rewrite capture scope to fit a new port.
 Put a feature in its maintained module and document how to run
 and copy it. Keep API explanation/source links in guides and use familiar
 end-user recording controls in each client. Native Kotlin and Swift are

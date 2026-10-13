@@ -77,8 +77,8 @@ quickstarts still install independently:
 | --- | --- |
 | [Integrated backend](end-to-end/recordings/README.md) | One combined Node listener composes Web/mobile factories, shared recording/processing/Ask features and all three original journals; Express/Vite resolve from the Web install. |
 | [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK, capture or playback. |
-| [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains React Native and the mobile backend; links to the relocated Flutter client. Both common app hosts are Android only. |
-| [React Native](end-to-end/react-native-recording-sync/app/README.md) | Common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
+| [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains the mobile backend and setup; links to both relocated clients. Both common app hosts are Android only. |
+| [React Native](end-to-end/recordings/clients/react-native/README.md) | Complete relocated install root; common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
 | [Flutter](end-to-end/recordings/clients/flutter/README.md) | First relocated client: complete Android install root with cloud-content flow and secondary connection/status. Published beta.13 lacks the fresh pairing and verified encrypted-upload host surfaces required for device sync. |
 | [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
 | [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its beta.6 compatibility path and dependency guards are retained; its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
@@ -92,10 +92,14 @@ in-process processing/Ask arbitration and retained peer-intent refusal. Existing
 launchers remain available for compatibility and must stop before the combined
 host runs; other writers are not coordinated.
 SDK-only modules remain usable without that service.
-Flutter now lives under `recordings/clients/flutter/`, including its license helpers;
-the old README is a forwarding entry. Web/RN clients, mobile backend launch base
-and all journal locations remain at their existing paths. Client/native identity
-and dependency pins/locks are preserved; folder relocation adds no SDK capability.
+Flutter and RN now live under `recordings/clients/`, including complete native
+install roots and required helper/guard graphs. Old READMEs are forwarding entries.
+Web, mobile backend launch base and all journal locations retain existing paths.
+Client/native identity, dependency pins/locks and original `8787` defaults are
+preserved. Native recovery identity includes the backend origin: retain that
+origin, using combined `PORT=8787` with matching `APP_ORIGIN` where applicable,
+rather than resetting journals or rewriting capture scope. Fresh cloud setup
+may explicitly select `5173`. Folder relocation adds no SDK capability.
 Independent device examples retain exact public beta.13 pins. Native iOS common
 apps, Flutter iOS and native Windows samples are not supplied here; Windows
 native SDK availability is planned upstream and requires public-contract

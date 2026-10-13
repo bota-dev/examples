@@ -2,9 +2,10 @@
 
 The combined Node listener is implemented. It composes the existing public-family
 Web/mobile factories, one cloud feature core and three separate original journals.
-Flutter is the first relocated client at `clients/flutter/`, with its complete
-install root and license helper graph. Web/RN and underlying auth/store/service
-files retain their compatibility paths; backend launch bases and journals stay put.
+Flutter and RN have complete relocated install roots at `clients/flutter/` and
+`clients/react-native/`, with required license/native/vendor/guard graphs.
+Web and underlying auth/store/service files retain their compatibility paths;
+backend launch bases, journals and original native recovery origin stay put.
 
 ```text
 backend/main → config preflight → one 127.0.0.1 HTTP listener
@@ -13,8 +14,8 @@ backend/main → config preflight → one 127.0.0.1 HTTP listener
                                           └─ native capture journal / SDK callbacks
                                     └─ shared recording/processing/Ask → public Bota API
 
-clients/flutter → existing mobile Bearer adapter /api/library/*
-Web/RN compatibility clients → existing cookie/Bearer adapters
+clients/flutter + clients/react-native → existing mobile Bearer adapter /api/library/*
+Web compatibility client → existing cookie/Origin adapter
 ```
 
 Canonical recording/processing/Ask functions accept the existing trusted
@@ -34,6 +35,10 @@ complete work. Web never adopts a peer ID into a new intent. Existing own GET
 recovery and native/library exact-known-ID paths remain. Older listeners must
 stop before using this host; no external-process or atomic file-race guarantee
 is made. Device commitment/receipt/cleanup authority stays in its existing owners.
+Client relocation preserves `8787` UI/native-host defaults. Retained native capture
+recovery must keep its original backend origin; configure combined `PORT` and
+`APP_ORIGIN` to that origin instead of resetting journals or rewriting capture
+scope. Fresh cloud setup may explicitly use the combined default `5173`.
 
 Configured startup requires absolute original bases/state paths. Read-only checks
 validate files/ancestors, alias/hardlink rejection, original columns/order,

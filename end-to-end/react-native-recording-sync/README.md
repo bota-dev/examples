@@ -15,17 +15,17 @@ The [combined launcher](../recordings/README.md) now serves Web/mobile through
 one Node listener, composing existing service factories while retaining separate
 auth adapters, DTOs and three journals. Upload/webhook/native service source paths
 remain local; scope/anchors, known IDs, uncertainty and SDK receipt/cleanup gates
-retain their contracts. Flutter has moved to `../recordings/clients/flutter/`;
-this root retains RN and the mobile backend. SDK/native identities, pins/locks,
+retain their contracts. Flutter and RN have moved under `../recordings/clients/`;
+this root retains the mobile backend and setup. SDK/native identities, pins/locks,
 backend launch bases and journals are unchanged.
 
 | Client | Common app | Device capability |
 | --- | --- | --- |
-| [React Native](app/README.md) | Sample/live library, transcription, general notes, recording-scoped Ask and GET-only request recovery | Existing Android encrypted-v2 sync for an already-provisioned device |
+| [React Native](../recordings/clients/react-native/README.md) | Relocated complete install root with sample/live library, transcription, general notes, recording-scoped Ask and GET-only request recovery | Existing Android encrypted-v2 sync for an already-provisioned device |
 | [Flutter](../recordings/clients/flutter/README.md) | Relocated Android client with the same sample/live recording journey and customer API | Connection/status only; published facade lacks the fresh pairing/verified encrypted-upload interfaces for sync |
 
-The existing directory name preserves RN/backend links and journals; the old
-[Flutter README](flutter/README.md) forwards to the relocated install root.
+The existing directory name preserves backend setup and journals; the old
+[Flutter](flutter/README.md) and [RN](app/README.md) READMEs forward to relocated roots.
 These are mobile clients of the integrated Layer 1 sample; vertical workflows remain later work. Current
 hosts are Android only. Native iOS, Flutter iOS and Windows app samples remain
 separate implementation gaps. The [design](DESIGN.md) and
@@ -33,7 +33,7 @@ separate implementation gaps. The [design](DESIGN.md) and
 
 ## Try sample recordings
 
-For React Native, follow [app setup](app/README.md), then choose **Try sample recordings**.
+For React Native, follow [app setup](../recordings/clients/react-native/README.md), then choose **Try sample recordings**.
 For Flutter, follow [Flutter setup](../recordings/clients/flutter/README.md) and choose its sample entry.
 The clients use synthetic in-memory content. Sample actions make no network or
 device calls, simulate no device upload/receipt/cleanup, and reset when the app
@@ -47,9 +47,13 @@ mobile backend source and integrated backend in one public checkout. Its live
 configuration maps the fixed mobile end user to a server-owned Web account and
 keeps the Bota key server-side. Default startup requires original explicit paths,
 schema/scope validation and all three journals; fresh `--initialize` allows only
-an all-missing set. Stop older listeners first. With default port 5173, forward
+an all-missing set. Stop older listeners first. For fresh cloud setup at default port 5173, forward
 `adb reverse tcp:5173 tcp:5173` and enter `http://127.0.0.1:5173` plus the separate
 `APP_ACCESS_TOKEN` in the client. Match any configured port change in forwarding.
+Retained native capture recovery must keep its original backend origin; for
+original loopback `8787`, set combined `PORT=8787` and
+`APP_ORIGIN=http://127.0.0.1:8787`, and forward `8787`. Do not reset journals,
+rewrite capture scope or change origins merely to adopt the combined default.
 
 The [older mobile backend](backend/README.md) remains a compatibility launcher
 with its original `backend/` CWD and default port 8787. Do not run it alongside
@@ -58,8 +62,9 @@ matching peer intent, including known/complete work, with no Web ID adoption;
 own GET recovery and native/library exact-known-ID paths remain. Common incoming
 header/body limits are 10/30 seconds; upstream processing limits are unchanged.
 These guards do not synchronize external writers or make file checks atomic.
-Flutter's complete install root and license helpers now live under `recordings/clients/`.
-Its URL input still defaults to `8787`; choose the combined URL explicitly as above.
+Both clients' complete install roots and helper/guard graphs now live under
+`recordings/clients/`. Their UI/native-host `8787` defaults remain; choose the
+configured URL explicitly, preserving original native recovery identity.
 
 The common app uses `/api/library/*` for fixed-owner recordings, completed
 transcripts, `tmpl_general_notes`, recording-scoped Ask and saved-operation
@@ -183,7 +188,7 @@ Use HTTPS and replace this fixed identity mode before hosting for multiple users
 ## Run the Android application
 
 ```sh
-cd app
+cd ../recordings/clients/react-native
 npm ci
 npm run android
 ```
@@ -259,7 +264,7 @@ adb reverse --remove tcp:8081
 cd backend
 npm ci
 npm test
-cd ../app
+cd ../../recordings/clients/react-native
 npm ci
 npm run typecheck
 npm test
@@ -267,7 +272,7 @@ npm run export
 npx expo prebuild --platform android --no-install
 cd android
 ./gradlew :recording-sync:testDebugUnitTest :app:assembleDebug --no-daemon -PreactNativeArchitectures=arm64-v8a
-cd ../../../recordings/clients/flutter
+cd ../../flutter
 flutter pub get --enforce-lockfile
 node --test scripts/test-flutter-licenses.mjs
 node scripts/check-flutter-licenses.mjs

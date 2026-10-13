@@ -1,8 +1,8 @@
 # Mobile recording samples architecture
 
 The [design](DESIGN.md) defines one common recording app with React Native and
-Flutter clients. Flutter now lives at `../recordings/clients/flutter/`, while this
-compatibility root retains RN `app/` and `backend/`. Each client has its own
+Flutter clients. Both now live under `../recordings/clients/`, while this
+compatibility root retains `backend/` and setup. Each client has its own
 manifest/lock and Android host; native identity and SDK pins/locks are unchanged. One
 combined HTTP backend can serve Web and both mobile clients, through shims importing the
 [canonical recording/processing/Ask core](../recordings/README.md) also used by web.
@@ -11,7 +11,7 @@ Use the full checkout with the Web installation, mobile backend source and
 Platform UI stays idiomatic and integration files stay easy to locate.
 
 ```text
-React Native app/ ─┐
+React Native ../recordings/clients/react-native/ ─┐
                   ├─ application bearer ─ backend/library ─ shared recordings core
 Flutter ../recordings/clients/flutter/ ─┘ └─ mobile library intent journal
 
@@ -29,6 +29,10 @@ recording/transcription/summary/Ask source checks. The application bearer is
 separate from the Bota key. Clients retain it only in memory, render content as
 text, fence retired sessions/selections and retain uncertain action locks.
 GET recovery reads a saved operation and cannot replay its original action.
+Folder relocation preserves UI/native-host `8787` defaults and native recovery
+scope, which includes the original backend origin. Configure the combined host
+at that origin for retained work; fresh cloud setup may explicitly use `5173`.
+Never reset journals or rewrite capture identity to fit a port change.
 
 Core public calls/error types have one implementation. Mobile keeps default
 strict recording/job project checks and its source-linked DTOs; web's explicit

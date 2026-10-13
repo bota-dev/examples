@@ -8,8 +8,9 @@ cookie/Bearer adapters, response projections and all three journals are retained
 **Current scope:** one combined listener with in-process processing/Ask
 coordination and peer-intent refusal. Auth, persistence, upload/webhook and native
 service code retains its existing public-family paths. Older launchers remain
-available for compatibility. The first relocated client is [Flutter Android](clients/flutter/README.md);
-Web/RN and backend service paths remain. The backend makes no SDK calls and adds no
+available for compatibility. Complete [Flutter](clients/flutter/README.md) and
+[RN](clients/react-native/README.md) Android install roots are now relocated;
+Web and backend service paths remain. The backend makes no SDK calls and adds no
 duplicated runtime dependencies: Express/Vite resolve from the installed
 Web root. Pinned development tools provide local checks. Fixtures need no live
 key, account, audio or device.
@@ -30,18 +31,33 @@ for the integrated architecture and remaining phases.
 
 ## Run a client
 
-| Client               | Current setup                                             | Scope                                                                                                                         |
-| -------------------- | --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Flutter Android      | [Flutter README](clients/flutter/README.md)               | First relocated client; local sample recordings or live cloud library, Transcript/Summary/Ask; optional SDK connection/status |
-| React web            | [Web README](../web-reference/README.md)                  | Existing compatibility root; audio import and cloud recording views                                                           |
-| React Native Android | [RN README](../react-native-recording-sync/app/README.md) | Existing compatibility root; cloud recording views and optional gated encrypted-v2 sync                                       |
+| Client               | Current setup                               | Scope                                                                                                                         |
+| -------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Flutter Android      | [Flutter README](clients/flutter/README.md) | First relocated client; local sample recordings or live cloud library, Transcript/Summary/Ask; optional SDK connection/status |
+| React web            | [Web README](../web-reference/README.md)    | Existing compatibility root; audio import and cloud recording views                                                           |
+| React Native Android | [RN README](clients/react-native/README.md) | Relocated complete install root; cloud recording views and optional gated encrypted-v2 sync                                   |
 
-Each client retains its own manifest, lock and native identity. Flutter's old
-[README](../react-native-recording-sync/flutter/README.md) forwards to the client setup. For a phone
-using the combined listener's default port, run `adb reverse tcp:5173 tcp:5173`
-and enter `http://127.0.0.1:5173` with the separate `APP_ACCESS_TOKEN` in live mode.
-Flutter's input retains `8787` as the older mobile launcher's default; configure
-the combined URL explicitly. Its sample mode uses local memory and needs no backend.
+Each client retains its own manifest, lock and native identity. Old
+[Flutter](../react-native-recording-sync/flutter/README.md) and
+[RN](../react-native-recording-sync/app/README.md) READMEs forward to their new setup.
+Both clients retain `8787` input defaults, and RN native recovery retains its
+original host-origin identity. For retained native captures, keep that original
+origin: the combined host can use `PORT=8787` and
+`APP_ORIGIN=http://127.0.0.1:8787`, with `adb reverse tcp:8787 tcp:8787`.
+Do not reset journals or rewrite capture identity to use another port.
+
+For fresh cloud setup on the combined default port, run
+`adb reverse tcp:5173 tcp:5173` and explicitly enter `http://127.0.0.1:5173` with
+the separate `APP_ACCESS_TOKEN`. Match the configured port and app origin.
+Both clients' sample modes use local memory and need no backend.
+
+RN's [App.tsx](clients/react-native/App.tsx) admits sample/live sessions;
+[Recordings.tsx](clients/react-native/Recordings.tsx) renders library/detail;
+[library-api.ts](clients/react-native/library-api.ts) and
+[recordings-controller.ts](clients/react-native/recordings-controller.ts) own
+bounded requests, source/session fences and retained uncertain locks.
+[DeviceSync.tsx](clients/react-native/DeviceSync.tsx) uses its complete native
+host/guard graph; copy it through the client setup rather than as a standalone file.
 
 ## Check the core
 
@@ -151,9 +167,9 @@ work whose client socket has disconnected; socket closure alone is not completio
 Older [Web](../web-reference/README.md) and
 [mobile](../react-native-recording-sync/backend/README.md) launch commands remain
 compatibility entry points with their original CWD/state rules. SDK/client/native
-manifests, locks and app identities are unchanged. Flutter's complete install root,
-license helpers and CI/discovery paths have moved together to `clients/flutter/`.
-Web/RN remain at their compatibility paths. This move does not relocate the mobile
+manifests, locks and app identities are unchanged. Flutter and RN complete install
+roots, helper/guard graphs and CI/discovery paths have moved together to `clients/`.
+Web remains at its compatibility path. These moves do not relocate the mobile
 backend launch base or journals, add iOS/playback/import, or expand SDK capability.
 Only SDK-only connection/status workflows are backend-free; the native encrypted
 upload path retains its documented backend and completion requirements.

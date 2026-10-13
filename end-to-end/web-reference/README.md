@@ -13,8 +13,9 @@ shims. The [combined launcher](../recordings/README.md) now composes the Web and
 mobile service factories on one listener, retaining both auth adapters, DTOs and
 all three journals. Use a full checkout: the combined runtime needs this Web
 installation, mobile backend source and integrated backend. The old Web launcher
-remains available with its original CWD rules. Web/RN and state paths stay;
-[Flutter](../recordings/clients/flutter/README.md) is the first relocated client.
+remains available with its original CWD rules. Web/backend and state paths stay;
+[Flutter](../recordings/clients/flutter/README.md) and
+[RN](../recordings/clients/react-native/README.md) now have relocated complete install roots.
 
 Use it as a starting template or copy a small recipe with its helpers. This is a
 general Layer 1 capability sample, not a vertical application or production SaaS
