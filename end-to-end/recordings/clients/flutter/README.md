@@ -13,8 +13,11 @@ support. This is a development template, not a production authentication system.
 ## Try it
 
 Use Flutter **3.47.5**, JDK 17 and Android SDK 37. The direct SDK dependency is
-exact public `bota_app_sdk: 2.0.0-beta.13` (beta); no private packages or sibling
-repositories are required.
+exact public `bota_app_sdk: 2.0.0-beta.17` (beta); no private packages or sibling
+repositories are required. The beta.17 adoption updates only its exact
+version/archive hash; all other locked packages and application code stay.
+See the [platform adoption review](../../../../docs/design-reviews/2026-10-14-native-sdk-adoption.md)
+for local checks and the separate hosted/physical gates.
 
 Run the commands below from this client directory.
 
@@ -93,7 +96,7 @@ source content. No automatic processing polling is added in this template.
 
 Live mode's settings menu includes **Device connection**. Enter the printed
 serial, explicitly enable Bluetooth access, scan, select and read status. This
-secondary [screen](lib/device_page.dart) calls only the public beta.13
+secondary [screen](lib/device_page.dart) calls only the public beta.17
 `BotaDeviceClient.configure`, `devices.scan/connect/readStatus/disconnect` and
 `destroy`. SDK identity reads verify the serial; advertised names are not identity.
 Connection loss clears/fences stale metadata. Restore Bluetooth and reconnect
@@ -133,7 +136,7 @@ Local qualification on October 12, 2026: frozen pub install, formatting,
 analysis and **38 tests** pass (9 HTTP, 15 controller, 10 device lifecycle,
 4 app widgets). The final-source Android debug APK also builds with Flutter
 3.47.5/JDK 17/SDK 37. Its application ID is
-`dev.bota.examples.mobile_recordings_flutter`. The public beta.13 plugin still
+`dev.bota.examples.mobile_recordings_flutter`. The public beta.17 plugin still
 uses Kotlin Gradle Plugin and produces Flutter's migration warning; this build
 does not establish compatibility with a later Flutter toolchain. Hosted results
 and any phone UI observations require their separate exact-source evidence.

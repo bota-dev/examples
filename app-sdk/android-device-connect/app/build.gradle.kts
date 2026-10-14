@@ -14,6 +14,6 @@ android {
 }
 dependencyLocking { lockAllConfigurations() }
 dependencies {
-    implementation("dev.bota:bota-app-sdk:2.0.0-beta.13")
+    implementation("dev.bota:bota-app-sdk:2.0.0-beta.17")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
 }

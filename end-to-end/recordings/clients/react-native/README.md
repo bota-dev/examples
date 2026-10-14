@@ -12,8 +12,15 @@ client changes no SDK pin, native identity, backend launch base or journal.
 
 This example includes **Android only**. The SDK's Apple facade does not supply
 this example's custom Kotlin upload host on iOS; an `ios` npm script is not
-evidence of an implemented iOS app. Public SDK beta.13, native adapter and
-existing security guards remain pinned.
+evidence of an implemented iOS app. The public npm package and native Maven host
+both pin SDK beta.17. Existing native adapter and security guards are retained.
+
+This package update uses the public `BotaClient` / `BotaDeviceSDK`
+native-workflow compatibility entry. It does not migrate to the generated
+JavaScript `/runtime` entry or its OS ports. The native material registry,
+backend origin, capture journals and SDK receipt/cleanup authority stay intact.
+See the [published SDK adoption review](../../../../docs/design-reviews/2026-10-14-published-sdk-adoption.md)
+for current qualification; earlier device/build results remain historical.
 
 ## Run the sample
 
@@ -194,7 +201,8 @@ reviewed downstream Metro parents retain their public names/versions and only
 replace their internal micromatch `.some` import with its literal public source
 and the same locked picomatch 2.3.2. The existing braces entry point now requires
 21 zero-removal/asset checks; native signing still attests 803 assets and runs
-32 cases. SDK beta.13, application/device contracts and native/source-map tests
-remain unchanged. See [exact local qualification and remaining source, hosted,
+32 cases. The dated dependency remediation preserved SDK beta.13;
+the separate beta.17 upgrade retains application/device contracts and native/source-map tests.
+See [exact local qualification and remaining source, hosted,
 scanner and native gates](../../../../docs/metro-public-matching-removal.md). Local checks do not establish scanner
 closure or physical acceptance.

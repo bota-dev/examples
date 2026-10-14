@@ -10,7 +10,7 @@ Flutter Material UI → account/recording state → RecordingsApi
                                                 └─ BackendApi (app Bearer HTTP)
                                                       → ../../backend
                                                       → public Bota /v1 API
-Live-only device screen → public beta.13 Flutter SDK → Bluetooth
+Live-only device screen → public beta.17 Flutter SDK → Bluetooth
 ```
 
 `models.dart` validates the narrow presentation DTOs. `api.dart` holds the
@@ -50,7 +50,7 @@ or app disposal. Device navigation drains subscriptions/configuration and awaits
 SDK destruction before reopening. A destruction failure keeps the gate failed
 and new device admission blocked until app restart. SDK transport errors/native
 omissions remain SDK concerns.
-It offers no recording catalog/upload/cleanup because published Dart beta.13
+It offers no recording catalog/upload/cleanup because published Dart beta.17
 lacks the required public gates and encrypted-v2 host callback contract.
 
 The generated Android host has a distinct application ID, minimum API 26,

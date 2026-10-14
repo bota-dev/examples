@@ -1,8 +1,17 @@
 # Connect to a device with Flutter
 
-An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.13` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
+An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.17` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
 
-## Current beta.13 adoption
+## Current beta.17 adoption — 2026-10-14
+
+The exact pub.dev pin and regenerated archive lock select beta.17; the published
+plugin pins matching Android Maven and Apple CocoaPods versions. Only the Bota
+lock entry changed. Frozen installation, clean analysis and all six existing
+lifecycle widget cases pass on Flutter 3.47.5. The application code and device
+scope stay unchanged. Android debug assembly and hosted results are recorded in
+the [SDK adoption review](../../docs/design-reviews/2026-10-14-native-sdk-adoption.md); no beta.17 phone or iOS test was performed.
+
+## Historical beta.13 adoption
 
 The exact pub.dev pin and archive lock select beta.13; its Android Maven and
 Apple CocoaPods dependencies select that same version. The dependency update

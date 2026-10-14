@@ -123,10 +123,11 @@ over another overlapping implementation. No universal UI framework, wrapper SDK
 or private runtime dependency is introduced to share concrete backend logic.
 
 Use normal platform UI and published public SDK surfaces for optional device
-paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.13/frameworks/web)
+paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.17/frameworks/web)
 targets foreground desktop Chromium, a secure context and compatible device
 Identity service; API-only browser use and browser Bluetooth have different
-boundaries. Existing exact SDK pins stay unchanged in this design revision.
+boundaries. The [October 14 adoption review](../../docs/design-reviews/2026-10-14-published-sdk-adoption.md)
+records the beta.17 package update separately from this API-only client.
 Connection/catalog samples do not establish complete app parity or hardware
 acceptance. Vertical workflows and production identity/deployment remain later
 or customer-owned work, respectively.

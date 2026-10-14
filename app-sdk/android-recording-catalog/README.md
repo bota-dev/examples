@@ -1,7 +1,7 @@
 # List device recording metadata with Kotlin
 
 An independent Android example using public Maven Central
-`dev.bota:bota-app-sdk:2.0.0-beta.13` (beta). Discover an already-provisioned
+`dev.bota:bota-app-sdk:2.0.0-beta.17` (beta). Discover an already-provisioned
 device, verify its exact serial through the SDK, read status, and list pending
 recording metadata. Optional read-only connection settings and bounded firmware
 log observations help diagnose the same device. No backend or API key is required.
@@ -11,7 +11,16 @@ resets, or starts/stops recording. The SDK sends catalog-request protocol messag
 to retrieve metadata; “read-only” means no recording/data mutation, not zero BLE
 writes. Catalog data is shown in memory and is not saved or logged by the app.
 
-## Current beta.13 adoption
+## Current beta.17 adoption — 2026-10-14
+
+The exact public Maven pin and regenerated dependency lock select beta.17.
+Only the Bota lock entry changed. All 16 existing JVM cases and Android debug
+assembly pass locally with JDK 17/SDK 36; a separate frozen-lock build preserves
+that resolution. Fresh pairing, metadata-only scope and connection fencing
+remain unchanged. Hosted and physical acceptance require separate beta.17
+results. See the [SDK adoption review](../../docs/design-reviews/2026-10-14-native-sdk-adoption.md).
+
+## Historical beta.13 adoption
 
 The exact public Maven pin and dependency lock select beta.13. All 16 local unit
 tests and frozen-lock Android APK assembly pass with JDK 17 and Android SDK 36.
@@ -197,4 +206,4 @@ background operation and interrupted audio transfers are not covered.
 The shared compound-engineering review uses the repository's
 [architecture](../../ARCHITECTURE.md) §§2–6. See the
 [SDK reference](https://docs.bota.dev/api-reference/client-sdks) and
-[public Android package](https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.13/).
+[public Android package](https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.17/).

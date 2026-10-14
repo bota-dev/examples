@@ -91,13 +91,13 @@ and uncertain action. Saved IDs remain metadata, not content/cleanup authority.
   retained in client memory. The server owns project/end-user configuration and
   the Bota API key. Sign-out clears content and fences late results.
 - **React Native device path:** retain the Android encrypted-v2 host and its
-  exact public beta.13 SDK. Open it explicitly from the live app; keep fresh
+  exact public beta.17 SDK. Open it explicitly from the live app; keep fresh
   identity/pairing, idle/no-direct-upload, generation and completion boundaries.
-- **Flutter device path:** public beta.13 connection/status only. Its current
+- **Flutter device path:** public beta.17 connection/status only. Its current
   facade lacks the fresh pairing and encrypted-upload host interfaces needed
   for this example's device sync. Do not bypass those gaps.
 
-Keep existing exact beta.13 manifest/lock pins. Version adoption needs its own
+Keep existing exact beta.17 manifest/lock pins. Version adoption needs its own
 public-contract/build/recovery evidence; do not assume a new version closes a
 facade gap. Native Windows SDK support is
 [planned upstream](https://github.com/bota-dev/app-sdk#supported-platforms);

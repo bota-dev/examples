@@ -1,6 +1,6 @@
 # Connect to a device from the browser
 
-A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.13` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
+A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.17` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
 
 The public calls are in [page.ts](page.ts):
 `devices.connect({ expectedSerialNumber })`, `devices.readSnapshot()` and
@@ -8,10 +8,13 @@ The public calls are in [page.ts](page.ts):
 page controls and cleans up the client. Copy both files and the page markup to
 adapt this example; keep the serial supplied by your application's user.
 
-**Current checks, October 12, 2026:** frozen installation, 15 local tests
+**Current checks, October 14, 2026, beta.17:** frozen installation, 15 local tests
 (11 synthetic UI/lifecycle regressions and four dependency-security checks),
 TypeScript checking and the Vite/WASM build pass on Node 22.23.2 / Windows.
 Live browser Bluetooth and supported-firmware acceptance remain unverified.
+The [adoption review](../../docs/design-reviews/2026-10-14-published-sdk-adoption.md)
+records public release availability and exact-version host evidence. npm's
+`latest` tag remains beta.0; this sample pins the published beta explicitly.
 
 ## Run
 

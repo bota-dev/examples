@@ -6,6 +6,10 @@ shared Node backend, platform clients and copyable feature modules. Retain usefu
 standalone Node/Python quickstarts. General capabilities are the current product
 layer; vertical/app-type examples come later.
 
+The separately requested [October 14 SDK adoption](docs/design-reviews/2026-10-14-published-sdk-adoption.md)
+updates existing device clients to public beta.17. It does not complete missing
+platform hosts or the remaining consolidation below.
+
 ## 1. Consolidate the existing backend features compatibly
 
 **Implemented:** shared recording/processing/Ask features and the

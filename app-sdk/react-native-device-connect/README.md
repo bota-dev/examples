@@ -1,6 +1,12 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.13`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.17`. No API key, backend, binding, recording, or upload is needed.
+
+This version update retains the public `BotaClient` native-workflow compatibility
+entry. It does not migrate the sample to the generated-JavaScript `/runtime`
+entry or add OS ports. Current package/build qualification is recorded in the
+[published SDK adoption review](../../docs/design-reviews/2026-10-14-published-sdk-adoption.md).
+Earlier dated build and phone results below qualify only their recorded versions.
 
 ## Run
 
@@ -15,9 +21,11 @@ npm run android
 npm run ios
 ```
 
-Keep install scripts enabled: this example applies a pinned node-forge parser
-guard for Expo signing tools. `npm test` includes nine Forge/Expo regressions;
-see [dependency review](../../docs/node-forge-parser-mitigation.md).
+Keep install scripts enabled: this example verifies all 803 assets of its
+reviewed native Expo signing tools and rejects Forge, then checks the public
+Metro matching sources without braces. `npm test` includes all 32 signing,
+21 Metro and four source-map regressions; see
+[dependency review](../../DEPENDENCY_SECURITY.md).
 
 Grant Bluetooth permissions (location on Android 11 and older), turn Bluetooth on, enter the exact printed device serial, and scan. Stop other apps from holding the device connection. Select a candidate to connect. Advertised names are display hints, not identity; a mismatch disconnects. On success, read status and disconnect. No environment configuration is needed. Rebuild native apps after changing the SDK.
 
@@ -50,7 +58,7 @@ GATT 8/133 reconnect failures. The dated beta.9 phone results below remain evide
 for beta.9 only; current build and hardware checks are tracked in the
 [adoption review](../../docs/independent-examples-review.md).
 
-The current beta.13 also includes failed Android connect/MTU handshake cleanup,
+The historical beta.13 also includes failed Android connect/MTU handshake cleanup,
 first published in beta.12. The SDK retains responsibility for transport and
 connection recovery; the sample's explicit scan/connect workflow is unchanged.
 Its [public release verification](https://github.com/bota-dev/app-sdk/releases/download/v2.0.0-beta.13/beta13-publication-review.md)
@@ -178,7 +186,8 @@ reviewed downstream Metro parents retain their public names/versions and only
 replace their internal micromatch `.some` import with its literal public source
 and the same locked picomatch 2.3.2. The existing braces entry point now requires
 21 zero-removal/asset checks; native signing still attests 803 assets and runs
-32 cases. SDK beta.13, application/device contracts and native/source-map tests
-remain unchanged. See [exact local qualification and remaining source, hosted,
+32 cases. The dated dependency remediation preserved SDK beta.13;
+the separate beta.17 upgrade retains application/device contracts and native/source-map tests.
+See [exact local qualification and remaining source, hosted,
 scanner and native gates](../../docs/metro-public-matching-removal.md). Local checks do not establish scanner
 closure or physical acceptance.

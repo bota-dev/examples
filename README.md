@@ -128,19 +128,22 @@ Different public SDK capabilities do not imply identical UI or full device parit
 | Kotlin / Android | [MainActivity.kt](app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](app-sdk/android-device-connect/README.md) | Native Android, API 26+; catalog reads metadata, not audio transfer; integrated recording client is planned |
 | Swift / Apple | [App.swift](app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](app-sdk/apple-device-connect/README.md) | Current SwiftUI hosts are macOS; no native iOS host or integrated recording client yet |
 | React Native | [App.tsx](app-sdk/react-native-device-connect/App.tsx); [setup](app-sdk/react-native-device-connect/README.md) | Connection has Android/iOS hosts; recording/sync sample is Android-only, already-provisioned encrypted-v2 with documented backend/firmware gates |
-| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android host only; beta.13 lacks the fresh-pairing/encrypted-v2 interfaces required for the RN sync workflow |
+| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android host only; beta.17 lacks the fresh-pairing/encrypted-v2 host interfaces required for the RN sync workflow |
 | Web / desktop Chromium | [page.ts](app-sdk/web-device-connect/page.ts) and [main.ts](app-sdk/web-device-connect/main.ts); [setup](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; not integrated into the API recording client yet |
 | Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
 
-All eight independent device examples pin published **2.0.0-beta.13**.
+All device examples, including the legacy workspace and integrated mobile
+clients, pin published **2.0.0-beta.17**. This is the current public beta;
+npm's `latest` tag remains beta.0. Native RN workflows use the compatibility
+factory; this package update does not migrate them to generated JS `/runtime`.
 Inspect the selected manifest/lockfile and README for tooling and public methods.
 Missing facade capability, missing host and missing verification are different
 gaps; do not fill them with private transports or an unofficial SDK.
 
-[Adoption evidence](docs/independent-examples-review.md#beta13-adoption) and the
+[Adoption evidence](docs/design-reviews/2026-10-14-published-sdk-adoption.md) and the
 [implementation review](docs/independent-examples-review.md) distinguish source,
 native builds, live API and physical acceptance. Historical phone results apply
-only to their tested source/SDK/firmware/device; they do not establish beta.13
+only to their tested source/SDK/firmware/device; they do not establish beta.17
 physical acceptance. The [AI guide](docs/using-examples-with-ai.md) helps tools
 locate feature code and setup; [AGENTS.md](AGENTS.md) governs repository changes.
 
@@ -270,7 +273,8 @@ an unchanged dependency alert or prove physical installation.
 
 The [legacy RN app](apps/react-native/README.md) and
 [backend](apps/backend/README.md) under `apps/` remain compatibility examples,
-not the recommended customer template. They pin SDK beta.6. The backend has no
+not the recommended customer template. They pin SDK beta.17 using the native
+compatibility path. The backend has no
 caller authentication or per-user authorization and uses one configured end
 user. The immediate raw-token binding/provisioning flow is a target-lifecycle
 gap. Use this pair only in an isolated local test environment.

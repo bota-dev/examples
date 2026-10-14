@@ -1,5 +1,13 @@
 # React Native App SDK migration
 
+**Current package:** the legacy workspace now pins public beta.17 while retaining
+the native `BotaClient` compatibility path and its existing local-only backend.
+See [October 14 adoption](design-reviews/2026-10-14-published-sdk-adoption.md)
+for current checks. Generated-JS `/runtime` adoption is separate. The beta.6
+migration and exact-source evidence below are historical.
+The current native app/runtime is 0.3.0; the retained `appVersion` policy keeps
+this native upgrade separate from 0.2.0 binaries. A native rebuild is required.
+
 The existing `apps/react-native` example moves to native app version 0.2.0 and
 the exact published beta dependency `@bota.dev/react-native-app-sdk@2.0.0-beta.6`.
 Its Expo 57 dependencies use the Expo native-module matrix (React 19.2.3,
