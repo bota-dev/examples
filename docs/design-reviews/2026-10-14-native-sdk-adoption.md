@@ -1,5 +1,9 @@
 # Published beta.17 adoption: native and Flutter examples
 
+This is the historical beta.17 review qualified at `a7b3417`. Its registry
+observations below predate beta.18 publication; see the separate
+[beta.18 platform review](2026-10-14-native-sdk-beta18-adoption.md) for the current update.
+
 ## Scope and authority
 
 The owner requested the latest published SDK. Public registry checks on
@@ -75,7 +79,7 @@ results remain dated and bound to their original package/source/firmware.
 | Flutter common app isolation/recovery | Enforced lock, format unchanged for 10 files, clean analysis and 38 existing HTTP/controller/device/UI cases | matched locally |
 | Flutter dependency licenses | Five gate fixtures and 44 resolved MIT/BSD/Apache notices | matched for bounded package gate |
 | Flutter Android native linking | Public beta.17 debug APKs pass for both roots on Flutter 3.47.5/JDK 17/SDK 37; connect 219.3 seconds, common app 257.5 seconds | matched locally |
-| SwiftPM and macOS app compilation | Public tag/checksum and consumed signatures verified on Windows; no Apple compiler available | unverified locally; hosted gate required |
+| SwiftPM and macOS app compilation | Exact beta.17 public inputs and both hosted macOS builds pass at a7b3417 | matched in hosted builds; no local Apple compiler |
 | Physical behavior and live providers/storage | Not executed in this dependency-adoption pass | unverified |
 
 Flutter 3.47.5 automatically amends the independent connection sample's analyzer
@@ -98,6 +102,7 @@ acceptance. No phone/app data, provisioning or firmware was changed.
 | Flutter Recordings | `e7f5150991b4287d5b5daf3eaf4b0af3413822b92cf6d84d28dbe517e273c774` |
 
 Both Apple lock JSON files bind the peeled tag commit exactly. All 44 local
-Markdown links across the six platform roots and this review resolve. The
-consuming hosted workflows remain responsible for clean-runner qualification,
-including macOS compilation unavailable on the Windows host.
+Markdown links across the six platform roots and this review resolve. All six
+Kotlin/Swift/Flutter hosted jobs pass at `a7b3417`, including both macOS builds.
+See [complete beta.17 qualification](2026-10-14-published-sdk-adoption.md#hosted-qualification-of-the-sdk-update).
+Later beta.18 results are separate; no beta.17 hardware acceptance is implied.

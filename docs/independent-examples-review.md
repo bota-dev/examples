@@ -1,6 +1,6 @@
 # Independent examples implementation review
 
-Current SDK adoption: [October 14 published beta.17 review](design-reviews/2026-10-14-published-sdk-adoption.md).
+Current SDK adoption: [October 14 published beta.18 review](design-reviews/2026-10-14-beta18-sdk-adoption.md).
 Earlier sections retain their exact historical package, source and hardware scope.
 
 Review date: 2026-09-29 UTC. Uses the shared compound-engineering 1.2.5 workflow against [ARCHITECTURE.md](../ARCHITECTURE.md) §§2–6 and the selected public contracts. This expansion adds seven examples alongside the previously verified Node upload example; it does not modify the legacy workspace or the platform/SDK implementation.

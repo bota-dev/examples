@@ -5,8 +5,11 @@ Follow the repository [AGENTS.md](../../../../AGENTS.md), then this
 inside Bota Recordings; use the [combined backend setup](../../README.md).
 No cross-example runtime imports or private Bota helpers.
 
-Preserve exact beta.17/public dependency pins and the frozen lock. Sample mode
-is pure local fixtures; it must not initialize SDKs, request permissions or make
+- SDK: retain exact public beta.17 and the frozen pub lock; beta.17 is the latest
+  published Dart package. Native beta.18 does not establish Flutter availability; see
+  the [version review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md).
+
+Sample mode is pure local fixtures; it must not initialize SDKs, request permissions or make
 HTTP/provider calls. Live mode uses a memory-only customer-backend token, never a
 Bota key. Keep bounds, redirect refusal, authorization/source checks, account and
 selection fences, retained uncertain write locks and GET-only request recovery.

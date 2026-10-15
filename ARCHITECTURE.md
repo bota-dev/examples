@@ -81,7 +81,7 @@ quickstarts still install independently:
 | [React Native](end-to-end/recordings/clients/react-native/README.md) | Complete relocated install root; common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
 | [Flutter](end-to-end/recordings/clients/flutter/README.md) | First relocated client: complete Android install root with cloud-content flow and secondary connection/status. Published beta.17 lacks the fresh pairing and verified encrypted-upload host surfaces required for device sync. |
 | [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
-| [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its native compatibility path now pins beta.17; dependency guards remain. Its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
+| [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its native compatibility path now pins beta.18; dependency guards remain. Its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
 
 The web and mobile backends now import the integrated core through compatible
 feature paths and DTO projections. Authentication, bounded HTTP clients, upload,
@@ -100,8 +100,9 @@ preserved. Native recovery identity includes the backend origin: retain that
 origin, using combined `PORT=8787` with matching `APP_ORIGIN` where applicable,
 rather than resetting journals or rewriting capture scope. Fresh cloud setup
 may explicitly select `5173`. Folder relocation adds no SDK capability.
-All device examples now use exact public beta.17 pins; the
-[adoption review](docs/design-reviews/2026-10-14-published-sdk-adoption.md)
+RN/Web/Android/Swift use exact public beta.18 pins; Flutter retains its latest
+public beta.17 until beta.18 is published. These install roots are independent. The
+[adoption review](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
 records package and host checks. RN retains its native-workflow compatibility
 factory; generated-JS `/runtime` adoption is separate. Native iOS common
 apps, Flutter iOS and native Windows samples are not supplied here; Windows

@@ -1,6 +1,6 @@
 {
   "name": "@bota-dev/example-react-native",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "private": true,
   "main": "expo-router/entry",
   "scripts": {
@@ -38,7 +38,7 @@
     "react-native-svg": "15.15.4",
     "tailwind-merge": "^3.4.0",
     "tailwindcss": "^4.3.0",
-    "@bota.dev/react-native-app-sdk": "2.0.0-beta.17",
+    "@bota.dev/react-native-app-sdk": "2.0.0-beta.18",
     "expo-build-properties": "~57.0.15"
   },
   "devDependencies": {

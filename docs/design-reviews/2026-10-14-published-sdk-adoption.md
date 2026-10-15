@@ -1,5 +1,9 @@
 # Published SDK adoption — October 14, 2026
 
+Historical beta.17 qualification. The subsequent
+[beta.18 adoption](2026-10-14-beta18-sdk-adoption.md) tracks the release that
+became public during this pass; results below qualify beta.17 only.
+
 Owner request: use the latest SDK across the examples. This follows the public
 package and lifecycle boundaries in [DESIGN.md](../../DESIGN.md),
 [ARCHITECTURE.md](../../ARCHITECTURE.md) and
@@ -70,11 +74,11 @@ guard indexes and all guarded SDK-independent vendor payloads remain intact.
 | Preserve app behavior and lifecycle | Existing controllers, public methods, authorization, journal/origin and SDK cleanup code retained; existing controller/native callback cases | Matched in source/tests; physical acceptance unverified |
 | Native binary / OTA compatibility | Legacy appVersion/runtime 0.3.0; app ID and journals retained; other RN roots configure no OTA runtime/update project | Matched in source; rebuild required, no OTA published |
 | Existing dependency mitigations remain enforced | Full legacy 110 tests and mandatory 803-signing/1,252-parent-asset install guards; RN 58/100 tests retain signing, Metro and map checks | Matched locally; original guarded bytes unchanged |
-| Browser SDK host | Frozen npm install, 15 tests, TypeScript and Vite/WASM production build on Node 22.23.2 / Windows | Matched locally; exact hosted checks pending |
+| Browser SDK host | Frozen npm install, 15 tests, TypeScript and Vite/WASM production build on Node 22.23.2 / Windows; hosted Web SDK check | Matched locally and at a7b3417 |
 | Kotlin / Flutter host builds | Two frozen Kotlin APKs, 16 JVM tests; Flutter clean analysis, 6/38 tests, both APKs, five license fixtures / 44 notices | Matched locally; [platform details](2026-10-14-native-sdk-adoption.md) |
-| RN source and Android hosts | Two frozen installs, typechecks, 58/100 tests, both 448-identity license gates and ordinary Android/Hermes exports; exact-source short-path APK builds and 10 recording-host JVM tests | Matched locally; hosted clean-runner checks pending |
-| Legacy host and exports | Frozen install, 110 tests, both typechecks and backend build pass; final all-platform export running | Partial until export/native hosted checks complete |
-| SwiftPM / macOS hosts | Public exact revision/checksum and consumed signatures verified | Unverified locally; macOS compiler unavailable, hosted build required |
+| RN source and Android hosts | Two frozen installs, typechecks, 58/100 tests, both 448-identity license gates and ordinary Android/Hermes exports; exact-source APK builds and 10 recording-host JVM tests; hosted Android/iOS connection and Android recording jobs | Matched locally and in hosted consumers at a7b3417 |
+| Legacy host and exports | Frozen install, 110 tests, both typechecks/backend build; final 0.3.0 Android/iOS/Web exports and hosted four-ABI Android APK pass | Matched locally and at a7b3417 |
+| SwiftPM / macOS hosts | Public exact revision/checksum and signatures; both hosted SwiftPM resolution/macOS builds succeed | Matched in hosted consumers at a7b3417; no local Apple compiler |
 | Documentation follows manifests | Current README/design/agent/public setup guidance; 77 catalog IDs / 84 documents / 449 indexed links, nine discovery regressions; 474 changed/new Markdown links checked separately | Matched locally; historical package/device evidence retained |
 | Physical, live-backend and deployment acceptance | No device, firmware, account, upload, provider or deployment operation performed | Unverified; prior package-specific results are historical |
 
@@ -100,3 +104,38 @@ current source by SHA-256 before and after Expo prebuild. Connection APK SHA-256
 Recordings APK SHA-256:
 `0a5ced9ffa0466f4d84e18c2416e1274b6d2e4d17b63200f3dc6689b8abf2543`.
 No APK was installed on a device.
+
+## Hosted qualification of the SDK update
+
+The qualifying runtime source is
+[`a7b34175eff07b6ab55af66991ae8a60043930f1`](https://github.com/bota-dev/examples/commit/a7b34175eff07b6ab55af66991ae8a60043930f1).
+Subsequent evidence-only Markdown updates do not change its dependency graph,
+runtime source, native configuration, installation guards or workflows.
+
+**All 13 source-validation workflows / 22 jobs succeed at this source.** Both
+Kotlin builds, both Swift macOS builds, both Flutter APK jobs, RN connection
+Android/iOS and the RN recording host pass. Web SDK, Web application,
+backend/core, catalog and CodeQL checks pass. Legacy verification and the final
+Android job also pass: Gradle completed 418 tasks in 21 minutes 10 seconds,
+including arm64-v8a, armeabi-v7a, x86 and x86_64. No workflow, architecture,
+timeout, heap or guard bypass was needed.
+
+Direct qualification runs:
+[RN connection](https://github.com/bota-dev/examples/actions/runs/38654533685),
+[mobile recordings](https://github.com/bota-dev/examples/actions/runs/38654533509),
+[legacy app](https://github.com/bota-dev/examples/actions/runs/38654533691),
+[Swift connection](https://github.com/bota-dev/examples/actions/runs/38654533797),
+[Swift catalog](https://github.com/bota-dev/examples/actions/runs/38654533610),
+[Kotlin connection](https://github.com/bota-dev/examples/actions/runs/38654533747),
+[Kotlin catalog](https://github.com/bota-dev/examples/actions/runs/38654533536),
+[Flutter connection](https://github.com/bota-dev/examples/actions/runs/38654533678),
+[Web SDK](https://github.com/bota-dev/examples/actions/runs/38654533700),
+[Web app](https://github.com/bota-dev/examples/actions/runs/38654533543),
+[core](https://github.com/bota-dev/examples/actions/runs/38654533620),
+[catalog](https://github.com/bota-dev/examples/actions/runs/38654533496),
+[CodeQL](https://github.com/bota-dev/examples/actions/runs/38654532216).
+
+Public setup documentation is updated on the docs integration branch; Mintlify
+production delivery remains separate. New firmware/device, actual upload and
+cleanup, background behavior and missing platform hosts remain unverified or
+unimplemented as described above; these build results do not close those gates.

@@ -85,9 +85,9 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 ## Preserve the migration and copy boundary
 
 1. Inspect the selected README, source/imports, manifest and lockfile. Public
-   SDK pins are beta.17, including the legacy workspace; historical prose does
+   SDK pins are beta.18 for RN/Web/Android/Swift, beta.17 for Flutter; historical prose does
    not override current manifests. RN uses native compatibility factories, not
-   the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-14-published-sdk-adoption.md).
+   the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-14-beta18-sdk-adoption.md).
 2. Install only in documented roots with lifecycle scripts enabled. Keep native
    Expo signing integrity, braces and other mandatory guard/test chains; do not
    bypass postinstall to get a clean install.

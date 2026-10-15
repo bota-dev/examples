@@ -14,10 +14,14 @@ support. This is a development template, not a production authentication system.
 
 Use Flutter **3.47.5**, JDK 17 and Android SDK 37. The direct SDK dependency is
 exact public `bota_app_sdk: 2.0.0-beta.17` (beta); no private packages or sibling
-repositories are required. The beta.17 adoption updates only its exact
-version/archive hash; all other locked packages and application code stay.
-See the [platform adoption review](../../../../docs/design-reviews/2026-10-14-native-sdk-adoption.md)
-for local checks and the separate hosted/physical gates.
+repositories are required. Beta.17 is still the latest public pub.dev package;
+its manifest, lock and application source remain unchanged from `a7b34175`.
+The [hosted beta.17 job](https://github.com/bota-dev/examples/actions/runs/38654533509/job/116161047923)
+passed there. Other platform clients select native beta.18 independently; this
+client claims no beta.18 package or build. See the
+[per-facade version review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md)
+and [beta.17 qualification](../../../../docs/design-reviews/2026-10-14-native-sdk-adoption.md).
+Physical-device acceptance remains separate.
 
 Run the commands below from this client directory.
 

@@ -12,7 +12,7 @@
 
 ## Key conventions
 
-- Preserve exact beta.17 npm/Maven compatibility pins, Expo/native pins, app ID, mandatory 803-asset signing and zero-braces Metro guards, and every existing postinstall/test chain. This client retains the public native-workflow entry; package adoption does not qualify generated-JS `/runtime` ports. Follow [dependency security](../../../../DEPENDENCY_SECURITY.md) and the [SDK adoption review](../../../../docs/design-reviews/2026-10-14-published-sdk-adoption.md).
+- Preserve exact beta.18 npm/Maven compatibility pins, Expo/native pins, app ID, mandatory 803-asset signing and zero-braces Metro guards, and every existing postinstall/test chain. This client retains the public native-workflow entry; package adoption does not qualify generated-JS `/runtime` ports. Follow [dependency security](../../../../DEPENDENCY_SECURITY.md) and the [SDK adoption review](../../../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md).
 - Preserve the `8787` origin defaults and native journal identity. Client relocation does not move server journals or authorize rekeying, deleting or replacing retained captures.
 - Sample mode is local fixtures only; SDK/native loading and permissions require the explicit live Device action. Keep caller tokens in memory and Bota keys on the server.
 - Keep source/session fences, uncertain write locks and GET-only recovery. Cloud job success never authorizes device cleanup; SDK receipts and exact-generation checks remain authoritative.

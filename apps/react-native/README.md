@@ -1,14 +1,14 @@
 # Bota Example Mobile App
 
-Expo 57 app demonstrating `@bota.dev/react-native-app-sdk@2.0.0-beta.17`
-(beta) with the existing local example backend. App/native runtime: 0.3.0.
+Expo 57 app demonstrating `@bota.dev/react-native-app-sdk@2.0.0-beta.18`
+(beta) with the existing local example backend. App/native runtime: 0.4.0.
 
 This update retains the public native-workflow compatibility entry, local-only
 backend and legacy provisioning/recovery limits. It does not adopt the
 generated-JavaScript `/runtime` entry. Current package and build evidence is in
-the [SDK adoption review](../../docs/design-reviews/2026-10-14-published-sdk-adoption.md).
-The `appVersion` OTA policy now selects runtime 0.3.0: rebuild the native app
-before using this SDK update. Old 0.2.0 binaries must not receive its JavaScript.
+the [SDK adoption review](../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md).
+The `appVersion` OTA policy now selects runtime 0.4.0: rebuild the native app
+before using this SDK update. Old 0.2.0/0.3.0 binaries must not receive its JavaScript.
 
 ## Run
 
@@ -43,7 +43,8 @@ development-tool replacement.
 The legacy root also carries the [maintained public-parent matching replacement](../../docs/legacy-public-parent-matching-removal.md)
 for Braces #113. Keep its mandatory read-only asset/absence attestation and
 20-case suite active. The dated remediation preserved SDK beta.6/runtime 0.2.0;
-this separate SDK beta.17 update retains the native/signing workflows and app runtime.
+this separate SDK beta.18 update retains the native/signing workflows and
+requires a new native runtime.
 Local exports/prebuilds do not establish hosted assembly,
 installed Bluetooth behavior or scanner closure.
 

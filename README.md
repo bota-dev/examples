@@ -132,18 +132,19 @@ Different public SDK capabilities do not imply identical UI or full device parit
 | Web / desktop Chromium | [page.ts](app-sdk/web-device-connect/page.ts) and [main.ts](app-sdk/web-device-connect/main.ts); [setup](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; not integrated into the API recording client yet |
 | Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
 
-All device examples, including the legacy workspace and integrated mobile
-clients, pin published **2.0.0-beta.17**. This is the current public beta;
+RN, Web, Android and Swift examples pin public **2.0.0-beta.18**. Both Flutter
+clients retain **2.0.0-beta.17**, the latest public Dart package at this update;
+Flutter beta.18 publication is pending. Each client installs independently.
 npm's `latest` tag remains beta.0. Native RN workflows use the compatibility
 factory; this package update does not migrate them to generated JS `/runtime`.
 Inspect the selected manifest/lockfile and README for tooling and public methods.
 Missing facade capability, missing host and missing verification are different
 gaps; do not fill them with private transports or an unofficial SDK.
 
-[Adoption evidence](docs/design-reviews/2026-10-14-published-sdk-adoption.md) and the
+[Adoption evidence](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md) and the
 [implementation review](docs/independent-examples-review.md) distinguish source,
 native builds, live API and physical acceptance. Historical phone results apply
-only to their tested source/SDK/firmware/device; they do not establish beta.17
+only to their tested source/SDK/firmware/device; they do not establish beta.18
 physical acceptance. The [AI guide](docs/using-examples-with-ai.md) helps tools
 locate feature code and setup; [AGENTS.md](AGENTS.md) governs repository changes.
 
@@ -273,7 +274,7 @@ an unchanged dependency alert or prove physical installation.
 
 The [legacy RN app](apps/react-native/README.md) and
 [backend](apps/backend/README.md) under `apps/` remain compatibility examples,
-not the recommended customer template. They pin SDK beta.17 using the native
+not the recommended customer template. They pin SDK beta.18 using the native
 compatibility path. The backend has no
 caller authentication or per-user authorization and uses one configured end
 user. The immediate raw-token binding/provisioning flow is a target-lifecycle

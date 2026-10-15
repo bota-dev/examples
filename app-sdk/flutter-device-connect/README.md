@@ -11,6 +11,13 @@ lifecycle widget cases pass on Flutter 3.47.5. The application code and device
 scope stay unchanged. Android debug assembly and hosted results are recorded in
 the [SDK adoption review](../../docs/design-reviews/2026-10-14-native-sdk-adoption.md); no beta.17 phone or iOS test was performed.
 
+Beta.17 remains the latest public pub.dev package. Other platform samples now
+select public native beta.18 independently; this Flutter manifest, lock and app
+source remain unchanged from `a7b34175`. Its
+[hosted beta.17 job](https://github.com/bota-dev/examples/actions/runs/38654533678/job/116161047442)
+passed there. See the [per-facade version review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md);
+no Flutter beta.18 build or availability is claimed.
+
 ## Historical beta.13 adoption
 
 The exact pub.dev pin and archive lock select beta.13; its Android Maven and

@@ -1,11 +1,11 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.17`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.18`. No API key, backend, binding, recording, or upload is needed.
 
 This version update retains the public `BotaClient` native-workflow compatibility
 entry. It does not migrate the sample to the generated-JavaScript `/runtime`
 entry or add OS ports. Current package/build qualification is recorded in the
-[published SDK adoption review](../../docs/design-reviews/2026-10-14-published-sdk-adoption.md).
+[published SDK adoption review](../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md).
 Earlier dated build and phone results below qualify only their recorded versions.
 
 ## Run
@@ -187,7 +187,7 @@ replace their internal micromatch `.some` import with its literal public source
 and the same locked picomatch 2.3.2. The existing braces entry point now requires
 21 zero-removal/asset checks; native signing still attests 803 assets and runs
 32 cases. The dated dependency remediation preserved SDK beta.13;
-the separate beta.17 upgrade retains application/device contracts and native/source-map tests.
+the separate beta.18 upgrade retains application/device contracts and native/source-map tests.
 See [exact local qualification and remaining source, hosted,
 scanner and native gates](../../docs/metro-public-matching-removal.md). Local checks do not establish scanner
 closure or physical acceptance.

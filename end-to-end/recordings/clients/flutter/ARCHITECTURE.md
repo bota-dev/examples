@@ -59,6 +59,11 @@ without Bluetooth hardware. No iOS/desktop/web host is supplied here. Tests and
 debug assembly verify source/UI/runtime composition; native linking for other
 hosts, live providers and physical device behavior remain separate acceptance.
 
+The [version review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md)
+retains public Flutter beta.17 independently of native beta.18 samples. This
+client's manifest, lock and application source remain qualified at `a7b34175`;
+that is beta.17 evidence, with no Flutter beta.18 build or new host capability.
+
 ## Implementation review
 
 | Requirement | Evidence | Status |

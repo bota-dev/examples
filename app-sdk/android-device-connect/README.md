@@ -1,8 +1,16 @@
 # Connect to a device with Kotlin
 
-A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.17` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
+A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.18` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
 
-## Current beta.17 adoption — 2026-10-14
+## Current beta.18 adoption — 2026-10-14
+
+The exact public Maven pin and regenerated lock select beta.18. Only the Bota
+lock entry changes; application/controller source and non-SDK packages remain.
+New local and hosted checks for this package are recorded separately in the
+[beta.18 adoption review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md); beta.17 results below qualify their original source only.
+No physical beta.18 session is claimed.
+
+## Historical beta.17 adoption — 2026-10-14
 
 The exact public Maven pin and regenerated dependency lock select beta.17.
 Only the Bota lock entry changed; non-SDK dependencies and app lifecycle code
