@@ -29,12 +29,13 @@ export function parseJson(bytes) {
 
 export function createClient(
   config,
-  { fetchImpl = fetch, deadline = performance.now() + 180000 } = {},
+  { fetchImpl = fetch, deadline = performance.now() + 180000, signal: operationSignal } = {},
 ) {
   const signal = (seconds) => {
     const left = Math.floor(deadline - performance.now());
     ensure(left > 0, 504, 'TIMEOUT', 'Operation time budget expired. Refresh existing state.');
-    return AbortSignal.timeout(Math.min(seconds * 1000, left));
+    const timeout = AbortSignal.timeout(Math.min(seconds * 1000, left));
+    return operationSignal ? AbortSignal.any([timeout, operationSignal]) : timeout;
   };
   async function request(method, path, body, options = {}) {
     ensure(
@@ -170,5 +171,110 @@ export function createClient(
       );
     }
   }
-  return { request, storagePut };
+  async function storageGet(raw, expectedBytes) {
+    let url;
+    try {
+      url = new URL(raw);
+    } catch {
+      throw new AppError(502, 'INVALID_STORAGE', 'Unsupported audio source.');
+    }
+    ensure(
+      typeof raw === 'string' &&
+        raw.length <= 8192 &&
+        !/[\x00-\x20\x7f\\#]/.test(raw) &&
+        url.protocol === 'https:' &&
+        !url.username &&
+        !url.password &&
+        !url.hash &&
+        (!url.port || url.port === '443') &&
+        config.storageHosts.includes(url.hostname),
+      502,
+      'INVALID_STORAGE',
+      'Unsupported audio source.',
+    );
+    const maxBytes = 25 * 1024 * 1024;
+    const count = (value) => {
+      const number =
+        typeof value === 'string' && /^(0|[1-9][0-9]{0,15})$/.test(value) ? Number(value) : value;
+      ensure(
+        Number.isSafeInteger(number) && number > 0 && number <= maxBytes,
+        502,
+        'RESPONSE_LIMIT',
+        'Audio exceeds the supported size or has an invalid length.',
+      );
+      return number;
+    };
+    const expected = expectedBytes === null ? null : count(expectedBytes);
+    const abort = signal(120);
+    let response;
+    try {
+      response = await fetchImpl(url.href, {
+        method: 'GET',
+        redirect: 'error',
+        credentials: 'omit',
+        referrerPolicy: 'no-referrer',
+        headers: { Accept: 'audio/wav', 'Accept-Encoding': 'identity' },
+        signal: abort,
+      });
+      ensure(
+        ![403, 404].includes(response.status),
+        410,
+        'STORAGE_EXPIRED',
+        'Audio access expired or is unavailable. Load audio again to request fresh access.',
+      );
+      ensure(
+        response.status === 200 &&
+          response.body &&
+          !response.headers.get('content-range') &&
+          (response.headers.get('content-encoding') ?? 'identity').toLowerCase() === 'identity' &&
+          response.headers.get('content-type')?.split(';')[0].trim().toLowerCase() === 'audio/wav',
+        502,
+        'INVALID_STORAGE',
+        'The audio source did not return a supported WAV response.',
+      );
+      const length = response.headers.get('content-length');
+      const declared = length === null ? null : count(length);
+      ensure(
+        expected === null || declared === null || expected === declared,
+        502,
+        'INVALID_STORAGE',
+        'The audio source length did not match.',
+      );
+      const chunks = [];
+      let bytes = 0;
+      for await (const chunk of response.body) {
+        abort.throwIfAborted();
+        bytes += chunk.length;
+        ensure(
+          bytes <= maxBytes &&
+            (expected === null || bytes <= expected) &&
+            (declared === null || bytes <= declared),
+          502,
+          'RESPONSE_LIMIT',
+          'Audio exceeds the supported size or declared length.',
+        );
+        chunks.push(chunk);
+      }
+      abort.throwIfAborted();
+      ensure(
+        bytes > 0 &&
+          (expected === null || bytes === expected) &&
+          (declared === null || bytes === declared),
+        502,
+        'INVALID_STORAGE',
+        'The audio source was empty or incomplete.',
+      );
+      return Buffer.concat(chunks);
+    } catch (error) {
+      if (error instanceof AppError) throw error;
+      throw new AppError(
+        502,
+        'STORAGE_FAILURE',
+        'Audio could not be loaded. No automatic retry was made.',
+      );
+    } finally {
+      if (response?.body && !response.body.locked) await response.body.cancel().catch(() => {});
+    }
+  }
+  return { request, storagePut, storageGet };
 }

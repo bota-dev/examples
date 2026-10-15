@@ -2,7 +2,7 @@
 
 A familiar recording app template for customer developers building for their
 own end users, inspired by Demo and Bota One. Import audio, choose a recording,
-then open its Transcript, Summary or Ask tab. The React frontend and Node
+load supported audio, then open its Transcript, Summary or Ask tab. The React frontend and Node
 backend demonstrate public recordings, upload, transcription, general notes,
 recording-scoped Ask and webhook integrations. Shared HTTP, authentication and
 durable intent adapters remain in this Web root and use shared feature code.
@@ -23,8 +23,8 @@ starter. API documentation and source recipes are below; the everyday UI focuses
 on recordings and results. Activity is secondary and initially collapsed for
 explicit saved-operation refresh and notification metadata.
 
-This web implementation uses APIs only: no device SDK, microphone capture or
-audio playback. No device, private package or sibling repository is needed.
+This web implementation uses APIs only, including ordinary-import playback:
+no device SDK, microphone capture or device-audio decryption. No device, private package or sibling repository is needed.
 Independent API snippets and platform-specific App SDK examples remain useful
 for smaller tasks. The common app journey is the direction for mobile-to-web
 templates; current connection/catalog snippets do not implement that full journey.
@@ -44,7 +44,9 @@ npm run demo
 ```
 
 Open **http://127.0.0.1:5173** and select **Open demo**. Choose a
-recording, open its Transcript/Summary/Ask tabs, or import audio. Uploading and processing
+recording, select **Load audio**, open its Transcript/Summary/Ask tabs, or import audio. The
+seed recordings play a generated synthetic WAV tone unrelated to their transcripts.
+Uploading and processing
 are separate actions. The demo simulates the upstream API in-process, makes no
 external requests and resets on restart. Its outputs and notifications are
 synthetic; they prove no transcription, upload or model-provider acceptance.
@@ -60,6 +62,7 @@ or select an unused port before running again.
 | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------- |
 | List/read recordings          | `GET /v1/recordings`, `GET /v1/recordings/{id}`                                                                         | [recordings.mjs](../recordings/backend/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx)    |
 | Upload audio                  | `POST /v1/recordings`, `POST /v1/recordings/{id}/upload-url`, storage `PUT`, `POST /v1/recordings/{id}/upload-complete` | [upload.mjs](server/features/upload.mjs)                        | [Upload.tsx](web/features/uploads/Upload.tsx)               |
+| Play an ordinary import       | `GET /v1/recordings/{id}`, `GET /v1/recordings/{id}/download-url?format=wav&use_enhanced=false`, storage `GET`          | [playback.mjs](server/features/playback.mjs)                    | [AudioPlayer.tsx](web/features/playback/AudioPlayer.tsx)    |
 | Transcribe and read text      | `GET /v1/transcriptions`, `GET /v1/transcriptions/{id}`, `POST /v1/transcriptions`                                      | [processing.mjs](../recordings/backend/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx) |
 | Create/read general notes     | `GET /v1/summaries`, `GET /v1/summaries/{id}`, `POST /v1/summaries`                                                     | [processing.mjs](../recordings/backend/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx)       |
 | Ask one recording             | `POST /v1/ask/sessions`, `POST /v1/ask/sessions/{id}/messages`, scoped session/history `GET`                            | [ask.mjs](../recordings/backend/features/ask.mjs)               | [Ask.tsx](web/features/ask/Ask.tsx)                         |
@@ -89,6 +92,44 @@ adapter with your application's authenticated identity and server-derived
 end-user mapping. Keep the ownership checks and durable-before-write ordering.
 These modules belong to the integrated sample family; they are not a published generic API SDK
 or independently runnable standalone snippets. Never copy an API key into React.
+
+## Playback contract
+
+Select **Load audio**, then use the browser's audio controls. Playback accepts
+owned, nondeleted `api_upload` / `import` recordings in uploaded, processing or
+completed state with verified upload metadata, explicit `device_id: null` and
+`encryption_version: null` or numeric `0`. Missing or malformed evidence,
+device/encrypted sources and unsupported media are unavailable. This is not a
+device-audio player or decryption implementation.
+
+The backend requests one public WAV export with `use_enhanced=false`. That API
+GET may create/cache a converted object; it does not prove upload commitment,
+decryption or browser decoding. The converted bytes do not claim to match the
+original recording's SHA-256. The same independently trusted `BOTA_STORAGE_HOSTS`
+allowlist applies to uploads and playback. Storage uses HTTPS/default TLS port,
+no API credential/cookie forwarding, no redirects and bounded time/bytes.
+The descriptor, actual body and WAV signature are checked within a **25 MiB**
+download cap. Oversize exports, expired/missing storage objects and unsupported
+browser decoding produce errors; another load requires an explicit action.
+
+`GET /api/recordings/{id}/audio` returns complete media through the authenticated
+same-origin route only after fresh ownership/source checks and a current-session
+check. These observations are non-atomic, not a guarantee against later owner
+changes. Signed storage URLs stay in server memory and never enter the browser,
+logs or SQLite journals. The browser keeps one temporary Blob URL, with no
+autoplay or persistent media cache, and aborts, pauses, clears and revokes it on
+refresh, selection changes, Back or sign-out. Data already delivered to an
+authorized user cannot be remotely revoked. Byte/signature tests establish no
+live-provider export or real customer-audio playback acceptance.
+
+To adapt this feature, copy [playback.mjs](server/features/playback.mjs), the
+[recording shim](server/features/recordings.mjs) and shared core/errors, the bounded
+[HTTP/storage client](server/client.mjs), route/session gates in [app.mjs](server/app.mjs),
+and [AudioPlayer](web/features/playback/AudioPlayer.tsx) with [api.ts](web/api.ts).
+Keep the source tuple, host policy, byte limits, release-time session checks and
+media teardown. The narrow CSP `media-src 'self' blob:` permits local media
+without widening script or API access. Do not copy only the `<audio>` element
+and expose signed URLs or project credentials to the browser.
 
 ## Connect your authorized project
 
@@ -225,6 +266,11 @@ authorization, device cleanup, encrypted-v2, firmware or full SDK-lifecycle clai
 No infrastructure, physical-device operation or package publication occurs here.
 
 ## Checks and evidence
+
+The [October 14 playback review](../../docs/design-reviews/2026-10-14-web-playback.md)
+records 158 backend and 52 UI/client tests passing, plus build/security checks.
+Actual browser decoding and live export/customer-audio acceptance remain
+unverified; signature checks and synthetic responses do not establish them.
 
 The [core README](../recordings/README.md) records shared-core checks and its
 compatibility boundary. The dated presentation/quality results below predate

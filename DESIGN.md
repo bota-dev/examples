@@ -135,7 +135,7 @@ production account product or forced cross-platform consumer-app parity is neede
 | --- | --- | --- |
 | API workflows | Node/Python workflow recipes and an extended inventory | Curated entry points, clearer copy boundaries and consistent evidence remain ongoing work |
 | SDK starters | RN Android/iOS connection; Flutter Android connection; Kotlin Android and Swift macOS connection/catalog; desktop Chromium connection | Native Swift iOS and Flutter iOS hosts are missing; supported workflow coverage varies |
-| React web reference | Audio import, library, Transcript/Summary/Ask, synthetic mode and configured API path | Playback is missing; web is API-only |
+| React web reference | Audio import, authorized ordinary-import WAV playback, library, Transcript/Summary/Ask, synthetic mode and configured API path | Device/encrypted playback is unavailable; web is API-only |
 | RN/Flutter Android references | Complete install roots under `recordings/clients/`; cloud library/results/Ask, sample mode and one shared mobile adapter; optional RN encrypted-v2 sync or Flutter connection/status | Ordinary import/playback and common-app iOS hosts are missing; Flutter does not expose the selected encrypted-sync facade contract |
 | Combined backend | One listener composes Web/mobile service factories, shared recording/processing/Ask features and retained journals | Auth/store/Web files retain existing paths; external writers and atomic file races are not coordinated |
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |

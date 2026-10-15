@@ -6,6 +6,7 @@
 - Exactly two product layers: general capabilities now; vertical use cases and consumer app types later. API, SDK and combined examples are formats within the first layer.
 - Owner-approved architecture: one integrated Bota Recordings sample with one shared backend and platform-specific web, React Native, Flutter, Kotlin and Swift clients. Keep public calls in copyable feature modules. SDK-only connection/status works without the backend; each client declares its actual capabilities and host evidence.
 - Ordinary app UI serves recording users. Public-call explanations and technical details belong in README/source. Do not create another API Explorer or expand toward a catalog count.
+- Web ordinary-import playback uses a bounded public WAV export with explicit source/encryption evidence, fresh owner/session checks and transient browser media. See the [playback contract](end-to-end/web-reference/README.md#playback-contract); device/encrypted playback and live decoder acceptance are separate.
 - Preserve backend launch bases, journals, locks and SDK pins. The combined backend provides one listener with retained cookie/Bearer adapters and three journals. [Flutter](end-to-end/recordings/clients/flutter/README.md) and [RN](end-to-end/recordings/clients/react-native/README.md) have relocated; Web/backend paths stay. Preserve original native recovery origin/defaults; configure the combined host to that origin rather than reset journals or rewrite captures. Use the [combined setup](end-to-end/recordings/README.md).
 
 ## Select and inspect

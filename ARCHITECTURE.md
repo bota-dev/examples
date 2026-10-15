@@ -62,10 +62,12 @@ The common app's end-user flow is **add/import audio → library → playback/so
 transcript → notes → recording-scoped Ask**. Everyday screens show recordings
 and content; public-call explanations and adaptation instructions belong in
 README/source. Technical request/recovery metadata remains secondary.
-Playback is **not implemented** in the current references. Qualify the public audio
-retrieval, format, encryption and authorization contract before adding it:
-an encrypted original or URL issuance does not prove playable/decrypted audio, and
-synthetic output must not imply successful live playback or device transfer.
+Web playback uses a bounded public WAV export for authorized ordinary imports;
+device/encrypted sources and missing source/encryption evidence are unavailable.
+The cookie-authenticated backend retains signed URLs, checks the current owner
+before and after retrieval, and rechecks the session before returning bytes.
+Browser decoding remains separate from format-signature checks. Mobile playback
+is not implemented. Synthetic tones establish no live playback or device transfer.
 
 ## Current implementation
 
@@ -76,7 +78,7 @@ quickstarts still install independently:
 | Location | Implemented role and limits |
 | --- | --- |
 | [Integrated backend](end-to-end/recordings/README.md) | One combined Node listener composes Web/mobile factories, shared recording/processing/Ask features and all three original journals; Express/Vite resolve from the Web install. |
-| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK, capture or playback. |
+| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, ordinary-import playback, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK or capture. |
 | [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains the mobile backend and setup; links to both relocated clients. Both common app hosts are Android only. |
 | [React Native](end-to-end/recordings/clients/react-native/README.md) | Complete relocated install root; common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
 | [Flutter](end-to-end/recordings/clients/flutter/README.md) | First relocated client: complete Android install root with cloud-content flow and secondary connection/status. Published beta.18 lacks the fresh pairing and verified encrypted-upload host surfaces required for device sync. |
@@ -268,7 +270,7 @@ before using the combined host; see the
 Fill qualified iOS/native hosts and useful SDK modules without waiting for every
 client's full recording UI. Complete ordinary intake/playback only after its
 public contract is qualified. Vertical apps remain the later product layer.
-Remaining Web/auth/store relocation, playback and new hosts remain planned work.
+Remaining Web/auth/store relocation, mobile playback and new hosts remain planned work.
 The
 [consolidation review](docs/design-reviews/2026-10-12-integrated-recordings.md)
 records the current implementation and its bounded verification.

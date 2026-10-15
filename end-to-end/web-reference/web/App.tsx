@@ -4,6 +4,7 @@ import { createApi, errorMessage } from './api';
 import { dateLabel, durationLabel } from './format';
 import { IntentContext, useRead } from './workflow';
 import { Recordings } from './features/recordings/Recordings';
+import { AudioPlayer } from './features/playback/AudioPlayer';
 import { Upload } from './features/uploads/Upload';
 import { Transcript } from './features/transcription/Transcript';
 import { Summaries } from './features/summaries/Summaries';
@@ -151,7 +152,7 @@ export default function App() {
             </p>
           </div>
         ) : session.user ? (
-          <RecordingApp key={session.epoch} api={api} />
+          <RecordingApp key={session.epoch} api={api} mode={session.mode} />
         ) : (
           <Login
             key={session.epoch}
@@ -299,7 +300,7 @@ function Login({
   );
 }
 
-function RecordingApp({ api }: { api: ApiClient }) {
+function RecordingApp({ api, mode }: { api: ApiClient; mode: Mode }) {
   const [selected, setSelected] = useState<string | null>(null);
   const previousSelection = useRef<string | null>(null);
   const [revision, setRevision] = useState(0);
@@ -342,7 +343,7 @@ function RecordingApp({ api }: { api: ApiClient }) {
               <button className="text-button back-button" onClick={() => setSelected(null)}>
                 <span aria-hidden="true">←</span> All recordings
               </button>
-              <RecordingDetail key={selected} api={api} id={selected} />
+              <RecordingDetail key={selected} api={api} id={selected} mode={mode} />
             </>
           ) : (
             <section className="detail-empty">
@@ -358,7 +359,7 @@ function RecordingApp({ api }: { api: ApiClient }) {
 }
 
 type DetailTab = 'transcription' | 'notes' | 'ask';
-function RecordingDetail({ api, id }: { api: ApiClient; id: string }) {
+function RecordingDetail({ api, id, mode }: { api: ApiClient; id: string; mode: Mode }) {
   const record = useRead<Recording>(api, `/api/recordings/${encodeURIComponent(id)}`);
   const [tab, setTab] = useState<DetailTab>('transcription');
   const heading = useRef<HTMLHeadingElement>(null);
@@ -404,6 +405,9 @@ function RecordingDetail({ api, id }: { api: ApiClient; id: string }) {
           </p>
         ) : null}
       </div>
+      {record.data && !record.loading ? (
+        <AudioPlayer api={api} recordingId={id} mode={mode} />
+      ) : null}
       {record.data ? (
         <>
           <div className="detail-tabs" role="tablist" aria-label="Recording perspectives">

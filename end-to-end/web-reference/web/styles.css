@@ -499,6 +499,26 @@ input[type='file']::file-selector-button {
   border-bottom: 1px solid var(--line);
   margin: 16px 0 24px;
 }
+.audio-player {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 16px 0;
+}
+.audio-player h3 {
+  font-size: 14px;
+}
+.audio-player .section-heading {
+  margin-bottom: 8px;
+}
+.audio-player audio {
+  display: block;
+  width: 100%;
+  margin-top: 12px;
+}
+.audio-player audio[hidden] {
+  display: none;
+}
 .detail-tabs button {
   background: transparent;
   color: var(--muted);

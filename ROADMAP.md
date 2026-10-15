@@ -109,6 +109,12 @@ actual capabilities and keeps its SDK-only path independent of the backend.
 
 ## 4. Complete the ordinary recording flow and migrate the layout
 
+**Web playback implemented:** the ordinary-import path requests a fixed public
+WAV export, bounds storage bytes and rechecks owner/source/session before release.
+Signed URLs remain server-side; the browser clears its transient media on source
+refresh, selection changes and sign-out. Device/encrypted sources are unavailable.
+Synthetic tone playback does not establish live API/export/media acceptance.
+
 Keep Bota Recordings familiar: add/import audio → library → playback/source →
 transcript → general notes → scoped Ask. Ordinary UI serves recording users;
 technical request metadata and copy instructions remain secondary. Add mobile

@@ -34,7 +34,7 @@ for the integrated architecture and remaining phases.
 | Client               | Current setup                               | Scope                                                                                                                         |
 | -------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | Flutter Android      | [Flutter README](clients/flutter/README.md) | First relocated client; local sample recordings or live cloud library, Transcript/Summary/Ask; optional SDK connection/status |
-| React web            | [Web README](../web-reference/README.md)    | Existing compatibility root; audio import and cloud recording views                                                           |
+| React web            | [Web README](../web-reference/README.md)    | Existing compatibility root; audio import, ordinary-import WAV playback and cloud recording views                             |
 | React Native Android | [RN README](clients/react-native/README.md) | Relocated complete install root; cloud recording views and optional gated encrypted-v2 sync                                   |
 
 Each client retains its own manifest, lock and native identity. Old

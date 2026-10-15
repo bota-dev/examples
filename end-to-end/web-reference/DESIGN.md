@@ -32,13 +32,13 @@ credential/input boundaries and the absence of external-writer guarantees.
 
 ## Implemented subset and target
 
-| Capability          | Current web implementation                                                                            |
-| ------------------- | ----------------------------------------------------------------------------------------------------- |
-| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                    |
-| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                |
-| Playback            | Not implemented. The target adds playback only for a supported, authorized audio representation.      |
-| Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template. |
-| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.         |
+| Capability          | Current web implementation                                                                                                      |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                                              |
+| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                                          |
+| Playback            | Explicitly load an authorized ordinary import as WAV, then use native audio controls. Device/encrypted sources are unavailable. |
+| Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template.                           |
+| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.                                   |
 
 The [root roadmap](../../ROADMAP.md) owns the remaining integrated-sample/platform work.
 Do not describe target features as available controls or add overlapping app
@@ -88,7 +88,7 @@ withhold operation metadata as well as content.
   and account/sign-out controls.
 - Recording library: title, date, duration and concise state in each row;
   **Upload audio** and Refresh actions. Show the actual selected file before upload.
-- Recording detail: title/metadata, then **Transcript**, **Summary** and **Ask**
+- Recording detail: title/metadata and a compact explicit-load audio player, then **Transcript**, **Summary** and **Ask**
   tabs. Display one feature at a time with explicit processing actions.
 - Short loading, empty, pending and failure states. Use a simple selection prompt
   before a recording is opened; no hero or oversized blank illustration.

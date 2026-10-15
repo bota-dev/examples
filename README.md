@@ -27,7 +27,7 @@ focused guides/quickstarts belong to the general layer. `api/`, `app-sdk/` and
 
 | Client | Run and adapt | Implemented today |
 | --- | --- | --- |
-| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, library, Transcript/Summary/Ask; API-only |
+| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, ordinary-import playback, library, Transcript/Summary/Ask; API-only |
 | React Native Android | [RN sample](end-to-end/recordings/clients/react-native/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
 | Flutter Android | [Flutter sample](end-to-end/recordings/clients/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
 | Kotlin / Android | [SDK connection](app-sdk/android-device-connect/README.md) and [recording catalog](app-sdk/android-recording-catalog/README.md) | Native device workflows; integrated recording client is planned |
@@ -55,7 +55,7 @@ success.
 
 The recording experience connects audio input, library, supported audio playback
 and source review, transcript, general notes and recording-scoped Ask. Current
-web has no playback; mobile has no ordinary file import/playback and its recording
+Web playback supports authorized unencrypted imports; mobile has no ordinary file import/playback and its recording
 hosts are Android only. Standalone device connection/status needs no backend.
 Cloud features and authorized device upload need the customer backend; device
 presence never gates browsing existing cloud recordings.
@@ -93,6 +93,7 @@ without their HTTP, authorization, ownership and durable-state helpers.
 | --- | --- | --- |
 | List/read recordings | `GET /v1/recordings`, `GET /v1/recordings/{id}` | [Shared recordings](end-to-end/recordings/backend/features/recordings.mjs); [React library](end-to-end/web-reference/web/features/recordings/Recordings.tsx) |
 | Import audio | Create recording, get upload URL, storage `PUT`, verified upload completion | [Backend upload](end-to-end/web-reference/server/features/upload.mjs); [React upload](end-to-end/web-reference/web/features/uploads/Upload.tsx) |
+| Play imported audio | Authorized WAV export, bounded storage `GET`, same-origin media | [Backend playback](end-to-end/web-reference/server/features/playback.mjs); [React player](end-to-end/web-reference/web/features/playback/AudioPlayer.tsx) |
 | Transcribe/read text and create general notes | Public transcription/summary GET/POST calls | [Shared processing](end-to-end/recordings/backend/features/processing.mjs); [Transcript](end-to-end/web-reference/web/features/transcription/Transcript.tsx) / [Summary](end-to-end/web-reference/web/features/summaries/Summaries.tsx) |
 | Ask about one recording | Recording-scoped session/message calls and source/citation checks | [Shared Ask](end-to-end/recordings/backend/features/ask.mjs); [React Ask](end-to-end/web-reference/web/features/ask/Ask.tsx) |
 | Receive events and recover known operations | Signed customer webhook; GET-only saved-operation refresh | [Webhook receiver](end-to-end/web-reference/server/features/webhooks.mjs); [Activity](end-to-end/web-reference/web/features/webhooks/Activity.tsx) |
@@ -239,7 +240,7 @@ provides API/SDK installation guidance.
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
 | [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | Retained mobile backend and setup; links to relocated RN/Flutter Android clients with sample modes and optional device paths | No; device path optional |
-| [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
+| [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import/playback, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
 | [Integrated Recordings sample](end-to-end/recordings/README.md) | Combined Node backend with retained auth/journals and relocated RN/Flutter Android clients; Web/backend compatibility paths remain | No |
 
 </details>

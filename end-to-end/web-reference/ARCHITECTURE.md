@@ -11,9 +11,20 @@ Bota Recordings is a common app sample/template for developers building for
 their own end users, inspired by Demo/Bota One. Its compact recording library
 opens a selected detail with Transcript/Summary/Ask tabs. Technical public-call
 and source recipes live in README, not the everyday UI. This is an API-only
-implementation with audio import; it adds no device SDK, capture or playback.
+implementation with audio import and ordinary-import WAV playback; it adds no device SDK or capture.
 Other platforms can follow the same journey through their supported public
 surfaces; existing connection/catalog samples are not complete app equivalents.
+
+Playback is a Web feature composed by both existing listeners. It requests the
+public WAV export with enhanced substitution disabled, then downloads a bounded
+buffer from an independently configured exact storage host without API credentials.
+Explicit ordinary-import/unencrypted metadata, verified upload evidence and fresh
+owner/source checks gate release; session expiry/logout during retrieval denies
+the response. No signed URL reaches React or a journal. The player owns one
+temporary Blob URL and aborts/pauses/resets/revokes it on refresh, selection change
+or sign-out. Only the media CSP directive permits `blob:`. WAV signature checks
+are not decoding proof; device/encrypted playback and mobile players remain absent.
+See [playback contract](README.md#playback-contract).
 
 ```text
 React feature → same-origin /api route → authenticated web principal

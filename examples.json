@@ -990,7 +990,7 @@
       "id": "web-reference",
       "path": "end-to-end/web-reference",
       "title": "Bota Recordings web sample",
-      "purpose": "Common recording app template: React + Node, audio import, Transcript/Summary/Ask and webhook/recovery recipes; API-only",
+      "purpose": "Common recording app template: React + Node, audio import/playback, Transcript/Summary/Ask and webhook/recovery recipes; API-only",
       "category": "end-to-end",
       "language": "TypeScript / JavaScript",
       "physical_device_required": false,
