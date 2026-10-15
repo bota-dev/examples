@@ -269,8 +269,11 @@ No infrastructure, physical-device operation or package publication occurs here.
 
 The [October 14 playback review](../../docs/design-reviews/2026-10-14-web-playback.md)
 records 158 backend and 52 UI/client tests passing, plus build/security checks.
-Actual browser decoding and live export/customer-audio acceptance remain
-unverified; signature checks and synthetic responses do not establish them.
+The [October 15 live acceptance](../../docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+verified one synthetic WAV import through the real API/storage, transcription,
+summary and Ask, including GET-only upload verification and sign-out denial.
+Actual browser decoding, format conversion and customer-audio acceptance remain
+unverified; HTTP success and signature checks do not establish them.
 
 The [core README](../recordings/README.md) records shared-core checks and its
 compatibility boundary. The dated presentation/quality results below predate

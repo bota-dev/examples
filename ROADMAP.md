@@ -114,6 +114,9 @@ WAV export, bounds storage bytes and rechecks owner/source/session before releas
 Signed URLs remain server-side; the browser clears its transient media on source
 refresh, selection changes and sign-out. Device/encrypted sources are unavailable.
 Synthetic tone playback does not establish live API/export/media acceptance.
+The [October 15 live HTTP test](docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+passed for one synthetic WAV import through export, transcription, summary and
+Ask. Browser decoding and other input formats remain acceptance gaps.
 
 Keep Bota Recordings familiar: add/import audio → library → playback/source →
 transcript → general notes → scoped Ask. Ordinary UI serves recording users;

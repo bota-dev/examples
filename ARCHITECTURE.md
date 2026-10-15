@@ -68,6 +68,10 @@ The cookie-authenticated backend retains signed URLs, checks the current owner
 before and after retrieval, and rechecks the session before returning bytes.
 Browser decoding remains separate from format-signature checks. Mobile playback
 is not implemented. Synthetic tones establish no live playback or device transfer.
+The [October 15 acceptance](docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+qualifies the live HTTP flow for one synthetic WAV import through export,
+transcription, summary and Ask; browser decoding and other input formats remain
+unverified.
 
 ## Current implementation
 

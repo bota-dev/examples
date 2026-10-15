@@ -114,9 +114,10 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
    integrated foundation after compatibility checks; do not introduce a general
    wrapper SDK, hidden cross-root dependency or universal UI framework.
 
-Sample content is synthetic; current web has no playback, and mobile has no
-ordinary import/playback. These are honest implementation gaps, not fixture proof
-of completion. Original downloads are not necessarily playable/decrypted audio.
+Sample content is synthetic. Web implements ordinary-import WAV playback; its
+[live HTTP acceptance](design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+does not establish browser decoding. Mobile has no ordinary import/playback.
+Original downloads are not necessarily playable/decrypted audio.
 Read [CONTRIBUTING.md](../CONTRIBUTING.md) and
 [example contracts](example-contracts.md) before repository changes.
 
