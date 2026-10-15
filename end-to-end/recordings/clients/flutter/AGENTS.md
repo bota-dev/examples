@@ -5,9 +5,9 @@ Follow the repository [AGENTS.md](../../../../AGENTS.md), then this
 inside Bota Recordings; use the [combined backend setup](../../README.md).
 No cross-example runtime imports or private Bota helpers.
 
-- SDK: retain exact public beta.17 and the frozen pub lock; beta.17 is the latest
-  published Dart package. Native beta.18 does not establish Flutter availability; see
-  the [version review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md).
+- SDK: retain exact public beta.18 and the frozen pub lock. Verify actual pub.dev
+  identity before future upgrades; native tags alone do not prove publication.
+  See the [adoption review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md).
 
 Sample mode is pure local fixtures; it must not initialize SDKs, request permissions or make
 HTTP/provider calls. Live mode uses a memory-only customer-backend token, never a
@@ -15,7 +15,7 @@ Bota key. Keep bounds, redirect refusal, authorization/source checks, account an
 selection fences, retained uncertain write locks and GET-only request recovery.
 Keep API/source explanations out of everyday recording controls.
 
-The secondary device screen only connects and reads status. Dart beta.17 lacks
+The secondary device screen only connects and reads status. Dart beta.18 lacks
 the required fresh pairing/encrypted-upload host surfaces. Add no private GATT,
 catalog/transfer/cleanup/provisioning workaround. Android host/build evidence does
 not establish iOS, provider or physical-device acceptance.

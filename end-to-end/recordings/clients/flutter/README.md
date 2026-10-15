@@ -13,15 +13,18 @@ support. This is a development template, not a production authentication system.
 ## Try it
 
 Use Flutter **3.47.5**, JDK 17 and Android SDK 37. The direct SDK dependency is
-exact public `bota_app_sdk: 2.0.0-beta.17` (beta); no private packages or sibling
-repositories are required. Beta.17 is still the latest public pub.dev package;
-its manifest, lock and application source remain unchanged from `a7b34175`.
-The [hosted beta.17 job](https://github.com/bota-dev/examples/actions/runs/38654533509/job/116161047923)
-passed there. Other platform clients select native beta.18 independently; this
-client claims no beta.18 package or build. See the
-[per-facade version review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md)
-and [beta.17 qualification](../../../../docs/design-reviews/2026-10-14-native-sdk-adoption.md).
-Physical-device acceptance remains separate.
+exact public `bota_app_sdk: 2.0.0-beta.18` (beta); no private packages or sibling
+repositories are required. The regenerated pub lock selects archive SHA-256
+`30441cc7c83bb9cef7fddac19d047a59b4ad38c4a3dcb27de3dad4700613ab4a`.
+Only the Bota version/hash changes; all other locked packages and application
+code remain. See the [beta.18 qualification](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md).
+New hosted and physical-device acceptance remain separate.
+
+Historical [beta.17 qualification](../../../../docs/design-reviews/2026-10-14-native-sdk-adoption.md)
+and its [passing hosted job at a7b34175](https://github.com/bota-dev/examples/actions/runs/38654533509/job/116161047923)
+retain their original source/package limits. The `6dd54747` snapshot also retained
+Flutter beta.17 before beta.18 appeared on pub.dev. Those results do not qualify
+this new package.
 
 Run the commands below from this client directory.
 
@@ -100,7 +103,7 @@ source content. No automatic processing polling is added in this template.
 
 Live mode's settings menu includes **Device connection**. Enter the printed
 serial, explicitly enable Bluetooth access, scan, select and read status. This
-secondary [screen](lib/device_page.dart) calls only the public beta.17
+secondary [screen](lib/device_page.dart) calls only the public beta.18
 `BotaDeviceClient.configure`, `devices.scan/connect/readStatus/disconnect` and
 `destroy`. SDK identity reads verify the serial; advertised names are not identity.
 Connection loss clears/fences stale metadata. Restore Bluetooth and reconnect
@@ -140,7 +143,7 @@ Local qualification on October 12, 2026: frozen pub install, formatting,
 analysis and **38 tests** pass (9 HTTP, 15 controller, 10 device lifecycle,
 4 app widgets). The final-source Android debug APK also builds with Flutter
 3.47.5/JDK 17/SDK 37. Its application ID is
-`dev.bota.examples.mobile_recordings_flutter`. The public beta.17 plugin still
+`dev.bota.examples.mobile_recordings_flutter`. The public beta.18 plugin still
 uses Kotlin Gradle Plugin and produces Flutter's migration warning; this build
 does not establish compatibility with a later Flutter toolchain. Hosted results
 and any phone UI observations require their separate exact-source evidence.

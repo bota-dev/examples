@@ -9,41 +9,36 @@ does not qualify beta.18.
 
 ## Scope and public inputs
 
-Eight SDK install roots select exact public `2.0.0-beta.18`: RN, Web, Android
-and Swift. The two Flutter roots retain `2.0.0-beta.17`, their latest public
-package at the `2026-10-15T00:26:57Z` verification snapshot. These clients install
-independently and do not share an SDK runtime. This retains the approved
+All ten SDK install roots select exact public `2.0.0-beta.18`: RN, Web, Android,
+Swift and Flutter. They install independently and do not share an SDK runtime.
+This retains the approved
 public [design](../../DESIGN.md), [architecture](../../ARCHITECTURE.md) and
 [device/recovery contracts](../example-contracts.md). SDK-free API examples and
 the API recording Web application add no device dependency. No new app UI,
 protocol implementation, generated-JS factory migration or physical operation
 is part of this version update.
 
-At 23:54 UTC, RN npm, Maven and the anonymous Apple archive were public;
-Web/npm, pub.dev and CocoaPods were still rolling out. Every selected consumer
-artifact must be public; this task does not claim the synchronized beta.18
-release has completed while Flutter remains unpublished.
-The publisher is [release 38632018471](https://github.com/bota-dev/app-sdk/actions/runs/38632018471);
-this task performs no approval, publication, tag or channel mutation.
+The [synchronized release](https://github.com/bota-dev/app-sdk/actions/runs/38632018471)
+succeeded at `2026-10-15T00:39:15Z` (October 14 Pacific): all 12 normal jobs
+passed, with two recovery-only jobs skipped. Public native consumers, the
+49-file inventory, Flutter publication and its separate 59-file archive gate
+pass. This task only observes that publication; it performs no approval,
+publication, tag or channel mutation. npm `beta` is beta.18; `latest` stays beta.0.
 
-At `2026-10-15T00:16Z` (October 14 Pacific), Web/npm and the exact CocoaPods
-spec are also public. Trunk and CocoaPods/Specs contain beta.18, but the
-[canonical discovery index](https://cdn.cocoapods.org/all_pods_versions_b_3_6.txt)
-and its public CDN-repository origin still omit it. The latest observed index
-build began before beta.18's `23:59:34Z` Trunk registration. The release waits
-for this index before compiling clean native Flutter consumers and publishing
-Flutter. This is an observed discovery-index propagation gate; no failed build,
-SDK consumer incompatibility or need to republish is established.
-
-After verifying that delay independently, this batch adopts the latest public
-package **per facade**. It does not wait for equal version labels across
-independent clients. Flutter beta.18 adoption requires a later public archive,
-normal frozen installation and its own consumer checks. The retained Flutter
-beta.17 qualification at `a7b3417` remains valid for its unchanged source/locks.
+The earlier example source
+[`6dd5474`](https://github.com/bota-dev/examples/commit/6dd54747ac50d631f4bfb6f2199464707b940808)
+adopted beta.18 for eight roots while Flutter beta.17 was still its latest public
+package. CocoaPods' registered spec preceded its discovery-index update, which
+held the ordered Flutter gate. That gate then passed; the Flutter beta.18
+archive became public at `00:38:38Z`. This follow-up adopts that actual public
+archive in both Flutter roots and qualifies it separately from beta.17.
 
 Apple's public tag peels to `0962c8ccb8a4d407179309abae574bffb6e32933`;
 anonymous Swift archive SHA-256 is
 `aded7f6fe9fdb5a2f681c81ce4ade2b9cc67aa14abd90487b97c86fd2f7f6b7a`.
+The anonymous Flutter archive has 166,142 bytes and SHA-256
+`30441cc7c83bb9cef7fddac19d047a59b4ad38c4a3dcb27de3dad4700613ab4a`,
+matching pub.dev metadata; the publisher verifies all 59 source files at `0962c8c`.
 Native Apple/Android/Flutter and Web public source changes from beta.17 are
 version/identity changes. The RN generated BLE adapter fixes connected MTU
 observations with joined `requestMTUForDevice` cancellation. Existing RN examples
@@ -73,13 +68,13 @@ Fresh platform evidence is recorded in the
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
-| Latest public version per family | RN/Web/Maven/Swift beta.18 public; Flutter latest remains beta.17 at the snapshot above | Matched; synchronized beta.18 publication is separate |
-| Exact public SDK pins and frozen installs | Four npm roots / Kotlin locks / Swift public inputs match beta.18; two Flutter locks retain publicly verified beta.17 | Matched locally; hosted resolution required |
+| Latest public version across five families | All five public registries and successful synchronized release verify beta.18 | Matched for package publication; app delivery remains separate |
+| Exact public SDK pins and frozen installs | Four npm roots / Kotlin locks / Swift public inputs match beta.18; both Flutter configs resolve public beta.18 and normal/enforced installs pass | Matched locally; final hosted resolution required |
 | Existing behavior, trust and durable recovery | Application/controller/auth/journal source and origins retained; RN 58/100 and native host 10 cases, Kotlin catalog 16 cases | Matched in source and bounded tests; physical acceptance unverified |
 | Native binary / OTA separation | Legacy app/package/runtime 0.4.0; three actual SDK resolutions match; Android/iOS/Web exports pass; other clients retain no-OTA configuration | Matched locally; new native binaries required |
-| Dependency guards and non-SDK tuples | Original signing/braces/map hooks and source inventories retained; independent diff audit confirms non-SDK package objects unchanged; Flutter manifests/locks unchanged | Matched locally |
-| Platform tests and native exports/builds | Legacy 111 tests/types/backend build/all-platform exports; Web 15 tests/types/WASM build; RN and Kotlin qualification in platform reviews; unchanged Flutter beta.17 qualified at a7b3417 | Matched locally for changed roots; fresh hosted checks required |
-| Docs/discovery follow actual versions | Current guidance distinguishes beta.18 platforms from retained Flutter beta.17; 77 catalog IDs / 84 docs / 453 indexed links; all 499 local links across 35 changed/new Markdown files pass; dated beta.17 evidence preserved | Matched locally |
+| Dependency guards and non-SDK tuples | Original signing/braces/map hooks and source inventories retained; independent diff audit confirms non-SDK npm/native/pub objects unchanged; original Flutter analyzer config restored and direct analysis passes | Matched locally |
+| Platform tests and native exports/builds | Legacy 111 tests/types/backend build/all-platform exports; Web 15 tests/types/WASM build; RN/Kotlin qualification in platform reviews; Flutter 6/38 tests, license gates and both new beta.18 APKs pass | Matched locally across all selected roots; final hosted checks required |
+| Docs/discovery follow actual versions | Current guidance selects beta.18 in every SDK root; 77 catalog IDs / 84 docs / 453 indexed links pass, plus all 322 local file links in 14 follow-up Markdown files; dated beta.17 and initial per-facade evidence remain separate | Matched locally |
 | Physical/live/backend/deployment acceptance | No such operation performed | Unverified; unchanged scope limits |
 
 ## Local legacy workspace qualification
@@ -102,3 +97,25 @@ override or changed transforms: Android 115.5 seconds / 1,613 modules, Web
 
 These are export checks, not native four-ABI assembly or installed Bluetooth
 acceptance. The existing hosted native job remains required for beta.18.
+
+## Qualification carried forward from unchanged beta.18 inputs
+
+The final Flutter adoption changes no tracked input in the six independent
+RN-connect, Web-SDK, Kotlin or Swift roots. An independent review compared all
+99 tracked Git blobs and six owning workflow blobs against `6dd54747`; all match.
+Their seven successful beta.18 job receipts remain qualified at that source:
+
+| Unchanged example | Successful beta.18 job at `6dd54747` |
+| --- | --- |
+| RN connection Android | [116180577264](https://github.com/bota-dev/examples/actions/runs/38660573320/job/116180577264) |
+| RN connection iOS | [116180576754](https://github.com/bota-dev/examples/actions/runs/38660573320/job/116180576754) |
+| Web SDK | [116180577334](https://github.com/bota-dev/examples/actions/runs/38660573691/job/116180577334) |
+| Kotlin connection | [116180576348](https://github.com/bota-dev/examples/actions/runs/38660573414/job/116180576348) |
+| Kotlin catalog | [116180576423](https://github.com/bota-dev/examples/actions/runs/38660573426/job/116180576423) |
+| Swift connection | [116180576687](https://github.com/bota-dev/examples/actions/runs/38660573551/job/116180576687) |
+| Swift catalog | [116180577319](https://github.com/bota-dev/examples/actions/runs/38660573607/job/116180577319) |
+
+The existing path filters select seven final-source workflows / 15 jobs for
+the Flutter follow-up: both Flutter hosts, mobile/backend, Web app, core,
+legacy verification/native, catalog and CodeQL. Those fresh results must be
+recorded separately. The seven receipts above are not exact-final-source runs.

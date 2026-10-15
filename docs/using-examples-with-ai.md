@@ -75,7 +75,7 @@ and authorized upload use the customer backend.
 | Kotlin / Android | [MainActivity.kt](../app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](../app-sdk/android-device-connect/README.md) | Native Android connection/status; integrated recording client planned |
 | Swift / Apple | [App.swift](../app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](../app-sdk/apple-device-connect/README.md) | macOS SwiftUI connection/status; no native iOS host or integrated recording client yet |
 | React Native | [App.tsx](../app-sdk/react-native-device-connect/App.tsx); [setup](../app-sdk/react-native-device-connect/README.md) | Android/iOS connection hosts; recording/sync client currently Android-only |
-| Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android host; beta.17 lacks fresh-pairing/encrypted-v2 host interfaces needed for RN sync |
+| Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android host; beta.18 lacks fresh-pairing/encrypted-v2 host interfaces needed for RN sync |
 | Web / Chromium | [page.ts](../app-sdk/web-device-connect/page.ts) + [main.ts](../app-sdk/web-device-connect/main.ts); [setup](../app-sdk/web-device-connect/README.md) | Supported Web Bluetooth/secure context/firmware identity; not yet integrated into the API recording client |
 
 Missing public capability, missing host and missing verification are different
@@ -85,7 +85,7 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 ## Preserve the migration and copy boundary
 
 1. Inspect the selected README, source/imports, manifest and lockfile. Public
-   SDK pins are beta.18 for RN/Web/Android/Swift, beta.17 for Flutter; historical prose does
+   SDK pins are beta.18, including Flutter and the legacy workspace; historical prose does
    not override current manifests. RN uses native compatibility factories, not
    the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-14-beta18-sdk-adoption.md).
 2. Install only in documented roots with lifecycle scripts enabled. Keep native

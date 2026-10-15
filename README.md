@@ -128,13 +128,13 @@ Different public SDK capabilities do not imply identical UI or full device parit
 | Kotlin / Android | [MainActivity.kt](app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](app-sdk/android-device-connect/README.md) | Native Android, API 26+; catalog reads metadata, not audio transfer; integrated recording client is planned |
 | Swift / Apple | [App.swift](app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](app-sdk/apple-device-connect/README.md) | Current SwiftUI hosts are macOS; no native iOS host or integrated recording client yet |
 | React Native | [App.tsx](app-sdk/react-native-device-connect/App.tsx); [setup](app-sdk/react-native-device-connect/README.md) | Connection has Android/iOS hosts; recording/sync sample is Android-only, already-provisioned encrypted-v2 with documented backend/firmware gates |
-| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android host only; beta.17 lacks the fresh-pairing/encrypted-v2 host interfaces required for the RN sync workflow |
+| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android host only; beta.18 lacks the fresh-pairing/encrypted-v2 host interfaces required for the RN sync workflow |
 | Web / desktop Chromium | [page.ts](app-sdk/web-device-connect/page.ts) and [main.ts](app-sdk/web-device-connect/main.ts); [setup](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; not integrated into the API recording client yet |
 | Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
 
-RN, Web, Android and Swift examples pin public **2.0.0-beta.18**. Both Flutter
-clients retain **2.0.0-beta.17**, the latest public Dart package at this update;
-Flutter beta.18 publication is pending. Each client installs independently.
+All ten device SDK install roots, including the legacy workspace and both
+integrated mobile clients, pin public **2.0.0-beta.18**. Each client installs
+independently. The synchronized SDK release is publicly verified.
 npm's `latest` tag remains beta.0. Native RN workflows use the compatibility
 factory; this package update does not migrate them to generated JS `/runtime`.
 Inspect the selected manifest/lockfile and README for tooling and public methods.

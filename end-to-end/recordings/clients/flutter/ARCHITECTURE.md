@@ -10,7 +10,7 @@ Flutter Material UI → account/recording state → RecordingsApi
                                                 └─ BackendApi (app Bearer HTTP)
                                                       → ../../backend
                                                       → public Bota /v1 API
-Live-only device screen → public beta.17 Flutter SDK → Bluetooth
+Live-only device screen → public beta.18 Flutter SDK → Bluetooth
 ```
 
 `models.dart` validates the narrow presentation DTOs. `api.dart` holds the
@@ -50,7 +50,7 @@ or app disposal. Device navigation drains subscriptions/configuration and awaits
 SDK destruction before reopening. A destruction failure keeps the gate failed
 and new device admission blocked until app restart. SDK transport errors/native
 omissions remain SDK concerns.
-It offers no recording catalog/upload/cleanup because published Dart beta.17
+It offers no recording catalog/upload/cleanup because published Dart beta.18
 lacks the required public gates and encrypted-v2 host callback contract.
 
 The generated Android host has a distinct application ID, minimum API 26,
@@ -59,10 +59,11 @@ without Bluetooth hardware. No iOS/desktop/web host is supplied here. Tests and
 debug assembly verify source/UI/runtime composition; native linking for other
 hosts, live providers and physical device behavior remain separate acceptance.
 
-The [version review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md)
-retains public Flutter beta.17 independently of native beta.18 samples. This
-client's manifest, lock and application source remain qualified at `a7b34175`;
-that is beta.17 evidence, with no Flutter beta.18 build or new host capability.
+The [adoption review](../../../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md)
+records the public Flutter beta.18 archive, regenerated lock and new consuming
+checks. Application/controller source is unchanged. Historical `a7b34175` and
+`6dd54747` snapshots used Flutter beta.17; those results do not qualify beta.18
+or add a host/device capability.
 
 ## Implementation review
 

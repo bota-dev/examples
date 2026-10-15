@@ -98,7 +98,7 @@ API/App SDK quickstarts remain self-contained. No mass move/deletion is needed. 
   exact-generation and host authorization gates.
 - Fence late results after account/selection changes and drain native work before
   admitting a replacement session. Preserve the selected example's recovery limits.
-- Keep exact public SDK pins: RN/Web/Android/Swift beta.18, Flutter beta.17;
+- Keep exact public SDK pins. All device examples currently pin beta.18;
   a version bump supplies neither a missing host nor physical acceptance.
 - Keep lifecycle scripts enabled and preserve required postinstall/security-test
   chains. See [dependency security](DEPENDENCY_SECURITY.md) before changing locks,

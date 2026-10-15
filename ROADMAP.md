@@ -7,8 +7,7 @@ standalone Node/Python quickstarts. General capabilities are the current product
 layer; vertical/app-type examples come later.
 
 The separately requested [October 14 SDK adoption](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
-updates RN/Web/Android/Swift clients to public beta.18; Flutter retains its latest
-public beta.17 pending publication. It does not complete missing
+updates all device SDK clients to public beta.18. It does not complete missing
 platform hosts or the remaining consolidation below.
 
 ## 1. Consolidate the existing backend features compatibly

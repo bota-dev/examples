@@ -141,8 +141,7 @@ production account product or forced cross-platform consumer-app parity is neede
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
 Keep SDK capability, implemented host and verification as separate facts.
-RN/Web/Android/Swift examples pin public beta.18; Flutter retains its latest
-public beta.17 pending beta.18 publication. Legacy `apps/` retains
+All current device examples pin public beta.18. Legacy `apps/` retains
 compatibility code with its local-only authentication/provisioning limits.
 The [SDK adoption review](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
 separates package/build checks from physical acceptance and generated-JS migration.

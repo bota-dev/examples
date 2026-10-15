@@ -1,8 +1,17 @@
 # Connect to a device with Flutter
 
-An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.17` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
+An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.18` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
 
-## Current beta.17 adoption — 2026-10-14
+## Current beta.18 adoption — 2026-10-14
+
+The exact public pub.dev pin and regenerated lock select beta.18, archive SHA-256
+`30441cc7c83bb9cef7fddac19d047a59b4ad38c4a3dcb27de3dad4700613ab4a`.
+Its published plugin selects matching beta.18 Android/Apple dependencies. Only
+the Bota version/hash changes; app source and non-SDK dependencies remain.
+New frozen-install, analysis, six lifecycle tests and Android build evidence
+belongs to the [beta.18 adoption review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md). No beta.18 phone or iOS acceptance is claimed.
+
+## Historical beta.17 adoption — 2026-10-14
 
 The exact pub.dev pin and regenerated archive lock select beta.17; the published
 plugin pins matching Android Maven and Apple CocoaPods versions. Only the Bota
@@ -11,12 +20,11 @@ lifecycle widget cases pass on Flutter 3.47.5. The application code and device
 scope stay unchanged. Android debug assembly and hosted results are recorded in
 the [SDK adoption review](../../docs/design-reviews/2026-10-14-native-sdk-adoption.md); no beta.17 phone or iOS test was performed.
 
-Beta.17 remains the latest public pub.dev package. Other platform samples now
-select public native beta.18 independently; this Flutter manifest, lock and app
-source remain unchanged from `a7b34175`. Its
-[hosted beta.17 job](https://github.com/bota-dev/examples/actions/runs/38654533678/job/116161047442)
-passed there. See the [per-facade version review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md);
-no Flutter beta.18 build or availability is claimed.
+At the earlier `6dd54747` snapshot, beta.17 was still the latest public pub.dev
+package while other clients selected native beta.18. The
+[beta.17 job at a7b34175](https://github.com/bota-dev/examples/actions/runs/38654533678/job/116161047442)
+and [beta.17 job at 6dd54747](https://github.com/bota-dev/examples/actions/runs/38660573465/job/116180576977)
+passed. These historical results do not qualify the new beta.18 package.
 
 ## Historical beta.13 adoption
 

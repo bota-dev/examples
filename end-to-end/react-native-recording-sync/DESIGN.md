@@ -93,7 +93,7 @@ and uncertain action. Saved IDs remain metadata, not content/cleanup authority.
 - **React Native device path:** retain the Android encrypted-v2 host and its
   exact public beta.18 SDK. Open it explicitly from the live app; keep fresh
   identity/pairing, idle/no-direct-upload, generation and completion boundaries.
-- **Flutter device path:** public beta.17 connection/status only. Its current
+- **Flutter device path:** public beta.18 connection/status only. Its current
   facade lacks the fresh pairing and encrypted-upload host interfaces needed
   for this example's device sync. Do not bypass those gaps.
 
