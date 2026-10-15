@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "@bota.dev/react-native-app-sdk": "2.0.0-beta.18",
-    "expo": "57.0.4",
+    "expo": "58.0.7",
     "expo-build-properties": "57.0.15",
     "react": "19.2.3",
     "react-native": "0.86.3"
