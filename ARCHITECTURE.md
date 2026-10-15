@@ -259,14 +259,17 @@ Dependency mitigation requirements are maintained in
 
 ## Delivery and qualification
 
-The first compatible consolidation of recording/processing/Ask features is
-delivered. Existing clients use the core through their original adapters, with
-direct feature-source entry points in README. Next qualify shared write
-arbitration and auth/path compatibility before combining the listeners.
+The shared recording/processing/Ask core and one combined Node listener are
+implemented within their documented qualification bounds. The listener retains
+cookie/Bearer service factories, three original journals and in-process
+processing/Ask intent arbitration. Existing compatibility listeners must stop
+before using the combined host; see the
+[combined review](docs/design-reviews/2026-10-12-unified-recordings.md).
 Fill qualified iOS/native hosts and useful SDK modules without waiting for every
 client's full recording UI. Complete ordinary intake/playback only after its
 public contract is qualified. Vertical apps remain the later product layer.
-One executable backend, playback and new hosts remain planned work. The
+Remaining Web/auth/store relocation, playback and new hosts remain planned work.
+The
 [consolidation review](docs/design-reviews/2026-10-12-integrated-recordings.md)
 records the current implementation and its bounded verification.
 

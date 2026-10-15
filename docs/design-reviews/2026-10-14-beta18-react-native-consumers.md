@@ -89,10 +89,18 @@ source and staged whitespace checks pass.
 | Independent, copyable public roots and dependency controls | Complete source copies; existing guards, license checks, tests and exports | Matched locally |
 | Preserve identity, journals, lifecycle and receipt/cleanup ownership | Unchanged application/host implementations; existing 43 app/controller and 10 native tests | Conserved source and bounded local tests; no new physical claim |
 | Use supported compatibility entry without claiming runtime migration | Public package APIs compile; current setup states the retained entry | Matched for this version-update scope |
-| Exact-source hosted Android and connection iOS builds | Existing workflows retained | Unverified for beta.18 at this local-review checkpoint |
+| Hosted Android and connection iOS builds | Connection Android/iOS pass at `6dd54747`; unchanged source/guards retained; recording Android passes at final `291706c7` | Matched in hosted builds at the stated sources |
 | Installed app, Bluetooth/MTU behavior, cloud transfer and cleanup | No device installation, live Bota API, recording upload or physical operation performed | Unverified |
 
 Native debug assembly is not installed-app or Bluetooth acceptance. The
-connection sample's iOS host requires its own exact-source macOS build;
+connection sample's iOS simulator build passes at `6dd54747`;
 the Recordings client remains Android-only. No new production, unattended
 background, source deletion or generated-JS host acceptance is claimed.
+
+The [connection run](https://github.com/bota-dev/examples/actions/runs/38660573320)
+passes both native hosts. Its complete 46-file tree and owning workflow are
+Git-blob-identical in the final Flutter update. The final
+[recording run](https://github.com/bota-dev/examples/actions/runs/38661965688)
+passes RN Android/JVM tests/APK, Flutter beta.18 APK and both backend OS jobs at
+`291706c7e5c3cd00dde577ed9fd22f8af4937df7`. The global review records the
+15 exact-final-source jobs and seven inherited beta.18 receipts separately.

@@ -69,12 +69,12 @@ Fresh platform evidence is recorded in the
 | Requirement | Evidence | Status |
 | --- | --- | --- |
 | Latest public version across five families | All five public registries and successful synchronized release verify beta.18 | Matched for package publication; app delivery remains separate |
-| Exact public SDK pins and frozen installs | Four npm roots / Kotlin locks / Swift public inputs match beta.18; both Flutter configs resolve public beta.18 and normal/enforced installs pass | Matched locally; final hosted resolution required |
+| Exact public SDK pins and frozen installs | Four npm roots / Kotlin locks / Swift public inputs match beta.18; both Flutter configs resolve public beta.18 and normal/enforced installs pass | Matched locally and in the qualified hosted jobs below |
 | Existing behavior, trust and durable recovery | Application/controller/auth/journal source and origins retained; RN 58/100 and native host 10 cases, Kotlin catalog 16 cases | Matched in source and bounded tests; physical acceptance unverified |
-| Native binary / OTA separation | Legacy app/package/runtime 0.4.0; three actual SDK resolutions match; Android/iOS/Web exports pass; other clients retain no-OTA configuration | Matched locally; new native binaries required |
+| Native binary / OTA separation | Legacy app/package/runtime 0.4.0; actual SDK resolutions match; Android/iOS/Web exports and four-ABI native assembly pass; other clients retain no-OTA configuration | Matched in source/builds; native rebuild required, no OTA published |
 | Dependency guards and non-SDK tuples | Original signing/braces/map hooks and source inventories retained; independent diff audit confirms non-SDK npm/native/pub objects unchanged; original Flutter analyzer config restored and direct analysis passes | Matched locally |
-| Platform tests and native exports/builds | Legacy 111 tests/types/backend build/all-platform exports; Web 15 tests/types/WASM build; RN/Kotlin qualification in platform reviews; Flutter 6/38 tests, license gates and both new beta.18 APKs pass | Matched locally across all selected roots; final hosted checks required |
-| Docs/discovery follow actual versions | Current guidance selects beta.18 in every SDK root; 77 catalog IDs / 84 docs / 453 indexed links pass, plus all 322 local file links in 14 follow-up Markdown files; dated beta.17 and initial per-facade evidence remain separate | Matched locally |
+| Platform tests and native exports/builds | Legacy 111 tests/types/backend build/all-platform exports; Web 15 tests/types/WASM build; RN/Kotlin qualification in platform reviews; Flutter 6/38 tests, license gates and both beta.18 APKs pass; all 15 final-source and seven unchanged-input hosted jobs succeed | Matched within the recorded local/hosted scope |
+| Docs/discovery follow actual versions | Current guidance selects beta.18 in every SDK root; final 77 catalog IDs / 84 docs / 454 indexed links and nine discovery regressions pass; all 49 local file links in four evidence-only Markdown files pass; dated beta.17 and initial per-facade evidence remain separate | Matched locally |
 | Physical/live/backend/deployment acceptance | No such operation performed | Unverified; unchanged scope limits |
 
 ## Local legacy workspace qualification
@@ -95,8 +95,9 @@ override or changed transforms: Android 115.5 seconds / 1,613 modules, Web
 | iOS Hermes | 10,146,797 | `8d3515c4cecec2989ff8fd7670ba3ba7e33de776aa14e14cb1e8c9f7e2331241` |
 | Web JavaScript | 6,019,901 | `72ef8a75dd516a708ee677a18ed8c80da804a78d8a57316f56738e9d80ff427e` |
 
-These are export checks, not native four-ABI assembly or installed Bluetooth
-acceptance. The existing hosted native job remains required for beta.18.
+These local exports do not establish native assembly or installed Bluetooth
+acceptance. The later hosted four-ABI assembly succeeds as recorded below;
+physical acceptance remains unverified.
 
 ## Qualification carried forward from unchanged beta.18 inputs
 
@@ -117,5 +118,50 @@ Their seven successful beta.18 job receipts remain qualified at that source:
 
 The existing path filters select seven final-source workflows / 15 jobs for
 the Flutter follow-up: both Flutter hosts, mobile/backend, Web app, core,
-legacy verification/native, catalog and CodeQL. Those fresh results must be
-recorded separately. The seven receipts above are not exact-final-source runs.
+legacy verification/native, catalog and CodeQL. All succeed at the exact source
+recorded below. The seven receipts above are not exact-final-source runs.
+
+## Final hosted qualification
+
+The all-ten-roots beta.18 source is
+[`291706c7e5c3cd00dde577ed9fd22f8af4937df7`](https://github.com/bota-dev/examples/commit/291706c7e5c3cd00dde577ed9fd22f8af4937df7).
+All **seven triggered workflows / 15 jobs** succeed at that source:
+
+| Final-source workflow | Successful run |
+| --- | --- |
+| Legacy tests, exports and four-ABI Android host | [38661965802](https://github.com/bota-dev/examples/actions/runs/38661965802) |
+| Mobile/backend and Flutter beta.18 | [38661965688](https://github.com/bota-dev/examples/actions/runs/38661965688) |
+| Independent Flutter beta.18 | [38661965821](https://github.com/bota-dev/examples/actions/runs/38661965821) |
+| Web app, Windows and Linux | [38661965797](https://github.com/bota-dev/examples/actions/runs/38661965797) |
+| Backend core, Windows and Linux | [38661965761](https://github.com/bota-dev/examples/actions/runs/38661965761) |
+| Catalog/docs, Windows and Linux | [38661965691](https://github.com/bota-dev/examples/actions/runs/38661965691) |
+| CodeQL, JavaScript/TypeScript and Actions | [38661965103](https://github.com/bota-dev/examples/actions/runs/38661965103) |
+
+The [legacy Android job](https://github.com/bota-dev/examples/actions/runs/38661965802/job/116185276319)
+executes 418 tasks and completes Gradle in 21 minutes 34 seconds, including
+arm64-v8a, armeabi-v7a, x86 and x86_64. Both Flutter hosts build against the
+new public beta.18 archive. No gate, architecture, timeout, heap, guard or
+workflow is weakened or rerun to obtain these results.
+
+Combined with the seven unchanged-input beta.18 jobs at `6dd54747`, these
+receipts qualify 13 workflows / 22 jobs across their stated sources. Subsequent
+evidence-only Markdown edits preserve all compiled source, manifests, SDK locks,
+installation guards, native configuration and workflow inputs. SDK publication,
+example compilation and installed/live/physical acceptance remain separate.
+
+## Independent design review
+
+A fresh read-only review compares the combined adoption with current DESIGN,
+ARCHITECTURE and the owner's latest-public-SDK request. All ten pins and actual
+installed resolutions match beta.18. Public imports remain independent; no
+private SDK/source overrides, sibling imports, hardcoded test wearable or real
+credentials were introduced. The app/backend/native-host implementation,
+authentication, journal/origin, receipt/generation and lifecycle gates are
+unchanged. Original guards and analyzer settings remain enforced. The new
+workspace regression tests actual resolution instead of a hardcoded version.
+
+The review found no SDK adoption defect. It found an older architecture delivery
+paragraph still describing the combined listener as future work; that prose is
+corrected to the already documented implemented state, without changing runtime.
+Generated-JS host migration, installed physical behavior, live upload/cleanup,
+background acceptance and deployment remain separate from this version update.

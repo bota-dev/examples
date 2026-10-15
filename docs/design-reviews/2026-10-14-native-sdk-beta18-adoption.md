@@ -54,7 +54,7 @@ availability, a verified archive hash or consuming native build evidence.
 | Kotlin connect/catalog native compatibility | Targeted update builds pass in 74/68 seconds; separate frozen builds pass in 48/50 seconds on JDK17/SDK36; catalog reruns all16 JVM cases, zero failures/errors/skips | matched locally |
 | Latest public Flutter package | Both installed package configs resolve public beta.18; normal pub get changes only Bota version/hash and separate enforced-lock resolution succeeds | matched |
 | Flutter lifecycle/content compatibility | New beta.18 analysis and existing 6 connect/38 integrated cases pass; 2/10 Dart files format unchanged; license gate 5 fixtures/44 package notices passes | matched locally |
-| Flutter Android composition | New public beta.18 debug APKs pass in 43.6 seconds (connect) and 64.4 seconds (integrated), Flutter 3.47.5/JDK17/SDK37 | matched locally; new hosted checks remain separate |
+| Flutter Android composition | New public beta.18 debug APKs pass in 43.6 seconds (connect) and 64.4 seconds (integrated), Flutter 3.47.5/JDK17/SDK37; both final-source hosted APK jobs pass | matched locally and hosted at `291706c7` |
 | Apple compilation | Both beta.18 SwiftPM resolution/macOS builds pass at `6dd54747`, links below; no local Apple compiler | matched hosted for unchanged native roots |
 | Scope/lifecycle/state preservation | No application/controller/native source edits; no local state/device operations | matched in source |
 | Physical, provider and storage acceptance | Not executed in this dependency-adoption pass | unverified |
@@ -79,7 +79,7 @@ The later public beta.18 archive was verified before changing either pub pin.
 Both installed configs now resolve `bota_app_sdk-2.0.0-beta.18`; the plugin's
 Android version file and Apple dependency select beta.18. Both regenerated locks
 change only Bota version/hash. New analysis, tests, licenses and APK builds above
-qualify this package locally; the new consuming hosted workflow remains separate.
+qualify this package locally; the final consuming hosted jobs also pass below.
 The four native beta.18 roots are unchanged. SDK-free API/backend code is unaffected.
 
 ## Hosted native beta.18 qualification at 6dd54747
@@ -122,3 +122,16 @@ commands. That generated exclusion change was restored exactly; direct Dart
 analysis with the original tracked config also passes. No analyzer gate is
 weakened. The existing plugin KGP migration/SDK XML warnings remain; no claim
 covers a later Flutter toolchain, iOS host, live API/provider or physical device.
+
+## Final hosted Flutter beta.18 qualification
+
+Both new package consumers pass at exact all-beta.18 source
+`291706c7e5c3cd00dde577ed9fd22f8af4937df7`:
+
+- [Flutter connection](https://github.com/bota-dev/examples/actions/runs/38661965821/job/116185094839): frozen public install, analysis, six widget cases, Android APK assembly/upload.
+- [Flutter Recordings](https://github.com/bota-dev/examples/actions/runs/38661965688/job/116185094809): frozen install, license checks, analysis, 38 cases and Android APK assembly.
+
+The four Kotlin/Swift beta.18 source trees and their owning workflows remain
+identical to the successful `6dd54747` inputs documented above. The global review
+keeps these inherited results separate from the 15 final-source jobs. None of
+these builds installs a phone app or qualifies physical transfer/cleanup.
