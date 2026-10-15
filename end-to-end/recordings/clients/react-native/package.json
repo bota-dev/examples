@@ -22,12 +22,12 @@
   "dependencies": {
     "@bota.dev/react-native-app-sdk": "2.0.0-beta.18",
     "expo": "57.0.4",
-    "expo-build-properties": "57.0.15",
-    "react": "19.2.3",
-    "react-native": "0.86.3"
+    "expo-build-properties": "57.0.22",
+    "react": "19.3.0",
+    "react-native": "0.87.1"
   },
   "devDependencies": {
-    "@types/react": "19.2.17",
+    "@types/react": "19.3.0",
     "typescript": "6.0.3",
     "@expo/cli": "file:vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
     "@expo/code-signing-certificates": "file:vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
