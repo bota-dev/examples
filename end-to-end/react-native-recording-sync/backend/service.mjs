@@ -38,8 +38,10 @@ export function readConfig(env) {
   valid((deviceId === null || ID.device.test(deviceId)) && ID.user.test(env.BOTA_END_USER_ID), 'invalid_fixed_identity');
   valid(typeof env.BOTA_PROJECT_ID === 'string' && /^[A-Za-z0-9_-]{3,128}$/.test(env.BOTA_PROJECT_ID), 'invalid_project');
   valid(typeof env.APP_ACCESS_TOKEN === 'string' && env.APP_ACCESS_TOKEN.length >= 32 && env.APP_ACCESS_TOKEN.length <= 256 && !/\s/.test(env.APP_ACCESS_TOKEN) && !/^(sk_|rk_|dtok_|up_|rct_)/.test(env.APP_ACCESS_TOKEN) && env.APP_ACCESS_TOKEN !== env.BOTA_API_KEY, 'invalid_application_token');
+  const storageHosts = (env.BOTA_STORAGE_HOSTS ?? '').split(',').map(host => host.trim()).filter(Boolean);
+  valid(storageHosts.length <= 16 && storageHosts.every(host => /^[a-z0-9][a-z0-9.-]{0,252}$/.test(host)), 'invalid_storage_hosts');
   return { apiBase: api.href.replace(/\/$/, ''), apiKey: env.BOTA_API_KEY, projectId: env.BOTA_PROJECT_ID,
-    endUserId: env.BOTA_END_USER_ID, deviceId, appToken: env.APP_ACCESS_TOKEN };
+    endUserId: env.BOTA_END_USER_ID, deviceId, appToken: env.APP_ACCESS_TOKEN, storageHosts };
 }
 
 /** A single fixed customer identity. The database never contains signed material or audio. */

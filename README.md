@@ -28,10 +28,10 @@ focused guides/quickstarts belong to the general layer. `api/`, `app-sdk/` and
 | Client | Run and adapt | Implemented today |
 | --- | --- | --- |
 | React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, ordinary-import playback, library, Transcript/Summary/Ask; API-only |
-| React Native Android | [RN sample](end-to-end/recordings/clients/react-native/README.md) | Sample/live cloud library, Transcript/Summary/Ask; optional encrypted device sync |
-| Flutter Android | [Flutter sample](end-to-end/recordings/clients/flutter/README.md) | Same sample/live library and AI views; optional device connection/status |
+| React Native Android / iOS | [RN sample](end-to-end/recordings/clients/react-native/README.md) | File import, ordinary-import playback, library and Transcript/Summary/Ask; encrypted device sync is Android-only |
+| Flutter Android / iOS | [Flutter sample](end-to-end/recordings/clients/flutter/README.md) | File import, ordinary-import playback, library and AI views; optional device connection/status |
 | Kotlin / Android | [SDK connection](app-sdk/android-device-connect/README.md) and [recording catalog](app-sdk/android-recording-catalog/README.md) | Native device workflows; integrated recording client is planned |
-| Swift / Apple | [SDK connection](app-sdk/apple-device-connect/README.md) and [recording catalog](app-sdk/apple-recording-catalog/README.md) | Native macOS device workflows; integrated recording client/iOS host is planned |
+| Swift / Apple | [SDK connection](app-sdk/apple-device-connect/README.md) and [recording catalog](app-sdk/apple-recording-catalog/README.md) | Shared iOS/macOS connection/status; recording catalog remains macOS |
 
 Try the web sample without credentials or hardware using Node **22.23.2+**:
 
@@ -55,8 +55,9 @@ success.
 
 The recording experience connects audio input, library, supported audio playback
 and source review, transcript, general notes and recording-scoped Ask. Current
-Web playback supports authorized unencrypted imports; mobile has no ordinary file import/playback and its recording
-hosts are Android only. Standalone device connection/status needs no backend.
+Web and mobile playback support authorized unencrypted imports. Mobile file import
+and playback use the same backend features, with platform-native pickers and
+temporary media. Standalone device connection/status needs no backend.
 Cloud features and authorized device upload need the customer backend; device
 presence never gates browsing existing cloud recordings.
 
@@ -92,8 +93,8 @@ without their HTTP, authorization, ownership and durable-state helpers.
 | Feature | Public API/SDK boundary | Current public-call source |
 | --- | --- | --- |
 | List/read recordings | `GET /v1/recordings`, `GET /v1/recordings/{id}` | [Shared recordings](end-to-end/recordings/backend/features/recordings.mjs); [React library](end-to-end/web-reference/web/features/recordings/Recordings.tsx) |
-| Import audio | Create recording, get upload URL, storage `PUT`, verified upload completion | [Backend upload](end-to-end/web-reference/server/features/upload.mjs); [React upload](end-to-end/web-reference/web/features/uploads/Upload.tsx) |
-| Play imported audio | Authorized WAV export, bounded storage `GET`, same-origin media | [Backend playback](end-to-end/web-reference/server/features/playback.mjs); [React player](end-to-end/web-reference/web/features/playback/AudioPlayer.tsx) |
+| Import audio | Create recording, get upload URL, storage `PUT`, verified upload completion | [Shared upload](end-to-end/recordings/backend/features/upload.mjs); [Web upload](end-to-end/web-reference/web/features/uploads/Upload.tsx); [RN media](end-to-end/recordings/clients/react-native/media-controller.ts); [Flutter media](end-to-end/recordings/clients/flutter/lib/recording_media.dart) |
+| Play imported audio | Authorized WAV export, bounded storage `GET`, authenticated app media | [Shared playback](end-to-end/recordings/backend/features/playback.mjs); [Web player](end-to-end/web-reference/web/features/playback/AudioPlayer.tsx); mobile media files above |
 | Transcribe/read text and create general notes | Public transcription/summary GET/POST calls | [Shared processing](end-to-end/recordings/backend/features/processing.mjs); [Transcript](end-to-end/web-reference/web/features/transcription/Transcript.tsx) / [Summary](end-to-end/web-reference/web/features/summaries/Summaries.tsx) |
 | Ask about one recording | Recording-scoped session/message calls and source/citation checks | [Shared Ask](end-to-end/recordings/backend/features/ask.mjs); [React Ask](end-to-end/web-reference/web/features/ask/Ask.tsx) |
 | Receive events and recover known operations | Signed customer webhook; GET-only saved-operation refresh | [Webhook receiver](end-to-end/web-reference/server/features/webhooks.mjs); [Activity](end-to-end/web-reference/web/features/webhooks/Activity.tsx) |
@@ -127,15 +128,15 @@ Different public SDK capabilities do not imply identical UI or full device parit
 | Platform | Current SDK public-call source | Current host and capability limits |
 | --- | --- | --- |
 | Kotlin / Android | [MainActivity.kt](app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](app-sdk/android-device-connect/README.md) | Native Android, API 26+; catalog reads metadata, not audio transfer; integrated recording client is planned |
-| Swift / Apple | [App.swift](app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](app-sdk/apple-device-connect/README.md) | Current SwiftUI hosts are macOS; no native iOS host or integrated recording client yet |
-| React Native | [App.tsx](app-sdk/react-native-device-connect/App.tsx); [setup](app-sdk/react-native-device-connect/README.md) | Connection has Android/iOS hosts; recording/sync sample is Android-only, already-provisioned encrypted-v2 with documented backend/firmware gates |
-| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android host only; beta.18 lacks the fresh-pairing/encrypted-v2 host interfaces required for the RN sync workflow |
+| Swift / Apple | [ConnectModel.swift](app-sdk/apple-device-connect/Sources/BotaConnect/ConnectModel.swift); [setup](app-sdk/apple-device-connect/README.md) | iOS/macOS connection/status; catalog remains macOS; no integrated cloud client |
+| React Native | [App.tsx](app-sdk/react-native-device-connect/App.tsx); [recording app](end-to-end/recordings/clients/react-native/README.md) | Android/iOS connection and cloud app hosts; encrypted-v2 sync remains Android-only with documented backend/firmware gates |
+| Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android/iOS hosts; the selected Dart facade does not supply this sample's RN encrypted-v2 host workflow |
 | Web / desktop Chromium | [page.ts](app-sdk/web-device-connect/page.ts) and [main.ts](app-sdk/web-device-connect/main.ts); [setup](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; not integrated into the API recording client yet |
 | Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
 
-All ten device SDK install roots, including the legacy workspace and both
-integrated mobile clients, pin public **2.0.0-beta.18**. Each client installs
-independently. The synchronized SDK release is publicly verified.
+The Swift connection starter, both Flutter clients and integrated RN client pin
+public **2.0.0-beta.19**. The other six device SDK roots retain beta.18. Each client
+installs independently; manifests/locks declare its exact public version.
 npm's `latest` tag remains beta.0. Native RN workflows use the compatibility
 factory; this package update does not migrate them to generated JS `/runtime`.
 Inspect the selected manifest/lockfile and README for tooling and public methods.
@@ -145,8 +146,8 @@ gaps; do not fill them with private transports or an unofficial SDK.
 [Adoption evidence](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md) and the
 [implementation review](docs/independent-examples-review.md) distinguish source,
 native builds, live API and physical acceptance. Historical phone results apply
-only to their tested source/SDK/firmware/device; they do not establish beta.18
-physical acceptance. The [AI guide](docs/using-examples-with-ai.md) helps tools
+only to their tested source/SDK/firmware/device. The [iOS/mobile-flow review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+separates new host/build checks from media/device acceptance. The [AI guide](docs/using-examples-with-ai.md) helps tools
 locate feature code and setup; [AGENTS.md](AGENTS.md) governs repository changes.
 
 ## Example catalog
@@ -234,14 +235,14 @@ provides API/SDK installation guidance.
 | [API health probe (Python)](api/api-health-python/README.md) | Make one credential-free health observation without claiming whole-system or device availability | No |
 | [React Native connect](app-sdk/react-native-device-connect/README.md) | Discover, verify serial, connect, read status, disconnect | Yes |
 | [Web connect](app-sdk/web-device-connect/README.md) | Browser picker and identity verification with Web Bluetooth and WASM | Yes |
-| [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI macOS application using the public Swift package | Yes |
+| [Apple connect](app-sdk/apple-device-connect/README.md) | SwiftUI iOS/macOS connection/status using the public Swift package | Yes |
 | [Android connect](app-sdk/android-device-connect/README.md) | Kotlin Android application using Maven Central | Yes |
 | [Android recording catalog](app-sdk/android-recording-catalog/README.md) | Verify exact serial and list legacy/encrypted-v2 metadata without audio transfer | Yes |
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app | Yes |
-| [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android application using pub.dev | Yes |
-| [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | Retained mobile backend and setup; links to relocated RN/Flutter Android clients with sample modes and optional device paths | No; device path optional |
+| [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android/iOS connection/status using pub.dev | Yes |
+| [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | Retained backend and setup; RN/Flutter Android/iOS recording apps with import/playback and optional supported device paths | No; device path optional |
 | [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import/playback, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
-| [Integrated Recordings sample](end-to-end/recordings/README.md) | Combined Node backend with retained auth/journals and relocated RN/Flutter Android clients; Web/backend compatibility paths remain | No |
+| [Integrated Recordings sample](end-to-end/recordings/README.md) | Combined Node backend with retained auth/journals and RN/Flutter Android/iOS clients; Web/backend compatibility paths remain | No |
 
 </details>
 

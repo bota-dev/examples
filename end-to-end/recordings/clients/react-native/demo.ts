@@ -86,6 +86,8 @@ export function createDemoLibrary(): LibraryApi {
       if (!row) throw new LibraryError(404, 'not_found');
       return { operation: { ...row } };
     },
+    async upload() { throw new LibraryError(400, 'invalid_audio'); },
+    async audio() { throw new LibraryError(400, 'playback_unavailable'); },
     dispose() { disposed = true; known.clear(); operations.clear(); transcripts.clear(); summaries.clear(); },
   };
 }

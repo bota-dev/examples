@@ -1,6 +1,7 @@
 # Independent examples implementation review
 
-Current SDK adoption: [October 14 published beta.18 review](design-reviews/2026-10-14-beta18-sdk-adoption.md).
+Current iOS/mobile work and four beta.19 consumers: [October 20 review](design-reviews/2026-10-20-ios-mobile-recording-flows.md).
+The other six SDK roots retain the [October 14 published beta.18 baseline](design-reviews/2026-10-14-beta18-sdk-adoption.md).
 Current Web playback: [October 14 ordinary-import review](design-reviews/2026-10-14-web-playback.md).
 Earlier sections retain their exact historical package, source and hardware scope.
 

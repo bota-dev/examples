@@ -6,7 +6,7 @@ recording-scoped Ask have **one maintained feature implementation**. The existin
 cookie/Bearer adapters, response projections and all three journals are retained.
 
 **Current scope:** one combined listener with in-process processing/Ask
-coordination and peer-intent refusal. Auth, persistence, upload/webhook and native
+coordination and peer-intent refusal. Auth, persistence, webhook and native
 service code retains its existing public-family paths. Older launchers remain
 available for compatibility. Complete [Flutter](clients/flutter/README.md) and
 [RN](clients/react-native/README.md) Android install roots are now relocated;
@@ -17,12 +17,13 @@ key, account, audio or device.
 
 ## Find the public calls
 
-| Feature                         | Public API integration                                                        | Source                                            |
-| ------------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------- |
-| Recording library               | Owner-filtered recording pages and exact recording reads                      | [recordings.mjs](backend/features/recordings.mjs) |
-| Transcriptions and notes        | Source-filtered job reads, explicit creation, known-resource reconciliation   | [processing.mjs](backend/features/processing.mjs) |
-| Recording-scoped Ask            | Session membership, one question, answer/citation validation and GET recovery | [ask.mjs](backend/features/ask.mjs)               |
-| Safe error/operation projection | Shared error identity and narrow metadata for authorized operations           | [errors.mjs](backend/errors.mjs)                  |
+| Feature                         | Public API integration                                                        | Source                                                                                                                 |
+| ------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Recording library               | Owner-filtered recording pages and exact recording reads                      | [recordings.mjs](backend/features/recordings.mjs)                                                                      |
+| Ordinary audio import/playback  | Durable import, verified completion and bounded authenticated WAV retrieval   | [upload.mjs](backend/features/upload.mjs), [playback.mjs](backend/features/playback.mjs), [http.mjs](backend/http.mjs) |
+| Transcriptions and notes        | Source-filtered job reads, explicit creation, known-resource reconciliation   | [processing.mjs](backend/features/processing.mjs)                                                                      |
+| Recording-scoped Ask            | Session membership, one question, answer/citation validation and GET recovery | [ask.mjs](backend/features/ask.mjs)                                                                                    |
+| Safe error/operation projection | Shared error identity and narrow metadata for authorized operations           | [errors.mjs](backend/errors.mjs)                                                                                       |
 
 This is first-party sample application code, not a new Bota API SDK. It teaches
 ordinary public HTTP integrations. Read the [root design](../../DESIGN.md) and
@@ -31,11 +32,11 @@ for the integrated architecture and remaining phases.
 
 ## Run a client
 
-| Client               | Current setup                               | Scope                                                                                                                         |
-| -------------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| Flutter Android      | [Flutter README](clients/flutter/README.md) | First relocated client; local sample recordings or live cloud library, Transcript/Summary/Ask; optional SDK connection/status |
-| React web            | [Web README](../web-reference/README.md)    | Existing compatibility root; audio import, ordinary-import WAV playback and cloud recording views                             |
-| React Native Android | [RN README](clients/react-native/README.md) | Relocated complete install root; cloud recording views and optional gated encrypted-v2 sync                                   |
+| Client                   | Current setup                               | Scope                                                                                               |
+| ------------------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------------- |
+| Flutter Android/iOS      | [Flutter README](clients/flutter/README.md) | Ordinary import/WAV playback, local sample or live library and AI views; optional connection/status |
+| React web                | [Web README](../web-reference/README.md)    | Existing compatibility root; audio import, ordinary-import WAV playback and cloud recording views   |
+| React Native Android/iOS | [RN README](clients/react-native/README.md) | Ordinary import/WAV playback and cloud recording views; encrypted device sync stays Android-only    |
 
 Each client retains its own manifest, lock and native identity. Old
 [Flutter](../react-native-recording-sync/flutter/README.md) and
@@ -171,6 +172,9 @@ manifests, locks and app identities are unchanged. Flutter and RN complete insta
 roots, helper/guard graphs and CI/discovery paths have moved together to `clients/`.
 Web remains at its compatibility path. These moves do not relocate the mobile
 backend launch base or journals, add iOS/playback/import, or expand SDK capability.
+The separate [October 20 implementation](../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+adds iOS hosts and ordinary mobile import/playback; it does not alter those
+relocation guarantees or add Flutter/iOS encrypted device sync.
 Only SDK-only connection/status workflows are backend-free; the native encrypted
 upload path retains its documented backend and completion requirements.
 

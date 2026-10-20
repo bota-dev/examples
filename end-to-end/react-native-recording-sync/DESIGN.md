@@ -35,11 +35,11 @@ permit private Bota application imports. Demo/Bota One inform the journey only.
 
 | Capability | Current mobile implementation |
 | --- | --- |
-| Audio input | RN can sync an already-provisioned encrypted-v2 device recording. Neither client implements microphone capture or file import. Flutter has no device transfer in this example. |
+| Audio input | Both clients import ordinary audio files. Android RN can also sync an already-provisioned encrypted-v2 device recording. No microphone capture or Flutter device transfer is added. |
 | Library and results | Both clients show owned cloud recordings, transcripts, general notes and recording-scoped Ask. A live library needs existing authorized audio or RN device sync. |
-| Playback | Not implemented. The target adds playback only for a supported, authorized audio representation. |
+| Playback | Explicit authenticated WAV load/play/pause for verified ordinary imports, with native private temporary media and joined cleanup. Device/encrypted sources are unavailable. |
 | Device SDK | Optional RN encrypted sync and Flutter connection/status, enabled explicitly in live mode. Their supported workflows differ. |
-| Hosts | Android hosts are supplied. Common-app iOS hosts are missing; that is separate from the SDKs' iOS support. |
+| Hosts | Both clients supply Android/iOS cloud app hosts. The RN custom encrypted-upload adapter remains Android-only. Build/runtime evidence is recorded separately. |
 | Synthetic mode | Local DTO fixtures and synthetic results with no network or SDK work. They do not prove live processing, upload or cleanup. |
 
 Mobile and web now use one recording/processing/Ask implementation and common
@@ -91,9 +91,9 @@ and uncertain action. Saved IDs remain metadata, not content/cleanup authority.
   retained in client memory. The server owns project/end-user configuration and
   the Bota API key. Sign-out clears content and fences late results.
 - **React Native device path:** retain the Android encrypted-v2 host and its
-  exact public beta.18 SDK. Open it explicitly from the live app; keep fresh
+  exact public beta.19 SDK. Open it explicitly from the live app; keep fresh
   identity/pairing, idle/no-direct-upload, generation and completion boundaries.
-- **Flutter device path:** public beta.18 connection/status only. Its current
+- **Flutter device path:** public beta.19 connection/status only. Its selected
   facade lacks the fresh pairing and encrypted-upload host interfaces needed
   for this example's device sync. Do not bypass those gaps.
 
@@ -103,7 +103,7 @@ facade gap. Native Windows SDK support is
 [planned upstream](https://github.com/bota-dev/app-sdk#supported-platforms);
 it is a capability gap rather than only a missing example host.
 
-This example supplies Android hosts. An iOS host, full platform parity and physical
+This example supplies Android/iOS cloud hosts. Full device platform parity and physical
 qualification require separate implementation/evidence. API library access is
 independent of device presence and grants no device-cleanup authority.
 

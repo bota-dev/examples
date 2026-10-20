@@ -906,14 +906,14 @@
       "id": "apple-device-connect",
       "path": "app-sdk/apple-device-connect",
       "title": "Apple connect",
-      "purpose": "SwiftUI macOS application using the public Swift package",
+      "purpose": "SwiftUI iOS/macOS connection and status using the public Swift package",
       "category": "app-sdk",
       "language": "Swift",
       "physical_device_required": true,
       "readme": "app-sdk/apple-device-connect/README.md",
       "setup_reference": "app-sdk/apple-device-connect/README.md",
       "verification_reference": "app-sdk/apple-device-connect/README.md",
-      "platform": "macOS",
+      "platform": "iOS, macOS",
       "workflow": ".github/workflows/apple-device-connect.yml"
     },
     {
@@ -962,14 +962,14 @@
       "id": "flutter-device-connect",
       "path": "app-sdk/flutter-device-connect",
       "title": "Flutter connect",
-      "purpose": "Flutter Android application using pub.dev",
+      "purpose": "Flutter Android/iOS connection and status using pub.dev",
       "category": "app-sdk",
       "language": "Dart",
       "physical_device_required": true,
       "readme": "app-sdk/flutter-device-connect/README.md",
       "setup_reference": "app-sdk/flutter-device-connect/README.md",
       "verification_reference": "app-sdk/flutter-device-connect/README.md",
-      "platform": "Android",
+      "platform": "Android, iOS",
       "workflow": ".github/workflows/flutter-device-connect.yml"
     },
     {

@@ -68,6 +68,15 @@ function fixture({ before = {}, after = {}, descriptor = {}, storage, signal, de
   return { calls, run: () => playbackAudio(ctx, 'rec_a') };
 }
 
+test('Web playback preserves omitted-project compatibility while checking the exact owner', async () => {
+  const f = fixture({ before: { project_id: undefined } });
+  assert.deepEqual(await f.run(), bytes);
+  await assert.rejects(
+    fixture({ before: { project_id: undefined, end_user_id: 'eu_other' } }).run(),
+    { status: 403 },
+  );
+});
+
 test('playback uses fixed public WAV export, credential-free storage and final ownership read', async () => {
   const f = fixture();
   assert.deepEqual(await f.run(), bytes);

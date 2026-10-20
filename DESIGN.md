@@ -33,7 +33,7 @@ authorized principal; clients never hold Bota secret keys.
 The target layout is **partially implemented**. Shared recording, processing and
 Ask modules, contract tests and one combined Node listener now exist in
 `end-to-end/recordings/`. It composes existing cookie/Bearer service factories
-and all three journals. Complete Flutter and React Native Android install roots
+and all three journals. Flutter and React Native Android/iOS install roots
 now live at `clients/flutter/` and `clients/react-native/`. Web and auth/store
 service files retain their existing paths. The broader target remains:
 
@@ -134,14 +134,15 @@ production account product or forced cross-platform consumer-app parity is neede
 | Area | Available now | Important gap |
 | --- | --- | --- |
 | API workflows | Node/Python workflow recipes and an extended inventory | Curated entry points, clearer copy boundaries and consistent evidence remain ongoing work |
-| SDK starters | RN Android/iOS connection; Flutter Android connection; Kotlin Android and Swift macOS connection/catalog; desktop Chromium connection | Native Swift iOS and Flutter iOS hosts are missing; supported workflow coverage varies |
+| SDK starters | RN/Flutter Android/iOS connection; Kotlin Android; Swift iOS/macOS connection and macOS catalog; desktop Chromium connection | Host/build evidence and physical qualification remain separate; workflow coverage varies |
 | React web reference | Audio import, authorized ordinary-import WAV playback, library, Transcript/Summary/Ask, synthetic mode and configured API path | Device/encrypted playback is unavailable; web is API-only |
-| RN/Flutter Android references | Complete install roots under `recordings/clients/`; cloud library/results/Ask, sample mode and one shared mobile adapter; optional RN encrypted-v2 sync or Flutter connection/status | Ordinary import/playback and common-app iOS hosts are missing; Flutter does not expose the selected encrypted-sync facade contract |
-| Combined backend | One listener composes Web/mobile service factories, shared recording/processing/Ask features and retained journals | Auth/store/Web files retain existing paths; external writers and atomic file races are not coordinated |
+| RN/Flutter references | Android/iOS hosts under `recordings/clients/`; ordinary file import/playback, cloud library/results/Ask and sample mode; optional Android RN encrypted-v2 sync or Flutter connection/status | iOS cloud support supplies no Kotlin upload host; Flutter does not expose the selected encrypted-sync facade contract; native/media/physical evidence remains scoped |
+| Combined backend | One listener composes Web/mobile service factories, shared recording/upload/playback/processing/Ask features and retained journals | Auth/store/Web files retain existing paths; external writers and atomic file races are not coordinated |
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
 Keep SDK capability, implemented host and verification as separate facts.
-All current device examples pin public beta.18. Legacy `apps/` retains
+Swift connection, both Flutter clients and the integrated RN client use public
+beta.19; the other six roots retain beta.18. Legacy `apps/` retains
 compatibility code with its local-only authentication/provisioning limits.
 The [SDK adoption review](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
 separates package/build checks from physical acceptance and generated-JS migration.

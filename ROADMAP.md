@@ -9,6 +9,10 @@ layer; vertical/app-type examples come later.
 The separately requested [October 14 SDK adoption](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
 updates all device SDK clients to public beta.18. It does not complete missing
 platform hosts or the remaining consolidation below.
+The [October 20 iOS/mobile pass](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+adds the Swift/Flutter iOS hosts, RN cloud iOS support and ordinary mobile media;
+its four touched SDK roots use public beta.19. Native and physical evidence stay
+specific to the recorded source and platform.
 
 ## 1. Consolidate the existing backend features compatibly
 
@@ -86,6 +90,11 @@ root install or universal example framework is required.
 
 ## 3. Fill useful native platform hosts and SDK modules
 
+**Implemented in source:** Swift iOS connection/status shares the macOS feature;
+both Flutter roots now have iOS hosts, and the RN recording app has a cloud-only
+iOS host. Each has an unsigned hosted build gate. These additions do not supply
+an iOS implementation of the custom Android encrypted-upload adapter.
+
 Kotlin, Swift, React Native, Flutter and Web examples have equal importance.
 Complete small supported host/workflow paths; prioritize missing Swift iOS and
 Flutter iOS hosts alongside documented RN iOS support. Native Kotlin and Swift
@@ -117,6 +126,10 @@ Synthetic tone playback does not establish live API/export/media acceptance.
 The [October 15 live HTTP test](docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
 passed for one synthetic WAV import through export, transcription, summary and
 Ask. Browser decoding and other input formats remain acceptance gaps.
+RN and Flutter now support explicit ordinary file import and WAV playback using
+the same backend features, native pickers and transient private audio. The
+mobile adapter adds raw upload and authenticated audio routes without moving
+journals; native decoder and physical acceptance remain separate checks.
 
 Keep Bota Recordings familiar: add/import audio → library → playback/source →
 transcript → general notes → scoped Ask. Ordinary UI serves recording users;

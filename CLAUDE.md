@@ -7,6 +7,7 @@ Then read [DESIGN.md](DESIGN.md), [ROADMAP.md](ROADMAP.md),
 Use the [AI guide](docs/using-examples-with-ai.md) to locate the integrated
 sample's [combined launcher](end-to-end/recordings/README.md), relocated [Flutter](end-to-end/recordings/clients/flutter/README.md)/[RN](end-to-end/recordings/clients/react-native/README.md) clients, feature modules or a focused quickstart. Preserve public package pins, authorization,
 durable recovery and dependency guards; report the exact verification performed.
+For iOS hosts and ordinary mobile import/playback, use the [current capability and evidence review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md).
 
 For legacy root dependency changes, also read the [current public-parent matching scope](docs/legacy-public-parent-matching-removal.md).
 

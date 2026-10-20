@@ -122,9 +122,11 @@ refresh, selection changes, Back or sign-out. Data already delivered to an
 authorized user cannot be remotely revoked. Byte/signature tests establish no
 live-provider export or real customer-audio playback acceptance.
 
-To adapt this feature, copy [playback.mjs](server/features/playback.mjs), the
-[recording shim](server/features/recordings.mjs) and shared core/errors, the bounded
-[HTTP/storage client](server/client.mjs), route/session gates in [app.mjs](server/app.mjs),
+To adapt this feature, copy [shared playback](../recordings/backend/features/playback.mjs),
+[shared recording validation](../recordings/backend/features/recordings.mjs) and
+[errors](../recordings/backend/errors.mjs), the bounded
+[HTTP/storage client](../recordings/backend/http.mjs), Web compatibility exports
+in `server/features/` and `server/client.mjs`, route/session gates in [app.mjs](server/app.mjs),
 and [AudioPlayer](web/features/playback/AudioPlayer.tsx) with [api.ts](web/api.ts).
 Keep the source tuple, host policy, byte limits, release-time session checks and
 media teardown. The narrow CSP `media-src 'self' blob:` permits local media
@@ -274,6 +276,10 @@ verified one synthetic WAV import through the real API/storage, transcription,
 summary and Ask, including GET-only upload verification and sign-out denial.
 Actual browser decoding, format conversion and customer-audio acceptance remain
 unverified; HTTP success and signature checks do not establish them.
+The [October 20 mobile/iOS review](../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+records shared upload/playback extraction. Existing Web source paths remain
+compatibility exports, including the explicit omitted-project response policy;
+the mobile adapter keeps strict project checks.
 
 The [core README](../recordings/README.md) records shared-core checks and its
 compatibility boundary. The dated presentation/quality results below predate

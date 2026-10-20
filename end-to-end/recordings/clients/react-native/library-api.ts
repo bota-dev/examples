@@ -16,6 +16,17 @@ export type Operation = { id: string; kind: string; state: string; resource_id: 
 export type MutationResult = { operation: Operation };
 export type Citation = { recording_id: string; start_ms: number };
 export type AskResult = MutationResult & { answer?: string; citations?: Citation[] };
+export type AudioImport = { name: string; mime: string; body: Blob };
+export const MAX_AUDIO_BYTES = 25 * 1024 * 1024;
+export const AUDIO_TYPES = ['audio/wav', 'audio/x-wav', 'audio/mpeg', 'audio/mp4', 'audio/ogg', 'audio/opus', 'audio/webm', 'audio/flac', 'audio/x-flac'];
+export function pickerAudioType(name: string, provided?: string) {
+  const mime = provided?.toLowerCase().trim();
+  const aliases: Record<string, string> = { 'audio/x-wav': 'audio/wav', 'audio/wave': 'audio/wav', 'audio/mp3': 'audio/mpeg', 'audio/m4a': 'audio/mp4', 'audio/x-m4a': 'audio/mp4', 'audio/x-flac': 'audio/flac' };
+  if (mime && mime !== 'application/octet-stream') return Object.hasOwn(aliases, mime) ? aliases[mime] : AUDIO_TYPES.includes(mime) ? mime : '';
+  const extensions: Record<string, string> = { wav: 'audio/wav', mp3: 'audio/mpeg', m4a: 'audio/mp4', ogg: 'audio/ogg', opus: 'audio/opus', webm: 'audio/webm', flac: 'audio/flac' };
+  const extension = /\.([a-z0-9]+)$/i.exec(name)?.[1].toLowerCase() ?? '';
+  return Object.hasOwn(extensions, extension) ? extensions[extension] : '';
+}
 
 export interface LibraryApi {
   list(cursor?: string, signal?: AbortSignal): Promise<RecordingPage>;
@@ -27,6 +38,8 @@ export interface LibraryApi {
   ask(recordingId: string, question: string, signal?: AbortSignal): Promise<AskResult>;
   operations(signal?: AbortSignal): Promise<Operation[]>;
   operation(id: string, signal?: AbortSignal, recordingId?: string): Promise<AskResult>;
+  upload(input: AudioImport, signal?: AbortSignal): Promise<MutationResult>;
+  audio(recordingId: string, signal?: AbortSignal): Promise<Uint8Array>;
   dispose(): void;
 }
 
@@ -44,6 +57,11 @@ export class LibraryError extends Error {
       invalid_question: 'Enter a question between 1 and 10,000 characters.',
       outcome_unknown: 'The connection ended. Refresh the saved request; this action will not be sent again.',
       invalid_response: 'The response could not be verified. Refresh reads and inspect the retained request.',
+      invalid_audio: 'Choose one supported audio file between 1 byte and 25 MiB with a valid filename.',
+      playback_unavailable: 'Playback is available only for verified ordinary audio imports. Device and encrypted audio are unavailable.',
+      cleanup_failed: 'Local audio cleanup failed. Restart the app before loading more audio.',
+      playback_failed: 'This audio could not be decoded or played. Choose supported audio or reload it.',
+      playback_timeout: 'Audio did not finish loading. Reload it before trying playback again.',
     };
     super(messages[code] ?? 'The request could not complete. Preserve the server journal and refresh current results.');
     this.name = 'LibraryError'; this.status = status; this.code = code;
@@ -131,6 +149,39 @@ export function normalizeQuestion(value: string): string {
   return trimmed;
 }
 
+export function validateAudioImport(input: AudioImport) {
+  if (!input.name.trim() || input.name.length > 255 || /[\x00-\x1f\x7f/\\\uD800-\uDFFF]/u.test(input.name) ||
+      !AUDIO_TYPES.includes(input.mime) || !Number.isSafeInteger(input.body.size) || input.body.size < 1 || input.body.size > MAX_AUDIO_BYTES)
+    throw new LibraryError(400, 'invalid_audio');
+}
+
+export async function readWav(response: Response): Promise<Uint8Array> {
+  const length = response.headers.get('content-length');
+  if (!/^audio\/wav(?:;|$)/i.test(response.headers.get('content-type') ?? '') ||
+      !length || !/^\d+$/.test(length) || Number(length) < 44 || Number(length) > MAX_AUDIO_BYTES ||
+      !response.headers.get('cache-control')?.split(',').some(value => value.trim().toLowerCase() === 'no-store') || !response.body) {
+    await response.body?.cancel().catch(() => {});
+    throw new LibraryError(502, 'invalid_response');
+  }
+  const reader = response.body.getReader();
+  const chunks: Uint8Array[] = []; let total = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read(); if (done) break;
+      total += value.byteLength;
+      if (total > Number(length) || total > MAX_AUDIO_BYTES) throw new LibraryError(502, 'invalid_response');
+      chunks.push(value);
+    }
+  } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
+  if (total !== Number(length)) throw new LibraryError(502, 'invalid_response');
+  const bytes = new Uint8Array(total); let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.length; }
+  const matches = (start: number, text: string) => [...text].every((char, index) => bytes[start + index] === char.charCodeAt(0));
+  const size = new DataView(bytes.buffer).getUint32(4, true);
+  if (!matches(0, 'RIFF') || !matches(8, 'WAVE') || (size !== 0xffffffff && size !== total - 8)) throw new LibraryError(502, 'invalid_response');
+  return bytes;
+}
+
 export function createLibraryApi(originInput: string, tokenInput: string, onExpired: () => void = () => {}, fetchImpl: typeof fetch = fetch): LibraryApi {
   let origin: string;
   try { origin = backendOrigin(originInput.trim()); } catch { throw new LibraryError(0, 'invalid_configuration'); }
@@ -138,22 +189,28 @@ export function createLibraryApi(originInput: string, tokenInput: string, onExpi
   if (!token || token.length < 32 || token.length > 256 || /\s/.test(token) || /^(sk_|rk_|dtok_|up_|rct_)/.test(token)) throw new LibraryError(0, 'invalid_configuration');
   let disposed = false;
   const resource = (value: string, prefix: string) => { if (!id(value, prefix)) return invalid(); return encodeURIComponent(value); };
-  async function request(path: string, method = 'GET', body?: unknown, signal?: AbortSignal): Promise<unknown> {
+  async function request(path: string, method = 'GET', body?: unknown, signal?: AbortSignal, audioInput?: AudioImport, binary = false): Promise<unknown> {
     if (disposed) throw new LibraryError(0, 'unauthorized');
     const controller = new AbortController();
     const abort = () => controller.abort();
     if (signal?.aborted) abort();
     signal?.addEventListener('abort', abort, { once: true });
-    const timer = setTimeout(abort, path.endsWith('/ask') && method === 'POST' ? 210_000 : 30_000);
+    const timer = setTimeout(abort, audioInput ? 180_000 : binary ? 120_000 : path.endsWith('/ask') && method === 'POST' ? 210_000 : 30_000);
     try {
       const target = `${origin}/api/library${path}`;
       const response = await fetchImpl(target, {
         method, credentials: 'omit', redirect: 'error', signal: controller.signal,
-        headers: { Authorization: `Bearer ${token}`, Accept: 'application/json', ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
-        ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+        headers: { Authorization: `Bearer ${token}`, Accept: binary ? 'audio/wav' : 'application/json',
+          ...(audioInput ? { 'Content-Type': audioInput.mime, 'X-File-Name': encodeURIComponent(audioInput.name) } : body === undefined ? {} : { 'Content-Type': 'application/json' }) },
+        ...(audioInput ? { body: audioInput.body } : body === undefined ? {} : { body: JSON.stringify(body) }),
       });
       if (response.url && response.url !== target) return invalid();
       if (response.status === 401) { onExpired(); throw new LibraryError(401, 'unauthorized'); }
+      if (binary && response.ok) {
+        const bytes = await readWav(response);
+        if (disposed || controller.signal.aborted) throw new LibraryError(0, 'unauthorized');
+        return bytes;
+      }
       if (!/^application\/json(?:;|$)/i.test(response.headers.get('content-type') ?? '')) return invalid();
       const length = response.headers.get('content-length');
       if (length && (!/^\d+$/.test(length) || Number(length) > 2 * 1024 * 1024)) return invalid();
@@ -199,6 +256,13 @@ export function createLibraryApi(originInput: string, tokenInput: string, onExpi
       const result = mutation(await request(`/operations/${encodeURIComponent(id)}`, 'GET', undefined, signal), undefined, recordingId);
       if (result.operation.id !== id) return invalid();
       return result;
+    },
+    async upload(input, signal) {
+      validateAudioImport(input);
+      return mutation(await request('/uploads', 'POST', undefined, signal, input), 'upload');
+    },
+    async audio(recordingId, signal) {
+      return await request(`/recordings/${resource(recordingId, 'rec')}/audio`, 'GET', undefined, signal, undefined, true) as Uint8Array;
     },
     dispose() { disposed = true; token = ''; origin = ''; },
   };

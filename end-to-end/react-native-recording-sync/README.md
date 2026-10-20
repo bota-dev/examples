@@ -22,13 +22,13 @@ backend launch bases and journals are unchanged.
 | Client | Common app | Device capability |
 | --- | --- | --- |
 | [React Native](../recordings/clients/react-native/README.md) | Relocated complete install root with sample/live library, transcription, general notes, recording-scoped Ask and GET-only request recovery | Existing Android encrypted-v2 sync for an already-provisioned device |
-| [Flutter](../recordings/clients/flutter/README.md) | Relocated Android client with the same sample/live recording journey and customer API | Connection/status only; published facade lacks the fresh pairing/verified encrypted-upload interfaces for sync |
+| [Flutter](../recordings/clients/flutter/README.md) | Android/iOS sample/live recording journey with ordinary file import/playback and customer API | Connection/status only; selected facade does not supply this sample's encrypted-upload host workflow |
 
 The existing directory name preserves backend setup and journals; the old
 [Flutter](flutter/README.md) and [RN](app/README.md) READMEs forward to relocated roots.
 These are mobile clients of the integrated Layer 1 sample; vertical workflows remain later work. Current
-hosts are Android only. Native iOS, Flutter iOS and Windows app samples remain
-separate implementation gaps. The [design](DESIGN.md) and
+hosts support Android/iOS cloud flows; the RN encrypted device host remains
+Android-only. Native Windows remains an upstream gap. The [design](DESIGN.md) and
 [architecture](ARCHITECTURE.md) define the shared flow and integration boundaries.
 
 ## Try sample recordings
@@ -98,7 +98,7 @@ then authorize and enable Bluetooth. After verified sync, return to the library
 for Transcript, Summary and Ask. The original native routes and capture journal
 retain their scoped recovery contract.
 
-**Current SDK:** exact public beta.18 using native-workflow compatibility.
+**Current SDK:** exact public beta.19 using native-workflow compatibility.
 Its checks are recorded in the
 [adoption review](../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md).
 Beta.17 physical upload and recovery remain unverified for this example.
@@ -148,7 +148,7 @@ separate prerequisites. Android is the only included native host.
 - Node 22.23.2+, npm, JDK 17 and Android SDK tooling compatible with Expo 57.
 - Android 8+ (API 26+) phone with Bluetooth. Use a USB connection with `adb` for
   the loopback backend instructions below.
-- Exact public `@bota.dev/react-native-app-sdk@2.0.0-beta.18` and its matching
+- Exact public `@bota.dev/react-native-app-sdk@2.0.0-beta.19` and its matching
   Maven package, pinned by this example. No sibling repositories or unpublished
   SDK overrides are required.
 - A disposable project and end user, an already-provisioned/bound device, and a

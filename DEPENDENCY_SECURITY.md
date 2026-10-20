@@ -6,6 +6,15 @@ and export limitations below describe their dated checks. The decoder/Xcode
 overrides and guarded adapter remain required; the existing security tests
 must pass against the new consumer graph before release.
 
+The [October 20 iOS/mobile review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+adds public Expo 57 media packages and Flutter file selector/audio/cache packages.
+Exact registry versions, publication dates, archive integrity and licenses are
+recorded in the [RN provenance](end-to-end/recordings/clients/react-native/media-dependencies.json)
+and [Flutter provenance](end-to-end/recordings/clients/flutter/dependency-provenance.json).
+Frozen installs retain the existing signing, Metro, source-map and license gates.
+Four touched SDK roots use owner-requested public beta.19; six other roots keep
+beta.18. Native builds and actual decoder behavior remain separate evidence.
+
 ## Scope and choice (2026-09-26)
 
 Dependabot #100/#101 concern image-size 1.2.1 parser loops:

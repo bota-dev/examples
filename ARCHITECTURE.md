@@ -66,8 +66,10 @@ Web playback uses a bounded public WAV export for authorized ordinary imports;
 device/encrypted sources and missing source/encryption evidence are unavailable.
 The cookie-authenticated backend retains signed URLs, checks the current owner
 before and after retrieval, and rechecks the session before returning bytes.
-Browser decoding remains separate from format-signature checks. Mobile playback
-is not implemented. Synthetic tones establish no live playback or device transfer.
+Browser/native decoding remains separate from format-signature checks. Mobile
+imports and WAV playback use the same shared features through Bearer-authenticated
+routes; platform pickers and private temporary media stay native. Signed storage
+URLs never reach the clients. Synthetic tones establish no device transfer.
 The [October 15 acceptance](docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
 qualifies the live HTTP flow for one synthetic WAV import through export,
 transcription, summary and Ask; browser decoding and other input formats remain
@@ -83,9 +85,9 @@ quickstarts still install independently:
 | --- | --- |
 | [Integrated backend](end-to-end/recordings/README.md) | One combined Node listener composes Web/mobile factories, shared recording/processing/Ask features and all three original journals; Express/Vite resolve from the Web install. |
 | [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, ordinary-import playback, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK or capture. |
-| [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains the mobile backend and setup; links to both relocated clients. Both common app hosts are Android only. |
+| [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains backend/setup and original journals; links to Android/iOS RN and Flutter clients. Shared ordinary upload/playback retains existing cookie/Bearer adapters. |
 | [React Native](end-to-end/recordings/clients/react-native/README.md) | Complete relocated install root; common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
-| [Flutter](end-to-end/recordings/clients/flutter/README.md) | First relocated client: complete Android install root with cloud-content flow and secondary connection/status. Published beta.18 lacks the fresh pairing and verified encrypted-upload host surfaces required for device sync. |
+| [Flutter](end-to-end/recordings/clients/flutter/README.md) | Android/iOS hosts with ordinary import/playback, cloud-content flow and secondary connection/status. The selected public facade does not supply this sample's encrypted-upload host workflow. |
 | [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
 | [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its native compatibility path now pins beta.18; dependency guards remain. Its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
 
@@ -106,13 +108,13 @@ preserved. Native recovery identity includes the backend origin: retain that
 origin, using combined `PORT=8787` with matching `APP_ORIGIN` where applicable,
 rather than resetting journals or rewriting capture scope. Fresh cloud setup
 may explicitly select `5173`. Folder relocation adds no SDK capability.
-All device SDK install roots use exact public beta.18 pins. They install
-independently. The
+Swift connection, both Flutter clients and integrated RN now pin public beta.19;
+the other six SDK roots retain beta.18. They install independently. The
 [adoption review](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
 records package and host checks. RN retains its native-workflow compatibility
-factory; generated-JS `/runtime` adoption is separate. Native iOS common
-apps, Flutter iOS and native Windows samples are not supplied here; Windows
-native SDK availability is planned upstream and requires public-contract
+factory; generated-JS `/runtime` adoption is separate. Swift and Flutter supply
+iOS connection/status; RN iOS provides the cloud recording app with no custom
+device upload host. Native Windows SDK availability is planned upstream and requires public-contract
 qualification before an example can depend on it. Current local, hosted, live
 and hardware evidence remains in each README and the
 [implementation review](docs/independent-examples-review.md).
@@ -274,7 +276,10 @@ before using the combined host; see the
 Fill qualified iOS/native hosts and useful SDK modules without waiting for every
 client's full recording UI. Complete ordinary intake/playback only after its
 public contract is qualified. Vertical apps remain the later product layer.
-Remaining Web/auth/store relocation, mobile playback and new hosts remain planned work.
+Ordinary mobile import/playback and the Swift, Flutter and RN cloud iOS hosts
+are implemented; see the [October 20 review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+for native build and runtime evidence. Remaining Web/auth/store relocation and
+physical mobile acceptance stay separate work.
 The
 [consolidation review](docs/design-reviews/2026-10-12-integrated-recordings.md)
 records the current implementation and its bounded verification.

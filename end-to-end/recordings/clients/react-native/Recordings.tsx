@@ -1,15 +1,8 @@
 import { useEffect, useState, useSyncExternalStore } from 'react';
-import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
+import { MediaControls } from './MediaControls';
+import { Action } from './Action';
 import type { RecordingsController, RecordingState } from './recordings-controller';
-
-export function Action({ title, onPress, disabled = false, secondary = false }: {
-  title: string; onPress: () => void; disabled?: boolean; secondary?: boolean;
-}) {
-  return <Pressable accessibilityRole="button" accessibilityLabel={title} accessibilityState={{ disabled }}
-    disabled={disabled} onPress={onPress} style={({ pressed }) => [styles.button, secondary && styles.secondary, disabled && styles.disabled, pressed && !disabled && styles.pressed]}>
-    <Text style={[styles.buttonText, secondary && styles.secondaryText]}>{title}</Text>
-  </Pressable>;
-}
 
 const duration = (seconds: number | null) => seconds === null ? 'Duration unavailable' : `${Math.floor(seconds / 60)}:${String(Math.floor(seconds % 60)).padStart(2, '0')}`;
 const date = (iso: string) => new Date(iso).toLocaleDateString();
@@ -28,7 +21,8 @@ export function LibraryView({ controller, mode, onExit, onDevice }: {
     </View>
     {mode === 'sample' ? <View style={styles.sample}><Text style={styles.sampleText}>Sample mode · synthetic content</Text>
       <Text>Actions simulate results locally. No hardware, upload, provider or API request runs.</Text></View> :
-      <View style={styles.row}><Text style={styles.muted}>Connected to your backend</Text><Action title="Device" onPress={onDevice} secondary /></View>}
+      <View style={styles.row}><Text style={styles.muted}>Connected to your backend</Text>{Platform.OS === 'android' && <Action title="Device" onPress={onDevice} secondary />}</View>}
+    {mode === 'live' && controller.media && <View style={styles.card}><MediaControls controller={controller.media} selected={state.selected?.id ?? null} /></View>}
 
     {state.selected ? <>
       <Action title="Back to library" onPress={() => controller.back()} secondary />
@@ -141,11 +135,6 @@ const styles = StyleSheet.create({
   label: { fontWeight: '600', color: '#152738', fontSize: 15 },
   body: { fontSize: 16, lineHeight: 25, color: '#152738' },
   muted: { fontSize: 13, lineHeight: 20, color: '#415365' },
-  button: { backgroundColor: '#14659b', minHeight: 46, paddingHorizontal: 16, paddingVertical: 12, alignItems: 'center', justifyContent: 'center', borderRadius: 6 },
-  secondary: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#8494a4' },
-  buttonText: { color: '#fff', fontWeight: '600', fontSize: 15 },
-  secondaryText: { color: '#164d73' },
-  disabled: { opacity: 0.45 },
   pressed: { opacity: 0.75 },
   sample: { backgroundColor: '#e9f2fa', borderWidth: 1, borderColor: '#bfd7ec', padding: 14, borderRadius: 8, gap: 6 },
   sampleText: { fontWeight: '600', color: '#164d73' },

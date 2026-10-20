@@ -7,26 +7,61 @@ import 'device_page.dart';
 
 void main() => runApp(const RecordingsApp());
 
+/// The public Flutter facade is a process singleton and destroy is terminal.
+class DeviceSessionAdmission {
+  bool _used = false;
+  bool claim() {
+    if (_used) return false;
+    _used = true;
+    return true;
+  }
+}
+
+final _processDeviceAdmission = DeviceSessionAdmission();
+typedef DevicePageBuilder =
+    Widget Function(void Function(Future<void>) onCleanup);
+
 class RecordingsApp extends StatelessWidget {
-  const RecordingsApp({super.key, this.controller});
+  const RecordingsApp({
+    super.key,
+    this.controller,
+    this.deviceAdmission,
+    this.devicePageBuilder,
+  });
   final RecordingsController? controller;
+  final DeviceSessionAdmission? deviceAdmission;
+  final DevicePageBuilder? devicePageBuilder;
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: 'Bota Recordings Sample',
     theme: ThemeData(colorSchemeSeed: const Color(0xff176e61)),
-    home: RecordingsHome(controller: controller),
+    home: RecordingsHome(
+      controller: controller,
+      deviceAdmission: deviceAdmission,
+      devicePageBuilder: devicePageBuilder,
+    ),
   );
 }
 
 class RecordingsHome extends StatefulWidget {
-  const RecordingsHome({super.key, this.controller});
+  const RecordingsHome({
+    super.key,
+    this.controller,
+    this.deviceAdmission,
+    this.devicePageBuilder,
+  });
   final RecordingsController? controller;
+  final DeviceSessionAdmission? deviceAdmission;
+  final DevicePageBuilder? devicePageBuilder;
   @override
   State<RecordingsHome> createState() => _RecordingsHomeState();
 }
 
-class _RecordingsHomeState extends State<RecordingsHome> {
+class _RecordingsHomeState extends State<RecordingsHome>
+    with WidgetsBindingObserver {
   late final state = widget.controller ?? RecordingsController();
+  late final deviceAdmission =
+      widget.deviceAdmission ?? _processDeviceAdmission;
   final origin = TextEditingController(text: 'http://127.0.0.1:8787');
   final token = TextEditingController();
   String setupError = '';
@@ -36,18 +71,40 @@ class _RecordingsHomeState extends State<RecordingsHome> {
   String deviceError = '';
   Future<void> deviceCleanup = Future<void>.value();
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState lifecycle) {
+    if (lifecycle != AppLifecycleState.resumed) state.stopAudio();
+  }
+
   Future<void> openDevice() async {
     if (deviceOpen || deviceBlocked) return;
     deviceOpen = true;
     try {
       await deviceCleanup;
       if (!mounted || !state.signedIn || state.sample) return;
+      if (!deviceAdmission.claim()) {
+        setState(() {
+          deviceBlocked = true;
+          deviceError =
+              'The device session has ended. Restart the sample to connect again.';
+        });
+        return;
+      }
       await Navigator.of(context).push(
         MaterialPageRoute<void>(
           builder: (_) => ListenableBuilder(
             listenable: state,
             builder: (_, _) => state.signedIn
-                ? DevicePage(onCleanup: (future) => deviceCleanup = future)
+                ? (widget.devicePageBuilder?.call(
+                        (future) => deviceCleanup = future,
+                      ) ??
+                      DevicePage(onCleanup: (future) => deviceCleanup = future))
                 : const Scaffold(
                     body: Center(
                       child: Text('Session ended. Return to sign in.'),
@@ -57,6 +114,13 @@ class _RecordingsHomeState extends State<RecordingsHome> {
         ),
       );
       await deviceCleanup;
+      if (mounted) {
+        setState(() {
+          deviceBlocked = true;
+          deviceError =
+              'The device session has ended. Restart the sample to connect again.';
+        });
+      }
     } catch (_) {
       if (mounted) {
         setState(() {
@@ -72,6 +136,7 @@ class _RecordingsHomeState extends State<RecordingsHome> {
 
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     origin.dispose();
     token.dispose();
     if (widget.controller == null) state.dispose();
@@ -246,12 +311,32 @@ class _RecordingsHomeState extends State<RecordingsHome> {
           ),
         ],
       ),
+      if (!state.sample) ...[
+        FilledButton.icon(
+          onPressed:
+              state.canUseMedia && !state.picking && !state.locked('upload')
+              ? state.importAudio
+              : null,
+          icon: const Icon(Icons.audio_file),
+          label: Text(
+            state.picking || state.busy('upload')
+                ? 'Importing…'
+                : 'Import audio',
+          ),
+        ),
+        const Text(
+          'WAV, MP3, M4A, OGG, Opus, WebM or FLAC · up to 25 MiB',
+          style: TextStyle(fontSize: 12),
+        ),
+        _notice('upload'),
+        if (state.mediaBlocked) Text(state.audioError),
+      ],
       if (state.loading) const LinearProgressIndicator(),
       if (state.recordings.isEmpty && !state.loading)
         const Padding(
           padding: EdgeInsets.symmetric(vertical: 32),
           child: Text(
-            'No recordings yet. Add audio through your configured upload workflow, then refresh.',
+            'No recordings yet. Import an audio file, then open it here.',
           ),
         ),
       for (final recording in state.recordings)
@@ -338,6 +423,42 @@ class _RecordingsHomeState extends State<RecordingsHome> {
             ),
           ),
           if (state.detailLoading) const LinearProgressIndicator(),
+          if (!state.sample)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      OutlinedButton.icon(
+                        onPressed: state.canUseMedia && !state.audioLoading
+                            ? state.loadAudio
+                            : null,
+                        icon: const Icon(Icons.download),
+                        label: Text(
+                          state.audioLoading
+                              ? 'Loading audio…'
+                              : state.audioReady
+                              ? 'Reload audio'
+                              : 'Load audio',
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton(
+                        tooltip: state.playing ? 'Pause audio' : 'Play audio',
+                        onPressed: state.audioReady
+                            ? state.togglePlayback
+                            : null,
+                        icon: Icon(
+                          state.playing ? Icons.pause : Icons.play_arrow,
+                        ),
+                      ),
+                    ],
+                  ),
+                  if (state.audioError.isNotEmpty) Text(state.audioError),
+                ],
+              ),
+            ),
           TabBar(
             onTap: (tab) {
               if (tab == 1) state.refreshSummaries();

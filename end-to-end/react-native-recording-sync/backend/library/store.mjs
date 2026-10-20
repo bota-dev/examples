@@ -72,6 +72,16 @@ export function createStore(path, scopeId) {
       ensure(principal.scopeId === scopeId, 409, 'library_scope_changed', 'Library scope changed.');
       return view(db.prepare('SELECT * FROM library_operations WHERE kind=? AND anchor=?').get(kind, anchor));
     },
+    assertPeerUpload(details) {
+      const peer = db.prepare(`SELECT 1 FROM library_operations WHERE kind='upload'
+        AND json_extract(details,'$.projectId')=? AND json_extract(details,'$.endUserId')=?
+        AND json_extract(details,'$.name')=? AND json_extract(details,'$.contentType')=?
+        AND json_extract(details,'$.size')=? AND json_extract(details,'$.digest')=? LIMIT 1`)
+        .get(details.projectId, details.endUserId, details.name, details.contentType, details.size, details.digest);
+      ensure(!peer, 409, 'cross_intent_reconciliation_required',
+        'A retained upload needs GET reconciliation in its original adapter.');
+      return true;
+    },
     findLegacyAsk(principal, recordingId) {
       ensure(principal.scopeId === scopeId, 409, 'library_scope_changed', 'Library scope changed.');
       return view(db.prepare(`SELECT * FROM library_operations WHERE kind='ask' AND state!='complete'

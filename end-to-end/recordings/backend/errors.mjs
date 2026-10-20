@@ -41,7 +41,7 @@ export const operationView = (op) => ({
 export function errorOperation(error) {
   const op =
     error instanceof AppError && ![401, 403, 404].includes(error.status) ? error.operation : null;
-  const prefixes = { transcription: 'txn', summary: 'sum', ask: 'as' };
+  const prefixes = { upload: 'rec', transcription: 'txn', summary: 'sum', ask: 'as' };
   if (
     !object(op) ||
     typeof op.id !== 'string' ||
@@ -52,6 +52,9 @@ export function errorOperation(error) {
       'starting',
       'creating',
       'created',
+      'uploading',
+      'verifying',
+      'verification_pending',
       'sending',
       'submitted',
       'complete',

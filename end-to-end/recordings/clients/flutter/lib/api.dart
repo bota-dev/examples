@@ -1,12 +1,19 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'models.dart';
+import 'recording_media.dart';
 
 abstract interface class RecordingsApi {
   Future<Json> get(String path);
   Future<Json> post(String path, Json body);
   void close();
+}
+
+abstract interface class MediaRecordingsApi implements RecordingsApi {
+  Future<Json> upload(AudioImport file);
+  Future<Uint8List> audio(String recordingId);
 }
 
 class ApiException implements Exception {
@@ -25,12 +32,13 @@ class ApiException implements Exception {
 }
 
 /// This token authenticates to the customer's backend, never to Bota's API.
-class BackendApi implements RecordingsApi {
+class BackendApi implements MediaRecordingsApi {
   BackendApi(
     String origin,
     this._token, {
     this.timeout = const Duration(seconds: 30),
     this.askTimeout = const Duration(seconds: 210),
+    this.audioTimeout = const Duration(seconds: 120),
     this.maxBytes = 2 * 1024 * 1024,
   }) : _origin = validateOrigin(origin) {
     if (_token.length < 32 ||
@@ -45,6 +53,7 @@ class BackendApi implements RecordingsApi {
   String _token;
   final Duration timeout;
   final Duration askTimeout;
+  final Duration audioTimeout;
   final int maxBytes;
   final HttpClient _client = HttpClient();
   bool _closed = false;
@@ -71,7 +80,100 @@ class BackendApi implements RecordingsApi {
   @override
   Future<Json> post(String path, Json body) => _request('POST', path, body);
 
-  Future<Json> _request(String method, String path, [Json? body]) async {
+  @override
+  Future<Json> upload(AudioImport file) =>
+      _request('POST', '/api/library/uploads', null, file);
+
+  @override
+  Future<Uint8List> audio(String recordingId) async {
+    validatedId(recordingId);
+    HttpClientRequest? pending;
+    bool terminated = false;
+    try {
+      return await (() async {
+        if (_closed) throw const ApiException(0, 'closed', 'Session ended.');
+        final request = await _client.getUrl(
+          _origin.resolve('/api/library/recordings/$recordingId/audio'),
+        );
+        pending = request;
+        if (terminated || _closed) {
+          request.abort();
+          throw const ApiException(0, 'closed', 'Session ended.');
+        }
+        request.followRedirects = false;
+        request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $_token');
+        request.headers.set(HttpHeaders.acceptHeader, 'audio/wav');
+        final response = await request.close();
+        if (response.statusCode == 401) {
+          throw const ApiException(
+            401,
+            'unauthorized',
+            'Your session ended. Connect again.',
+          );
+        }
+        if (response.statusCode != 200 ||
+            response.headers.contentType?.mimeType != 'audio/wav') {
+          throw const ApiException(
+            0,
+            'audio_unavailable',
+            'Audio is unavailable. Only verified ordinary imports support playback.',
+          );
+        }
+        if (response.contentLength > maxAudioBytes) {
+          throw const FormatException('Audio is too large.');
+        }
+        final builder = BytesBuilder(copy: false);
+        await for (final chunk in response) {
+          if (builder.length + chunk.length > maxAudioBytes) {
+            throw const FormatException('Audio is too large.');
+          }
+          builder.add(chunk);
+        }
+        final bytes = builder.takeBytes();
+        if (bytes.length < 44 ||
+            ![
+              0x52,
+              0x49,
+              0x46,
+              0x46,
+            ].asMap().entries.every((e) => bytes[e.key] == e.value) ||
+            ![
+              0x57,
+              0x41,
+              0x56,
+              0x45,
+            ].asMap().entries.every((e) => bytes[e.key + 8] == e.value)) {
+          throw const FormatException('Invalid WAV response.');
+        }
+        final declared = ByteData.sublistView(
+          bytes,
+        ).getUint32(4, Endian.little);
+        if (declared != 0xffffffff && declared + 8 != bytes.length) {
+          throw const FormatException('Incomplete WAV response.');
+        }
+        return bytes;
+      })().timeout(audioTimeout);
+    } on ApiException {
+      terminated = true;
+      pending?.abort();
+      rethrow;
+    } catch (_) {
+      terminated = true;
+      pending?.abort();
+      throw const ApiException(
+        0,
+        'audio_unavailable',
+        'Audio could not be loaded. Refresh recording and try again.',
+      );
+    }
+  }
+
+  Future<Json> _request(
+    String method,
+    String path, [
+    Json? body,
+    AudioImport? upload,
+  ]) async {
     if (_closed) {
       throw const ApiException(0, 'closed', 'This session has ended.');
     }
@@ -92,7 +194,12 @@ class BackendApi implements RecordingsApi {
         request.followRedirects = false;
         request.headers.set(HttpHeaders.authorizationHeader, 'Bearer $_token');
         request.headers.set(HttpHeaders.acceptHeader, 'application/json');
-        if (body != null) {
+        if (upload != null) {
+          request.headers.contentType = ContentType.parse(upload.mimeType);
+          request.headers.set('X-File-Name', Uri.encodeComponent(upload.name));
+          request.contentLength = upload.bytes.length;
+          request.add(upload.bytes);
+        } else if (body != null) {
           request.headers.contentType = ContentType.json;
           request.write(jsonEncode(body));
         }
@@ -163,7 +270,11 @@ class BackendApi implements RecordingsApi {
         }
         return value;
       })().timeout(
-        method == 'POST' && path.endsWith('/ask') ? askTimeout : timeout,
+        upload != null
+            ? const Duration(seconds: 180)
+            : method == 'POST' && path.endsWith('/ask')
+            ? askTimeout
+            : timeout,
       );
     } on ApiException {
       terminated = true;

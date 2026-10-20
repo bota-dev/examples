@@ -24,6 +24,10 @@ The cloud adapter is [library.mjs](library.mjs). Local
 [Ask](../../recordings/backend/features/ask.mjs), with shared
 [error types](../../recordings/backend/errors.mjs). Native capture, binding and
 receipt logic remains in [service.mjs](service.mjs).
+Ordinary audio import/playback now also uses canonical
+[upload](../../recordings/backend/features/upload.mjs),
+[playback](../../recordings/backend/features/playback.mjs) and
+[bounded HTTP/storage](../../recordings/backend/http.mjs) modules shared with Web.
 
 Use the full repository checkout or copy the compatibility family including
 `end-to-end/recordings/backend/`; this folder alone is no longer a complete runtime
@@ -104,6 +108,7 @@ Do not use a Bota API key as that token.
 | --- | --- |
 | `BOTA_API_BASE_URL` | Server; intended public API base ending `/v1`. HTTPS is required except loopback tests. The template points at production. |
 | `BOTA_API_KEY` | Server only; never entered in the phone app or sent to storage. |
+| `BOTA_STORAGE_HOSTS` | Comma-separated independently trusted exact HTTPS storage hosts, required for ordinary import/playback. No wildcard or inference from a returned signed URL; blank disables these media actions without changing existing library/native routes. |
 | `BOTA_PROJECT_ID` | Fixed expected project. Every fetched device/recording must match. |
 | `BOTA_END_USER_ID` | Fixed test user; never accepted from request bodies or headers. |
 | `BOTA_DEVICE_ID` | Optional; blank enables cloud-library-only startup. A configured value must be a valid, existing bound `dev_*` for native sync. No device registration/provisioning. |
@@ -126,7 +131,8 @@ storage and operational controls beyond this example.
 ## HTTP contract
 
 Every request requires `Authorization: Bearer <APP_ACCESS_TOKEN>`.
-Bodies are strict JSON (32 KiB maximum); unknown fields and arbitrary paths are
+Bodies are strict JSON (32 KiB maximum), except the raw ordinary-audio upload
+below (25 MiB maximum, no content encoding). Unknown fields and arbitrary paths are
 rejected. Only `GET /api/library/recordings` accepts one URL-encoded opaque
 `cursor` query. Library routes authorize current project/end-user ownership and
 do not require a device or binding header. GET requests accept no body;
@@ -146,13 +152,15 @@ With no configured device, these original routes return
 | --- | --- |
 | `GET /api/library/recordings?cursor=...` | `{data,has_more,next_cursor}`; fixed-owner `GET /v1/recordings`, then exact owned recording reads. One page of at most 20. |
 | `GET /api/library/recordings/:id` | `{id,name,status,created_at,duration_seconds,upload_verified}` from owned `GET /v1/recordings/:id`. No storage URL/path. |
+| `POST /api/library/uploads` | Raw allowed audio bytes with exact MIME `Content-Type` and URI-component-encoded `X-File-Name`. Returns `{operation,recording?}`. Shared feature persists name/type/size/SHA-256 intent before create, one storage PUT and one completion call; 425 stays pending. |
+| `GET /api/library/recordings/:id/audio` | Complete `audio/wav` bytes with `no-store`, up to 25 MiB. Verified ordinary `api_upload`/`import` sources only; no query, Range or device/encrypted source. Fixed public WAV export, exact storage allowlist, credential-free storage and final source/owner checks; client disconnect aborts the read. No signed URL reaches the app. |
 | `GET /api/library/recordings/:id/transcriptions` | `{data:[{id,recording_id,status,created_at,full_text?}]}`; `GET /v1/transcriptions?recording_id=...`, exact job and recording checks. Text only after completion. |
 | `POST /api/library/recordings/:id/transcriptions` | `{operation,transcription?}`; reuse a known job or persist intent before one `POST /v1/transcriptions`. New jobs require server upload-integrity evidence. |
 | `GET /api/library/transcriptions/:id/summaries` | `{data:[{id,transcription_id,recording_id,template_id,status,created_at,output?}]}`; source-filtered summaries and exact source-chain reads. Only `tmpl_general_notes`; output only after completion. |
 | `POST /api/library/transcriptions/:id/summaries` | `{operation,summary?}`; reuse general notes or persist intent before one `POST /v1/summaries` for the completed transcription. |
 | `POST /api/library/recordings/:id/ask` | `{question}` → `{operation,answer?,citations?}`. Public recording-scoped session creation, one message, then owner-filtered membership/exact-history GETs. Each distinct canonical question is a separate single-question session. |
 | `GET /api/library/operations` | `{data:[operation]}`; newest 50 retained action metadata rows. No questions, answers, transcript or raw journal details. |
-| `GET /api/library/operations/:id` | GET-only reconciliation: known transcription/summary/Ask content after current ownership checks; unknown resource stays uncertain. Never resends a write. |
+| `GET /api/library/operations/:id` | GET-only upload verification or known transcription/summary/Ask recovery after current ownership checks; unknown resource stays uncertain. Never resends a write. |
 
 An operation is `{id,kind,state,resource_id,updated_at}`. Its identifier is a
 local UUID. `resource_id` can be null when a create response was lost. Complete
@@ -171,6 +179,19 @@ The library is a cloud-content interface. It issues no upload session, device
 receipt, source confirmation or deletion authority. Cloud access stays available
 without a current Bluetooth connection. The frontends' credential-free demo is
 local synthetic data; this live backend has no synthetic upload/receipt mode.
+
+Ordinary imports are a separate path from encrypted device uploads. Supported
+MIMEs are `audio/wav`, `audio/x-wav`, `audio/mpeg`, `audio/mp4`, `audio/ogg`,
+`audio/opus`, `audio/webm` and `audio/flac`. Upload uses a 180-second upstream
+budget; playback retrieval uses bounded 120-second storage reads. The 30-second
+incoming body limit is separate. Clients explicitly choose files and request
+processing; the backend does not change automatic-processing policy.
+Keep duplicate file/name/type/hash intents and unknown outcomes in their original
+journal. The combined host refuses matching retained Web/mobile upload intents
+across adapters, including complete ones; it does not adopt a peer's resource ID.
+Native clients load only private temporary WAV files, with no autoplay, and stop,
+drain and remove their media when leaving the source/account. These source/unit
+contracts do not establish native decoding or physical device acceptance.
 
 ### Existing Android encrypted-v2 routes
 

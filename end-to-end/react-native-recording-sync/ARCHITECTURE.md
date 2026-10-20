@@ -3,7 +3,8 @@
 The [design](DESIGN.md) defines one common recording app with React Native and
 Flutter clients. Both now live under `../recordings/clients/`, while this
 compatibility root retains `backend/` and setup. Each client has its own
-manifest/lock and Android host; native identity and SDK pins/locks are unchanged. One
+manifest/lock and Android/iOS hosts; native identities remain stable and touched
+SDK consumers pin public beta.19. One
 combined HTTP backend can serve Web and both mobile clients, through shims importing the
 [canonical recording/processing/Ask core](../recordings/README.md) also used by web.
 Use the full checkout with the Web installation, mobile backend source and
@@ -37,11 +38,15 @@ Never reset journals or rewrite capture identity to fit a port change.
 Core public calls/error types have one implementation. Mobile keeps default
 strict recording/job project checks and its source-linked DTOs; web's explicit
 legacy policy tolerates omitted `project_id`, but supplied projects and exact
-owner/source chains still match. Upload/webhook/native service modules remain
-local. One combined listener now preserves both auth adapters and all three
+owner/source chains still match. Ordinary upload/playback and their bounded HTTP
+client now live in the shared core; webhook/native service modules remain local.
+Mobile exposes raw `POST /api/library/uploads` and authenticated
+`GET /api/library/recordings/:id/audio`; native media sees private local files,
+never signed URLs or credentials. One combined listener preserves both auth adapters and all three
 journals; older launchers remain compatibility entries. Stop them before using
-the combined host. SDK/native package pins, routes and journal scope/anchors stay
-unchanged. Default startup preflights original absolute paths, columns/indexes,
+the combined host. Existing routes and journal scope/anchors stay unchanged.
+New import intents deduplicate by name/type/size/hash; fresh cross-adapter claims
+refuse retained matching uploads without adopting peer IDs. Default startup preflights original absolute paths, columns/indexes,
 scope and configured account mapping; fresh `--initialize` requires all journals
 absent and never merges or rekeys state.
 

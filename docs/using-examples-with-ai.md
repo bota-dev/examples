@@ -10,10 +10,10 @@ may guide the work; the selected public contract defines supported behavior.
 **Bota Recordings** is the sample foundation: copyable recording features, one
 shared customer backend and platform clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../end-to-end/recordings/README.md)
-now implements recording, processing/general-notes and Ask logic plus error
+now implements recording, ordinary upload/playback, processing/general-notes and Ask logic plus error
 types. The combined Node launcher now composes existing Web/mobile factories on
 one listener. Both credential-specific adapters, DTOs and all three journals
-remain, with upload/webhook/native source at existing paths. Complete
+remain, with compatibility exports at the existing Web upload/playback paths and local webhook/native source. Complete
 [Flutter](../end-to-end/recordings/clients/flutter/README.md) and
 [RN](../end-to-end/recordings/clients/react-native/README.md) install roots have relocated.
 Web/backend paths stay; integrated Kotlin/Swift clients are not built.
@@ -40,7 +40,7 @@ app, follow that application's instructions and replace its identity/auth adapte
 | --- | --- | --- |
 | List/read recordings | [Shared recordings](../end-to-end/recordings/backend/features/recordings.mjs); [React library](../end-to-end/web-reference/web/features/recordings/Recordings.tsx) | [Web README](../end-to-end/web-reference/README.md) |
 | Import/verify audio | [upload.mjs](../end-to-end/web-reference/server/features/upload.mjs); [React upload](../end-to-end/web-reference/web/features/uploads/Upload.tsx) | Web; storage PUT keeps API credentials separate |
-| Play an ordinary import | [playback.mjs](../end-to-end/web-reference/server/features/playback.mjs); [AudioPlayer](../end-to-end/web-reference/web/features/playback/AudioPlayer.tsx) | Web; authenticated bounded WAV export, no device decryption |
+| Play an ordinary import | [shared playback](../end-to-end/recordings/backend/features/playback.mjs); [Web player](../end-to-end/web-reference/web/features/playback/AudioPlayer.tsx); [RN media](../end-to-end/recordings/clients/react-native/media-controller.ts); [Flutter media](../end-to-end/recordings/clients/flutter/lib/recording_media.dart) | Web/mobile; authenticated bounded WAV export, no device decryption |
 | Transcript/general notes | [Shared processing](../end-to-end/recordings/backend/features/processing.mjs); [Transcript](../end-to-end/web-reference/web/features/transcription/Transcript.tsx) / [Summary](../end-to-end/web-reference/web/features/summaries/Summaries.tsx) | Web or [mobile README](../end-to-end/react-native-recording-sync/README.md) |
 | Recording-scoped Ask | [Shared Ask](../end-to-end/recordings/backend/features/ask.mjs); [React Ask](../end-to-end/web-reference/web/features/ask/Ask.tsx) | Exact owner/session/source checks and durable intent |
 | Webhook/saved-operation refresh | [webhooks.mjs](../end-to-end/web-reference/server/features/webhooks.mjs); [Activity](../end-to-end/web-reference/web/features/webhooks/Activity.tsx) | Signed customer callback; refresh never resends a write |
@@ -74,9 +74,9 @@ and authorized upload use the customer backend.
 | Platform | Existing public-call source | Current host/support |
 | --- | --- | --- |
 | Kotlin / Android | [MainActivity.kt](../app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](../app-sdk/android-device-connect/README.md) | Native Android connection/status; integrated recording client planned |
-| Swift / Apple | [App.swift](../app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](../app-sdk/apple-device-connect/README.md) | macOS SwiftUI connection/status; no native iOS host or integrated recording client yet |
-| React Native | [App.tsx](../app-sdk/react-native-device-connect/App.tsx); [setup](../app-sdk/react-native-device-connect/README.md) | Android/iOS connection hosts; recording/sync client currently Android-only |
-| Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android host; beta.18 lacks fresh-pairing/encrypted-v2 host interfaces needed for RN sync |
+| Swift / Apple | [ConnectModel.swift](../app-sdk/apple-device-connect/Sources/BotaConnect/ConnectModel.swift); [setup](../app-sdk/apple-device-connect/README.md) | Shared iOS/macOS connection/status; no integrated cloud client |
+| React Native | [App.tsx](../app-sdk/react-native-device-connect/App.tsx); [recording app](../end-to-end/recordings/clients/react-native/README.md) | Android/iOS cloud app; encrypted device sync stays Android-only |
+| Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android/iOS connection/status and cloud app; no selected RN encrypted-v2 host workflow |
 | Web / Chromium | [page.ts](../app-sdk/web-device-connect/page.ts) + [main.ts](../app-sdk/web-device-connect/main.ts); [setup](../app-sdk/web-device-connect/README.md) | Supported Web Bluetooth/secure context/firmware identity; not yet integrated into the API recording client |
 
 Missing public capability, missing host and missing verification are different
@@ -86,7 +86,7 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 ## Preserve the migration and copy boundary
 
 1. Inspect the selected README, source/imports, manifest and lockfile. Public
-   SDK pins are beta.18, including Flutter and the legacy workspace; historical prose does
+   Four touched SDK roots use beta.19 and six retain beta.18; inspect the manifest/lock. Historical prose does
    not override current manifests. RN uses native compatibility factories, not
    the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-14-beta18-sdk-adoption.md).
 2. Install only in documented roots with lifecycle scripts enabled. Keep native
@@ -116,7 +116,9 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 
 Sample content is synthetic. Web implements ordinary-import WAV playback; its
 [live HTTP acceptance](design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
-does not establish browser decoding. Mobile has no ordinary import/playback.
+does not establish browser decoding. Mobile now implements ordinary import/WAV
+playback; its [host/media evidence](design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+is distinct from actual native decoding and physical device acceptance.
 Original downloads are not necessarily playable/decrypted audio.
 Read [CONTRIBUTING.md](../CONTRIBUTING.md) and
 [example contracts](example-contracts.md) before repository changes.

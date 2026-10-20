@@ -7,9 +7,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  bota_app_sdk: 2.0.0-beta.18
+  bota_app_sdk: 2.0.0-beta.19
   permission_handler: 13.0.2
   device_info_plus: 13.2.0
+  file_selector: 1.1.0
+  just_audio: 0.10.6
+  path_provider: 2.1.6
 dev_dependencies:
   flutter_test:
     sdk: flutter

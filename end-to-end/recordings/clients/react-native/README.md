@@ -1,4 +1,4 @@
-# Bota Recordings — React Native Android app
+# Bota Recordings — React Native Android and iOS app
 
 A common recording app template with a library, recording detail and
 **Transcript / Summary / Ask** tabs. Customers can adapt its ordinary React
@@ -10,10 +10,12 @@ This complete install root is now inside the integrated
 `end-to-end/react-native-recording-sync/app` entry forwards here. Moving the
 client changes no SDK pin, native identity, backend launch base or journal.
 
-This example includes **Android only**. The SDK's Apple facade does not supply
-this example's custom Kotlin upload host on iOS; an `ios` npm script is not
-evidence of an implemented iOS app. The public npm package and native Maven host
-both pin SDK beta.18. Existing native adapter and security guards are retained.
+The cloud library, ordinary file import, playback and result screens target
+**Android and iOS**. **Device encrypted-v2 sync remains Android only**: its local
+Kotlin host is never loaded or offered by the iOS UI. The public npm package and
+native Maven host both pin SDK **2.0.0-beta.19**. Existing native adapter,
+journals and dependency guards are retained. Native iOS builds and actual media
+decoding need separate macOS/device qualification; a Metro export is source evidence.
 
 This package update uses the public `BotaClient` / `BotaDeviceSDK`
 native-workflow compatibility entry. It does not migrate to the generated
@@ -24,7 +26,7 @@ for current qualification; earlier device/build results remain historical.
 
 ## Run the sample
 
-Use Node 22.23.2+, JDK 17 and the Android SDK required by Expo 57:
+Use Node 22.23.2+, JDK 17 and the Android SDK required by Expo 57 for Android:
 
 On Windows, use a short checkout/build path for native assembly. Deep worktree
 paths can exceed CMake's object-path limit even when JavaScript checks pass.
@@ -34,6 +36,24 @@ cd end-to-end/recordings/clients/react-native
 npm ci
 npm run android
 ```
+
+For iOS, use macOS with Xcode and CocoaPods 1.13+. Expo generates the ignored
+native host reproducibly from [app.json](app.json), then installs its public
+native dependencies. No sibling SDK checkout is required:
+
+```sh
+npm ci
+npm run prebuild:ios
+npm run ios
+```
+
+The simulator can use the Mac's `http://127.0.0.1:8787` backend. An iPhone needs
+an HTTPS backend origin reachable from the phone; HTTP LAN origins remain
+rejected. The config permits local-network development, disables microphone
+permissions and background recording/playback, and requests no iOS Bluetooth
+permission because this host implements cloud flows only. No iCloud entitlement,
+media-library permission or production account configuration is needed for the
+system file picker. Build a new app after native dependency/config changes.
 
 Run these commands from a repository checkout. When adapting the client, copy
 this entire install root, including `modules/`, `scripts/`, `vendor/` and the
@@ -50,8 +70,9 @@ Ask returns a clearly labelled fixed answer for every question, with a sample
 timestamp. No provider, publication receipt or device cleanup is simulated.
 **Exit sample** clears results and starts a fresh fixture set next time.
 
-The application includes a custom native module. Its advertised runnable host
-is the Android development build; Expo Go and iOS are not qualified here.
+The Android application includes a custom native device module. Use development
+builds; Expo Go does not qualify the complete app. Sample mode contains synthetic
+text only; import and playback are live-backend actions.
 
 ## Connect a customer backend
 
@@ -86,24 +107,79 @@ routes; they are wrappers around public Bota APIs, not Bota endpoints themselves
 
 | Customer route | App action |
 | --- | --- |
+| `POST /api/library/uploads` | Explicit ordinary file import, raw file body and encoded `X-File-Name`. |
+| `GET /api/library/recordings/:id/audio` | Authorized bounded WAV bytes; no signed URL enters the app. |
 | `GET /api/library/recordings` and `GET /api/library/recordings/:id` | Library and current detail; explicit cursor pagination. |
 | `GET/POST /api/library/recordings/:id/transcriptions` | Read transcripts or explicitly request one. |
 | `GET/POST /api/library/transcriptions/:id/summaries` | Read general notes or explicitly request a summary. |
 | `POST /api/library/recordings/:id/ask` | Send one trimmed question. |
 | `GET /api/library/operations` and `GET /api/library/operations/:id` | Saved request metadata and GET-only reconciliation. |
 
-The transport requests `redirect:error`, rejects a differing exposed response
-URL, limits normal requests to 30 seconds and Ask to 210 seconds, and checks a
-2 MiB declared/content text cap. React Native fetch
-buffers native response bodies before returning text, so this application cap
-does not establish a streaming network-memory bound. The companion server also
-bounds its upstream requests and does not issue redirects. Native fetch redirect
+The live library uses official `expo/fetch`, requests `redirect:error`, rejects
+a differing exposed response URL, limits normal requests to 30 seconds, upload
+to 180 seconds, playback to 120 seconds and Ask to 210 seconds. JSON has a 2 MiB
+declared/content text cap. The WAV reader checks `audio/wav`, explicit no-store,
+matching declared and received size (44 bytes–25 MiB), exact RIFF/WAVE bytes and
+the RIFF size (including the exporter's unknown-size sentinel), before creating
+a private cache file. Its streamed body cap bounds bytes accumulated in app
+code; it does not qualify platform buffering or audio decoding. The companion
+server also bounds its upstream requests and does not issue redirects. Native fetch redirect
 enforcement remains a platform qualification check; a final URL check cannot
 undo a native redirect already followed. No app request automatically retries.
 
+## Ordinary audio import and playback
+
+[native-media.ts](native-media.ts) contains the small OS ports: the system
+document picker copies one audio file into private cache, `expo-file-system`
+supplies its native File body (no base64), and `expo-audio` plays a private WAV
+cache file. [audio-player.ts](audio-player.ts) uses its public loaded/error events
+and native-resource release. [picked-audio.ts](picked-audio.ts) validates metadata
+and removes an invalid picker cache copy even before returning it to the controller.
+[library-api.ts](library-api.ts) holds the two customer-backend calls;
+[media-controller.ts](media-controller.ts) owns per-account async fences, local
+cleanup and upload uncertainty; [MediaControls.tsx](MediaControls.tsx) is the UI,
+using the shared leaf [Action](Action.tsx) button with the recording screens.
+These files plus their documented imports are the copy boundary.
+
+Select **Choose and upload audio** for WAV/MP3/M4A/OGG/Opus/WebM/FLAC up to 25 MiB.
+Known audio MIME aliases are normalized; missing/octet-stream types use only
+the documented audio extensions. This classifies the request and proves no
+codec, plaintext or integrity property. Other explicit MIME types are refused.
+The server verifies original upload before admitting
+processing. Refresh the library to read its recording, then choose transcription,
+summary or Ask separately. A saved upload can be refreshed only by its known ID.
+An uncertain write locks that intent; there is no resend button. **Import another
+file** is offered only after exact completed-upload metadata and a fresh matching,
+upload-verified recording read. Identical-file deduplication remains server-owned.
+
+Select a recording and **Load audio**, then **Play audio**. Loading never autoplays.
+Readiness waits for Expo's public `playbackStatusUpdate`/`isLoaded` event or an
+already-loaded `currentStatus`, with a ten-second local decoder deadline.
+Unsupported/failed audio shows a sanitized message and releases the exact cache
+and native player; an asynchronous error after loading also clears readiness.
+The retained status subscription is removed before both registry removal and
+public `SharedObject.release()`. A synchronous `play()` result alone is not
+decoder acceptance. Reload is explicit after a decoder error or media reset.
+The backend checks fresh ownership and explicit ordinary-import/plaintext evidence;
+device/encrypted recordings remain unavailable. The app never treats API job status
+as device-cleanup authority. Switching recordings, refreshing detail, returning
+to the library, leaving for Device, sign-out and unmount retire the player, pause,
+release and delete its private cache. Late network/native/picker results are fenced
+to their original account/selection and cleaned up. The user's original picked
+file is never deleted. Backgrounding pauses audio. A failed release blocks more
+playback until restart. Sign-out joins pending picker/player finalizers before
+admitting another account; close a still-open picker to finish that cleanup.
+An OS kill may leave cache files for OS cache reclamation;
+this example does not promise secure erasure or process-crash cleanup.
+
+The exact public [media dependency receipt](media-dependencies.json) records
+MIT licenses, registry publication dates, URLs and SRI. Asset/constants are
+explicit Expo 57 peers so npm cannot silently choose SDK 58 for `expo-audio`.
+The original signing/Metro/source-map guards remain required.
+
 ## Device recordings
 
-In live mode, choose **Device** to load [DeviceSync.tsx](DeviceSync.tsx). That
+On Android in live mode, choose **Device** to load [DeviceSync.tsx](DeviceSync.tsx). That
 explicit action is the only entry into SDK/native code and Bluetooth permission
 requests. The retained encrypted-v2 path requires the backend's separately
 configured, already-bound device, a fresh SDK-read serial/pairing check,
@@ -111,6 +187,11 @@ compatible capabilities and inactive direct upload. It does not provision,
 reset, rebind or start/stop recording. Read the enclosing
 [device prerequisites and evidence](../../../react-native-recording-sync/README.md)
 before syncing real audio.
+New App SDK acceptance is encrypted-upload-v2 only: require exact capture
+identity/ciphertext integrity, authoritative cloud verification, a signed
+completion receipt and receipt-gated cleanup. Ordinary import/playback and
+historical legacy transfer results do not qualify this physical device path.
+Preserve retained unknown device uploads and journals.
 Device uses the live session's origin/token; select **Enable device access** to
 authorize that configured device and request permissions. Changing credentials
 requires returning to the library and signing out, rather than entering another
@@ -169,15 +250,35 @@ remain SDK/native responsibilities; do not move them into JavaScript state.
 npm run typecheck
 npm test
 npm run export
+npm run export:ios
+npm run prebuild:ios
 ```
 
 New focused tests exercise the real adapter/controller used by these screens:
 synthetic flow without network, source/citation projection, stale content,
 signout disposal, lasting action locks and GET-only known-request recovery.
-The existing identity/lifecycle, native signing, Metro/braces and source-map suites remain in
-ordinary `npm test`. These are local synthetic tests and an Android Metro
-export, separate from native assembly, rendered phone UI, live APIs, provider
+Media cases cover raw upload, input limits, source denial, WAV bounds, exact
+operation/recording recovery, late callbacks and player/cache retirement. The
+existing identity/lifecycle, native signing, Metro/braces and source-map suites remain in
+ordinary `npm test`. These are local synthetic tests and platform Metro
+exports, separate from native assembly, rendered phone UI, live APIs, provider
 configuration and physical upload/deletion acceptance.
+
+October 20 local qualification: normal frozen install (477 packages, audit 0),
+74 app/adapter/controller cases, strict types, 32 signing, 21 Metro and four
+source-map cases pass, with a 450-package license scan. The eight public
+dependency receipts match exact locked versions, tarballs and integrity.
+The normal iOS prebuild command refuses Windows; native generation/build must
+run on a supported macOS host. Installed UI, audio decoding and fresh physical
+encrypted-v2 acceptance remain separate gates.
+
+| Design requirement | Implementation and source evidence | Status |
+| --- | --- | --- |
+| Native clients over one customer backend | Android/iOS cloud screens and fixed Bearer import/audio routes; Android-only device entry/module | Matched in source; native iOS build separate |
+| No replay of uncertain writes | Upload intent lock before POST, known-operation GET, exact complete operation and fresh verified recording before another import | Matched in synthetic controller/adapter tests |
+| Account/selection lifecycle and local media | Public loaded/error/deadline gate, late results fenced, sequential replacement player admission, joined sign-out, immediate pause and private-cache/native shared-object release | Matched in synthetic tests; OS media behavior unverified |
+| Public packages and dependency guards | Exact SDK beta.19 npm/Maven and Expo 57 media pins, normal frozen install, all existing mandatory chains | Matched locally; hosted checks separate |
+| Encrypted device recording acceptance | Retained Android SDK receipt authority and journals; no iOS encrypted host | Unverified; ordinary imports do not qualify it |
 
 The [relocation review](../../../../docs/design-reviews/2026-10-12-react-native-client-move.md)
 records fresh install, source-preservation and native-build evidence separately.

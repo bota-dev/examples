@@ -210,6 +210,7 @@ export async function startIntegratedServer(
       if (initialize) chmodSync(config.paths.mobileDatabase, 0o600);
       library = new LibraryService(config.mobile, {
         database: config.paths.mobileLibraryDatabase,
+        fetchImpl,
         request: (method, path, body) =>
           service.upstream(path, method, body, path.startsWith('/ask/') ? 180_000 : 25_000),
       });

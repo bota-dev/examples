@@ -1,4 +1,5 @@
 import { LibraryError, normalizeQuestion, operationMetadata, safeMessage, type AskResult, type Citation, type LibraryApi, type Operation, type Recording, type Summary, type Transcription } from './library-api.ts';
+import { MediaController, type MediaPorts } from './media-controller.ts';
 
 export type DetailTab = 'Transcript' | 'Summary' | 'Ask';
 export type RequestState = { key: string; busy: boolean; error: string; operation?: Operation };
@@ -33,7 +34,8 @@ export class RecordingsController {
   private listRead: AbortController | null = null;
   private operationRead: AbortController | null = null;
   private readonly api: LibraryApi;
-  constructor(api: LibraryApi) { this.api = api; }
+  readonly media: MediaController | null;
+  constructor(api: LibraryApi, media?: MediaPorts) { this.api = api; this.media = media ? new MediaController(api, media) : null; }
 
   snapshot = () => this.state;
   subscribe = (listener: () => void) => { this.listeners.add(listener); return () => { this.listeners.delete(listener); }; };
@@ -76,11 +78,13 @@ export class RecordingsController {
   select(recording: Recording) {
     if (this.disposed) return;
     this.retireDetail();
+    this.media?.select(recording.id);
     this.update({ selected: recording, tab: 'Transcript', transcripts: [], summaries: [], sourceId: null,
       question: '', answer: null, citations: [], detailError: '' });
     void this.refreshDetail();
   }
   back() {
+    this.media?.select(null);
     this.retireDetail(); this.update({ selected: null, detailLoading: false, detailError: '', transcripts: [],
       summaries: [], sourceId: null, question: '', answer: null, citations: [] });
   }
@@ -92,6 +96,7 @@ export class RecordingsController {
   async refreshDetail(sourceId = this.state.sourceId) {
     const selected = this.state.selected;
     if (!selected || this.disposed) return;
+    this.media?.select(selected.id);
     this.retireDetail(); const revision = this.detailRevision;
     const controller = this.begin(); this.detailRead = controller;
     this.update({ detailLoading: true, detailError: '', transcripts: [], summaries: [], sourceId: null });
@@ -188,12 +193,13 @@ export class RecordingsController {
       if (!this.disposed && revision === this.operationsRevision) this.update({ operationsLoading: false, operationsError: safeMessage(error) });
     } finally { this.finish(controller); }
   }
-  dispose() {
+  async dispose() {
     if (this.disposed) return;
     this.disposed = true; this.detailRevision += 1; this.listRevision += 1; this.operationsRevision += 1;
     for (const controller of this.pending) controller.abort();
-    this.pending.clear(); this.requests.clear(); this.locked.clear(); this.api.dispose(); this.state = initial();
+    this.pending.clear(); this.requests.clear(); this.locked.clear(); const cleanup = this.media?.dispose(); this.api.dispose(); this.state = initial();
     for (const listener of this.listeners) listener();
     this.listeners.clear();
+    await cleanup;
   }
 }
