@@ -25,4 +25,6 @@ jobs:
         with:
           persist-credentials: false
       - run: swift package resolve
+      - run: swift test
       - run: bash build.sh
+      - run: bash build-ios.sh

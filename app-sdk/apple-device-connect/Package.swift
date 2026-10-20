@@ -4,8 +4,10 @@ import PackageDescription
 let package = Package(
     name: "BotaConnect",
     platforms: [.macOS(.v13)],
-    dependencies: [.package(url: "https://github.com/bota-dev/app-sdk.git", exact: "2.0.0-beta.18")],
+    dependencies: [.package(url: "https://github.com/bota-dev/app-sdk.git", exact: "2.0.0-beta.19")],
     targets: [.executableTarget(name: "BotaConnect", dependencies: [
         .product(name: "BotaAppSDK", package: "app-sdk")
+    ]), .testTarget(name: "BotaConnectTests", dependencies: [
+        "BotaConnect", .product(name: "BotaAppSDK", package: "app-sdk")
     ])]
 )
