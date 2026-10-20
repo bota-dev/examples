@@ -7,6 +7,7 @@ import 'package:bota_app_sdk/bota_app_sdk.dart';
 import 'package:bota_app_sdk/src/platform.dart';
 import 'package:bota_connect/main.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -86,6 +87,34 @@ void main() {
       },
     );
   });
+
+  testWidgets('iOS requests Bluetooth only and never reads Android metadata', (
+    tester,
+  ) async {
+    var infoReads = 0;
+    List<Object?>? permissions;
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(
+      const MethodChannel('dev.fluttercommunity.plus/device_info'),
+      (_) async {
+        infoReads++;
+        throw StateError('Android metadata must not be read on iOS');
+      },
+    );
+    messenger.setMockMethodCallHandler(
+      const MethodChannel('flutter.baseflow.com/permissions/methods'),
+      (call) async {
+        permissions = call.arguments as List<Object?>;
+        return <int, int>{
+          for (final permission in permissions!) permission! as int: 1,
+        };
+      },
+    );
+    await _prepare(tester);
+    expect(permissions, [Permission.bluetooth.value]);
+    expect(infoReads, 0);
+  }, variant: TargetPlatformVariant({TargetPlatform.iOS}));
 
   testWidgets('late connect completion cannot restore a lost connection', (
     tester,
@@ -203,9 +232,199 @@ void main() {
       );
     },
   );
+  testWidgets(
+    'ended connection observation clears status and retires pending reads',
+    (tester) async {
+      final platform = await _prepare(tester);
+      await _connect(tester, platform);
+      await tester.tap(find.widgetWithText(FilledButton, 'Read status'));
+      await tester.pump();
+      await platform.connection.close();
+      await tester.pump();
+      platform.statusResult.complete(_status);
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Connection observation ended.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('Battery:'), findsNothing);
+      expect(
+        tester
+            .widget<FilledButton>(
+              find.widgetWithText(FilledButton, 'Read status'),
+            )
+            .onPressed,
+        isNull,
+      );
+      expect(
+        tester
+            .widget<FilledButton>(
+              find.widgetWithText(FilledButton, 'Enable Bluetooth access'),
+            )
+            .onPressed,
+        isNull,
+      );
+    },
+  );
+
+  testWidgets('ended observation rejects a retained candidate callback', (
+    tester,
+  ) async {
+    final platform = await _prepare(tester);
+    final stale = tester
+        .widget<TextButton>(
+          find.widgetWithText(TextButton, 'Bota test - -40 dBm'),
+        )
+        .onPressed!;
+    await platform.connection.close();
+    await tester.pumpAndSettle();
+    expect(find.text('Bota test - -40 dBm'), findsNothing);
+    platform.discovery.add(
+      BotaDiscoveredDevice(
+        id: 'late',
+        name: 'Late candidate',
+        rssi: -30,
+        discoveredAt: DateTime.utc(2026),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Late candidate'), findsNothing);
+    expect(
+      find.textContaining('Connection observation ended.'),
+      findsOneWidget,
+    );
+    stale();
+    await tester.pumpAndSettle();
+    expect(platform.serials, isEmpty);
+  });
+
+  testWidgets('home route stays on a closed screen after joined teardown', (
+    tester,
+  ) async {
+    Future<void>? cleanup;
+    final platform = await _prepare(
+      tester,
+      onCleanup: (future) => cleanup = future,
+    );
+    final gate = Completer<void>();
+    platform.destroyWait = gate.future;
+    // Real asynchronous native work must be created in the real test zone.
+    await tester.runAsync(() => tester.tap(find.byTooltip('Close connection')));
+    await tester.pump();
+    expect(find.textContaining('Device connection closed.'), findsNothing);
+    expect(cleanup, isNotNull);
+    await tester.runAsync(() async {
+      gate.complete();
+      await cleanup;
+    });
+    await tester.pumpAndSettle();
+    expect(platform.destroyCalls, 1);
+    expect(find.textContaining('Device connection closed.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('device route waits for SDK destruction before returning', (
+    tester,
+  ) async {
+    final platform = _FakePlatform();
+    final gate = Completer<void>();
+    platform.destroyWait = gate.future;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: TextButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) => ConnectPage(
+                    client: BotaDeviceClient.forTesting(platform),
+                  ),
+                ),
+              ),
+              child: const Text('Open device'),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Open device'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Close connection'));
+    await tester.pump();
+    expect(platform.destroyCalls, 1);
+    expect(find.text('Device connection'), findsOneWidget);
+    gate.complete();
+    await tester.pumpAndSettle();
+    expect(find.text('Open device'), findsOneWidget);
+    expect(platform.destroyCalls, 1);
+  });
+
+  testWidgets(
+    'SDK destruction failure stays visible and keeps its cleanup future failed',
+    (tester) async {
+      final platform = _FakePlatform()
+        ..destroyError = StateError('raw native details');
+      Future<void>? cleanup;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: ConnectPage(
+            client: BotaDeviceClient.forTesting(platform),
+            onCleanup: (future) => cleanup = future,
+          ),
+        ),
+      );
+      await tester.tap(find.byTooltip('Close connection'));
+      await tester.pumpAndSettle();
+      expect(
+        find.textContaining('Device cleanup did not complete.'),
+        findsOneWidget,
+      );
+      expect(find.textContaining('raw native details'), findsNothing);
+      expect(find.text('Close connection'), findsOneWidget);
+      await expectLater(cleanup, throwsStateError);
+      expect(platform.destroyCalls, 1);
+      expect(
+        tester
+            .widget<FilledButton>(
+              find.widgetWithText(FilledButton, 'Enable Bluetooth access'),
+            )
+            .onPressed,
+        isNull,
+      );
+    },
+  );
+
+  testWidgets('disposed configuration is drained before one SDK destruction', (
+    tester,
+  ) async {
+    final platform = _FakePlatform();
+    final gate = Completer<void>();
+    platform.configureWait = gate.future;
+    Future<void>? cleanup;
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ConnectPage(
+          client: BotaDeviceClient.forTesting(platform),
+          onCleanup: (future) => cleanup = future,
+        ),
+      ),
+    );
+    await tester.tap(find.text('Enable Bluetooth access'));
+    await tester.pump();
+    await tester.pumpWidget(const SizedBox());
+    expect(cleanup, isNotNull);
+    expect(platform.destroyCalls, 0);
+    gate.complete();
+    await cleanup;
+    expect(platform.destroyCalls, 1);
+    expect(tester.takeException(), isNull);
+  });
 }
 
-Future<_FakePlatform> _prepare(WidgetTester tester) async {
+Future<_FakePlatform> _prepare(
+  WidgetTester tester, {
+  void Function(Future<void>)? onCleanup,
+}) async {
   tester.view.physicalSize = const Size(1000, 1600);
   tester.view.devicePixelRatio = 1;
   addTearDown(tester.view.resetPhysicalSize);
@@ -213,7 +432,10 @@ Future<_FakePlatform> _prepare(WidgetTester tester) async {
   final platform = _FakePlatform();
   await tester.pumpWidget(
     MaterialApp(
-      home: ConnectPage(client: BotaDeviceClient.forTesting(platform)),
+      home: ConnectPage(
+        client: BotaDeviceClient.forTesting(platform),
+        onCleanup: onCleanup,
+      ),
     ),
   );
   await tester.tap(find.text('Enable Bluetooth access'));
@@ -263,6 +485,11 @@ void _expectDisconnected(WidgetTester tester) {
 }
 
 class _FakePlatform implements BotaPlatform {
+  Object? destroyError;
+  bool scanStarted = false;
+  Future<void>? configureWait;
+  Future<void>? destroyWait;
+  int destroyCalls = 0;
   final connection = StreamController<BotaConnectedDevice?>.broadcast();
   late final StreamController<BotaDiscoveredDevice> discovery =
       StreamController<BotaDiscoveredDevice>(
@@ -281,11 +508,17 @@ class _FakePlatform implements BotaPlatform {
   final serials = <String?>[];
 
   @override
-  Future<void> configure(BotaConfiguration configuration) async {}
+  Future<void> configure(BotaConfiguration configuration) async {
+    await configureWait;
+  }
+
   @override
   Future<void> destroy() async {
-    await connection.close();
-    await discovery.close();
+    destroyCalls++;
+    await destroyWait;
+    if (destroyError != null) throw destroyError!;
+    if (!connection.isClosed) await connection.close();
+    if (scanStarted && !discovery.isClosed) await discovery.close();
   }
 
   @override
@@ -294,7 +527,11 @@ class _FakePlatform implements BotaPlatform {
   Stream<BotaDiscoveredDevice> scan({
     Duration timeout = const Duration(seconds: 10),
     bool allowDuplicates = false,
-  }) => discovery.stream;
+  }) {
+    scanStarted = true;
+    return discovery.stream;
+  }
+
   @override
   Future<BotaConnectedDevice> connect(
     BotaDiscoveredDevice device, {
