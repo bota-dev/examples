@@ -93,6 +93,32 @@ tests, the existing macOS application build and unsigned iOS simulator/device
 builds in [the native CI job](https://github.com/bota-dev/examples/actions/runs/39512379550/job/118936300796).
 This qualifies compilation/linking, not Bluetooth permission or physical identity.
 
+| Hosted workflow | Exact source | Observed result |
+| --- | --- | --- |
+| [Web reference](https://github.com/bota-dev/examples/actions/runs/39514848192) | `d9ccb2b9d8bb91dcda9b2f239c84570c4e98b5df` | Linux and Windows pass |
+| [Shared backend core](https://github.com/bota-dev/examples/actions/runs/39514848155) | same `d9ccb2b` | Linux and Windows pass |
+| [Catalog](https://github.com/bota-dev/examples/actions/runs/39514848142) | same `d9ccb2b` | Linux and Windows pass |
+| [Mobile recording samples](https://github.com/bota-dev/examples/actions/runs/39514848145) | same `d9ccb2b` | Both backend jobs, RN/Flutter Android builds and Flutter iOS simulator/device builds pass; first RN iOS export fails worker heap |
+| [Flutter connection](https://github.com/bota-dev/examples/actions/runs/39514738797) | `4d79085e018c0569a00553b1b0164f684a28a56e` | Android APK, iOS simulator and unsigned iOS device builds pass |
+
+Public example cards/changelog are pushed in docs source
+[`a15b8b1`](https://github.com/bota-dev/docs/commit/a15b8b1ba892642a2d999d78ab177dd8cbe7f33a).
+Both affected pages compile as MDX locally; production docs delivery is separate.
+
+The [first RN iOS job](https://github.com/bota-dev/examples/actions/runs/39514848145/job/118944430329)
+passes 131 tests, types, license and frozen installation, then its two-worker
+Metro export fails with `Jest worker ran out of memory` on the public SDK's
+3,971,776-byte generated `core.ts`. Installed Metro source uses the Jest worker
+pool only for `maxWorkers > 1`; one worker transforms in-process. The follow-up
+keeps normal minification/Hermes/SDK source and all guards, uses a serial iOS
+export and sets a 4 GiB Node old-generation heap in CI. The workflow prints
+actual runner memory and V8 heap limits. Fresh hosted export/native qualification
+remains required; a cached local export cannot establish cold-transform memory.
+The exact follow-up local serial export passes on Node 22.23.2 with a measured
+4,144 MiB V8 heap: 684 modules and an 8,420,398-byte optimized Hermes bundle
+(SHA-256 `aa964daefed3b7b4ab6f7d4be5bd0cd772fb412433330217b71c04635c113855`).
+It retains the normal Metro cache, so this is configuration/source evidence only.
+
 The earlier [October 15 live HTTP run](2026-10-14-web-playback.md#october-15-live-http-acceptance)
 remains evidence only for its recorded source and WAV fixture. No new live API
 write was needed for this implementation pass. New mobile native decoding,

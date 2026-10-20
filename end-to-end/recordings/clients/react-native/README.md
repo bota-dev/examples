@@ -250,9 +250,16 @@ remain SDK/native responsibilities; do not move them into JavaScript state.
 npm run typecheck
 npm test
 npm run export
-npm run export:ios
+NODE_OPTIONS=--max-old-space-size=4096 npm run export:ios
 npm run prebuild:ios
 ```
+
+The iOS export uses one Metro worker. On macOS CI, Node has a 4 GiB old-generation
+heap and reports its actual heap/memory limits. The public SDK includes a large
+generated TypeScript module; the first two-worker iOS export exceeded its worker
+heap before native compilation. Keep the serial export and heap setting when
+using a small-memory host; this changes build resources, not SDK code or guards.
+In PowerShell, set `$env:NODE_OPTIONS='--max-old-space-size=4096'` before the command.
 
 New focused tests exercise the real adapter/controller used by these screens:
 synthetic flow without network, source/citation projection, stale content,

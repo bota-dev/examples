@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test *.test.mjs && npm run test:native-expo-signing && npm run test:braces-security && npm run test:source-map-security",
     "export": "expo export --platform android --max-workers 2",
-    "export:ios": "expo export --platform ios --max-workers 2",
+    "export:ios": "expo export --platform ios --max-workers 1",
     "postinstall": "node scripts/verify-native-expo-signing.mjs && node scripts/apply-braces-security.mjs",
     "test:braces-security": "node --test scripts/test-braces-security.mjs",
     "test:source-map-security": "node --test scripts/test-source-map-security.mjs",

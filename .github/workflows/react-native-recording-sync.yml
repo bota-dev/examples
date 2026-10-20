@@ -122,6 +122,7 @@ jobs:
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
       CI: '1'
+      NODE_OPTIONS: --max-old-space-size=4096
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -132,6 +133,7 @@ jobs:
       - name: Prepare native tooling
         run: |
           xcodebuild -version
+          node -e "console.log({architecture: process.arch, memoryMiB: Math.round(require('node:os').totalmem()/1048576), heapLimitMiB: Math.round(require('node:v8').getHeapStatistics().heap_size_limit/1048576)})"
           gem install --no-document cocoapods -v 1.16.2
           echo "$(ruby -e 'print Gem.bindir')" >> "$GITHUB_PATH"
           "$(ruby -e 'print Gem.bindir')/pod" _1.16.2_ --version

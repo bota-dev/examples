@@ -10,13 +10,14 @@ UI and the published SDK; each client exposes its actual supported capabilities.
 
 **The foundation is partially implemented.** The [combined backend](end-to-end/recordings/README.md)
 now provides one Node listener for the existing Web cookie and mobile Bearer
-adapters, with shared recording, transcription/general-notes and Ask features.
-The three original journals and response contracts remain separate; upload,
-webhook and native service modules are composed from their existing public paths.
+adapters, with shared recording, upload/playback, transcription/general-notes
+and Ask features. The three original journals and response contracts remain
+separate; webhook and native service modules retain their compatibility paths.
 Flutter and React Native now have complete install roots under
 `end-to-end/recordings/clients/`. Web retains its existing path; integrated
-Kotlin/Swift clients are not built. Public SDK pins, native identities, backend
-launch bases and journal locations are unchanged.
+Kotlin/Swift clients are not built. Four touched SDK roots use public beta.19;
+the other six retain beta.18. Native identities, backend launch bases and journal
+locations are unchanged.
 
 There are exactly two product layers: **general platform capabilities now**,
 then **vertical and app-type examples later**. The integrated sample and its

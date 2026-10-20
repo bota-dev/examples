@@ -164,7 +164,8 @@ not implement or approve a particular vertical app.
 
 ## Delivery rules
 
-Existing launch paths, catalog identities, locks and SDK pins remain unchanged.
+Preserve existing launch paths, catalog identities, locks and exact SDK pins
+outside explicitly qualified changes, such as the four beta.19 consumers above.
 The implemented core adds its own catalog entry and frozen dev-tool lock.
 Further consolidation or moves require compatible links,
 catalog/workflow updates and preserved state; legacy retirement retains its
