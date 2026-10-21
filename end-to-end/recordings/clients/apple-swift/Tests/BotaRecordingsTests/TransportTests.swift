@@ -54,11 +54,16 @@ import XCTest
         transportTrace("redirect.begin")
         let destination = try LoopbackServer { _ in .init() }
         let location = destination.origin + "/stolen"
-        let server = try LoopbackServer { _ in .init(status: 302, headers: ["Location": location], body: Data()) }
-        defer { server.stop(); destination.stop() }
-        let api = try LibraryAPI.live(origin: server.origin, token: token)
-        await failure(.unavailable) { try await api.list() }
-        try await close(api)
+        defer { destination.stop() }
+        for status in [301, 302, 303, 307, 308] {
+            transportTrace("redirect.case.\(status)")
+            let server = try LoopbackServer { _ in .init(status: status, headers: ["Location": location], body: Data()) }
+            defer { server.stop() }
+            let api = try LibraryAPI.live(origin: server.origin, token: token)
+            await failure(.unavailable) { try await api.list() }
+            try await close(api)
+            XCTAssertEqual(server.requests.count, 1)
+        }
         XCTAssertTrue(destination.requests.isEmpty)
         transportTrace("redirect.end")
     }
@@ -71,6 +76,7 @@ import XCTest
             .init(headers: ["Content-Type": "application/json", "Content-Encoding": "gzip"]),
             .init(body: Data("not-json".utf8)),
             .init(body: Data([0xff, 0xfe])),
+            .init(headers: ["Content-Type": "; application/json"]),
         ]
         for (index, response) in responses.enumerated() {
             transportTrace("status-json.case.\(index)")
@@ -145,5 +151,20 @@ import XCTest
         try await transport.close()
         transportTrace("transport.close.end")
         transportTrace("cancellation.end")
+    }
+    func testThirtySecondDeadlineCancelsAndJoinsStalledResponse() async throws {
+        transportTrace("deadline.begin")
+        let hold = DispatchSemaphore(value: 0)
+        let server = try LoopbackServer { _ in .init(hold: hold, holdSeconds: 40) }
+        defer { hold.signal(); server.stop() }
+        let transport = JSONTransport(try BackendConfiguration(origin: server.origin, token: token))
+        let started = DispatchTime.now().uptimeNanoseconds
+        await failure(.network) { try await transport.get("/api/library/recordings") }
+        let elapsed = Double(DispatchTime.now().uptimeNanoseconds - started) / 1_000_000_000
+        XCTAssertGreaterThan(elapsed, 25, "Fixture must remain stalled until the real production deadline")
+        XCTAssertLessThan(elapsed, 40, "The deadline and actual finalizer must finish within the cleanup bound")
+        try await transport.close()
+        XCTAssertEqual(server.requests.count, 1)
+        transportTrace("deadline.end")
     }
 }

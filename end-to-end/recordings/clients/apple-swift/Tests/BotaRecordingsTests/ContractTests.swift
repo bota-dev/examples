@@ -3,6 +3,21 @@ import XCTest
 @testable import BotaRecordings
 
 final class ContractTests: XCTestCase {
+    func testSelectionCancellationCannotSuppressAnObserved401() {
+        var failure = ReaderFailure()
+        failure.observe(CancellationError())
+        failure.observe(LibraryFailure.unauthorized)
+        failure.observe(LibraryFailure.network)
+        failure.observe(CancellationError())
+        XCTAssertEqual(failure.value as? LibraryFailure, .unauthorized)
+        var normal = ReaderFailure()
+        normal.observe(LibraryFailure.unavailable)
+        normal.observe(CancellationError())
+        XCTAssertEqual(normal.value as? LibraryFailure, .unavailable)
+        failure.observe(LibraryFailure.cleanup)
+        failure.observe(LibraryFailure.unauthorized)
+        XCTAssertEqual(failure.value as? LibraryFailure, .cleanup)
+    }
     func json(_ value: Any) throws -> Data { try JSONSerialization.data(withJSONObject: value) }
     var row: [String: Any] { ["id": "rec_one", "name": NSNull(), "status": "completed", "created_at": "2026-01-15T09:30:00Z", "duration_seconds": NSNull(), "upload_verified": true] }
     func testConfigurationRejectsAuthorityEscapesAndBotaCredentials() throws {

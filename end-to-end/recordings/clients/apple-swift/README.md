@@ -96,7 +96,10 @@ rejects foreign recording/transcription identities. A library response with
 `has_more` is deliberately incomplete. This app does not follow its cursor.
 
 Each response must be JSON and valid UTF-8, fit the 2 MiB streaming byte limit
-and finish within the configured 30-second resource deadline. DTO caps count
+and finish within the 30-second request deadline. An independent timer cancels
+the known data task, including a stalled response. Task completion and session
+invalidation must both join; a further five-second cleanup deadline fails closed
+and retains the native owner instead of claiming successful cleanup. DTO caps count
 UTF-16 units, matching the shared adapter. Large otherwise-valid results can
 exceed this sample's deliberate byte cap. There are no redirects, cookies,
 credential store, cache, retries or raw server-body error messages.
@@ -134,15 +137,19 @@ fails closed if a dependency is added; extend it only with an explicit
 license/security review. The app is MIT licensed and uses Apple system
 frameworks. Node scripts are build checks only and use built-in Node modules.
 
-`swift test` includes 20 synthetic/loopback tests covering DTO UTF-16 caps,
+`swift test` includes 22 synthetic/loopback tests covering DTO UTF-16 caps,
 required fields, page consistency, actual HTTP headers and cookie isolation,
 redirect refusal, streamed/declared byte limits, status/MIME/JSON/source
 rejection, cancellation before headers, stale selection, sign-out joins, 401
-retirement and sticky cleanup failure. Loopback peers never use a real token
+retirement, sticky cleanup failure and the actual production 30-second request
+deadline. Redirect regressions cover 301/302/303/307/308 without reaching the
+destination peer. Loopback peers never use a real token
 or contact a Bota backend. Sample tests fail if its live factory is invoked.
 The test peer uses nonblocking sockets and bounded poll/header/body/hold waits;
-failure to join its worker within five seconds fails the test. CI runs contract,
-model and transport classes separately with individual step timeouts.
+failure to join its worker within five seconds fails the test. CI runs contract
+and model classes separately, then each transport method with a two-minute
+deadline and unbuffered test-only boundary markers. The macOS/iOS build job is
+independent; native compilation does not establish transport-test success.
 
 Local October 20, 2026 evidence: the two Node gate regressions pass; project,
 plist, workflow and shell structural checks are separate from native compilation.
@@ -152,5 +159,5 @@ macOS app build and unsigned iOS simulator/device builds require the owning
 No live API read, signed installation, phone run or physical device test is
 claimed by these local checks.
 
-Foundation references: [streaming URLSession bytes](https://developer.apple.com/documentation/foundation/urlsession/bytes%28for%3Adelegate%3A%29)
-and [URLSession.AsyncBytes](https://developer.apple.com/documentation/foundation/urlsession/asyncbytes).
+Foundation references: [streaming data-task delegates](https://developer.apple.com/documentation/foundation/fetching-website-data-into-memory)
+and [URLSessionTaskDelegate](https://developer.apple.com/documentation/foundation/urlsessiontaskdelegate).

@@ -16,6 +16,7 @@ final class LoopbackServer: @unchecked Sendable {
         var body = Data("{}".utf8)
         var omitLength = false
         var hold: DispatchSemaphore?
+        var holdSeconds = 5
     }
     let origin: String
     private let group = DispatchGroup()
@@ -109,7 +110,7 @@ final class LoopbackServer: @unchecked Sendable {
         let response = respond(request)
         if let hold = response.hold {
             transportTrace("fixture.response.hold.begin")
-            let deadline = DispatchTime.now() + 5
+            let deadline = DispatchTime.now() + .seconds(response.holdSeconds)
             while hold.wait(timeout: .now() + .milliseconds(100)) != .success {
                 if isStopped { return }
                 if DispatchTime.now().uptimeNanoseconds >= deadline.uptimeNanoseconds { recordFailure("response hold exceeded fixture deadline"); return }

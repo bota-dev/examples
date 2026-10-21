@@ -58,6 +58,9 @@ jobs:
       - name: Transport - cancellation before headers
         run: swift test --skip-build --filter 'TransportTests/testCancellationBeforeHeadersJoinsTransport'
         timeout-minutes: 2
+      - name: Transport - production deadline and finalizer
+        run: swift test --skip-build --filter 'TransportTests/testThirtySecondDeadlineCancelsAndJoinsStalledResponse'
+        timeout-minutes: 2
 
   native-build:
     runs-on: macos-15
