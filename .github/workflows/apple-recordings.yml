@@ -30,6 +30,14 @@ jobs:
           node-version: '22.23.2'
       - run: node --test scripts/check-dependencies.test.mjs
       - run: node scripts/check-dependencies.mjs
-      - run: swift test
+      - name: Swift contract tests
+        run: swift test --filter ContractTests
+        timeout-minutes: 3
+      - name: Swift model lifecycle tests
+        run: swift test --skip-build --filter ModelTests
+        timeout-minutes: 3
+      - name: Swift real transport tests
+        run: swift test --skip-build --filter TransportTests
+        timeout-minutes: 5
       - run: bash build.sh
       - run: bash build-ios.sh

@@ -9,6 +9,12 @@ import XCTest
         do { _ = try await action(); XCTFail("Expected controlled failure") }
         catch { XCTAssertEqual(error as? LibraryFailure, expected) }
     }
+    func testIdleLoopbackListenerStopsWithoutWaitingForAConnection() throws {
+        let server = try LoopbackServer { _ in XCTFail("Unexpected request"); return .init() }
+        server.stop()
+        server.stop() // Idempotent without reusing or closing an unrelated descriptor.
+        XCTAssertTrue(server.requests.isEmpty)
+    }
     func testActualGETHeadersAndNoCookieReplay() async throws {
         let body = Data(list.utf8)
         let server = try LoopbackServer { _ in .init(headers: ["Content-Type": "application/json; charset=utf-8", "Set-Cookie": "session=secret; Path=/"], body: body) }

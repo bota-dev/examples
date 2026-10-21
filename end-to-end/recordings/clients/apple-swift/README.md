@@ -134,12 +134,15 @@ fails closed if a dependency is added; extend it only with an explicit
 license/security review. The app is MIT licensed and uses Apple system
 frameworks. Node scripts are build checks only and use built-in Node modules.
 
-`swift test` includes 19 synthetic/loopback tests covering DTO UTF-16 caps,
+`swift test` includes 20 synthetic/loopback tests covering DTO UTF-16 caps,
 required fields, page consistency, actual HTTP headers and cookie isolation,
 redirect refusal, streamed/declared byte limits, status/MIME/JSON/source
 rejection, cancellation before headers, stale selection, sign-out joins, 401
 retirement and sticky cleanup failure. Loopback peers never use a real token
 or contact a Bota backend. Sample tests fail if its live factory is invoked.
+The test peer uses nonblocking sockets and bounded poll/header/body/hold waits;
+failure to join its worker within five seconds fails the test. CI runs contract,
+model and transport classes separately with individual step timeouts.
 
 Local October 20, 2026 evidence: the two Node gate regressions pass; project,
 plist, workflow and shell structural checks are separate from native compilation.
