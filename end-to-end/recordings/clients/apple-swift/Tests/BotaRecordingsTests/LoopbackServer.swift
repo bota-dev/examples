@@ -3,6 +3,11 @@ import Foundation
 import XCTest
 @testable import BotaRecordings
 
+// Test-only, unbuffered boundary markers. Never include a URL, header, token or body.
+func transportTrace(_ marker: String) {
+    FileHandle.standardError.write(Data("[transport] \(marker)\n".utf8))
+}
+
 // Test-only HTTP peer. It binds only 127.0.0.1 and never contacts a live backend.
 final class LoopbackServer: @unchecked Sendable {
     struct Response: Sendable {
@@ -40,10 +45,11 @@ final class LoopbackServer: @unchecked Sendable {
               fcntl(socket, F_SETFL, flags | O_NONBLOCK) == 0
         else { Darwin.close(socket); throw LibraryFailure.network }
         origin = "http://127.0.0.1:\(UInt16(bigEndian: address.sin_port))"
+        transportTrace("fixture.ready")
         group.enter()
         DispatchQueue(label: "bota.sample.test.http").async { [self] in
             // This worker alone closes the listener; stop never closes a descriptor under accept/poll.
-            defer { Darwin.close(socket); group.leave() }
+            defer { Darwin.close(socket); transportTrace("fixture.worker.exit"); group.leave() }
             while wait(socket, events: Int16(POLLIN), phase: "listener", deadline: nil) {
                 let client = accept(socket, nil, nil)
                 if client < 0 {
@@ -58,6 +64,7 @@ final class LoopbackServer: @unchecked Sendable {
     private var isStopped: Bool { lock.lock(); defer { lock.unlock() }; return stopped }
     private func recordFailure(_ message: String) {
         lock.lock(); if failure == nil { failure = message }; lock.unlock()
+        transportTrace("fixture.failure.recorded")
     }
     private func wait(_ socket: Int32, events: Int16, phase: String, deadline: DispatchTime?) -> Bool {
         while !isStopped {
@@ -97,14 +104,17 @@ final class LoopbackServer: @unchecked Sendable {
         }
         let request = String(decoding: input, as: UTF8.self)
         lock.lock(); captured.append(request); lock.unlock()
+        transportTrace("fixture.request.headers.complete")
         received.signal()
         let response = respond(request)
         if let hold = response.hold {
+            transportTrace("fixture.response.hold.begin")
             let deadline = DispatchTime.now() + 5
             while hold.wait(timeout: .now() + .milliseconds(100)) != .success {
                 if isStopped { return }
                 if DispatchTime.now().uptimeNanoseconds >= deadline.uptimeNanoseconds { recordFailure("response hold exceeded fixture deadline"); return }
             }
+            transportTrace("fixture.response.hold.end")
         }
         if isStopped { return }
         var headers = response.headers
@@ -112,6 +122,7 @@ final class LoopbackServer: @unchecked Sendable {
         if !response.omitLength && headers["Content-Length"] == nil { headers["Content-Length"] = String(response.body.count) }
         let head = "HTTP/1.1 \(response.status) Test\r\n" + headers.map { "\($0.key): \($0.value)\r\n" }.joined() + "\r\n"
         let output = Data(head.utf8) + response.body, bodyDeadline = DispatchTime.now() + 15
+        transportTrace("fixture.response.write.begin")
         output.withUnsafeBytes { bytes in
             var offset = 0
             while offset < bytes.count {
@@ -123,6 +134,7 @@ final class LoopbackServer: @unchecked Sendable {
                 guard count > 0 else { if !isStopped { recordFailure("response write failed: errno \(errno)") }; return }
                 offset += count
             }
+            transportTrace("fixture.response.write.complete")
         }
     }
     func waitForRequest() async -> Bool {
@@ -131,14 +143,17 @@ final class LoopbackServer: @unchecked Sendable {
         }
     }
     func stop(file: StaticString = #filePath, line: UInt = #line) {
+        transportTrace("fixture.stop.begin")
         lock.lock()
         if stopped { lock.unlock(); return }
         stopped = true
         lock.unlock()
         guard group.wait(timeout: .now() + 5) == .success else {
+            transportTrace("fixture.stop.timeout")
             XCTFail("Loopback fixture cleanup did not join within five seconds", file: file, line: line)
             return
         }
+        transportTrace("fixture.stop.joined")
         lock.lock(); let failure = self.failure; lock.unlock()
         if let failure { XCTFail("Loopback fixture failed: \(failure)", file: file, line: line) }
     }

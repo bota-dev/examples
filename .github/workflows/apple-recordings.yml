@@ -12,15 +12,16 @@ permissions:
   contents: read
 
 jobs:
-  build:
+  tests:
     runs-on: macos-15
-    timeout-minutes: 20
+    timeout-minutes: 25
     defaults:
       run:
         working-directory: end-to-end/recordings/clients/apple-swift
     env:
       DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
       FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      NSUnbufferedIO: 'YES'
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -36,8 +37,44 @@ jobs:
       - name: Swift model lifecycle tests
         run: swift test --skip-build --filter ModelTests
         timeout-minutes: 3
-      - name: Swift real transport tests
-        run: swift test --skip-build --filter TransportTests
-        timeout-minutes: 5
+      - name: Transport - idle listener cleanup
+        run: swift test --skip-build --filter 'TransportTests/testIdleLoopbackListenerStopsWithoutWaitingForAConnection'
+        timeout-minutes: 2
+      - name: Transport - real GET headers and cookie isolation
+        run: swift test --skip-build --filter 'TransportTests/testActualGETHeadersAndNoCookieReplay'
+        timeout-minutes: 2
+      - name: Transport - redirect isolation
+        run: swift test --skip-build --filter 'TransportTests/testRedirectDoesNotForwardTokenOrReachSecondPeer'
+        timeout-minutes: 2
+      - name: Transport - status MIME and JSON rejection
+        run: swift test --skip-build --filter 'TransportTests/testStatusMIMEEncodingAndJSONFailuresStayControlled'
+        timeout-minutes: 2
+      - name: Transport - declared and streamed byte bounds
+        run: swift test --skip-build --filter 'TransportTests/testDeclaredAndStreamingByteLimits'
+        timeout-minutes: 2
+      - name: Transport - exact content sources
+        run: swift test --skip-build --filter 'TransportTests/testForeignDetailAndJoinedContentSourcesAreRejected'
+        timeout-minutes: 2
+      - name: Transport - cancellation before headers
+        run: swift test --skip-build --filter 'TransportTests/testCancellationBeforeHeadersJoinsTransport'
+        timeout-minutes: 2
+
+  native-build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: end-to-end/recordings/clients/apple-swift
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6.4.0
+        with:
+          node-version: '22.23.2'
+      - run: node scripts/check-dependencies.mjs
       - run: bash build.sh
       - run: bash build-ios.sh
