@@ -16,7 +16,11 @@ one listener. Both credential-specific adapters, DTOs and all three journals
 remain, with compatibility exports at the existing Web upload/playback paths and local webhook/native source. Complete
 [Flutter](../end-to-end/recordings/clients/flutter/README.md) and
 [RN](../end-to-end/recordings/clients/react-native/README.md) install roots have relocated.
-Web/backend paths stay; integrated Kotlin/Swift clients are not built.
+Web/backend paths stay. Small [Kotlin](../end-to-end/recordings/clients/android-kotlin/README.md)
+and [Swift](../end-to-end/recordings/clients/apple-swift/README.md) cloud readers
+use the same Bearer adapter and [read contract](../end-to-end/recordings/contracts/native-library-read.md).
+They read the first recording page and existing transcript/general notes; no
+upload, playback, processing writes, Ask or device SDK is added to those clients.
 
 Use the [README entry paths](../README.md#start-with-bota-recordings), then choose
 the feature/platform below. Run only the relevant documented install root(s)
@@ -73,11 +77,11 @@ and authorized upload use the customer backend.
 
 | Platform | Existing public-call source | Current host/support |
 | --- | --- | --- |
-| Kotlin / Android | [MainActivity.kt](../app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](../app-sdk/android-device-connect/README.md) | Native Android connection/status; integrated recording client planned |
-| Swift / Apple | [ConnectModel.swift](../app-sdk/apple-device-connect/Sources/BotaConnect/ConnectModel.swift); [setup](../app-sdk/apple-device-connect/README.md) | Shared iOS/macOS connection/status; no integrated cloud client |
+| Kotlin / Android | [SDK connection](../app-sdk/android-device-connect/README.md); [cloud reader](../end-to-end/recordings/clients/android-kotlin/README.md) | Native Android SDK starter and separate GET-only recording library/results |
+| Swift / Apple | [SDK connection](../app-sdk/apple-device-connect/README.md); [cloud reader](../end-to-end/recordings/clients/apple-swift/README.md) | Shared iOS/macOS SDK starter and separate GET-only SwiftUI library/results |
 | React Native | [App.tsx](../app-sdk/react-native-device-connect/App.tsx); [recording app](../end-to-end/recordings/clients/react-native/README.md) | Android/iOS cloud app; encrypted device sync stays Android-only |
 | Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android/iOS connection/status and cloud app; no selected RN encrypted-v2 host workflow |
-| Web / Chromium | [page.ts](../app-sdk/web-device-connect/page.ts) + [main.ts](../app-sdk/web-device-connect/main.ts); [setup](../app-sdk/web-device-connect/README.md) | Supported Web Bluetooth/secure context/firmware identity; not yet integrated into the API recording client |
+| Web / Chromium | [device-session.ts](../end-to-end/web-reference/web/features/devices/device-session.ts); [setup](../end-to-end/web-reference/README.md) | Optional connection/status in the recording app; explicit lazy preparation/chooser, secure context and supported Web Bluetooth |
 
 Missing public capability, missing host and missing verification are different
 gaps. Native Windows/Electron SDK support is planned upstream. Do not use private
@@ -85,8 +89,10 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 
 ## Preserve the migration and copy boundary
 
-1. Inspect the selected README, source/imports, manifest and lockfile. All ten
-   SDK install roots use exact public beta.19. Historical prose does
+1. Inspect the selected README, source/imports, manifest and lockfile. Ten existing
+   SDK roots use exact public beta.19; the optional Web app feature uses exact
+   public beta.20. Native Kotlin/Swift cloud readers use HTTP without a Bota SDK.
+   Historical prose does
    not override current manifests. RN uses native compatibility factories, not
    the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-20-sdk19-catalog-ios.md).
 2. Install only in documented roots with lifecycle scripts enabled. Keep native
@@ -168,8 +174,9 @@ origin defaults stay 8787. Retained native capture recovery keeps its original
 origin: configure combined PORT=8787 and matching APP_ORIGIN where needed; do not
 reset journals or rewrite capture scope. Fresh cloud setup may explicitly select
 5173 with matching phone forwarding.
-Further client moves and integrated Kotlin/Swift clients remain planned; no
-external-writer or atomic file-race guarantee is added.
+Kotlin/Swift cloud readers implement only first-page library and existing results
+through the same Bearer backend. Optional Web connection/status uses beta.20;
+its demo is inert. No external-writer or atomic file-race guarantee is added.
 Keep keys server-side, SDK pins unchanged,
 owner/source and receipt/cleanup gates intact. No private helpers, hardcoded
 devices or duplicate uncertain writes. Use normal platform UI and supported

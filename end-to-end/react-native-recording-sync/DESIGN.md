@@ -10,8 +10,9 @@ belong to the **Bota Recordings** foundation alongside the web client. The targe
 has one shared customer backend and clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../recordings/README.md)
 and combined listener are implemented, preserving original auth/DTOs and three
-journals. Flutter and RN clients are relocated; Web/backend retain existing paths and
-integrated Kotlin/Swift clients are not implemented.
+journals. Flutter and RN clients are relocated; Web/backend retain existing paths.
+Small native Kotlin/Swift cloud readers also use the existing Bearer adapter,
+limited to the first recording page and existing transcript/general notes.
 The recording experience connects
 audio input → library → supported playback/source review → transcript → general
 notes → recording-scoped Ask. Use familiar mobile navigation, normal native SDK

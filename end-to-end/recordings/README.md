@@ -32,11 +32,20 @@ for the integrated architecture and remaining phases.
 
 ## Run a client
 
-| Client                   | Current setup                               | Scope                                                                                               |
-| ------------------------ | ------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| Flutter Android/iOS      | [Flutter README](clients/flutter/README.md) | Ordinary import/WAV playback, local sample or live library and AI views; optional connection/status |
-| React web                | [Web README](../web-reference/README.md)    | Existing compatibility root; audio import, ordinary-import WAV playback and cloud recording views   |
-| React Native Android/iOS | [RN README](clients/react-native/README.md) | Ordinary import/WAV playback and cloud recording views; encrypted device sync stays Android-only    |
+| Client                   | Current setup                                     | Scope                                                                                                     |
+| ------------------------ | ------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| Flutter Android/iOS      | [Flutter README](clients/flutter/README.md)       | Ordinary import/WAV playback, local sample or live library and AI views; optional connection/status       |
+| React web                | [Web README](../web-reference/README.md)          | Audio import, ordinary-import WAV playback and cloud recording views; optional Chromium connection/status |
+| React Native Android/iOS | [RN README](clients/react-native/README.md)       | Ordinary import/WAV playback and cloud recording views; encrypted device sync stays Android-only          |
+| Kotlin Android           | [Kotlin README](clients/android-kotlin/README.md) | Small native sample/live cloud reader: library, transcript and existing general notes                     |
+| Swift iOS/macOS          | [Swift README](clients/apple-swift/README.md)     | Small SwiftUI sample/live cloud reader: library, transcript and existing general notes                    |
+
+The Kotlin and Swift clients use the existing mobile Bearer adapter and the
+[native read contract](contracts/native-library-read.md). They fetch only the
+first page of up to 20 recordings and say when more exist. They perform no
+upload, playback, processing writes, Ask or SDK work. Copy their native HTTP,
+validation and lifecycle files together; no cross-language client framework or
+new backend is required. SDK-only device starters remain linked from their READMEs.
 
 Each client retains its own manifest, lock and native identity. Old
 [Flutter](../react-native-recording-sync/flutter/README.md) and

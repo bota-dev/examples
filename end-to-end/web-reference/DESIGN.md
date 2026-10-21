@@ -8,10 +8,12 @@ web client of the integrated **Bota Recordings** foundation: one shared customer
 backend, platform clients and copyable features. Client targets include React
 web, RN, Flutter, native Android/Kotlin and Apple/Swift. The
 [combined backend](../recordings/README.md) now composes the existing Web/mobile
-factories on one listener with original journals/auth/DTOs retained. Integrated
+factories on one listener with original journals/auth/DTOs retained.
 Complete [Flutter](../recordings/clients/flutter/README.md) and
 [RN](../recordings/clients/react-native/README.md) clients are relocated under
-`recordings/clients/`. Web/backend paths stay; integrated Kotlin/Swift recording clients are not built.
+`recordings/clients/`, alongside small Kotlin/Swift cloud readers using the same
+Bearer backend. Web/backend paths stay. Native readers show only the first
+recording page and existing transcript/notes; full feature parity is not implied.
 
 The recording experience is audio input → library → supported playback/source
 review → transcript → general notes → recording-scoped Ask. Use normal platform

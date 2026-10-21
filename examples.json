@@ -990,7 +990,7 @@
       "id": "web-reference",
       "path": "end-to-end/web-reference",
       "title": "Bota Recordings web sample",
-      "purpose": "Common recording app template: React + Node, audio import/playback, Transcript/Summary/Ask and webhook/recovery recipes; API-only",
+      "purpose": "Common React + Node recording app: import/playback, Transcript/Summary/Ask, webhook/recovery and optional Chromium device connection/status",
       "category": "end-to-end",
       "language": "TypeScript / JavaScript",
       "physical_device_required": false,
@@ -1004,14 +1004,14 @@
       "id": "recordings",
       "path": "end-to-end/recordings",
       "title": "Integrated Recordings sample",
-      "purpose": "Combined Node backend with retained auth/journals and relocated RN/Flutter Android clients; Web/backend compatibility paths remain",
+      "purpose": "Shared Node backend, RN/Flutter recording apps and small Kotlin/Swift cloud readers; retained auth/journals and Web/backend compatibility paths",
       "category": "end-to-end",
-      "language": "JavaScript / TypeScript / Dart",
+      "language": "JavaScript / TypeScript / Dart / Kotlin / Swift",
       "physical_device_required": false,
       "readme": "end-to-end/recordings/README.md",
       "setup_reference": "end-to-end/recordings/README.md",
       "verification_reference": "end-to-end/recordings/README.md",
-      "platform": "React Native and Flutter Android / Web compatibility adapter",
+      "platform": "Android / iOS / macOS / Web compatibility adapter",
       "workflow": ".github/workflows/recordings-backend.yml"
     }
   ]

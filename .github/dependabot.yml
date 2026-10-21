@@ -4,6 +4,10 @@
 version: 2
 
 updates:
+  - package-ecosystem: gradle
+    directory: /end-to-end/recordings/clients/android-kotlin
+    schedule:
+      interval: weekly
   - package-ecosystem: npm
     directory: /end-to-end/recordings
     schedule:

@@ -52,9 +52,9 @@ end-to-end/recordings/
 Each client has its own language, package manager, normal UI, permissions and SDK
 lifecycle. It builds independently and declares only its implemented and
 qualified capabilities. A connection/status module can run without the backend
-or a complete recording UI. Native Kotlin and Swift clients begin with the
-smallest useful public-SDK host; cloud features can be added where they teach a
-useful integration. Identical UI and full feature parity are not requirements.
+or a complete recording UI. Native Kotlin and Swift provide separate small
+public-SDK hosts and cloud readers, each with an explicit supported surface.
+Identical UI and full feature parity are not requirements.
 
 Developers can run a client, inspect one feature or copy a bounded workflow
 without adopting the entire app. Put direct public calls in plain feature files,
@@ -135,13 +135,15 @@ production account product or forced cross-platform consumer-app parity is neede
 | --- | --- | --- |
 | API workflows | Node/Python workflow recipes and an extended inventory | Curated entry points, clearer copy boundaries and consistent evidence remain ongoing work |
 | SDK starters | RN/Flutter Android/iOS connection; Kotlin Android; Swift iOS/macOS connection and metadata catalog; desktop Chromium connection | Host/build evidence and physical qualification remain separate; workflow coverage varies |
-| React web reference | Audio import, authorized ordinary-import WAV playback, library, Transcript/Summary/Ask, synthetic mode and configured API path | Device/encrypted playback is unavailable; web is API-only |
+| React web reference | Audio import, authorized ordinary-import WAV playback, library, Transcript/Summary/Ask, synthetic mode and optional SDK connection/status | Device/encrypted playback and capture/transfer are unavailable; Bluetooth requires supported desktop Chromium |
 | RN/Flutter references | Android/iOS hosts under `recordings/clients/`; ordinary file import/playback, cloud library/results/Ask and sample mode; optional Android RN encrypted-v2 sync or Flutter connection/status | iOS cloud support supplies no Kotlin upload host; Flutter does not expose the selected encrypted-sync facade contract; native/media/physical evidence remains scoped |
+| Kotlin/Swift cloud readers | Native Android and SwiftUI iOS/macOS sample/live library, transcript and existing general notes through the shared Bearer backend | First page only; no import, playback, processing writes, Ask or device SDK dependency |
 | Combined backend | One listener composes Web/mobile service factories, shared recording/upload/playback/processing/Ask features and retained journals | Auth/store/Web files retain existing paths; external writers and atomic file races are not coordinated |
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
 Keep SDK capability, implemented host and verification as separate facts.
-All ten device SDK install roots use exact public beta.19. Legacy `apps/` retains
+Ten existing device SDK roots use exact public beta.19; the optional Web app
+integration uses exact public beta.20. Legacy `apps/` retains
 compatibility code with its local-only authentication/provisioning limits.
 The [SDK adoption review](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
 separates package/build checks from physical acceptance and generated-JS migration.
