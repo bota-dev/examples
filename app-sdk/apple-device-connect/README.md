@@ -90,6 +90,12 @@ new synthetic Swift tests or compile either Apple host. The
 results and physical iOS/macOS Bluetooth behavior must be recorded separately;
 the historical beta.18 builds below do not qualify this source or beta.19.
 
+Hosted source `fafbfe4` passes SwiftPM resolution, synthetic Swift tests, the
+macOS app build and unsigned iOS simulator/device builds in
+[CI](https://github.com/bota-dev/examples/actions/runs/39512379550/job/118936300796).
+Physical Bluetooth behavior remains unverified; see the
+[current implementation review](../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md).
+
 ## Historical beta.18 adoption — 2026-10-14
 
 The exact public SwiftPM tag peels to

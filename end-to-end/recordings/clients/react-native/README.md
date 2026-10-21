@@ -14,15 +14,16 @@ The cloud library, ordinary file import, playback and result screens target
 **Android and iOS**. **Device encrypted-v2 sync remains Android only**: its local
 Kotlin host is never loaded or offered by the iOS UI. The public npm package and
 native Maven host both pin SDK **2.0.0-beta.19**. Existing native adapter,
-journals and dependency guards are retained. Native iOS builds and actual media
-decoding need separate macOS/device qualification; a Metro export is source evidence.
+journals and dependency guards are retained. Android/iOS native builds pass in
+the hosted checks below; actual media decoding needs separate device qualification.
 
 This package update uses the public `BotaClient` / `BotaDeviceSDK`
 native-workflow compatibility entry. It does not migrate to the generated
 JavaScript `/runtime` entry or its OS ports. The native material registry,
 backend origin, capture journals and SDK receipt/cleanup authority stay intact.
-See the [published SDK adoption review](../../../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
-for current qualification; earlier device/build results remain historical.
+See the [current iOS/mobile review](../../../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+for qualification. The [beta.18 adoption review](../../../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
+and earlier device/build results remain historical.
 
 ## Run the sample
 
@@ -279,12 +280,17 @@ The normal iOS prebuild command refuses Windows; native generation/build must
 run on a supported macOS host. Installed UI, audio decoding and fresh physical
 encrypted-v2 acceptance remain separate gates.
 
+At source `a10743d`, [hosted CI](https://github.com/bota-dev/examples/actions/runs/39517257471)
+passes both backend OSes, the Android upload-adapter tests/APK and the iOS cold
+optimized export, public Pod resolution and unsigned simulator application build.
+These checks establish build integration, not real-phone media or device acceptance.
+
 | Design requirement | Implementation and source evidence | Status |
 | --- | --- | --- |
-| Native clients over one customer backend | Android/iOS cloud screens and fixed Bearer import/audio routes; Android-only device entry/module | Matched in source; native iOS build separate |
+| Native clients over one customer backend | Android/iOS cloud screens and fixed Bearer import/audio routes; Android-only device entry/module | Matched in source and Android/iOS builds; physical behavior unverified |
 | No replay of uncertain writes | Upload intent lock before POST, known-operation GET, exact complete operation and fresh verified recording before another import | Matched in synthetic controller/adapter tests |
 | Account/selection lifecycle and local media | Public loaded/error/deadline gate, late results fenced, sequential replacement player admission, joined sign-out, immediate pause and private-cache/native shared-object release | Matched in synthetic tests; OS media behavior unverified |
-| Public packages and dependency guards | Exact SDK beta.19 npm/Maven and Expo 57 media pins, normal frozen install, all existing mandatory chains | Matched locally; hosted checks separate |
+| Public packages and dependency guards | Exact SDK beta.19 npm/Maven and Expo 57 media pins, normal frozen install, all existing mandatory chains | Matched in local and hosted checks |
 | Encrypted device recording acceptance | Retained Android SDK receipt authority and journals; no iOS encrypted host | Unverified; ordinary imports do not qualify it |
 
 The [relocation review](../../../../docs/design-reviews/2026-10-12-react-native-client-move.md)

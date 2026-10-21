@@ -8,8 +8,8 @@ clients in Bota Recordings. The UI uses normal Flutter Material navigation and a
 small Sample/Live label; API recipes live in this README and source.
 
 **Included hosts:** Android 8+ (API 26), compile SDK 37, and normal Flutter iOS
-15+ Runner (`dev.bota.examples.mobileRecordingsFlutter`). iOS native linking and
-physical behavior need separate macOS/device evidence. Desktop/browser hosts
+15+ Runner (`dev.bota.examples.mobileRecordingsFlutter`). Hosted Android/iOS
+build evidence is recorded below; physical behavior remains unverified. Desktop/browser hosts
 are not included. This is a development template, not a production authentication system.
 
 ## Try it
@@ -187,8 +187,11 @@ license-gate regressions pass on Flutter 3.47.5/Windows. These cover 15 actual
 loopback HTTP cases, 15 existing recording controller cases, 13 media-port cases,
 13 device lifecycle/admission cases and five UI widgets. Android debug assembly passes
 through the normal Gradle host with JDK 17 and the installed SDK/NDK/CMake above.
-Native decoder output, real
-picker behavior, macOS/iOS linking and physical-device behavior remain separate.
+At source `a10743d`, [hosted CI](https://github.com/bota-dev/examples/actions/runs/39517257471)
+passes Android APK assembly and unsigned iOS simulator/device builds, with frozen
+installation, analysis, tests and license gates. Native decoder output, real
+picker behavior and physical-device behavior remain separate; see the
+[current review](../../../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md).
 
 Local qualification on October 12, 2026: frozen pub install, formatting,
 analysis and **38 tests** pass (9 HTTP, 15 controller, 10 device lifecycle,
