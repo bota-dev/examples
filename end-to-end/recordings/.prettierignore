@@ -3,3 +3,5 @@ package-lock.json
 # Platform clients are independent install roots with their own checks.
 clients/flutter/**
 clients/react-native/**
+clients/android-kotlin/**
+clients/apple-swift/**

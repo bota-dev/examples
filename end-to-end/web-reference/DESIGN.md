@@ -32,13 +32,13 @@ credential/input boundaries and the absence of external-writer guarantees.
 
 ## Implemented subset and target
 
-| Capability          | Current web implementation                                                                                                      |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------- |
-| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                                              |
-| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                                          |
-| Playback            | Explicitly load an authorized ordinary import as WAV, then use native audio controls. Device/encrypted sources are unavailable. |
-| Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template.                           |
-| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.                                   |
+| Capability          | Current web implementation                                                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                                                 |
+| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                                             |
+| Playback            | Explicitly load an authorized ordinary import as WAV, then use native audio controls. Device/encrypted sources are unavailable.    |
+| Device SDK          | Optional public Web SDK exact-serial connection, current status and disconnect. No pairing proof, catalog, capture or device sync. |
+| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.                                      |
 
 The [root roadmap](../../ROADMAP.md) owns the remaining integrated-sample/platform work.
 Do not describe target features as available controls or add overlapping app
@@ -97,6 +97,10 @@ withhold operation metadata as well as content.
 - **Activity** is a secondary, initially collapsed panel for saved-operation
   GET reconciliation and webhook metadata. It never resends a write or displays
   recovered answer content.
+- **Devices** is optional and initially collapsed. Prepare Bluetooth explicitly,
+  then enter the printed serial and choose Connect from a separate user gesture.
+  Status/disconnect controls do not gate recording navigation or cloud features.
+  Demo and unsupported browsers disable device actions without importing the SDK.
 
 Use white/gray surfaces, system sans-serif text, modest spacing, clear buttons,
 visible focus and useful contrast. Avoid editorial headlines or ornamental
@@ -123,11 +127,19 @@ over another overlapping implementation. No universal UI framework, wrapper SDK
 or private runtime dependency is introduced to share concrete backend logic.
 
 Use normal platform UI and published public SDK surfaces for optional device
-paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.18/frameworks/web)
+paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.20/frameworks/web)
 targets foreground desktop Chromium, a secure context and compatible device
-Identity service; API-only browser use and browser Bluetooth have different
-boundaries. The [October 14 adoption review](../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
-records the beta.18 package update separately from this API-only client.
+Identity service; cloud API use and browser Bluetooth have different boundaries.
+This app's Web SDK is pinned independently; the existing standalone starter
+retains its own qualified version. The App owns one device-session host across
+recording views and account replacement. Device identity/status clear immediately
+on observed loss, errors, sign-out, replacement or page teardown; pending creation,
+picker, read, disconnect and destruction join before another SDK owner may enter.
+Failed cleanup blocks device admission until reload. No persistence namespace is
+supplied and no SDK-owned retained state is cleared. A restored closed page must
+reload; page unloading cannot guarantee completion of asynchronous browser work.
+The public facade has no connection subscription or fresh pairing contract;
+cached-getter observation grants no ownership, upload or cleanup authority.
 Connection/catalog samples do not establish complete app parity or hardware
 acceptance. Vertical workflows and production identity/deployment remain later
 or customer-owned work, respectively.

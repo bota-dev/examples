@@ -23,8 +23,10 @@ starter. API documentation and source recipes are below; the everyday UI focuses
 on recordings and results. Activity is secondary and initially collapsed for
 explicit saved-operation refresh and notification metadata.
 
-This web implementation uses APIs only, including ordinary-import playback:
-no device SDK, microphone capture or device-audio decryption. No device, private package or sibling repository is needed.
+Cloud recording features use the APIs, including ordinary-import playback.
+An optional public Web SDK feature connects a wearable and reads its current
+status. No device, private package or sibling repository is needed for recording
+features. Microphone capture, device transfer and device-audio decryption are unavailable.
 Independent API snippets and platform-specific App SDK examples remain useful
 for smaller tasks. The common app journey is the direction for mobile-to-web
 templates; current connection/catalog snippets do not implement that full journey.
@@ -50,6 +52,7 @@ Uploading and processing
 are separate actions. The demo simulates the upstream API in-process, makes no
 external requests and resets on restart. Its outputs and notifications are
 synthetic; they prove no transcription, upload or model-provider acceptance.
+Devices is disabled in this mode; it imports no SDK and opens no Bluetooth picker.
 
 Use that exact origin: `localhost` and `127.0.0.1` are different browser origins.
 The server binds loopback. Change `PORT` and `APP_ORIGIN` together if necessary.
@@ -58,15 +61,16 @@ or select an unused port before running again.
 
 ## Pick a recipe
 
-| Feature                       | Public calls                                                                                                            | Backend sample                                                  | Frontend sample                                             |
-| ----------------------------- | ----------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- | ----------------------------------------------------------- |
-| List/read recordings          | `GET /v1/recordings`, `GET /v1/recordings/{id}`                                                                         | [recordings.mjs](../recordings/backend/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx)    |
-| Upload audio                  | `POST /v1/recordings`, `POST /v1/recordings/{id}/upload-url`, storage `PUT`, `POST /v1/recordings/{id}/upload-complete` | [upload.mjs](server/features/upload.mjs)                        | [Upload.tsx](web/features/uploads/Upload.tsx)               |
-| Play an ordinary import       | `GET /v1/recordings/{id}`, `GET /v1/recordings/{id}/download-url?format=wav&use_enhanced=false`, storage `GET`          | [playback.mjs](server/features/playback.mjs)                    | [AudioPlayer.tsx](web/features/playback/AudioPlayer.tsx)    |
-| Transcribe and read text      | `GET /v1/transcriptions`, `GET /v1/transcriptions/{id}`, `POST /v1/transcriptions`                                      | [processing.mjs](../recordings/backend/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx) |
-| Create/read general notes     | `GET /v1/summaries`, `GET /v1/summaries/{id}`, `POST /v1/summaries`                                                     | [processing.mjs](../recordings/backend/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx)       |
-| Ask one recording             | `POST /v1/ask/sessions`, `POST /v1/ask/sessions/{id}/messages`, scoped session/history `GET`                            | [ask.mjs](../recordings/backend/features/ask.mjs)               | [Ask.tsx](web/features/ask/Ask.tsx)                         |
-| Receive/display notifications | Bota delivers to your `POST /webhooks/bota` callback                                                                    | [webhooks.mjs](server/features/webhooks.mjs)                    | [Activity.tsx](web/features/webhooks/Activity.tsx)          |
+| Feature                       | Public calls                                                                                                                   | Backend sample                                                  | Frontend sample                                                                                                 |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| List/read recordings          | `GET /v1/recordings`, `GET /v1/recordings/{id}`                                                                                | [recordings.mjs](../recordings/backend/features/recordings.mjs) | [Recordings.tsx](web/features/recordings/Recordings.tsx)                                                        |
+| Upload audio                  | `POST /v1/recordings`, `POST /v1/recordings/{id}/upload-url`, storage `PUT`, `POST /v1/recordings/{id}/upload-complete`        | [upload.mjs](server/features/upload.mjs)                        | [Upload.tsx](web/features/uploads/Upload.tsx)                                                                   |
+| Play an ordinary import       | `GET /v1/recordings/{id}`, `GET /v1/recordings/{id}/download-url?format=wav&use_enhanced=false`, storage `GET`                 | [playback.mjs](server/features/playback.mjs)                    | [AudioPlayer.tsx](web/features/playback/AudioPlayer.tsx)                                                        |
+| Transcribe and read text      | `GET /v1/transcriptions`, `GET /v1/transcriptions/{id}`, `POST /v1/transcriptions`                                             | [processing.mjs](../recordings/backend/features/processing.mjs) | [Transcript.tsx](web/features/transcription/Transcript.tsx)                                                     |
+| Create/read general notes     | `GET /v1/summaries`, `GET /v1/summaries/{id}`, `POST /v1/summaries`                                                            | [processing.mjs](../recordings/backend/features/processing.mjs) | [Summaries.tsx](web/features/summaries/Summaries.tsx)                                                           |
+| Ask one recording             | `POST /v1/ask/sessions`, `POST /v1/ask/sessions/{id}/messages`, scoped session/history `GET`                                   | [ask.mjs](../recordings/backend/features/ask.mjs)               | [Ask.tsx](web/features/ask/Ask.tsx)                                                                             |
+| Receive/display notifications | Bota delivers to your `POST /webhooks/bota` callback                                                                           | [webhooks.mjs](server/features/webhooks.mjs)                    | [Activity.tsx](web/features/webhooks/Activity.tsx)                                                              |
+| Optional device connection    | Public `BotaDeviceClient.create()`, `devices.connect({ expectedSerialNumber })`, `readSnapshot()`, `disconnect()`, `destroy()` | None                                                            | [device-session.ts](web/features/devices/device-session.ts) and [Devices.tsx](web/features/devices/Devices.tsx) |
 
 React calls this example's authenticated `/api/*` routes. The backend files show
 the public Bota calls with fixed owner/source filters; the webhook path above is
@@ -92,6 +96,65 @@ adapter with your application's authenticated identity and server-derived
 end-user mapping. Keep the ownership checks and durable-before-write ordering.
 These modules belong to the integrated sample family; they are not a published generic API SDK
 or independently runnable standalone snippets. Never copy an API key into React.
+
+## Optional Bluetooth connection
+
+In configured live mode, open **Devices**, choose **Prepare Bluetooth**, enter
+the exact printed serial, then choose **Connect device** and select your wearable
+in the browser picker. Preparation loads the public SDK/WASM without connecting.
+Connect invokes the public chooser before any await; combining lazy import and
+the picker in one async click handler can lose browser user activation. Choose
+**Read status** explicitly for battery, state and firmware; **Disconnect device**
+retires that SDK session. Prepare again before another connection.
+
+This requires foreground desktop Chromium with Web Bluetooth on HTTPS or
+localhost and compatible Bota Identity service `0008` firmware (the browser blocks
+standard serial characteristic `2A25`). Arbitrary HTTP LAN URLs, Safari/Firefox,
+background Bluetooth and mobile-browser parity are unsupported. Demo and
+unsupported browsers leave device actions disabled. The recording library remains
+usable without preparation or a device, including while Bluetooth closes.
+
+The SDK verifies the exact serial; the feature also checks the returned serial
+and peripheral against its public cached connection before releasing status.
+There is no public fresh-pairing contract, cloud ownership check, binding,
+catalog, capture, audio transfer/upload or recording cleanup in this feature.
+Connected status never authorizes those operations. Recording navigation and
+device selection are independent; browsing another recording does not disconnect.
+
+One page-owned host spans account/recording views. Observed connection loss,
+wrong identity, SDK action error, sign-out or account/page retirement clears
+identity/status immediately. Pending preparation, chooser, read, disconnect and
+destruction join before another device owner may prepare; failed cleanup keeps
+admission closed until reload. An open browser picker may need to be dismissed.
+Public Web beta.20 has no connection subscription: a 250 ms observation reads
+only `connectedDevice`, without GATT polling. Missing SDK/OS loss callbacks or
+browser background throttling can delay clearing. Page unloading cannot await
+all asynchronous work; a page restored from back/forward cache remains closed
+to Bluetooth and requires reload. No automatic reconnection occurs.
+Only errors surfaced by public teardown can close the admission gate; awaited
+SDK cleanup is not independent proof of physical disconnection.
+
+Copy [device-session.ts](web/features/devices/device-session.ts),
+[Devices.tsx](web/features/devices/Devices.tsx), the App-owned session hooks in
+[App.tsx](web/App.tsx) and matching device styles. Replace UI/device selection,
+but preserve account/peripheral ownership and joined cleanup gates. The SDK
+receives no `storageNamespace`, so its public default has no persistent device
+hints or journals; this sample neither creates nor clears retained SDK state.
+Keep same-origin SDK/WASM assets and the server's narrow `script-src 'self'
+'wasm-unsafe-eval'` policy. JavaScript `unsafe-eval`, external script origins and
+backend routes are not required.
+
+The new integration pins **`@bota.dev/web-app-sdk@2.0.0-beta.20`**. Anonymous npm
+metadata/archive verification records MIT, 375,802 bytes and the exact registry
+SHA-512 in [dependency provenance](web/features/devices/dependency-provenance.json)
+and [package-lock.json](package-lock.json). It was published October 21 UTC and
+was the public `beta` tag at the recorded check; `latest` remains beta.0. The
+owner's latest-SDK request permits its age below seven days; unrelated dependency
+age rules remain. Only this SDK entry/pin is added. Vite stays 8.3.4 and every
+other lock field is unchanged; the fresh pre-change audit reports zero findings.
+The ten existing SDK install roots retain their independently qualified beta.19
+pins. Source, synthetic browser tests, production asset build and physical
+Bluetooth acceptance are separate evidence; no hardware session is run here.
 
 ## Playback contract
 
