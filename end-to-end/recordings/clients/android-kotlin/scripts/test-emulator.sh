@@ -12,10 +12,23 @@ export ANDROID_AVD_HOME="${RUNNER_TEMP:?RUNNER_TEMP must be a temporary director
 mkdir -p "$ANDROID_AVD_HOME" app/build/reports/runtime
 test -z "$("$ADB" -s "$SERIAL" get-state 2>/dev/null || true)"
 emulator_pid=""
+logcat_pid=""
 cleanup() {
   if [[ -n "$emulator_pid" ]]; then
+    # Preserve uncaught reactor/linkage crashes before the isolated emulator is
+    # destroyed. Test reports alone cannot describe a process-level Android crash.
+    timeout 15 "$ADB" -s "$SERIAL" logcat -b crash -d -v threadtime \
+      >app/build/reports/runtime/logcat-crash.txt 2>&1 || true
+    timeout 15 "$ADB" -s "$SERIAL" logcat -b all -d -v threadtime \
+      >app/build/reports/runtime/logcat-final.txt 2>&1 || true
+    if [[ -n "$logcat_pid" ]]; then
+      kill "$logcat_pid" 2>/dev/null || true
+      wait "$logcat_pid" 2>/dev/null || true
+      logcat_pid=""
+    fi
     "$ADB" -s "$SERIAL" emu kill >/dev/null 2>&1 || true
     wait "$emulator_pid" 2>/dev/null || true
+    emulator_pid=""
   fi
   "$AVDMANAGER" delete avd --name "$NAME" >/dev/null 2>&1 || true
 }
@@ -33,6 +46,9 @@ for _ in $(seq 1 180); do
 done
 [[ "$booted" == true ]]
 "$ADB" -s "$SERIAL" shell getprop ro.build.version.sdk | tr -d '\r' | grep -qx 29
+"$ADB" -s "$SERIAL" logcat -b all -v threadtime \
+  >app/build/reports/runtime/logcat-live.txt 2>&1 &
+logcat_pid=$!
 "$ADB" -s "$SERIAL" install -r app/build/outputs/apk/debug/app-debug.apk
 "$ADB" -s "$SERIAL" install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
 "$ADB" -s "$SERIAL" shell am instrument -w \
