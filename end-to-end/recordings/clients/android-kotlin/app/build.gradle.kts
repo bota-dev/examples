@@ -127,4 +127,3 @@ tasks.register("checkDependencyLicenses") {
         println("No forbidden licenses: ${records.size} app/test modules, ${checked.size} resolved binary identities verified.")
     }
 }
-

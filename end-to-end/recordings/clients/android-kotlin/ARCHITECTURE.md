@@ -40,4 +40,3 @@ reader, sole reactor worker and deadline executor. Credential revocation remains
 immediate and channel disposal/join happen off the UI dispatcher. HttpCore5.4.4's
 zero-wait single-worker join behavior is pinned and covered by a gated real-reactor
 regression; changing this dependency requires reviewing that implementation again.
-

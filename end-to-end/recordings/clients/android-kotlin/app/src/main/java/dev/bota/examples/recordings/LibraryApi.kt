@@ -245,5 +245,3 @@ class LiveLibrary private constructor(
     override fun revoke() { revoked.set(true); token.set(""); active.get()?.cancel() }
     override fun close() { revoke(); check(!cleanupFailed.get()) { "Network cleanup incomplete" } }
 }
-
-

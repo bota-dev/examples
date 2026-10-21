@@ -21,4 +21,3 @@ license and unmodified HttpCore NOTICE also ship in
 `app/src/main/assets/third-party/`. The gate checks actual bundled license/notice
 identities and refuses nested archives or public-suffix data. POM labels alone
 are insufficient. No OkHttp/PSL or Ktor dependency is shipped.
-
