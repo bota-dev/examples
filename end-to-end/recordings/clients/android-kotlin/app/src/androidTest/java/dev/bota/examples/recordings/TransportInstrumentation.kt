@@ -13,6 +13,7 @@ class TransportInstrumentation : Instrumentation() {
             "defaultTlsChecks" to TlsChecks::verifyDefaultTrustAndEndpointChecks,
             "cancellationJoinsActualReader" to RuntimeChecks::cancellationJoinsActualReader,
             "cancellationWaitsForRealReactorCallback" to RuntimeChecks::cancellationWaitsForRealReactorCallback,
+            "httpMessageLimits" to RuntimeChecks::httpMessageLimitsRejectOversizedHeadsAndTrailers,
         )
         var completed = 0
         try {

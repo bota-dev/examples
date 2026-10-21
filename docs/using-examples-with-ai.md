@@ -188,5 +188,6 @@ capabilities; report exact checks and deferred live/hardware acceptance.
 The two independent RN roots keep their public SDK/Expo/device contracts and
 ordinary install/test chains. Read [public Metro matching removal and delivery
 limits](metro-public-matching-removal.md) before changing their parent artifacts,
-overrides or zero-braces asset guard. Legacy root retains its separate braces
-parser guard and source/scanner limits.
+overrides or zero-braces asset guard. The legacy root uses its separate
+[public-parent matching and absence verification](legacy-public-parent-matching-removal.md)
+and source/scanner limits.

@@ -6,4 +6,5 @@ class RuntimeTest {
     @Test fun authenticatedGetDoesNotReplayAfterEarlyEof() = RuntimeChecks.authenticatedGetAndNoRetry()
     @Test fun revokeJoinsActualReader() = RuntimeChecks.cancellationJoinsActualReader()
     @Test fun cancelledResultDoesNotReleaseBlockedReactor() = RuntimeChecks.cancellationWaitsForRealReactorCallback()
+    @Test fun responseHeadAndTrailerParsingIsBounded() = RuntimeChecks.httpMessageLimitsRejectOversizedHeadsAndTrailers()
 }

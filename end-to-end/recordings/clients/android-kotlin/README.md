@@ -96,10 +96,24 @@ For ordinary upload/playback or processing actions, consult
 
 Live uses exact HTTP 200 GET responses, a 30-second cancellation deadline and a
 2 MiB streamed JSON byte cap, including chunked responses. Apache HttpCore
-**5.4.4** provides the ordinary HTTP/1.1 requester and unchanged system TLS trust
+**5.3.6** provides the ordinary HTTP/1.1 requester and unchanged system TLS trust
 and HTTPS endpoint verification. This root requires API 29 because its default
 TLS path uses `SSLEngine.getApplicationProtocol`. The independent device SDK
 starters still support API 26; they have different runtime requirements.
+
+The 5.3.6 pin avoids 5.4.4's unconditional JDK-specific socket setup,
+which calls `jdk.net.Sockets.supportedOptions`, unavailable on Android 29. Keep the 5.3.6 default
+extended-keepalive tunables unchanged. Upgrades need actual Android runtime checks
+as well as JVM tests and an APK build.
+
+HttpCore5.3.6 remains within the affected artifact range for
+[CVE-2026-54399](https://github.com/advisories/GHSA-hf6x-8p5f-cgmf).
+This requester supplies explicit `Http1Config` limits of 100 headers and 8192
+bytes per line, matching [Apache's finite-defaults fix](https://github.com/apache/httpcomponents-core/commit/d96a00f).
+The same configuration bounds response headers, folded-line accumulation and
+chunked trailers, including unfinished lines. Preserve it when copying the code.
+This mitigates that issue on this configured HTTP/1 path; the upstream artifact
+is not patched, and no advisory suppression or scanner-closure claim is made.
 
 There are no redirect, HTTP-auth follow-up, automatic retry, content-decoding,
 cookie or cache layers. A host-global `CookieHandler` is not consulted. Content
@@ -117,7 +131,7 @@ uninterruptible platform DNS lookup or final cleanup can delay error reporting
 and retirement beyond it. Replacement stays blocked until actual work finishes.
 Cleanup failure refuses new sessions until process restart. Never replace this
 join with a cancelled-Future or `SHUT_DOWN` status check. The zero-wait single-worker
-join relies on the reviewed exact 5.4.4 public implementation; re-review it on
+join relies on the reviewed exact 5.3.6 public implementation; re-review it on
 upgrade. Public test keys in `app/src/sharedTest/resources/tls` are synthetic and
 are excluded from application APKs.
 
@@ -138,9 +152,10 @@ the checks without that flag. Never refresh locks to hide an unexplained change.
 
 The [owning workflow](../../../../.github/workflows/android-recordings.yml) runs
 JVM tests with local synthetic HTTP/TLS, Android lint, license verification and a
-Debug APK/test-host build. Its separate API 29 emulator job runs four actual
+Debug APK/test-host build. Its separate API 29 emulator job runs five actual
 HTTP/TLS/cancellation checks, including invalid DNS/IP peers and an untrusted
-chain, with a gated real reactor callback proving cancellation joins work.
+chain, oversized headers/trailers and a gated real reactor callback proving
+cancellation joins work.
 JVM tests also qualify cookie/redirect refusal, response/deadline bounds, DTO/source
 validation, late results, sign-out and Sample isolation. Run the hosted emulator
 lane with `bash scripts/test-emulator.sh` only in a prepared temporary SDK/AVD

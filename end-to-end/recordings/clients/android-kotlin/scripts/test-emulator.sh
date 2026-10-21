@@ -54,6 +54,6 @@ logcat_pid=$!
 "$ADB" -s "$SERIAL" shell am instrument -w \
   dev.bota.examples.recordings.kotlin.test/dev.bota.examples.recordings.TransportInstrumentation \
   | tee app/build/reports/runtime/instrumentation.txt
-grep -q 'OK (4 tests)' app/build/reports/runtime/instrumentation.txt
+grep -q 'OK (5 tests)' app/build/reports/runtime/instrumentation.txt
 grep -q 'INSTRUMENTATION_CODE: -1' app/build/reports/runtime/instrumentation.txt
 ! grep -q 'INSTRUMENTATION_FAILED\|INSTRUMENTATION_STATUS_CODE: -2' app/build/reports/runtime/instrumentation.txt

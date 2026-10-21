@@ -1,5 +1,5 @@
 Application runtime dependencies:
-Apache HttpComponents Core HTTP/1.1 5.4.4 (Apache Software Foundation).
+Apache HttpComponents Core HTTP/1.1 5.3.6 (Apache Software Foundation).
 Kotlin standard library 2.1.20, kotlinx.coroutines 1.10.2 and
 kotlinx.serialization 1.8.1 (JetBrains).
 JetBrains Java annotations 23.0.0.

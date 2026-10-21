@@ -37,6 +37,10 @@ TLS uses the unchanged system trust and HTTPS endpoint-identification defaults.
 The thirty-second deadline seals admission and requests cancellation. Platform
 DNS and final retirement can take longer; source replacement joins the actual
 reader, sole reactor worker and deadline executor. Credential revocation remains
-immediate and channel disposal/join happen off the UI dispatcher. HttpCore5.4.4's
+immediate and channel disposal/join happen off the UI dispatcher. HttpCore5.3.6's
 zero-wait single-worker join behavior is pinned and covered by a gated real-reactor
 regression; changing this dependency requires reviewing that implementation again.
+Explicit `Http1Config` limits (100 fields, 8192 bytes per line) propagate to the
+response-head parser, its input buffer and chunked-trailer parser. These bounds
+mitigate the unbounded-defaults issue on this HTTP/1 path; the 5.3.6 vendor artifact
+remains in CVE-2026-54399's affected range. See README for source and acceptance.

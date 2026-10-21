@@ -12,6 +12,7 @@ import org.apache.hc.core5.concurrent.FutureCallback
 import org.apache.hc.core5.http.EntityDetails
 import org.apache.hc.core5.http.Header
 import org.apache.hc.core5.http.HttpResponse
+import org.apache.hc.core5.http.config.Http1Config
 import org.apache.hc.core5.http.impl.bootstrap.AsyncRequesterBootstrap
 import org.apache.hc.core5.http.impl.bootstrap.HttpAsyncRequester
 import org.apache.hc.core5.http.message.BasicHttpRequest
@@ -96,6 +97,9 @@ class LiveLibrary private constructor(
         // visible. HttpCore has no redirect, retry, cookie, authentication or cache layer.
         // Keep its system trust and HTTPS endpoint-identification defaults unchanged.
         val engine = AsyncRequesterBootstrap.bootstrap()
+            // Explicit finite HTTP/1 head/trailer limits match Apache's defaults
+            // fix for CVE-2026-54399. Preserve them when copying this requester.
+            .setHttp1Config(Http1Config.custom().setMaxHeaderCount(100).setMaxLineLength(8192).build())
             .setIOReactorConfig(IOReactorConfig.custom().setIoThreadCount(1)
                 .setSoTimeout(Timeout.ofMilliseconds(deadlineMillis)).build())
             .setDefaultMaxPerRoute(1).setMaxTotal(1)
@@ -185,7 +189,7 @@ class LiveLibrary private constructor(
         try {
             // With one reactor worker, after immediate close marks it SHUT_DOWN,
             // a zero wait invokes Thread.join(0): it joins that sole worker fully.
-            // This behavior is pinned/reviewed in HttpCore5 5.4.4 MultiCoreIOReactor.
+            // This behavior is pinned/reviewed in HttpCore5 5.3.6 MultiCoreIOReactor.
             while (true) {
                 try { engine.awaitShutdown(TimeValue.ZERO_MILLISECONDS); break }
                 catch (_: InterruptedException) { interrupted = true }

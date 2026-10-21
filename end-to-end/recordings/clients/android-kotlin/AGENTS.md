@@ -11,7 +11,8 @@
 - Follow the root [AGENTS](../../../../AGENTS.md), [design](../../../../DESIGN.md) and [native read contract](../../contracts/native-library-read.md).
 - Sample stays synthetic, credential-free and network-free. Live is GET-only through the existing authenticated customer backend; keep tokens only in memory.
 - Preserve exact DTO/source checks, joined worker/body cancellation, background sign-out and failed-cleanup refusal. Do not add SDK/device/audio/writes to this read slice.
-- HttpCore5.4.4's one-worker zero-wait shutdown joins the real reactor worker. Re-review that source on upgrade; keep system TLS defaults and cancellation off the UI dispatcher.
+- HttpCore5.3.6's one-worker zero-wait shutdown joins the real reactor worker. Re-review that source on upgrade; keep system TLS defaults and cancellation off the UI dispatcher.
+- Preserve explicit HTTP/1 limits of 100 headers and 8192 bytes per line for response heads/trailers; this supported configuration mitigates CVE-2026-54399 on the app path while the 5.3.6 artifact identity remains affected.
 - Update README and architecture when their actual contracts change; keep source/native/live evidence separate.
 
 ## Commit attribution
