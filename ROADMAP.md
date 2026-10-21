@@ -13,6 +13,9 @@ The [October 20 iOS/mobile pass](docs/design-reviews/2026-10-20-ios-mobile-recor
 adds the Swift/Flutter iOS hosts, RN cloud iOS support and ordinary mobile media;
 its four touched SDK roots use public beta.19. Native and physical evidence stay
 specific to the recorded source and platform.
+The [SDK/catalog follow-up](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
+aligns the remaining six SDK roots to beta.19 and adds the shared Swift metadata
+catalog's iOS host. No recording transfer or new device acceptance is implied.
 
 ## 1. Consolidate the existing backend features compatibly
 
@@ -94,6 +97,8 @@ root install or universal example framework is required.
 both Flutter roots now have iOS hosts, and the RN recording app has a cloud-only
 iOS host. Each has an unsigned hosted build gate. These additions do not supply
 an iOS implementation of the custom Android encrypted-upload adapter.
+The Swift metadata catalog also shares its feature across iOS/macOS, with fresh
+pairing before listing and no audio transfer or recording cleanup.
 
 Kotlin, Swift, React Native, Flutter and Web examples have equal importance.
 Complete small supported host/workflow paths; prioritize missing Swift iOS and
@@ -165,7 +170,7 @@ not implement or approve a particular vertical app.
 ## Delivery rules
 
 Preserve existing launch paths, catalog identities, locks and exact SDK pins
-outside explicitly qualified changes, such as the four beta.19 consumers above.
+outside explicitly qualified changes. All ten SDK install roots now pin beta.19.
 The implemented core adds its own catalog entry and frozen dev-tool lock.
 Further consolidation or moves require compatible links,
 catalog/workflow updates and preserved state; legacy retirement retains its

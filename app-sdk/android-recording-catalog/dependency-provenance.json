@@ -1,0 +1,34 @@
+{
+  "checked_on": "2026-10-20",
+  "coordinate": "dev.bota:bota-app-sdk:2.0.0-beta.19",
+  "registry_latest": "2.0.0-beta.19",
+  "registry_metadata_last_updated": "20261016024849",
+  "source_tag": "v2.0.0-beta.19",
+  "source_commit": "7a4ff0093629c030416f80113c585e10d0177e68",
+  "repository": "https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.19/",
+  "sha256": {
+    "aar": "602abae1051673ef21d24adced5e393a0033d612e0e01b6d0cfbcff5ba3dd31d",
+    "pom": "18bbfe7cd7ef06d81137ae8c646986b69adaa277e0d5ef414b12a8f95e8b3880",
+    "module": "bd484b3d4dd596d5c6a371ea6246b3989d8960a16dfa773edff76446e9f4530e"
+  },
+  "checksum_verification": "Downloaded anonymous public Central AAR/POM/module bytes match each published SHA-256 sidecar.",
+  "license": {
+    "pom": "MIT License",
+    "release_tag_license": "https://raw.githubusercontent.com/bota-dev/app-sdk/v2.0.0-beta.19/LICENSE",
+    "release_tag_license_text": "MIT License, Copyright (c) 2026 Bota",
+    "scope": "Direct SDK metadata/release license only; no recursive native or transitive license audit."
+  },
+  "detached_signatures": {
+    "artifacts": [
+      "aar",
+      "pom",
+      "module"
+    ],
+    "result": "Cryptographically valid GOODSIG and VALIDSIG from GnuPG using a task-isolated keyring.",
+    "fingerprint": "E8DF58D6CF224597DF0FF95CC127165AB45FBB93",
+    "public_key_source": "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xE8DF58D6CF224597DF0FF95CC127165AB45FBB93",
+    "signer_trust": "Independent certification of the signing-key owner is unverified; validity does not establish owner trust."
+  },
+  "adoption_scope": "Exact public Bota SDK replacement requested by owner. Application source, identities, non-Bota dependencies and device scope remain unchanged.",
+  "acceptance_limits": "No phone/device/cloud activity. Package/build qualification does not establish physical or encrypted-upload-v2 acceptance."
+}

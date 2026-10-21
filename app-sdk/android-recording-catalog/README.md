@@ -1,7 +1,7 @@
 # List device recording metadata with Kotlin
 
 An independent Android example using public Maven Central
-`dev.bota:bota-app-sdk:2.0.0-beta.18` (beta). Discover an already-provisioned
+`dev.bota:bota-app-sdk:2.0.0-beta.19` (beta). Discover an already-provisioned
 device, verify its exact serial through the SDK, read status, and list pending
 recording metadata. Optional read-only connection settings and bounded firmware
 log observations help diagnose the same device. No backend or API key is required.
@@ -11,7 +11,28 @@ resets, or starts/stops recording. The SDK sends catalog-request protocol messag
 to retrieve metadata; “read-only” means no recording/data mutation, not zero BLE
 writes. Catalog data is shown in memory and is not saved or logged by the app.
 
-## Current beta.18 adoption — 2026-10-14
+## Current beta.19 adoption — 2026-10-20
+
+The exact public Maven pin and targeted Gradle lock update select beta.19 at SDK
+tag `v2.0.0-beta.19` / source `7a4ff0093629c030416f80113c585e10d0177e68`.
+Only the Bota dependency-lock coordinate changes. Application/controller source,
+native identity, fresh pairing-state gate, metadata-only scope and all non-Bota
+locked dependencies remain unchanged.
+
+[Public package provenance](dependency-provenance.json) records the anonymously
+downloaded AAR, POM and Gradle-module hashes, matched against Maven Central
+SHA-256 sidecars. The POM and exact release-tag license identify MIT. Detached
+signatures for all three files are cryptographically valid in an isolated
+verification keyring; independent trust in the signing-key owner remains
+unverified. This is direct SDK provenance, not a recursive license audit.
+
+All 16 existing JVM cases, public resolution/Kotlin compilation and Android debug
+APK assembly pass locally on JDK 17 / Android SDK 36. A separate offline
+frozen-lock build preserves the exact resolution. Hosted checks and physical
+behavior need their own evidence. This update performs no device/cloud actions
+and establishes no encrypted-upload-v2 transfer or receipt/cleanup acceptance.
+
+## Historical beta.18 adoption — 2026-10-14
 
 The exact public Maven pin and regenerated lock select beta.18. Only the Bota
 lock entry changes; application/controller source and non-SDK packages remain.
@@ -214,4 +235,4 @@ background operation and interrupted audio transfers are not covered.
 The shared compound-engineering review uses the repository's
 [architecture](../../ARCHITECTURE.md) §§2–6. See the
 [SDK reference](https://docs.bota.dev/api-reference/client-sdks) and
-[public Android package](https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.18/).
+[public Android package](https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.19/).

@@ -12,8 +12,12 @@ Exact registry versions, publication dates, archive integrity and licenses are
 recorded in the [RN provenance](end-to-end/recordings/clients/react-native/media-dependencies.json)
 and [Flutter provenance](end-to-end/recordings/clients/flutter/dependency-provenance.json).
 Frozen installs retain the existing signing, Metro, source-map and license gates.
-Four touched SDK roots use owner-requested public beta.19; six other roots keep
-beta.18. Native builds and actual decoder behavior remain separate evidence.
+All ten SDK install roots now use owner-requested public beta.19. The
+[remaining SDK adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
+records unchanged non-SDK locks and independent consumer checks. This latest-SDK
+request permits the beta.19 release younger than the usual seven-day age floor;
+it does not waive that floor for unrelated dependencies. Native builds and
+actual decoder behavior remain separate evidence.
 
 ## Scope and choice (2026-09-26)
 

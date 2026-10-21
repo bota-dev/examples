@@ -85,10 +85,10 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 
 ## Preserve the migration and copy boundary
 
-1. Inspect the selected README, source/imports, manifest and lockfile. Public
-   Four touched SDK roots use beta.19 and six retain beta.18; inspect the manifest/lock. Historical prose does
+1. Inspect the selected README, source/imports, manifest and lockfile. All ten
+   SDK install roots use exact public beta.19. Historical prose does
    not override current manifests. RN uses native compatibility factories, not
-   the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-14-beta18-sdk-adoption.md).
+   the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-20-sdk19-catalog-ios.md).
 2. Install only in documented roots with lifecycle scripts enabled. Keep native
    Expo signing integrity, braces and other mandatory guard/test chains; do not
    bypass postinstall to get a clean install.

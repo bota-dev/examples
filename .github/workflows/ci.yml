@@ -30,8 +30,12 @@ jobs:
       - run: npm test
       - run: npm run typecheck
       - run: npm run build
-      - run: npx expo export --platform all
+      - run: |
+          node -e 'const os = require("node:os"); const v8 = require("node:v8"); console.log(JSON.stringify({arch: process.arch, memoryMiB: Math.round(os.totalmem()/1048576), heapMiB: Math.round(v8.getHeapStatistics().heap_size_limit/1048576)}));'
+          npx expo export --platform all --max-workers 1
         working-directory: apps/react-native
+        env:
+          NODE_OPTIONS: --max-old-space-size=4096
 
   android:
     name: Android native example

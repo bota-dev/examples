@@ -948,14 +948,14 @@
       "id": "apple-recording-catalog",
       "path": "app-sdk/apple-recording-catalog",
       "title": "Apple recording catalog",
-      "purpose": "Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata in a macOS app",
+      "purpose": "Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata on iOS/macOS",
       "category": "app-sdk",
       "language": "Swift",
       "physical_device_required": true,
       "readme": "app-sdk/apple-recording-catalog/README.md",
       "setup_reference": "app-sdk/apple-recording-catalog/README.md",
       "verification_reference": "app-sdk/apple-recording-catalog/README.md",
-      "platform": "macOS",
+      "platform": "iOS, macOS",
       "workflow": ".github/workflows/apple-recording-catalog.yml"
     },
     {

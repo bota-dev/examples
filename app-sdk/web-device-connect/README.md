@@ -1,6 +1,6 @@
 # Connect to a device from the browser
 
-A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.18` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
+A Vite page using published `@bota.dev/web-app-sdk@2.0.0-beta.19` (beta) to connect, verify an exact serial, read status, and disconnect. No backend or API key.
 
 The public calls are in [page.ts](page.ts):
 `devices.connect({ expectedSerialNumber })`, `devices.readSnapshot()` and
@@ -8,7 +8,28 @@ The public calls are in [page.ts](page.ts):
 page controls and cleans up the client. Copy both files and the page markup to
 adapt this example; keep the serial supplied by your application's user.
 
-**Current checks, October 14, 2026, beta.18:** frozen installation, 15 local tests
+## beta.19 adoption — October 20, 2026
+
+The anonymous public npm metadata and downloaded SDK archive match the exact
+SHA-512 in [package-lock.json](package-lock.json); the package is MIT. The
+manifest, physical lock entry and installed consumer all select beta.19.
+The page source, native identity requirements and SDK connection workflow stay
+unchanged. Frozen install (16 packages), all 15 tests, strict types, a 16-package
+license scan and the Vite/WASM production build pass locally on Node 22.23.2 /
+Windows. Current hosted results and physical browser Bluetooth remain separate.
+
+This root also pins **Vite 7.3.7**, the reviewed compatible security patch for
+the retained 7.3.6 development tool. Anonymous registry/archive verification
+confirms MIT, publication on October 6 and the same dependency/peer/engine graph.
+Only the SDK and Vite package tuples change; every other lock entry stays fixed.
+The patch addresses the launch-editor [Windows escaping issue](https://github.com/vitejs/launch-editor/security/advisories/GHSA-698v-4r3x-3vcv),
+[editor argument issue](https://github.com/vitejs/launch-editor/security/advisories/GHSA-r825-w8mm-5pxw)
+and [Windows path-check bypass](https://github.com/vitejs/launch-editor/security/advisories/GHSA-587h-7wmj-h5pm).
+Before the patch npm reported one high Vite package finding; the new frozen
+install reports zero vulnerabilities. No advisory exploit, editor command,
+physical pairing or hardware status request is executed by these checks.
+
+**Historical checks, October 14, 2026, beta.18:** frozen installation, 15 local tests
 (11 synthetic UI/lifecycle regressions and four dependency-security checks),
 TypeScript checking and the Vite/WASM build pass on Node 22.23.2 / Windows.
 Live browser Bluetooth and supported-firmware acceptance remain unverified.

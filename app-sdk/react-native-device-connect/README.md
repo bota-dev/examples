@@ -1,12 +1,24 @@
 # Connect to a device with React Native
 
-Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.18`. No API key, backend, binding, recording, or upload is needed.
+Scan → select → verify the **GATT-read serial** against the serial you enter → read status → disconnect. Uses the published beta `@bota.dev/react-native-app-sdk@2.0.0-beta.19`. No API key, backend, binding, recording, or upload is needed.
 
 This version update retains the public `BotaClient` native-workflow compatibility
 entry. It does not migrate the sample to the generated-JavaScript `/runtime`
-entry or add OS ports. Current package/build qualification is recorded in the
+entry or add OS ports. Historical beta.18 package/build qualification is recorded in the
 [published SDK adoption review](../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md).
 Earlier dated build and phone results below qualify only their recorded versions.
+
+## beta.19 adoption — October 20, 2026
+
+Anonymous public npm metadata and the downloaded archive match the exact
+SHA-512 in [package-lock.json](package-lock.json); the package is MIT. The
+manifest, physical lock entry and installed consumer agree on beta.19. Only
+the SDK tuple changes; every non-SDK lock field and all application/device
+source and native identities stay fixed. Normal frozen install (475 packages,
+audit zero), strict types, all 58 existing tests and a 448-package license scan
+pass locally on Node 22.23.2 / Windows. The signing guard still verifies 803
+assets and the Metro guard 218 assets with no Forge/braces. Fresh hosted native
+builds and physical Bluetooth/recovery acceptance remain separate gates.
 
 ## Run
 
@@ -76,7 +88,16 @@ after the SDK invalidates the connection.
 npm run typecheck
 npm test
 npm run export
+npm run export:ios
 ```
+
+The optimized iOS export uses one Metro worker. Set
+`NODE_OPTIONS=--max-old-space-size=4096` before running it; the iOS workflow
+records the actual Node/V8 heap limit and keeps the normal Hermes/minifier.
+The published generated SDK source can exceed a worker thread's parser heap;
+one worker executes the transform in the main Node process. Native Android
+assembly and iOS Simulator linking remain required workflow steps, separate
+from JavaScript export and physical Bluetooth acceptance.
 
 2026-10-08, beta.13: public frozen installation, TypeScript check, all 30 tests
 (identity plus Forge, braces and source-map regressions), and Android Metro
