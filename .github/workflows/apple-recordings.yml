@@ -1,0 +1,35 @@
+name: Swift recordings client
+
+on:
+  push:
+    branches: [main]
+    paths: ['end-to-end/recordings/clients/apple-swift/**', 'end-to-end/recordings/contracts/native-library-read.md', '.github/workflows/apple-recordings.yml']
+  pull_request:
+    paths: ['end-to-end/recordings/clients/apple-swift/**', 'end-to-end/recordings/contracts/native-library-read.md', '.github/workflows/apple-recordings.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: end-to-end/recordings/clients/apple-swift
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v6.4.0
+        with:
+          node-version: '22.23.2'
+      - run: node --test scripts/check-dependencies.test.mjs
+      - run: node scripts/check-dependencies.mjs
+      - run: swift test
+      - run: bash build.sh
+      - run: bash build-ios.sh
