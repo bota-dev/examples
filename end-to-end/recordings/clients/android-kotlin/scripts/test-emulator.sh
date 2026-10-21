@@ -51,7 +51,7 @@ done
 logcat_pid=$!
 "$ADB" -s "$SERIAL" install -r app/build/outputs/apk/debug/app-debug.apk
 "$ADB" -s "$SERIAL" install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
-"$ADB" -s "$SERIAL" shell am instrument -w \
+timeout --signal=TERM --kill-after=15s 300 "$ADB" -s "$SERIAL" shell am instrument -w \
   dev.bota.examples.recordings.kotlin.test/dev.bota.examples.recordings.TransportInstrumentation \
   | tee app/build/reports/runtime/instrumentation.txt
 grep -q 'OK (5 tests)' app/build/reports/runtime/instrumentation.txt
