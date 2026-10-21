@@ -77,6 +77,9 @@ connect attempt. Sign-out, window inactivity/disappearance or a 401 clears
 content and retires the token; return to Sample or reconnect explicitly. The
 next session waits for reader cancellation and URLSession invalidation to join.
 Cleanup failure blocks further admission until restart.
+The app owns one model above its windows/scenes. Failed retired APIs stay in that
+model's quarantine; recreating a view or reopening a window cannot discard them
+or reset the cleanup refusal. Successful retirement releases the ordinary owner.
 
 ## Read contract
 
@@ -121,6 +124,8 @@ capture identity, ciphertext integrity, cloud commitment or signed receipt gates
 - For an existing app, copy the five `Sources/BotaRecordings` files, then replace
   the sample `@main` app with your entry point. Preserve the DTO/source checks,
   fixed backend routes, bounded transport and model reader lifecycle together.
+  Keep the model at application scope above window/scene recreation, including
+  its sticky cleanup flag and retained failed-owner quarantine.
 - Copy `.github/workflows/apple-recordings.yml` and adapt its checkout path if
   creating a new repository. Follow your own dependency-update policy; this
   monorepo's Dependabot configuration is maintained centrally.
@@ -137,7 +142,7 @@ fails closed if a dependency is added; extend it only with an explicit
 license/security review. The app is MIT licensed and uses Apple system
 frameworks. Node scripts are build checks only and use built-in Node modules.
 
-`swift test` includes 22 synthetic/loopback tests covering DTO UTF-16 caps,
+`swift test` includes 25 synthetic/loopback tests covering DTO UTF-16 caps,
 required fields, page consistency, actual HTTP headers and cookie isolation,
 redirect refusal, streamed/declared byte limits, status/MIME/JSON/source
 rejection, cancellation before headers, stale selection, sign-out joins, 401
@@ -145,6 +150,8 @@ retirement, sticky cleanup failure and the actual production 30-second request
 deadline. Redirect regressions cover 301/302/303/307/308 without reaching the
 destination peer. Loopback peers never use a real token
 or contact a Bota backend. Sample tests fail if its live factory is invoked.
+Weak-owner regressions use a consuming factory to prove failed retired APIs
+remain owned for the model's lifetime and successful ones are released.
 The test peer uses nonblocking sockets and bounded poll/header/body/hold waits;
 failure to join its worker within five seconds fails the test. CI runs contract
 and model classes separately, then each transport method with a two-minute
