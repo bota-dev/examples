@@ -169,3 +169,6 @@ workspace (see the workflow). Local Windows checks build both APKs; hosted runti
 success remains a separate acceptance gate. These tests establish no live API,
 installed UI walkthrough, audio, device, cloud write or encrypted-upload-v2
 acceptance.
+
+See the [platform review](../../../../docs/design-reviews/2026-10-20-native-cloud-web-device.md)
+for hosted test/build results and the remaining live and physical checks.

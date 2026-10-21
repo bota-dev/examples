@@ -166,5 +166,8 @@ macOS app build and unsigned iOS simulator/device builds require the owning
 No live API read, signed installation, phone run or physical device test is
 claimed by these local checks.
 
+See the [platform review](../../../../docs/design-reviews/2026-10-20-native-cloud-web-device.md)
+for hosted test/build results and the remaining live and physical checks.
+
 Foundation references: [streaming data-task delegates](https://developer.apple.com/documentation/foundation/fetching-website-data-into-memory)
 and [URLSessionTaskDelegate](https://developer.apple.com/documentation/foundation/urlsessiontaskdelegate).

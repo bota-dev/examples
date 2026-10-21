@@ -10,6 +10,7 @@ readonly SERIAL=emulator-5580
 readonly NAME=bota-recordings-api29
 export ANDROID_AVD_HOME="${RUNNER_TEMP:?RUNNER_TEMP must be a temporary directory}/recordings-avd-${GITHUB_RUN_ID:-local}"
 mkdir -p "$ANDROID_AVD_HOME" app/build/reports/runtime
+timeout --signal=TERM --kill-after=5s 10 "$ADB" version >app/build/reports/runtime/adb-version.txt
 # A failed/timed-out probe is not proof that the serial is free. Refuse unknown
 # state rather than risk cleaning up an emulator that this script did not start.
 if probe="$(timeout --signal=TERM --kill-after=5s 10 "$ADB" -s "$SERIAL" get-state 2>&1)"; then
@@ -21,6 +22,40 @@ fi
 emulator_pid=""
 logcat_pid=""
 phase() { printf '%s %s\n' "$(date -u +%FT%TZ)" "$*" | tee -a app/build/reports/runtime/phases.txt; }
+verify_apk_identity() {
+  local label="$1" apk="$2" remote="$3" receipt="$4" host_hash remote_hash
+  sha256sum "$apk" >"app/build/reports/runtime/$label-host.sha256"
+  timeout --signal=TERM --kill-after=5s 15 "$ADB" -s "$SERIAL" shell sha256sum "$remote" \
+    >"app/build/reports/runtime/$receipt.sha256"
+  read -r host_hash _ <"app/build/reports/runtime/$label-host.sha256"
+  read -r remote_hash _ <"app/build/reports/runtime/$receipt.sha256"
+  [[ "$remote_hash" =~ ^[a-f0-9]{64}$ && "$remote_hash" == "$host_hash" ]]
+}
+install_apk() {
+  local label="$1" apk="$2" package="$3" staged="/data/local/tmp/bota-recordings-$1.apk" result
+  shift 3
+  # Use the documented staged installation path. A streamed install on this
+  # API29 image reached Package Manager but never returned its host receipt.
+  # Keep transfer and the shell-v2 Package Manager result separate; never retry
+  # an install whose completion is uncertain.
+  phase "pushing $label APK to the dedicated emulator (60-second budget)"
+  timeout --signal=TERM --kill-after=15s 60 "$ADB" -s "$SERIAL" push "$apk" "$staged" \
+    2>&1 | tee "app/build/reports/runtime/push-$label.txt"
+  verify_apk_identity "$label" "$apk" "$staged" "$label-staged"
+  phase "installing staged $label APK through Package Manager (120-second budget)"
+  if timeout --signal=TERM --kill-after=15s 120 "$ADB" -s "$SERIAL" shell -n -T pm install -r "$@" "$staged" \
+      2>&1 | tee "app/build/reports/runtime/install-$label.txt" &&
+      tr -d '\r' <"app/build/reports/runtime/install-$label.txt" | grep -qx Success; then
+    phase "$label Package Manager success receipt verified"
+  else
+    result=$?
+    phase "$label installation did not return success; capturing package state without replay"
+    timeout --signal=TERM --kill-after=5s 15 "$ADB" -s "$SERIAL" shell dumpsys package "$package" \
+      >"app/build/reports/runtime/$package-install-failure.txt" 2>&1 || true
+    return "$result"
+  fi
+  timeout --signal=TERM --kill-after=5s 10 "$ADB" -s "$SERIAL" shell rm -f "$staged"
+}
 stop_owned_process() {
   local pid="$1" label="$2"
   if kill -0 "$pid" 2>/dev/null; then
@@ -87,16 +122,20 @@ phase 'API29 boot verified; starting isolated log capture'
 "$ADB" -s "$SERIAL" logcat -b all -v threadtime \
   >app/build/reports/runtime/logcat-live.txt 2>&1 &
 logcat_pid=$!
-phase 'installing application APK (120-second budget)'
-timeout --signal=TERM --kill-after=15s 120 "$ADB" -s "$SERIAL" install -r app/build/outputs/apk/debug/app-debug.apk \
-  2>&1 | tee app/build/reports/runtime/install-app.txt
-phase 'installing instrumentation APK (120-second budget)'
-timeout --signal=TERM --kill-after=15s 120 "$ADB" -s "$SERIAL" install -r app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
-  2>&1 | tee app/build/reports/runtime/install-test.txt
+install_apk app app/build/outputs/apk/debug/app-debug.apk dev.bota.examples.recordings.kotlin
+install_apk test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk dev.bota.examples.recordings.kotlin.test -t
 for package in dev.bota.examples.recordings.kotlin dev.bota.examples.recordings.kotlin.test; do
   phase "verifying installed debug package $package"
   timeout --signal=TERM --kill-after=5s 15 "$ADB" -s "$SERIAL" shell pm path "$package" \
     | tee "app/build/reports/runtime/$package-path.txt" | grep -q '^package:'
+  mapfile -t installed_paths < <(tr -d '\r' <"app/build/reports/runtime/$package-path.txt")
+  [[ "${#installed_paths[@]}" == 1 && "${installed_paths[0]}" == package:/data/app/*/base.apk ]]
+  installed_path="${installed_paths[0]#package:}"
+  if [[ "$package" == dev.bota.examples.recordings.kotlin ]]; then
+    verify_apk_identity app app/build/outputs/apk/debug/app-debug.apk "$installed_path" app-installed
+  else
+    verify_apk_identity test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk "$installed_path" test-installed
+  fi
   timeout --signal=TERM --kill-after=5s 15 "$ADB" -s "$SERIAL" shell dumpsys package "$package" \
     >"app/build/reports/runtime/$package-info.txt"
   grep -qE '(flags|pkgFlags)=\[.*DEBUGGABLE' "app/build/reports/runtime/$package-info.txt"
