@@ -1,26 +1,54 @@
 # Read a Bota recording catalog with Swift
 
-A focused macOS SwiftUI app that verifies the serial you enter, reads fresh pairing state, and lists pending recording **metadata** through public Bota App SDK **2.0.0-beta.18**. It performs no audio download/upload, recording confirmation/deletion, binding, provisioning, reset or custom GATT work. No backend or API key is needed.
+A small iOS and macOS SwiftUI application that verifies your exact device serial,
+reads fresh pairing state and lists pending recording **metadata** through public
+Bota App SDK **2.0.0-beta.19**. Both hosts use the same feature source and require
+no backend or API key.
 
-**Status:** implemented; exact public beta.18 tag/commit and consumed signatures
-reviewed. The published binary archive matches the tagged SHA-256
-`aded7f6fe9fdb5a2f681c81ce4ade2b9cc67aa14abd90487b97c86fd2f7f6b7a`.
-This Windows host has no Swift/macOS toolchain: SwiftPM resolution, app compilation
-and physical Bluetooth acceptance require separate beta.18 results. See the
-[beta.18 adoption review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md).
-Historical [hosted beta.17 compilation](https://github.com/bota-dev/examples/actions/runs/38654533610/job/116161047359)
-passed at `a7b34175`; it does not qualify beta.18.
+It performs no audio transfer/upload, recording confirmation/deletion, capture,
+binding, provisioning, reset or custom GATT work. A metadata snapshot does not
+qualify a device recording workflow. New SDK acceptance remains encrypted-upload-v2
+only, with exact capture/ciphertext integrity, authoritative cloud verification,
+signed completion receipt and receipt-gated cleanup; this sample proves none of
+those properties. Legacy metadata remains available without implying plaintext
+or legacy transfer acceptance.
 
-Historical [hosted beta.13 compilation](https://github.com/bota-dev/examples/actions/runs/37876771920)
-passed at `9117760`; it does not qualify the current package.
+## Prerequisites
 
-## Prerequisites and run
+- macOS with Xcode and Swift 6 to build either host; macOS 13+ to run the Mac app,
+  or an iOS 15+ iPhone/iPad for the iOS app.
+- Bluetooth and an already-provisioned physical Bota device you are authorized to
+  inspect, with supported catalog/pairing firmware. Encrypted-v2 metadata depends
+  on the device's advertised public SDK capability.
+- The exact printed serial. No test wearable, saved serial, account or credential
+  is embedded. No particular device/firmware combination is qualified here.
 
-- macOS 13+, Xcode with Swift 6 and Bluetooth.
-- An already-provisioned physical Bota device you are authorized to inspect, with supported catalog/pairing firmware. Encrypted-v2 catalog support depends on that firmware's advertised public SDK capability. No tested device/firmware combination is claimed for this example.
-- The exact serial printed on that device. There is no saved/default serial or credential.
+## Run on iPhone or iPad
 
-From this example directory:
+From this directory on macOS:
+
+```sh
+open ios/BotaCatalog.xcodeproj
+```
+
+Choose the **BotaCatalog** scheme, a physical iPhone/iPad and your signing team
+under Signing & Capabilities, then run Debug. The checked-in project has an exact
+public SwiftPM dependency and resolved lock; no project generator, CocoaPods or
+sibling repository is required. Its bundle ID is
+`dev.bota.examples.catalog.ios`; choose your own identifier if your signing team
+requires it. The iOS simulator is a build/UI target, not Bluetooth proof.
+
+Grant Bluetooth access. If denied, enable it in Settings → Privacy & Security →
+Bluetooth, return to the app and choose **Enable Bluetooth** if needed. Enter the
+exact serial, **Scan for 10 seconds**, select a candidate, then **Refresh catalog**.
+Advertised names are hints; the SDK verifies the connected serial. The app also
+checks the returned serial and peripheral ID before admitting catalog reads.
+
+Every refresh clears the old snapshot, then reads pairing state from the exact
+current connection. Only `.paired` proceeds to the catalog; unpaired, unknown or
+failed reads leave the snapshot unavailable. There is no automatic provisioning.
+
+## Run on macOS
 
 ```sh
 swift package resolve
@@ -28,57 +56,128 @@ bash build.sh
 open BotaCatalog.app
 ```
 
-SwiftPM fetches the exact public package independently. The build script creates a macOS `.app` with Bluetooth usage descriptions and an ad-hoc signature. Bundle ID `dev.bota.examples.catalog.macos` differs from the connection sample. Run the bundle so macOS can associate its Bluetooth prompt with this app. Grant permission; if denied, use **System Settings → Privacy & Security → Bluetooth**, then reopen.
+The script retains the existing macOS bundle, Bluetooth descriptions and ad-hoc
+signature. Run that bundle so the permission prompt belongs to this application.
+Its bundle ID is `dev.bota.examples.catalog.macos`. If denied, grant access in
+System Settings → Privacy & Security → Bluetooth, then reopen. The Mac host uses
+one window; the iOS manifest also disables multiple simultaneous scenes.
 
-Enter the expected serial, scan for ten seconds, select a candidate, then choose **Refresh catalog**. Advertised names are discovery hints: the SDK verifies identity against the supplied serial during connection. A wrong serial does not authorize a catalog read. Refresh first reads pairing state from the current connection and proceeds only on `.paired`; a missing/unpaired/error result stops. It never provisions a device automatically.
+## Read the result
 
-Expected UI: a metadata snapshot labeled **Legacy catalog** or **Encrypted v2 catalog**, or `No pending recordings reported in this snapshot.` Legacy entries show identifier, start date, duration, bytes and the SDK's encryption flag. Encrypted-v2 entries show identifier/generation, start milliseconds, duration, ciphertext/plaintext lengths and storage format. These are reported metadata; no recording contents are opened. Legacy does **not** mean plaintext. An empty pending snapshot is not proof that cloud processing succeeded or that no historical recordings exist.
+The UI labels each entry **Legacy catalog** or **Encrypted v2 catalog**:
 
-## Public package and methods
+- Legacy entries show identifier, start time, duration, byte length and the SDK's
+  encryption flag. Legacy does **not** mean plaintext.
+- Encrypted-v2 entries show exact identifier/generation, start milliseconds,
+  duration, ciphertext/plaintext lengths and storage format. These fields report
+  metadata; this sample does not fetch or verify the ciphertext.
 
-`Package.swift` pins `2.0.0-beta.18`; `Package.resolved` pins public tag `v2.0.0-beta.18` at commit `0962c8ccb8a4d407179309abae574bffb6e32933`. Its SwiftPM manifest downloads the checksum-verified published binary framework. This example has no sibling source/runtime dependency or local binary override.
+An empty result means `No pending recordings reported in this snapshot.` It does
+not prove historical deletion, cloud commitment, processing success or absence of
+older recordings. Pairing does not prove backend end-user ownership or grant
+transfer/cleanup authority.
 
-Methods were reviewed at that immutable public tag:
+## Copy the feature
 
-| Public method | Use |
+- [CatalogModel.swift](Sources/BotaCatalog/CatalogModel.swift) contains direct
+  public SDK calls and their identity, fresh-pairing and lifecycle gates.
+  `CatalogActions` is a local synthetic-test seam, not a wrapper SDK or custom
+  transport.
+- [App.swift](Sources/BotaCatalog/App.swift) provides the SwiftUI device picker,
+  snapshot display and foreground scene handling shared by both hosts.
+- [Package.swift](Package.swift), [resolved package](Package.resolved),
+  [macOS Info.plist](Info.plist) and [build.sh](build.sh) retain the Mac install.
+- The [iOS project](ios/BotaCatalog.xcodeproj/project.pbxproj),
+  [shared scheme](ios/BotaCatalog.xcodeproj/xcshareddata/xcschemes/BotaCatalog.xcscheme),
+  [iOS Info.plist](ios/Info.plist) and [build-ios.sh](build-ios.sh) supply the
+  second host inside this same install root.
+
+Copy the two Swift files plus the exact public SDK product and your platform's
+Bluetooth purpose string. Replace the UI and customer-owned device-selection
+inputs. Keep fresh identity/pairing checks and all asynchronous ownership gates.
+No other example's runtime code or private application helper is required.
+
+| Public method | Teaching purpose |
 | --- | --- |
-| `BotaDeviceClient.configure()` / `destroy()` | SDK lifecycle. |
-| `devices.startScan(timeoutMilliseconds:)` | Bounded discovery stream. |
-| `devices.connect(serialNumber:device:)` | Exact-serial identity verification. |
-| `devices.connectionUpdates()` / `disconnect()` | Cached SDK connection notifications and explicit disconnect. |
-| `devices.statusUpdates()` | Connection-scoped public status subscription; observed setup/stream failure or termination clears the catalog. Status values are not displayed. |
-| `controls.readPairingState(from:)` | Fresh pairing check before every catalog read. |
-| `recordings.listPendingRecordings(_:)` | Unified pending metadata, `PendingRecording.legacy` / `.encryptedV2`. |
+| `BotaDeviceClient.configure()` / `destroy()` | Initialize and drain an SDK session. |
+| `devices.startScan(timeoutMilliseconds:)` | Bounded discovery. |
+| `devices.connect(serialNumber:device:)` | Exact serial read-back. |
+| `devices.connectionUpdates()` | Observe cached SDK connection changes. |
+| `devices.statusUpdates()` | Observe connection-scoped stream failure/termination; status values are discarded. |
+| `controls.readPairingState(from:)` | Fresh `.paired` gate before every catalog read. |
+| `recordings.listPendingRecordings(_:)` | SDK-owned capability discovery and unified `.legacy` / `.encryptedV2` metadata. |
+| `devices.cancelCurrentOperation()` / `disconnect()` | Retire active discovery/connection and disconnect before destruction. |
 
-The published Apple connection snapshot's `isProvisioned` defaults to false. This example therefore uses the fresh public pairing read instead of trusting that snapshot or advertised pairing hints. Pairing confirmation does not establish backend end-user ownership, transfer authorization, upload capability or cloud commitment.
+The public connection snapshot's `isProvisioned` defaults to false and is never
+used as a fresh pairing gate. Unified metadata selection stays inside the SDK;
+an error does not authorize a fallback transfer profile or custom GATT request.
+See the [public SDK reference](https://docs.bota.dev/api-reference/client-sdks),
+[tagged device manager](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.19/platforms/apple/Sources/BotaAppSDK/DeviceManager.swift),
+[recording manager](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.19/platforms/apple/Sources/BotaAppSDK/RecordingManager.swift)
+and [pairing method](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.19/platforms/apple/Sources/BotaAppSDK/DeviceControlManager.swift).
 
-The unified catalog API performs capability discovery and its legacy/v2 selection inside the SDK, including alias checks; errors are not treated as permission to silently choose another transfer profile. The app adds no GATT implementation. Its only catalog operation is metadata listing; it never calls a sync, transfer, upload or confirmation API.
+## Lifecycle and failure behavior
 
-Public references: [SDK reference](https://docs.bota.dev/api-reference/client-sdks), [tagged connection/status manager](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.18/platforms/apple/Sources/BotaAppSDK/DeviceManager.swift), [tagged recording manager](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.18/platforms/apple/Sources/BotaAppSDK/RecordingManager.swift), [tagged pairing read](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.18/platforms/apple/Sources/BotaAppSDK/DeviceControlManager.swift) and [catalog models](https://github.com/bota-dev/app-sdk/blob/v2.0.0-beta.18/platforms/apple/Sources/BotaAppSDK/Models/EncryptedUploadV2ContractModels.swift).
+The App owns one session model across window closure/reopening. The sample is
+foreground-only, with no background Bluetooth mode or automatic reconnect.
+Inactive/background scenes, explicit Disconnect and observed loss
+retire the current session: visible identity/catalog clear immediately; app
+actions and both observers are cancelled and joined; SDK cancellation,
+disconnect and destruction are awaited before another session may configure.
+Choose **Enable Bluetooth**, scan and verify again after retirement completes.
+Returning to the foreground may configure a new SDK session, but never connects
+to a device or refreshes its catalog automatically.
 
-## Connection loss and errors
+Late pairing/catalog/scan results cannot publish into a retired session. Cached
+positive connection notifications alone never establish verified identity.
+Connection-stream termination also removes candidates and refuses retained
+selection callbacks. Status setup failure, failure or termination retires the
+connection; a stale status observer cannot clear a later session.
 
-Public Apple beta.18 `connectionUpdates()` reports the SDK's cached connection state and does not itself forward spontaneous native disconnects. After exact-serial connection succeeds, this app starts a public `devices.statusUpdates()` subscription scoped to that connection revision, device ID and verified serial. Status values are discarded. Observed subscription setup failure, stream failure or termination clears catalog, pairing and verified identity, cancels the pending UI task and increments the connection revision. In the published source, native disconnect fails active subscriptions, and the public status stream forwards that failure. A nil connection notification also fences a pending connect, even before its result has populated the UI.
+Public Apple beta.19 connection updates alone do not forward spontaneous native
+disconnects. The connection-scoped public status stream forwards observed native
+subscription failure. If the OS omits its callback or leaves that stream open,
+the snapshot can remain displayed; this sample adds no polling/private workaround.
+Physical loss detection, prompt clearing and rediscovery remain unverified.
 
-Explicit disconnect clears and cancels the status observer **before** awaiting the SDK; a disconnect failure preserves the cleared UI and reports that native cleanup is unconfirmed. Late catalog/pairing results must match both the current operation ID and connection revision before rendering. The status observer also checks cancellation, connection revision, device identity and verified serial before clearing state, so an older observer cannot clear a newer connection. Connection success starts the observer only after establishing verified UI identity, with no later connection-success UI writes. Cleared connections reject delayed positive connection notifications until another explicit connect begins.
+Cancellation fences presentation; a native read may still need to settle before
+teardown can finish. A failed drain keeps replacement admission closed. Visible
+SDK cancellation/disconnect errors require closing the process before another
+owner can enter. Public `destroy()` is nonthrowing and suppresses some internal
+teardown failures: awaiting it is not independent proof of physical disconnect.
+Errors use controlled messages; no raw SDK details, audio or grants are logged.
 
-Refresh clears the previous snapshot first and preserves no successful-looking catalog on read failure. Errors use controlled messages, avoiding raw SDK details or packet contents. There are no automatic retries or reconnection loops. Cancellation fences the UI; it is not evidence that every native operation settled immediately. A later attempt may report an SDK operation still in progress. Scan/reconnect deliberately after checking the device and Bluetooth permissions; do not interpret a failure as lost credentials.
+Metadata stays only in UI memory. The app creates no catalog journal/export and
+does not reset or delete SDK-owned state. Bluetooth
+connect/disconnect, subscription and metadata requests interact with the selected
+device, but no recording lifecycle mutation or cloud request is performed.
 
-The app depends on observed SDK stream failure/termination and connection notifications. An OS that omits its disconnect callback or leaves the subscription open can leave the snapshot displayed; this example adds no polling or private GATT workaround. These source guards do not establish physical loss detection, prompt clearing, reconnect reliability or prompt rediscovery. macOS radio behavior, stream termination and firmware compatibility remain unverified. Bluetooth connect/disconnect, status subscription and SDK metadata-list requests interact with the selected device, but no audio or durable recording lifecycle mutation is requested.
-
-## Build evidence and cleanup
+## Verify and evidence
 
 ```sh
 swift package resolve
+swift test
 bash build.sh
+bash build-ios.sh
 ```
 
-| Evidence on October 8, 2026 | Status |
-| --- | --- |
-| Exact published version/tag and method/model inspection | Matched by public-tag source review. |
-| Local plist/lock and shell syntax | Checked on Windows; does not compile Swift. |
-| Local Swift package/app compilation | Not run; macOS/Swift toolchain unavailable. |
-| Historical beta.13 hosted package/build | [macOS compilation passed](https://github.com/bota-dev/examples/actions/runs/37876771920) at `9117760`; no functional/hardware tests. |
-| UI ordering, pairing rejection, Bluetooth/hardware | Not run; unverified by owner's creation-only scope. |
+The [owning workflow](../../.github/workflows/apple-recording-catalog.yml) retains
+the macOS build and adds synthetic Swift tests plus unsigned Debug builds for
+both a generic iOS simulator and device. The tests inject public model values;
+they use no radio, credentials or hardware.
 
-Metadata stays in UI memory; no journal or export is created. Close the window to cancel the UI operation and status observer, then destroy the SDK client. Cleanup of the local build is limited to this example's `.build`, `.swiftpm` and `BotaCatalog.app` artifacts. No cloud resources or device recordings are created or removed. Treat screenshots or copied metadata according to the device owner's content-retention policy.
+| Evidence on October 20, 2026 | Result |
+| --- | --- |
+| Exact public beta.19 tag | Anonymous read peels to `7a4ff0093629c030416f80113c585e10d0177e68`; both host locks and manifest pins match. |
+| Published Apple binary | Retained public archive SHA-256 rechecked as `ad00d21ee48249716b5592689df83e6d7f1846ad2cca313ad3976433543393a7`, matching the tagged manifest. |
+| Consumed public managers/models | Connection, status, pairing and catalog signatures remain unchanged from beta.18. |
+| Local project/XML/lock/shell checks | Checked on Windows; source/configuration evidence only. |
+| Ten synthetic regressions | Added for exact identity, fresh pairing, denial/errors, late catalog/pairing, nil/terminated observations, configure/action/destruction ordering and failed-cleanup refusal; execution requires Swift/macOS. |
+| Current native builds and physical behavior | Unverified here: this workstation has no Swift/Xcode toolchain. Hosted compilation and phone/macOS Bluetooth require separate exact-source evidence. |
+
+Historical [beta.17 macOS compilation](https://github.com/bota-dev/examples/actions/runs/38654533610/job/116161047359)
+passed at `a7b34175`, and
+[beta.13 macOS compilation](https://github.com/bota-dev/examples/actions/runs/37876771920)
+passed at `9117760`. Those builds do not qualify this source, beta.19 or iOS.
+The [beta.18 review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md)
+retains its earlier evidence.
