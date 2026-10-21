@@ -148,7 +148,5 @@ phase 'starting five transport cases (300-second shell budget)'
 timeout --signal=TERM --kill-after=15s 300 "$ADB" -s "$SERIAL" shell am instrument -w -r \
   dev.bota.examples.recordings.kotlin.test/dev.bota.examples.recordings.TransportInstrumentation \
   | tee app/build/reports/runtime/instrumentation.txt
-grep -q 'OK (5 tests)' app/build/reports/runtime/instrumentation.txt
-grep -q 'INSTRUMENTATION_CODE: -1' app/build/reports/runtime/instrumentation.txt
-! grep -q 'INSTRUMENTATION_FAILED\|INSTRUMENTATION_STATUS_CODE: -2' app/build/reports/runtime/instrumentation.txt
+bash scripts/check-runtime-result.sh app/build/reports/runtime/instrumentation.txt
 phase 'five cases and raw final success code verified'

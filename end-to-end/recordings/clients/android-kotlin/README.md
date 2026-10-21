@@ -157,7 +157,11 @@ the checks without that flag. Never refresh locks to hide an unexplained change.
 
 The [owning workflow](../../../../.github/workflows/android-recordings.yml) runs
 JVM tests with local synthetic HTTP/TLS, Android lint, license verification and a
-Debug APK/test-host build. Its separate API 29 emulator job runs five actual
+Debug APK/test-host build. Before Gradle, `bash scripts/test-runtime-result.sh`
+checks the runtime receipt gate with success/failure fixtures. The emulator gate
+requires the five-case success summary and exactly one raw final `-1` record;
+failure markers, wrong/missing or duplicate final records refuse success.
+Its separate API 29 emulator job runs five actual
 HTTP/TLS/cancellation checks, including invalid DNS/IP peers and an untrusted
 chain, oversized headers/trailers and a gated real reactor callback proving
 cancellation joins work.

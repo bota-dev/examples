@@ -34,6 +34,8 @@ jobs:
           distribution: temurin
           java-version: '17'
       - run: chmod +x gradlew
+      - name: Test runtime result acceptance
+        run: bash scripts/test-runtime-result.sh
       - name: Record anonymous public repository responses
         run: bash scripts/check-public-repositories.sh
       - name: Verify frozen build
