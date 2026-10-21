@@ -1,5 +1,6 @@
 import Darwin
 import Foundation
+@testable import BotaRecordings
 
 // Test-only HTTP peer. It binds only 127.0.0.1 and never contacts a live backend.
 final class LoopbackServer: @unchecked Sendable {
