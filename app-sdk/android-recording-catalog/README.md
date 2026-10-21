@@ -28,8 +28,8 @@ unverified. This is direct SDK provenance, not a recursive license audit.
 
 All 16 existing JVM cases, public resolution/Kotlin compilation and Android debug
 APK assembly pass locally on JDK 17 / Android SDK 36. A separate offline
-frozen-lock build preserves the exact resolution. Hosted checks and physical
-behavior need their own evidence. This update performs no device/cloud actions
+frozen-lock build preserves the exact resolution. The [hosted test/APK job](https://github.com/bota-dev/examples/actions/runs/39521265326)
+also passes at `aa726e3`; physical behavior remains unverified. This update performs no device/cloud actions
 and establishes no encrypted-upload-v2 transfer or receipt/cleanup acceptance.
 
 ## Historical beta.18 adoption — 2026-10-14

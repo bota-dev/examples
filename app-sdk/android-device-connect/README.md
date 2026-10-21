@@ -18,8 +18,9 @@ transitive-license audit is implied.
 
 Public resolution/Kotlin compilation/Android debug APK assembly and a separate
 offline frozen-lock build pass locally on JDK 17 / Android SDK 36. This connection
-app has no JVM test suite. Hosted and physical results remain separate; no phone
-session or encrypted-upload-v2 acceptance is claimed for this update.
+app has no JVM test suite. [Hosted APK assembly](https://github.com/bota-dev/examples/actions/runs/39521265119)
+also passes at `aa726e3`. Physical behavior remains unverified; no phone session
+or encrypted-upload-v2 acceptance is claimed for this update.
 
 ## Historical beta.18 adoption — 2026-10-14
 

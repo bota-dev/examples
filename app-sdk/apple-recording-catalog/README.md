@@ -172,8 +172,9 @@ they use no radio, credentials or hardware.
 | Published Apple binary | Retained public archive SHA-256 rechecked as `ad00d21ee48249716b5592689df83e6d7f1846ad2cca313ad3976433543393a7`, matching the tagged manifest. |
 | Consumed public managers/models | Connection, status, pairing and catalog signatures remain unchanged from beta.18. |
 | Local project/XML/lock/shell checks | Checked on Windows; source/configuration evidence only. |
-| Ten synthetic regressions | Added for exact identity, fresh pairing, denial/errors, late catalog/pairing, nil/terminated observations, configure/action/destruction ordering and failed-cleanup refusal; execution requires Swift/macOS. |
-| Current native builds and physical behavior | Unverified here: this workstation has no Swift/Xcode toolchain. Hosted compilation and phone/macOS Bluetooth require separate exact-source evidence. |
+| Ten synthetic regressions | Pass in hosted macOS CI for exact identity, fresh pairing, denial/errors, late catalog/pairing, nil/terminated observations, configure/action/destruction ordering and failed-cleanup refusal. |
+| Current native builds | SwiftPM resolution, the macOS app and unsigned iOS simulator/device builds pass at source `741bd3b` in [the owning job](https://github.com/bota-dev/examples/actions/runs/39520962585/job/118964409321). |
+| Physical behavior | Unverified: compilation and synthetic tests do not establish phone/macOS Bluetooth permission, identity, loss or cleanup behavior. |
 
 Historical [beta.17 macOS compilation](https://github.com/bota-dev/examples/actions/runs/38654533610/job/116161047359)
 passed at `a7b34175`, and

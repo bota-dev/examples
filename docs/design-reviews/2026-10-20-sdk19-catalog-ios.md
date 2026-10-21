@@ -53,12 +53,12 @@ from public Central checksums, source/license review and consuming native builds
 
 | Requirement | Evidence | Status |
 | --- | --- | --- |
-| Current public SDK in all ten roots | Four unchanged beta.19 roots plus six explicitly updated manifests/locks; exact registry inputs above | matched in source and public metadata; consuming qualification below |
+| Current public SDK in all ten roots | Four unchanged beta.19 roots plus six explicitly updated manifests/locks; exact registry inputs and source-bound qualification below | matched within the declared package/build scope |
 | Preserve unrelated dependency graph | SDK-only npm tuple/owning pin and targeted Gradle locks; one reviewed Web Vite security patch described below | matched by parsed lock/text comparisons within that explicit exception |
-| Swift iOS/macOS metadata-only host | Shared model/view, exact-serial connection, fresh pairing before catalog, explicit foreground lifecycle | matched in source; native/test execution requires hosted macOS |
+| Swift iOS/macOS metadata-only host | Shared model/view, exact-serial connection, fresh pairing before catalog, explicit foreground lifecycle | matched in source, ten hosted tests and macOS/iOS builds; physical behavior unverified |
 | Preserve uncertain state and native identities | No journal/schema/origin/identity migration or physical operation; legacy runtime alone advances | matched in source scope |
-| Independent install and required guards | Normal frozen install, original signing/Metro/source-map suites, platform tests/types/builds | local results below; final native/export qualification in progress |
-| Current developer/AI discovery | Existing README/catalog IDs and public example cards updated | verification in progress |
+| Independent install and required guards | Normal frozen install, original signing/Metro/source-map suites, platform tests/types/builds | matched in local and exact-source hosted checks below |
+| Current developer/AI discovery | Existing README/catalog IDs and public example cards updated; catalog, nine regressions, local links and public MDX compilation pass | matched locally; source/hosted/deployed documentation remain separate |
 | Physical/loss/media/device acceptance | No corresponding hardware run | unverified |
 
 The legacy lock-only resolver again retained the old nested SDK entry after
@@ -82,10 +82,19 @@ On Node 22.23.2/Windows the legacy normal frozen install passes (766 packages,
 audit zero), including the original 803 signing-asset and 1,252 parent-asset
 attestations and every required hook. All 111 tests pass, including the actual
 app-import SDK-resolution test. Both workspace typechecks, backend compilation
-and the 700-package installed license scan pass. Optimized all-platform export
-remains a separate pending check. Its CI now uses the already-qualified serial
+and the 700-package installed license scan pass. Optimized Android/iOS/Web
+export passes with 1,613/1,520/1,164 modules respectively. Its CI uses the serial
 Metro transform and 4 GiB Node heap from the earlier beta.19 iOS work, preserving
 normal minification/Hermes and printing actual host memory/heap limits.
+
+| Local legacy bundle | Bytes | SHA-256 |
+| --- | ---: | --- |
+| Android Hermes | 10,384,983 | `074f88d88453679163cf198682d7df67235f8e1215adb943090919ae3bdd1f9f` |
+| iOS Hermes | 10,176,089 | `185a3a9a9df4052a7d1d9e57f174bf8b85d6dc2f21ac4f81ce1242dd4e56d13c` |
+| Web JavaScript | 6,035,678 | `32fe5eeb938cd796f50916f5f00590c3afd821876e77ad0515e1e1c521050b24` |
+
+These local exports retain normal Metro caches and prove no installed bundle or
+cold-host memory bound. Native app delivery remains separate.
 
 Both Kotlin APKs pass targeted public-SDK lock updates and separate offline
 frozen builds with identical lock hashes. All 16 existing catalog JVM tests pass.
@@ -96,7 +105,14 @@ target API 36 remain unchanged.
 RN connection normal frozen install (475 packages/audit zero), 58 tests, strict
 types and 448-package license scan pass. Web connection frozen install, 15 tests,
 types, Vite/WASM production build and 16-package license scan pass. Optimized RN
-exports and exact-source hosted native results remain pending below.
+Android export passes with 633 modules and iOS with 635 modules and an
+8,207,619-byte Hermes bundle (SHA-256
+`231a2fd3de6162f02a69a474776432dff7a27594a554d58a9fe95c46317b9404`).
+Node 22.23.2 measures a 4,144 MiB heap with the 4 GiB setting. The normal Metro
+cache is retained, so this does not prove cold-transform memory. The fresh
+hosted iOS job then passes cold optimized export (635 modules, 95,623 ms), normal
+public resolution of 87 Pods and simulator native compilation, with measured
+4,144 MiB V8 heap. The paired hosted Android APK also passes.
 
 The Web starter's retained Vite 7.3.6 produced high advisories
 [GHSA-698v-4r3x-3vcv](https://github.com/vitejs/launch-editor/security/advisories/GHSA-698v-4r3x-3vcv),
@@ -114,3 +130,70 @@ Swift/macOS/iOS compilation requires the owning hosted macOS
 workflow; this Windows workstation cannot qualify Apple native code. Hosted
 results bind the exact pushed source, with unchanged-input receipts stated
 separately. No synthetic test substitutes for device or deployed-service proof.
+
+Swift source `741bd3b78fad955b8332b52ea1b6db09fba33a0b` passes public SwiftPM
+resolution, all ten synthetic tests, the existing macOS application and unsigned
+iOS simulator/device builds in
+[native CI](https://github.com/bota-dev/examples/actions/runs/39520962585/job/118964409321).
+The following `aa726e3` SDK/documentation commit changes no Swift root or owning
+workflow input. An independent source review confirms serial/peripheral and
+fresh-pairing gates, lifecycle/observer joins, late-result fencing and sticky
+cleanup refusal against public beta.19. Neither result establishes physical
+callback delivery or proves a disconnect hidden by nonthrowing SDK destruction.
+Exact public lifecycle review also confirms that failed initial configuration
+does not attach managers or retain a runtime. Cancel/disconnect return early
+when no operation/connection exists, before requiring configuration, so that
+ordinary denial admits an explicit retry. Genuine cleanup errors remain sticky;
+destruction clears runtime only after detach, permitting a joined reconfigure.
+
+| Hosted gate | Exact functional source | Result |
+| --- | --- | --- |
+| [Swift catalog](https://github.com/bota-dev/examples/actions/runs/39520962585) | `741bd3b78fad955b8332b52ea1b6db09fba33a0b` | Ten tests, macOS app and unsigned iOS simulator/device builds pass |
+| [Kotlin connection](https://github.com/bota-dev/examples/actions/runs/39521265119) | `aa726e30b6e1a548ccc4e9e0259af8479e918f41` | Frozen Gradle resolution and Android APK pass |
+| [Kotlin catalog](https://github.com/bota-dev/examples/actions/runs/39521265326) | same `aa726e3` | All 16 JVM tests and APK pass |
+| [Web connection](https://github.com/bota-dev/examples/actions/runs/39521265114) | same `aa726e3` | Frozen install, tests, types and production build pass |
+| [RN connection](https://github.com/bota-dev/examples/actions/runs/39521265349) | same `aa726e3` | Android tests/export/APK and iOS cold optimized export/Pods/native simulator app pass |
+| [Discovery](https://github.com/bota-dev/examples/actions/runs/39521265228) | same `aa726e3` | Linux and Windows pass |
+| [CodeQL](https://github.com/bota-dev/examples/actions/runs/39521264543) | same `aa726e3` | Actions and JavaScript/TypeScript pass |
+| [Legacy workspace](https://github.com/bota-dev/examples/actions/runs/39521265127) | same `aa726e3` | All 111 tests, types, backend build, all-platform export and four-ABI Android APK pass |
+
+The fresh legacy host reports 15,984 MiB total memory and a 4,144 MiB V8 heap.
+Normal optimized Web/iOS/Android exports finish with 1,163/1,520/1,613 modules;
+the Windows Web module count differs by one, so no cross-host byte-identity claim
+is made. The final Android log explicitly completes app CMake builds for
+`arm64-v8a`, `armeabi-v7a`, `x86` and `x86_64`, then assembly succeeds in 14m 53s.
+All targeted functional workflows above are successful; no workflow was rerun,
+test omitted or source/SDK downgraded to obtain these results.
+
+The four earlier beta.19 roots retain their successful native qualification:
+[Swift connection at `fafbfe4`](https://github.com/bota-dev/examples/actions/runs/39512379550),
+[Flutter connection at `4d79085`](https://github.com/bota-dev/examples/actions/runs/39514738797)
+and [both integrated mobile clients at `a10743d`](https://github.com/bota-dev/examples/actions/runs/39517257471).
+An exact tree comparison to this functional revision finds only their README
+changes; their runtime sources, manifests, locks and owning workflows, as well
+as the shared recording backend, are unchanged. These are carried-forward
+input-identical receipts, not fresh physical results.
+
+Public example guide/changelog source is pushed at
+[`060c739`](https://github.com/bota-dev/docs/commit/060c739da7fd8dc5c4579535fbb4a975585f47f5).
+Both affected MDX documents compile locally; Mintlify production delivery remains
+separate. Impact search includes current examples guidance/catalog, public docs,
+internal docs and the available workspace instruction files. No API schema or
+internal device design changes are required by these consumer-only additions.
+
+## Final conformance and evidence-only successor
+
+Independent source and documentation reviews found no remaining blocker in the
+approved scope. Source guards, synthetic tests, cached local exports, fresh
+hosted compilation and unverified physical acceptance remain separate. The
+current catalog has 77 retained identities and 84 indexed documents; its nine
+regressions and 517 indexed local-file links pass. The six evidence-only Markdown
+files also pass their separate 55-link check and whitespace validation.
+
+The final successor changes only five selected READMEs and this owning review.
+Runtime sources, manifests, packages, locks and workflows remain identical to
+successful `aa726e3`; the Swift root retains the identical functional inputs
+qualified at `741bd3b`. Automatic workflows triggered by those Markdown paths
+are separate from the exact-source results above. No phone/media/Bluetooth,
+encrypted-v2 capture/cloud/receipt/cleanup, signed-app or production-documentation
+acceptance is inferred from these builds.

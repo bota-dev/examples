@@ -13,10 +13,11 @@ adapt this example; keep the serial supplied by your application's user.
 The anonymous public npm metadata and downloaded SDK archive match the exact
 SHA-512 in [package-lock.json](package-lock.json); the package is MIT. The
 manifest, physical lock entry and installed consumer all select beta.19.
-The page source, native identity requirements and SDK connection workflow stay
+The page source, device identity checks and SDK connection workflow stay
 unchanged. Frozen install (16 packages), all 15 tests, strict types, a 16-package
 license scan and the Vite/WASM production build pass locally on Node 22.23.2 /
-Windows. Current hosted results and physical browser Bluetooth remain separate.
+Windows. [Hosted frozen/tests/types/build](https://github.com/bota-dev/examples/actions/runs/39521265114)
+also pass at `aa726e3`; physical browser Bluetooth remains unverified.
 
 This root also pins **Vite 7.3.7**, the reviewed compatible security patch for
 the retained 7.3.6 development tool. Anonymous registry/archive verification

@@ -17,8 +17,12 @@ the SDK tuple changes; every non-SDK lock field and all application/device
 source and native identities stay fixed. Normal frozen install (475 packages,
 audit zero), strict types, all 58 existing tests and a 448-package license scan
 pass locally on Node 22.23.2 / Windows. The signing guard still verifies 803
-assets and the Metro guard 218 assets with no Forge/braces. Fresh hosted native
-builds and physical Bluetooth/recovery acceptance remain separate gates.
+assets and the Metro guard 218 assets with no Forge/braces. Optimized Android/iOS
+Hermes exports pass locally. At `aa726e3`, [hosted CI](https://github.com/bota-dev/examples/actions/runs/39521265349)
+passes the Android APK and iOS simulator application, including a cold optimized
+iOS export, public Pod resolution and the existing guards. Physical
+Bluetooth/recovery acceptance remains unverified; see the
+[current review](../../docs/design-reviews/2026-10-20-sdk19-catalog-ios.md).
 
 ## Run
 
