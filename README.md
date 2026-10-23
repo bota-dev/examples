@@ -327,6 +327,21 @@ physical-device scenarios establish different evidence. See the
 [implementation review](docs/independent-examples-review.md) for current results
 and open acceptance gaps.
 
+`npm run test:integration` runs the existing independent Node API and integrated
+backend suites without installing the legacy workspace. First run
+`npm ci --prefix end-to-end/web-reference` to install the backend host and
+development-server test dependencies. It discovers the `api/*-node/*.test.mjs`
+suites (currently download, list, search, summarize, upload/transcribe and webhook
+receiver), shared backend contracts, Web server and mobile backend suites. It
+preserves their transport, authorization, integrity and durability
+checks, including real localhost CLI/HTTP and SQLite persistence scenarios.
+Use Node 22.23.2 or newer. These local fixtures do not establish live cloud or
+physical-device acceptance.
+
+The all-PR and branch-push `Integration tests` check runs these suites and retains
+`test-results/api-integration.xml` for 90 days. Existing path-filtered checks and
+platform-specific acceptance gates still apply to each changed example.
+
 ## Documentation
 
 - [Design](DESIGN.md): the integrated sample foundation and its two product layers.

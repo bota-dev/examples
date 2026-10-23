@@ -43,6 +43,13 @@
 
 ## Verify, document and deliver
 
+- `npm run test:integration` needs Node 22.23.2 or newer and the Web backend host
+  install (`npm ci --prefix end-to-end/web-reference`), without a root
+  dependency install. It discovers independent API and integrated backend suites and emits
+  JUnit under `test-results/`. The all-PR `Integration tests` job runs local
+  HTTP/transport/durability coverage; changed-example, live and physical gates
+  remain separate.
+
 - State scope, assumptions and observable acceptance before implementation. Follow [CONTRIBUTING.md](CONTRIBUTING.md); run the selected example's meaningful tests/build checks, including required security suites.
 - For docs/catalog changes: `node scripts/check-catalog.mjs` and `node --test scripts/test-catalog.mjs` on Node 22.23.2+. Check new docs' file links separately; the catalog checker has a fixed document set. No install or hardware run is needed for a docs-only change.
 - Legacy checks: `npm ci`, `npm test`, `npm run typecheck`, `npm run build` from root. No root lint command. Native/export checks are defined by its README/workflow.
