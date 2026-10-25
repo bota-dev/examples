@@ -1,4 +1,4 @@
-﻿name: bota_connect
+name: bota_connect
 description: Read-only Bota connection and status example.
 publish_to: 'none'
 version: 0.1.0+1
