@@ -84,6 +84,53 @@ no network probe is executed by the security workflow.
 
 ## Configuration corrections and limits
 
+### Maintained vendor inputs
+
+Semgrep's default dependency-directory selection omitted maintained code under
+`vendor`. The required `Scan` now adds a bounded, read-only source view bridge.
+The [current classification](../../.github/sast-maintained-vendor.json) covers all
+96 tracked vendor entries: 17 retained sources, 24 archives, 14 integrity and
+provenance records, six package manifests, nine notices and 26 retired `.source`
+evidence files. The seven official archives are provenance only; 17 derived
+runtime archives retain complete member inventories and selected maintained
+code. The root `braces-free-public-parents` profiles remain current consumers;
+`braces-security` source copies are retired evidence.
+
+The bridge analyzes 32 distinct views: all 17 retained JavaScript, declaration
+and Python sources, plus 15 distinct maintained JavaScript archive members.
+Thirty-nine selected archive-code origins map to those views, deduplicated only
+after exact byte equality. This includes Metro watcher JavaScript/Flow and
+literal helpers embedded in rebuild scripts, the current root parent patches,
+and the patched Metro members bundled in `metro-config`. Original-to-derived
+provenance identifies the selected changed or added code; unchanged official
+bundle members are preserved by the complete inventory hashes. Source views
+use recognized `.js`, `.ts` or `.py` filenames without changing their bytes.
+
+Trusted inline workflow policy is captured before checkout. All tracked paths
+containing a `vendor` component must match its exact regular-file inventory,
+modes, sizes and hashes. Historical source cannot supply a different policy.
+Git blob sizes and checkout sizes are checked before reading their content.
+Archives have finite compressed, member, expanded and view-size limits; paths
+must be canonical under `package/`, and duplicate members, links, devices and
+special entries fail. Before `tarfile` parses metadata, bounded gzip output and
+raw 512-byte TAR headers are checked for count, size, checksum and complete end
+blocks. The only supported extended metadata is a bounded single per-file PAX
+path record used by the current Metro bundle; global and GNU metadata fail.
+Every archive member hash and mode contributes to its
+reviewed complete-inventory digest. The bridge never executes, extracts to source
+directories or repacks a payload. Existing native/Metro payload-integrity gates
+remain unchanged.
+
+Separate vendor JSON/SARIF, the current policy, source-to-view identities and
+archive receipts are retained with the ordinary scan. The summary requires the
+exact expected view population in Semgrep's actual scanned paths and unchanged
+post-analysis hashes. Real local Semgrep 1.168.0 scans all 32 views with the same
+11 raw policy snapshots and strict flags: zero findings and zero errors. Canary
+controls reject new, changed, missing and symlinked tracked inputs, path traversal,
+duplicate archive members, links, devices and unexpected archive inventory.
+Thirty-seven local controls include early-parser gzip/PAX/header limits, Windows
+path aliases, missing scanned views and post-analysis source-view changes.
+
 All six Dependabot entries explicitly wait seven days for newly published
 version updates. This changes their effective three-day default; vulnerability
 security updates remain a separate repository setting. Two JSX text entities
@@ -105,6 +152,7 @@ static results, hosted Linux results and merge enforcement are distinct gates.
 | Every new PR has static analysis | Unfiltered PR events, merge-group trigger, no dependency/secret prerequisite | Matched in source; hosted execution separate |
 | Findings and analyzer errors fail | Real Semgrep 1.168 scan: 920 files, zero findings/errors; strict flags and zero-file guard | Matched locally |
 | Canonical shell sources retain coverage | Three unchanged source hashes; ShellCheck 0.11.0 zero findings; unsafe fixture fails | Matched locally |
+| Maintained vendor source is analyzed | 96-entry current-workflow guard, 32 exact source views, complete archive inventories and rejection controls | Matched locally; new hosted result pending |
 | Dispositions remain bound to reviewed source | 26 exact annotations, 26 unique source hashes; changed-hash/path-escape controls fail | Matched locally |
 | Adjacent rendering behavior remains valid | Web format/type/build checks and 69 UI checks pass; Python AST, manifest elements and legacy backend JavaScript emit preserved | Matched locally |
 | Exact hosted Linux result and merge enforcement | Requires the exact PR run and separate repository rule readback | Unverified here |

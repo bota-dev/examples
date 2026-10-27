@@ -47,6 +47,112 @@ jobs:
             exit 1
           fi
 
+      - name: Capture current maintained-vendor classification before checkout
+        id: vendor_policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import base64, hashlib, json, os, pathlib, zlib
+          # Trusted workflow constants; historical source cannot supply policy.
+          encoded = (
+              'eNrtXVtvY8lxfjfg/yDsa5aarup7/BQYfgiQOIHtPBnGoi/Vs/RKokBSuzsJ/N/ztS4zmvGhKFKkSEpnB6sZ8Vx4uqrrq6/6VFX/'
+              '329/c3b23aL8KJfpu389o+/vf59dC3797vc387lcLc9+mc1/ahezX87KRVospm1a0nI6uzqbtbPLNL1a4n+pZz/LVZ3Nz6ZX1zfL'
+              'xe/OfpwulrM5Tr04w/3LTzN8elbS1dVseba4ub6++HR2PbuYlk/f3X/r7GZe5Icyu7ycLvu3K6NtLsmYoo3PKUVlahbhrFRUVIrj'
+              'SAUn3F9/McV1C1z4f/1XfJDm5cfpz/JD/rSU/rmhaLQy339z+FIus8z7CaxMeDgqv16nqyr189VaW2uM5ocT7i77fDjoEJz6fPnP'
+              'U/nl8zHCfa13D8eWaf7EXZeppmV6dC2bfzq4nC3TxedTnLX6y83nqfz06LHvn6sf/cednKZXUBQ08wlH/3p31b3EcPA6LX/ssk/X'
+              '15NF/enDXFJZTq6g7p9lUuXnaZFJmV1dSVl+uNP3h4xvlMVkIeVmPl1++vAf//77P/zxz3/47vvPN72c1dvpREo5Yx4d+DLISF8+'
+              'XfyY2Lp+AfRfa8AM0Dp6aA8aVKpli/+lFStcS6KSnOOSk1SfXPBVguESsleNH33V1zO33xxTT64WMsF8xL8enbqUX5c/PExZnLmc'
+              '38jdwX98vwd5temvy5u5LD78TLjievnj5ONNmtfzvy/O70xiI0lqb4ck2aSSrkpsUqSLJB2lsmivfBaYkdbiOeKH1Zl90CmWLCZH'
+              'lhp9yFGelORcltO51Mnd404w6ipXa0X65SiEtri705/u7nT2jYzO7u58hi+6g5q0OHv4lt+dlXuUuk63f00vry/kEv+6fb7FGT4F'
+              'Jj3css1FJtc3Gdqf3F2w+O6VlHuznF4stlMrWwpDas02eRtdSs57QBtx1kVxlKYizEBcdj4HMcaW1qq2lSpHAE4sISrnih/Vup1a'
+              'L6b5AxzV9fRCtrRTrwYVSk6l6LUIjLEG56J3pVaySRvgIDHMk2uyNSZ2JpLNTLBTSbYR1ZzVqNDtFfpi8NXMfkipLkShElolUzyz'
+              'ya00ytW2qlLVrJsUZz0ZVrq0pLO3rKPWTocaOcmo1Bco9Y7HbalPpQb12X2idpXBTbM3OSTSAN3K1rRYJQvoqZBU60WCpaK9bknI'
+              'dygW60oY9bm9PvE1iy0x1ysa5EaqqsLKRtE61QarK4U51Qy7ZCeiCPQ0kIfjbE27kDIJh1YK4FdKG83zJepcLOfTq4/T9mlLlX6O'
+              'qr6OGyLsrSJctKUU0J2QdArV6sCUXNXQnQuwSe9rJi4q6kaIMoHRyiCesHXU6PYafQnLRTwy6D+N9qbZDLBVzYmO5GtUyVidAKnF'
+              'mVIUHCpcrMUlSWuP/2LNJrrGlWhU53bqvJ7PcCThOaFPjHEDVVoY25Aqi5TbMJMcQvlslGs+5+xgjsW0AipEFEwB7TGhtWKskkBW'
+              '1Vhhw8Vo/aQqp1dL+diffPLlyV8vrgfTmD2csZh+vAKufSgyX949otxPsO2WR9zg8ohwdtl40mKCCZjoVpJS0dmCaMHEFJuWlKsQ'
+              'AdoQ0iv2qSKeEJ1aM8kc5fLIM8X4P//957/86Q//9p+TP/7XXyDR8+Wvy41EaoIeEqltukZDrgZiwcwzkJ/NcPOJWlBULRmATvMB'
+              'Qrcqecf4CGFYcgQmwPmURdqXcs/L3xebxbHB85AgAzm2xC2aFuBtE0ddgAmQq4NnJie2IcSpQWlNCGxjTMXHPmGt8tZF96Qgvyw6'
+              'T/7JyzyN1n1d9h71765XBGz77kDCrufLxWYOMg46SDCdYFgy3KCi3KqBgIu2kZVXShsKoKsIREoD+cFfoWawXGGp1LLHRa8mbD5f'
+              'HkLY16n8lD5u7sU8DYobsGBNjQjUyVYgcA59CT6Ca1SIO2YVMaU9xBzBT+HZVLKKYvbBRVHwa0+K+/5ZJw+L/UcHExDN8oGE4A79'
+              'hcNyc9hQZIZEiynbTOyun5U0bUH5mldeq5iz0gDl0lejW45crId4rU86K2EN2ZNPrwcb+jVg42I6wRy4XuILMRZZLj7km+lF/bCY'
+              'lw/zm6sP09niQ4Gs/3x/wZ/vmdv5Ztowbph3Z1852FCihGy1xL5EZSB+XcQmmwHeVVqwonDQF/zLQkvWhQZ60ZxRr6YMcxhlbAsr'
+              'Jg6T41yB4zFWoLTkGFounFhUFq4xOQWoLqB4tSVmL45KLYHAjZ03YH+u5VPCFcjo4ZfJI5BZTNS5Onf/Ir+mHgktzu+uO6fzn/X5'
+              '8uP/bkabPQ+CTMIsTdpjllLJIWUbfA2uEgO+s6nOIdKgrHzzxMloVzK0wOxIWkpJpaeDkMvLm2XKFzK5f8H8hKBbulg8mtgPb6Tn'
+              's4vbkd3HhhDrHB/XCUx+Ob1EBJg+XcxS3feMv/2sT3vroRP2Q0rhjZVCOkQ97FaNzcFHFVvwpQcyyQFmUjWC2S1giNoA7TWpFkAp'
+              'Ec3koCypGGMgE0XeiVpmDeOapovJt/rZWBVaGaUHI0vYhgN1qc0Q3LGm6HOMil3T0TpduYBA+giKb6x1jZmzER/wkYSSXG6vpYrP'
+              'sri5Xiwhz8tHkf9kdnXxad/KuNf55PPSw8bOIIYQBt8yRJuUReBZkwDgVQXFkRiM4NeguvwNkSnWeocIK2ZXfXS6v2rSvhlL6cSW'
+              'Sh6WtbZfcyL2Hog9HI16KcKpcHYIMyOBldsKJDFZFe8y10y6Gp8N46etplFieI9Ws9dmjWc9PlnO5ZYnPiDS4vz602bZBmFQiiYS'
+              '5h0cYssBoimgfoGaSyUZVUquyevWDI42bQwlFyHJbFViSjbaEF+ND9o+4B3KGJxpPnuIeS7TEiD04B/vDrUp0OwyXd9BsT6/P3Ux'
+              'u5RNUdkbpQZfU2VEnU3rKDGVqJ1TFKxzopuyRnJtQrXVjtHgifCX1NfBwck5ZKeiVfoNusdhvXyjEnUezLl9iUoQ+FAcUgnnLJac'
+              'KFMbvGXHa+VSVdCEkcIgkwhJwXfIKp+5w5MtgBXP2UblVX43KvmaswzbzIZKCSCIw0u4UERl5yz8aiWQF4+wtHkT4CNtNPiDENVr'
+              'Z13PxOBYAVTkkzTraiMpb5K7rFHLsMlsTO2tDYN0MsAvm8rEcBMg+WxVYWmcrFNNEiJYlwBYAVRfw0eLchIaaGYKMKesnXlHKnkB'
+              '//HBDSc4aF1aFlXZW4ROsfrWtGqsxFaVQYCc4Zg6SDVSBD7pCDZDtTZVq7GVj5j9rBDi3e93yzST+xzMLfgka6MGEwxAJr3rrzeM'
+              'Nc7EviZGMbAUUqZQEKPBhBIVI1yKdlSLhYBJU9NeYA0nJ9F7RrkpkYx+EKJDCWAsNmhTpLbCzZYM0q1BtmtsXHouVRWGGyXjQ9Wa'
+              'nTIhsAoAhVL9qxFJ9xwiCblNlrMJ/oKYymxeIbBFXy/s7+e/EvmYMr9TsY2Z88eefLJbHY8J9G9Nu2Me/dvV65hO/3Z1O2bVv0m1'
+              'jsn1b1GrY479G1XsmGr/1rQ6ZtxvIcQx8f4A0nz3+fd7k+z7TMP3z0nh3K/M3102fjhfHlDm7zgpf28yHXPz+7yOr4glY4r+s3RC'
+              '6qA6ec+Z+jsS6piwv/88q92oaszbP2btjOn7u8y32o1Oxiz+XQt0TObftUjfeU4/0X5SscbU/qP2oGOG/2lpZkz0Pw6WM+b7n5Zm'
+              'xrT/HcpyzP7fj2DfZxEA8XOY59cv9AeyBz6UH2c/TWuaT/S5O1eTR0/4MGHr5RTDmF1NNl860wqTdTARlsFCgrPJWdCTbJ3XKUT8'
+              'cRpEpmifvGgOlFXNBlitbuVPpWkXm0g7FQKzXv63jGSYkjxSxsac3qphkPAOQGssnCBOaeAeJaasuZVMXktfPs6EGCtS6lFVLgni'
+              'N9Uzjon1prwdwbe0WE4+XswyZr5+kbDBq4MdRuTcE0Z9y0plS4a9Q9DvA/eItjl2kYNwohp1klgiR1ekwRIIsa3J/HaEfTe/y+yq'
+              'TT/e8Tr3GGpmv9wu4N+dlW+u6sXGsRLDg7nBYMnrwgmUoi9vUUrFISJKufRYtVm4RQCPTSFYY6Cq7MSX4kgoRwY0FW3fmha+4dcv'
+              'mPiIT3lQ5Km/cMo9rcASfvTtcjhma3WBs9SucC0FSBNA+JhEQL6rViLwo2RMcPVti9y9SOQqDr77q1y5CYL+oKSmBFn36jDbKMLV'
+              'FqqugumFUKOFC5WKIKm/GRcfeomCekse9QVBC0BEmcEFSeYaUspgzha8xecCsTnKpKWaVlqy4i0imCaWvHESlfPBm2yUgh9ta/I4'
+              '9kCu14sJ8+/il+lVLYsFPKA5p/iCaRl6JsAg0yuQUAKRLuDKXlNh20DhckxE1fS3ozri1OZT7GlJXqqonsXosrgYoz1R9H3fNbRj'
+              'YeyJpoqP1a5vRWVftjn8kPqmhpNvTji/3EqFRvNgWGmoON+UYyanmUxIYH3VFhGiFGNJpac11tSCCWxUaTbCCbSmKsIfl+yowidV'
+              'eJtAuRsNkjU86KgNa9OEQNt9zImFPCKhamCPGjQyh1itcpIRuJoWnU2mcYyhFhwKNdfRCsdC8tNX1lgdfmIKG0u+T0dXYx33yahq'
+              'LM4+JW2NFdcnoaqxjPq7sTZ6xyJ69wXPYxXz+lSRZ+0KNJYmrxekOV/uWpDvuN54LCLefAbal5ryWBn8PEG73Qv6PZf7jjW8R/F6'
+              'eizMPQqRj9W2u6x2GEtoX4jAY13s8+T03otd/aOSg/7X325Pvj2xj++v34p0xbbWhwmxZ/Ppx+nVo+f86llffRPz2y/8aXpV+xf2'
+              'YOanLxr6cs4/vl/3rHslVnfzWi6zzB9xwnWjeTTl7sF+cn+PTQZ28K1cDzn4Y+mOs0cZPPzzb6sAecU+7QdZVjo8eHy91nby6PHE'
+              'cN4BfOx99KeAHy8VwhYAolfRj/0vCx4UQdavnZ4yoGw4ureNLwcRxpHDzT5ksgX6mGH0eYWl8lcEn528X3gFNNpi1XPF7Hrp+I4C'
+              'j96aOA7Ws/KQUtkCk+zXa1ivuFT1epj05LLdM6FmC9G6FaLdf+OR/Yj2+d1X9idTfxLrh6+4CcP+RB1OYbHlNbde2J+o40mEpQfc'
+              'HmBvor9rAH/snPyYNgXYnyroFKjIK3TN3Z+E+RQYyT7bwu1PtPokiMnRso27zNpjZxvHSyHu8kKPnkKcDi9wp8ALTtjZ+1Nw9sfi'
+              'wR9WfCgMz0rWw06muhJcrTDeQt5RicYklWNxMTViz00MwZfEBu+N6SsFDr1EqrmE3tuBDrSksE2b+yeX3X7pd5Z5n/CXl7Or41t7'
+              'PEk5bD594ypQHW4U3auB2RXH8DzJAimLbomT1Rbz3anmMllnG3khVbzA9uHQWq/4DgnO/vRn78Otp2U+u73/3aVH9GpzJxshHNfo'
+              'j9B6T1wSxzwdNgYxXrFiRGa42sGDh0QBVym9QSSYoIsCwqI7kElj0dm2kMFZcJwkgVrjKGVbNKfsfTgQiu1GZ51snqjzPVYBbD5h'
+              'V+RcsxluJBt8082IFaFqJVHf9wcc8XZfASdZ60pBRxd84KCITbO9vZROKTDFZOkNTtjzdjH75d3P2hdLYfOpy6vineEmDyw5BUu+'
+              'SYrRZ5XZUvZUEhkKJmmE36EFo0NNRfUeM61pBDypd08LLvGLosQd9/g/ZiLPK1Y7TRxca6qVtQ3VeBbTm21UlZ0ECwLvEbBXF3NL'
+              'NhuRpmvVMeukjW2IVqkZBP7p9NTyjVnunantuvX7c3DhNMbo3tgYN+javYZHH5vett8cYsVAr2ZVfric1ZsLuf+OgY8+T5e9Kn5z'
+              'hDWroozhDQG1Nbk2ZVUu5CoAN0TWreUcrCls2KnQEkdgq/H42BVbhUoR0ibZxmFfELt72HmdKOIQYHNcIzsqczwQzVnxUi2Y4U2t'
+              'LKiMzSE04oLIXQLFlo0NfcNHLf1FZTTidYwlqr4JSqs+J1t1iX0d/oUvgfbqM277GF9MH9OcjoqvrY8VL+ViNGG45y4VBwnblm1q'
+              '4kyqFIMyvka2vvY+eK5myL+akFxMTlfv2QZbG0VRctz6uOstfbXELV9dESvSMHsLyMG4zHGsUEUt1kFXVGxfN2jJWVucgrdyjQ00'
+              'kU3V+KGqFpOYvIO3C6Xx8Sqio9QRGMaK94KRiYa75jadk3YuhFoCpG+ajbZUFW7b/HGzwKO+f22WpHz/hVwh5WsKIcfmjlsfhzSM'
+              'FW+4OPowCFHwJI1ZqyIhKYAO9Q5EKQYbNSVXGolqUm+7D+VkWoB7yQI0A5Zl4yjuSxMv2BVyhWYgd/n1tfWhVyzWB6eGM956I1Vf'
+              'lIqQdg7G9j2CE/lgreSktE9GeeN1gt5yFOe7V1eNdBLpe2ydjjq6kdx+4eS2g3q/9NWVs2JhGsIezGaImPFcnKVquWaVbexrfSaT'
+              '1jEI3HzlWlNvB86eWsm5by7XamtSgjP7i3Geu5HkCk3MbpZ3DZwPrg9epQ816NVLCfDlXt+25yowFUg+RAN3EcVqBJpwJDr2zec0'
+              'XD0Uw6BbpXqNqLNv/3L0+sBXLmW+az08apxzf9Fg75zXaZz3mv3xHnVoemnTrlsh9+d+1GZ+eoVbLmfzTz886vrcGz47ARok41xv'
+              'jx2IFcilSUlYhdrfXvVNiuFemy3KRKUUaS7NONvM4/bYC7mQspT61Bx9dqOUdY2Rnsgh3nUe8XPWDp7fwGFdz5bVyb27TvDdblzP'
+              'TDld11niiRzcXefhboL4e2oG+bo9H/cBI5Ds00DiijVioBsyxVVYHKZg8fBi0UQ2JgMFQ9Etw89FjLV4cU3ZSOQlVfDDFwPJtsm7'
+              '67oQrM5u3nWG8zYT9eBNNg7oIF849tGJjk50dKJ7dKKv33DjoI729eBodMbH6YyPpcnTAX3ybkQwuubRNY+ueY+u+WDNnw7qoV8d'
+              'nEZHffJR8+5Kl74kARilBuv5sjK2aR0FGB11LysI1jnRULmRXJtQbbVvUAGAgyVQ31QSEuGQnYpW6V1Q0+HxPrHxwefJHtbMdVNS'
+              'IIsJrpskPK82nKMxWjt4ZlaRMjxYLA3aLZEaZUwGCySslGDhpexorq9NmVpTU7y6rnjXtcXbObBnV4GtKT5dWYC66yLUgxjwhmUg'
+              'XxJGPA3nl3LOYsG2QFuaC7XvfKJcAgGrzUhhsGr4arg8Au3K3DcDsQWTwHO2EYwmH9Z26fEOOUPGqyIIo5EEw6yStdfeiAZ5BqMm'
+              'r0FeGjcGIylZ29pA2gjIBCkYDY+slHmx8Z7ytN7Aep+V1Lmm4nJ11eWuKy93Ocah4qk1lXqrq/V2XbH3Ohz7TXCNXQ17pBwj5Tgm'
+              'ynGgAtQDMo/XtOSRgIwEZCQguyUg+6nv/UItrFJusKGHUzBVy/A4VrUKpcWUNbeSYanSd+TNlEzfZ7v3IcslZWNM9YxjYr0p61JZ'
+              'nhjQLkhDqTkYAGUFNQoZeGOo6Jz7bsH93UH1hozEqKAsyzVaKpW8ck6rarwEfyjS8E0vgNX9AHbdE2A7I9y4IHxNjf3KOvtd19rv'
+              'xxQ3qwN9zAp4kBWkvsV17m9KLOEHrMxwzNbCraj+Qo9rKTDEoHoOuIgkDFaJmBAIYnF1z0a41t9rTTZor+ASqLUKFDQugpjHamxs'
+              'IblendYZbj/PYaJaCxSxMfmSQWr4xVa4nSM0TznCR/xt19XJO3CEowVuUq/8yALVcJugyhUBF5h3UFJTgulV+EUQtsg95b+6CiMI'
+              'AR5Eg/ZUsra/6xMfcrVNSTu0BXplPR4fbg8cE+Q6ml7fJsIRjqD3s87QnFcMQhPxyD6k2jTFAA/OHu5+tMDRAvdW3fio1Nx5Nfga'
+              'uWiYXW09NQDhIhW2zcWWYyKqpie36IhTm0+xJxh4qQIpZOOyuBijtXu2P7Z2zeKV10mBPSdTrEe0l5toq4x4CgXPTEWag+/LVcCd'
+              'k+QiqoCYIYIwCAbjyxevnlvTvqYrwOrOALvuDrCdCa4tFV9TZb+60n7X1fYvW507KVTZEEK3mqZ+9Si/qtPfda3+9sPcbJo+sYj8'
+              'Vd37rmvf9+McXlDh+3nYPdFv0FcQKFkOzkKJzD5bB+wNEX8Q1btUtE9eNAd4DWjU2Kxut/ig0kDdmuydq8WnPYVladxS1A0PXa1W'
+              'XFQ0OfnAVmpIMWe4wmCyxOrYewlselpdCtWD5bgXe4oVpetriv+faACw6yYA23uGtSXHayrqV1fV77qyfj9m99xa4S+K9BwG3zhK'
+              'AZnGgFpWKlsy7F2jPkf7bgXNsYschBPViCHBx3N0oDiwQ7gHZ76K6PdhY3ZNJjHIflUmcMI8VAgNSoXGskmaESc1FT0wMPm+wAm1'
+              '+AaTpEimxRw1jNDbFxvZBmXwaxoJrG4msOuGAtvZ3TMKzNeU5q8uz991if4+1yK27zD2xRqD925wgdDrwikCRI0kSgmEhjnl0t/y'
+              'NxtAWcC74dGtMbBZEDlfiiMBB2d4SAQa+zbHoJ+2R9hadZVbsQpU2mSvBJSEO9U0MWSEBpEcgqeQMMMbwoZeucAwUp3Ay3Zgj/to'
+              '13biqxn7bSh5Aosfj1pXAJ5vJ9UP99vb/HC3vc1dPcA3p/SR3fJT/u1vcI//ByEEk5Y='
+          )
+          body = zlib.decompress(base64.b64decode(encoded, validate=True))
+          if hashlib.sha256(body).hexdigest() != 'e8d0ee9ae85b9ed7f1041689559658a40e0621fff4db289f2500309b953909cd':
+              raise SystemExit('Current vendor classification integrity mismatch')
+          document = json.loads(body)
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          root.mkdir(parents=True, exist_ok=True)
+          (root / 'vendor-policy.json').write_bytes(body)
+          print(json.dumps({'classified_vendor_entries': len(document['inventory']), 'expected_source_views': document['expected_views']}))
+          PY
+
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         id: source
         with:
@@ -223,6 +329,219 @@ jobs:
               raise SystemExit('ShellCheck reported findings or analysis errors')
           PY
 
+      - name: Verify maintained vendor inventory and materialize exact source views
+        id: vendor_sources
+        if: ${{ always() && steps.identity.outcome == 'success' && steps.vendor_policy.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import gzip, hashlib, io, json, os, pathlib, subprocess, tarfile
+
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          workspace = pathlib.Path(os.environ['GITHUB_WORKSPACE']).resolve()
+          policy_bytes = (root / 'vendor-policy.json').read_bytes()
+          policy = json.loads(policy_bytes)
+          limits = policy['limits']
+          views_root = root / 'vendor-source-views'
+          views_root.mkdir(parents=True, exist_ok=False)
+
+          def digest(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def fail(message):
+              raise SystemExit(message)
+
+          def canonical_path(name):
+              path = pathlib.PurePosixPath(name)
+              if not name or '\0' in name or '\\' in name or ':' in name or pathlib.PureWindowsPath(name).drive or path.is_absolute() or '..' in path.parts or str(path) != name:
+                  fail('Noncanonical vendor path: ' + name)
+              return path
+
+          def bounded_tar_bytes(data):
+              # Bound decompression and inspect raw headers before tarfile can consume
+              # PAX/GNU metadata internally. Current payloads need only per-file PAX path.
+              with gzip.GzipFile(fileobj=io.BytesIO(data)) as compressed:
+                  raw = compressed.read(limits['tar_bytes'] + 1)
+              if len(raw) > limits['tar_bytes'] or len(raw) % 512:
+                  fail('Archive decompression or block alignment limit failed')
+              offset, headers, pax_headers, metadata_total, pending_path = 0, 0, 0, 0, False
+              while offset + 512 <= len(raw):
+                  header = raw[offset:offset + 512]
+                  if header == bytes(512):
+                      if pending_path or raw[offset:offset + 1024] != bytes(1024) or any(raw[offset:]):
+                          fail('Archive has incomplete metadata or invalid end blocks')
+                      return raw, {'expanded_tar_bytes': len(raw), 'raw_headers': headers, 'pax_headers': pax_headers}
+                  headers += 1
+                  if headers > limits['archive_members']:
+                      fail('Raw archive header count limit exceeded')
+                  def octal(field):
+                      value = field.strip(b'\0 ')
+                      if not value or any(byte not in b'01234567' for byte in value):
+                          fail('Archive numeric field is not bounded unsigned octal')
+                      return int(value, 8)
+                  if octal(header[148:156]) != sum(header[:148]) + 8 * 32 + sum(header[156:]):
+                      fail('Archive raw header checksum mismatch')
+                  size, kind = octal(header[124:136]), header[156:157]
+                  end = offset + 512 + ((size + 511) // 512) * 512
+                  if size > limits['member_bytes'] or end > len(raw):
+                      fail('Raw archive member size exceeds available bounded bytes')
+                  if kind == b'x':
+                      pax_headers += 1
+                      metadata_total += size
+                      if pending_path or size > limits['metadata_bytes'] or metadata_total > limits['metadata_total_bytes']:
+                          fail('Archive PAX metadata bound exceeded')
+                      body = raw[offset + 512:offset + 512 + size]
+                      space = body.find(b' ')
+                      if space <= 0 or not body[:space].isdigit() or int(body[:space]) != len(body) or not body.endswith(b'\n'):
+                          fail('Archive PAX record has invalid finite length')
+                      key, separator, value = body[space + 1:-1].partition(b'=')
+                      if key != b'path' or not separator or b'\n' in value:
+                          fail('Only one bounded per-file PAX path record is supported')
+                      name = value.decode('utf-8')
+                      canonical_path(name)
+                      if not name.startswith('package/'):
+                          fail('PAX path must be canonical under package/')
+                      pending_path = True
+                  elif kind in (b'0', b'\0', b'5'):
+                      if kind == b'5' and size:
+                          fail('Archive directory has unexpected payload bytes')
+                      pending_path = False
+                  else:
+                      fail('Archive raw type is prohibited, including GNU/global metadata and links')
+                  offset = end
+              fail('Archive lacks complete finite end blocks')
+
+          entries = {}
+          for row in filter(None, subprocess.check_output(['git', 'ls-files', '--stage', '-z'], cwd=workspace).decode().split('\0')):
+              metadata, name = row.split('\t', 1)
+              mode, oid, stage = metadata.split()
+              if 'vendor' not in canonical_path(name).parts:
+                  continue
+              if name in entries or stage != '0' or mode not in ('100644', '100755'):
+                  fail('Vendor inventory has a nonregular or unresolved entry: ' + name)
+              entries[name] = {'mode': mode, 'oid': oid}
+          expected = {entry['path']: entry for entry in policy['inventory']}
+          if len(expected) != len(policy['inventory']) or set(entries) != set(expected):
+              fail('Tracked vendor inventory differs from current workflow classification; new=' + repr(sorted(set(entries) - set(expected))) + '; absent=' + repr(sorted(set(expected) - set(entries))))
+
+          source_bytes, sources = {}, []
+          for name, entry in expected.items():
+              path = workspace / name
+              if entries[name]['mode'] != entry['mode']:
+                  fail('Vendor source mode changed: ' + name)
+              if any(candidate.is_symlink() for candidate in (path, *path.parents)) or not path.is_file():
+                  fail('Vendor source must be an ordinary file with ordinary parents: ' + name)
+              if not path.resolve().is_relative_to(workspace):
+                  fail('Vendor source escapes workspace: ' + name)
+              cap = limits['archive_bytes'] if entry['classification'] == 'immutable-archive' else limits['tracked_bytes']
+              if not 0 <= entry['bytes'] <= cap:
+                  fail('Classified vendor size exceeds finite input cap: ' + name)
+              blob_size = int(subprocess.check_output(['git', 'cat-file', '-s', entries[name]['oid']], cwd=workspace, text=True))
+              if blob_size != entry['bytes']:
+                  fail('Git vendor blob size differs from current classification: ' + name)
+              canonical = subprocess.check_output(['git', 'cat-file', 'blob', entries[name]['oid']], cwd=workspace)
+              if len(canonical) != entry['bytes'] or digest(canonical) != entry['sha256']:
+                  fail('Classified vendor bytes changed; review current policy: ' + name)
+              checkout_cap = entry['bytes'] * (2 if entry['text_checkout'] else 1)
+              if path.stat().st_size > checkout_cap:
+                  fail('Vendor checkout exceeds finite classified size: ' + name)
+              with path.open('rb') as stream:
+                  working = stream.read(checkout_cap + 1)
+              if len(working) > checkout_cap:
+                  fail('Vendor checkout grew beyond finite classified size: ' + name)
+              # Git's Windows text checkout may expand LF to CRLF. The analyzed view is
+              # always the exact canonical Git blob, and neither form is written back.
+              if working != canonical and not (entry['text_checkout'] and working.replace(b'\r\n', b'\n') == canonical):
+                  fail('Working vendor file differs from its classified Git blob: ' + name)
+              source_bytes[name] = canonical
+              sources.append({'path': name, 'classification': entry['classification'], 'sha256': digest(canonical),
+                              'bytes': len(canonical), 'checkout_sha256': digest(working), 'checkout_bytes': len(working)})
+
+          view_data, archive_receipts = {}, []
+          for entry in policy['inventory']:
+              if entry['classification'] == 'maintained-source':
+                  view_data[entry['view']] = source_bytes[entry['path']]
+          if len(view_data) != policy['expected_tracked_sources']:
+              fail('Retained vendor source count differs from current classification')
+
+          for entry in policy['archives']:
+              data = source_bytes[entry['path']]
+              if len(data) > limits['archive_bytes'] or len(data) != entry['bytes'] or digest(data) != entry['sha256']:
+                  fail('Archive does not match current immutable provenance: ' + entry['path'])
+              raw, preflight = bounded_tar_bytes(data)
+              files, names, expanded, count = {}, set(), 0, 0
+              with tarfile.open(fileobj=io.BytesIO(raw), mode='r:') as archive:
+                  for member in archive:
+                      count += 1
+                      if count > limits['archive_members']:
+                          fail('Archive member count limit exceeded')
+                      name = member.name.rstrip('/') if member.isdir() else member.name
+                      canonical_path(name)
+                      if not (name.startswith('package/') or (name == 'package' and member.isdir())) or name in names:
+                          fail('Archive member is duplicate or outside package/: ' + name)
+                      names.add(name)
+                      if member.type not in (tarfile.REGTYPE, tarfile.AREGTYPE, tarfile.DIRTYPE):
+                          fail('Archive links, devices and special members are prohibited: ' + name)
+                      if member.isdir():
+                          continue
+                      expanded += member.size
+                      if member.size > limits['member_bytes'] or expanded > limits['expanded_bytes']:
+                          fail('Archive expanded size limit exceeded')
+                      content = archive.extractfile(member).read(limits['member_bytes'] + 1)
+                      if len(content) != member.size:
+                          fail('Archive member size mismatch: ' + name)
+                      files[name] = {'data': content, 'mode': member.mode & 0o777}
+              rows = [{'path': name.removeprefix('package/'), 'bytes': len(value['data']), 'mode': value['mode'], 'sha256': digest(value['data'])}
+                      for name, value in sorted(files.items())]
+              inventory_hash = digest(json.dumps(rows, separators=(',', ':')).encode())
+              if len(rows) != entry['members'] or inventory_hash != entry['inventory_sha256']:
+                  fail('Archive complete member inventory differs from reviewed provenance: ' + entry['path'])
+              for selected in entry['selected']:
+                  content = files[selected['member']]['data']
+                  if len(content) > limits['view_bytes'] or len(content) != selected['bytes'] or digest(content) != selected['sha256']:
+                      fail('Maintained archive source differs from reviewed bytes: ' + selected['member'])
+                  if selected['view'] in view_data and view_data[selected['view']] != content:
+                      fail('Deduplicated source views are not byte identical')
+                  view_data[selected['view']] = content
+              archive_receipts.append({'path': entry['path'], 'sha256': digest(data), 'members': len(rows),
+                                       'inventory_sha256': inventory_hash, 'selected': entry['selected'], 'provenance': entry['provenance'], 'raw_preflight': preflight})
+
+          if set(view_data) != {view['view'] for view in policy['views']} or len(view_data) != policy['expected_views']:
+              fail('Source view population differs from current reviewed classification')
+          views = []
+          for view in policy['views']:
+              name, content = view['view'], view_data[view['view']]
+              if canonical_path(name).name != name or pathlib.PurePosixPath(name).suffix not in ('.js', '.ts', '.py'):
+                  fail('Expected a flat source view with a recognized language extension')
+              if len(content) > limits['view_bytes'] or len(content) != view['bytes'] or digest(content) != view['sha256']:
+                  fail('Source view SHA or finite size invariant failed: ' + name)
+              (views_root / name).write_bytes(content)
+              views.append(view)
+          receipt = {'policy_sha256': digest(policy_bytes), 'scanned_sha': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=workspace, text=True).strip(),
+                     'source_execution': False, 'source_repacked': False, 'tracked_inventory': sources, 'archives': archive_receipts, 'views': views}
+          (root / 'vendor-source-identity.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'tracked_vendor_entries': len(sources), 'derived_archives': len(archive_receipts), 'source_views': len(views), 'source_execution': False}))
+          PY
+
+      - name: Analyze maintained vendor source views with the same security rules
+        id: vendor_analysis
+        if: ${{ always() && steps.identity.outcome == 'success' && steps.vendor_sources.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          configs=()
+          for config in "$RUNNER_TEMP/sast-evidence/policy/"*; do
+            configs+=(--config="$config")
+          done
+          cd "$RUNNER_TEMP/sast-evidence/vendor-source-views"
+          semgrep scan \
+            --oss-only --strict --error --metrics=off --disable-version-check --no-rewrite-rule-ids \
+            --jobs=2 --timeout=30 --no-git-ignore --max-target-bytes=1048576 \
+            --json-output "$RUNNER_TEMP/sast-evidence/vendor-results.json" \
+            --sarif-output "$RUNNER_TEMP/sast-evidence/vendor-results.sarif" \
+            "${configs[@]}" .
+
       - name: Run full repository security analysis
         id: analysis
         if: ${{ always() && steps.identity.outcome == 'success' }}
@@ -248,16 +567,32 @@ jobs:
         env:
           ANALYSIS_OUTCOME: ${{ steps.analysis.outcome }}
           SHELLCHECK_OUTCOME: ${{ steps.shellcheck.outcome }}
+          VENDOR_SOURCES_OUTCOME: ${{ steps.vendor_sources.outcome }}
+          VENDOR_ANALYSIS_OUTCOME: ${{ steps.vendor_analysis.outcome }}
         shell: bash
         run: |
           python3 -I - <<'PY'
-          import json, os, pathlib
+          import hashlib, json, os, pathlib
           root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
           report = json.loads((root / 'results.json').read_text(encoding='utf-8'))
           summary = {'analysis_outcome': os.environ['ANALYSIS_OUTCOME'], 'findings': len(report.get('results', [])), 'errors': len(report.get('errors', [])), 'scanned_files': len(report.get('paths', {}).get('scanned', [])), 'semgrep_version': report.get('version')}
           summary['shellcheck_outcome'] = os.environ['SHELLCHECK_OUTCOME']
+          vendor = {'sources_outcome': os.environ['VENDOR_SOURCES_OUTCOME'], 'analysis_outcome': os.environ['VENDOR_ANALYSIS_OUTCOME']}
+          if (root / 'vendor-results.json').exists() and (root / 'vendor-source-identity.json').exists():
+              vendor_report = json.loads((root / 'vendor-results.json').read_text(encoding='utf-8'))
+              receipt = json.loads((root / 'vendor-source-identity.json').read_text(encoding='utf-8'))
+              expected = {view['view'] for view in receipt['views']}
+              scanned = vendor_report.get('paths', {}).get('scanned', [])
+              vendor.update({'findings': len(vendor_report.get('results', [])), 'errors': len(vendor_report.get('errors', [])),
+                             'scanned_files': len(scanned), 'expected_files': len(expected), 'semgrep_version': vendor_report.get('version'),
+                             'exact_view_population_scanned': len(scanned) == len(expected) and set(scanned) == expected,
+                             'source_views_unchanged': all(hashlib.sha256((root / 'vendor-source-views' / view['view']).read_bytes()).hexdigest() == view['sha256'] for view in receipt['views'])})
+          (root / 'vendor-summary.json').write_text(json.dumps(vendor, indent=2) + '\n', encoding='utf-8')
+          summary['maintained_vendor'] = vendor
           (root / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
           print(json.dumps(summary))
+          if vendor.get('sources_outcome') != 'success' or vendor.get('analysis_outcome') != 'success' or not vendor.get('exact_view_population_scanned') or not vendor.get('source_views_unchanged') or vendor.get('errors') or vendor.get('findings'):
+              raise SystemExit('Maintained vendor analysis failed, changed source, or omitted an expected view')
           if not summary['scanned_files']:
               raise SystemExit('SAST scanned zero files; applicability needs a separate review')
           if summary['shellcheck_outcome'] != 'success':

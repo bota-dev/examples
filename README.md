@@ -363,6 +363,17 @@ installing dependencies or requiring a Semgrep token. Findings, scanner errors
 and an empty scan fail the check. Existing CodeQL default analysis continues
 separately.
 
+Semgrep's ordinary dependency-directory defaults omit `vendor`. The same required
+check also analyzes exact maintained vendor source views under the same rules.
+The reviewed [inventory](.github/sast-maintained-vendor.json) freezes every tracked
+vendor file and classifies current payloads, official provenance and retired
+evidence. It selects retained source files and maintained archive patch members;
+each view preserves the original Git blob or archive-member bytes and records
+its source path, SHA-256 and size. Unknown or changed vendor inventory, unsafe
+archives, missing views, findings and analyzer errors fail the check. The policy
+is captured from the current workflow before any historical checkout. No vendor
+source is executed or repacked, and existing payload-integrity checks remain.
+
 Rules include security-audit, OWASP, JavaScript, TypeScript, Node.js, React,
 Python, Kotlin, Swift, Ruby and GitHub Actions. This is the configured community
 rule coverage; it does not establish complete language coverage for Dart or
