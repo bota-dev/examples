@@ -117,12 +117,13 @@ jobs:
           import hashlib, json, os, pathlib, subprocess
           workspace = pathlib.Path(os.environ['GITHUB_WORKSPACE']).resolve()
           rules = ('python.lang.security.audit.httpsconnection-detected.httpsconnection-detected',
-                   'java.android.security.exported_activity.exported_activity')
+                   'java.android.security.exported_activity.exported_activity',
+                   'javascript.express.security.injection.raw-html-format.raw-html-format')
           annotations = set()
           tracked = subprocess.check_output(['git', 'ls-files', '-z'], cwd=workspace).decode().split('\0')
           for name in filter(None, tracked):
               path = workspace / name
-              if path.suffix not in ('.py', '.xml'):
+              if path.suffix not in ('.py', '.xml', '.ts'):
                   continue
               for line in path.read_text(encoding='utf-8').splitlines():
                   if 'nosemgrep:' in line:
@@ -134,14 +135,17 @@ jobs:
               print(json.dumps({'reviewed_source_hashes': 0, 'findings': 0, 'ledger': 'absent; ordinary analysis'}))
               raise SystemExit(0)
           ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
-          sources = ledger['reviewed_findings'] + ledger['related_sources']
-          for entry in sources:
-              path = (workspace / entry['path']).resolve()
+          entries = ledger['reviewed_findings'] + ledger['related_sources']
+          sources = {entry['path']: entry['source_sha256'] for entry in entries}
+          if any(sources[entry['path']] != entry['source_sha256'] for entry in entries):
+              raise SystemExit('Conflicting reviewed source hashes')
+          for name, digest in sources.items():
+              path = (workspace / name).resolve()
               if not path.is_relative_to(workspace):
                   raise SystemExit('Reviewed source path escapes the workspace')
               canonical = path.read_bytes().replace(b'\r\n', b'\n')
-              if hashlib.sha256(canonical).hexdigest() != entry['source_sha256']:
-                  raise SystemExit('Reviewed source changed; recheck its annotation: ' + entry['path'])
+              if hashlib.sha256(canonical).hexdigest() != digest:
+                  raise SystemExit('Reviewed source changed; recheck its annotation: ' + name)
           approved = {(entry['path'], entry['rule_id']) for entry in ledger['reviewed_findings']}
           if annotations != approved:
               raise SystemExit('Audit annotations do not match the reviewed source ledger')

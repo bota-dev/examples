@@ -221,6 +221,50 @@
       "decision": "not_applicable_at_reviewed_site",
       "reason": "Required MAIN/LAUNCHER entry point; reviewed MainActivity consumes no external Intent data or extras.",
       "contract": "https://developer.android.com/about/versions/12/behavior-changes-12#exported"
+    },
+    {
+      "path": "apps/backend/src/index.ts",
+      "line": 124,
+      "rule_id": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "source_sha256": "53e61a1c23391e299911c28849551f16ae3d0965567dd0c6f878b74882e91d79",
+      "reviewed_site": "const bound = await bota<any>(`/devices/${device.id}/bind`, {",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "TypeScript generic call API-path argument enters bota<T> then Fetch; JSON.parse/res.json handle responses; no HTML construction or rendering sink. Legacy caller authentication/ownership limits remain separate.",
+      "contract": "https://nodejs.org/api/globals.html#fetch",
+      "response_contract": "https://expressjs.com/en/4x/api.html#res.json"
+    },
+    {
+      "path": "apps/backend/src/index.ts",
+      "line": 149,
+      "rule_id": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "source_sha256": "53e61a1c23391e299911c28849551f16ae3d0965567dd0c6f878b74882e91d79",
+      "reviewed_site": "const bound = await bota<any>(`/devices/${req.params.deviceId}/bind`, {",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "TypeScript generic call API-path argument enters bota<T> then Fetch; JSON.parse/res.json handle responses; no HTML construction or rendering sink. Legacy caller authentication/ownership limits remain separate.",
+      "contract": "https://nodejs.org/api/globals.html#fetch",
+      "response_contract": "https://expressjs.com/en/4x/api.html#res.json"
+    },
+    {
+      "path": "apps/backend/src/index.ts",
+      "line": 204,
+      "rule_id": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "source_sha256": "53e61a1c23391e299911c28849551f16ae3d0965567dd0c6f878b74882e91d79",
+      "reviewed_site": "const upload = await bota<any>(`/recordings/${recording.id}/upload-url`, {",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "TypeScript generic call API-path argument enters bota<T> then Fetch; JSON.parse/res.json handle responses; no HTML construction or rendering sink. Legacy caller authentication/ownership limits remain separate.",
+      "contract": "https://nodejs.org/api/globals.html#fetch",
+      "response_contract": "https://expressjs.com/en/4x/api.html#res.json"
+    },
+    {
+      "path": "apps/backend/src/index.ts",
+      "line": 230,
+      "rule_id": "javascript.express.security.injection.raw-html-format.raw-html-format",
+      "source_sha256": "53e61a1c23391e299911c28849551f16ae3d0965567dd0c6f878b74882e91d79",
+      "reviewed_site": "const recording = await bota<any>(`/recordings/${req.params.recordingId}/upload-complete`, {",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "TypeScript generic call API-path argument enters bota<T> then Fetch; JSON.parse/res.json handle responses; no HTML construction or rendering sink. Legacy caller authentication/ownership limits remain separate.",
+      "contract": "https://nodejs.org/api/globals.html#fetch",
+      "response_contract": "https://expressjs.com/en/4x/api.html#res.json"
     }
   ],
   "related_sources": [

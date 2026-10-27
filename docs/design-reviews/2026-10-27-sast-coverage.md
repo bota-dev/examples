@@ -53,6 +53,20 @@ unchanged.
 | [app-sdk/android-device-connect/app/src/main/AndroidManifest.xml](../../app-sdk/android-device-connect/app/src/main/AndroidManifest.xml) | 11 | Android launcher |
 | [app-sdk/android-recording-catalog/app/src/main/AndroidManifest.xml](../../app-sdk/android-recording-catalog/app/src/main/AndroidManifest.xml) | 11 | Android launcher |
 | [end-to-end/recordings/clients/android-kotlin/app/src/main/AndroidManifest.xml](../../end-to-end/recordings/clients/android-kotlin/app/src/main/AndroidManifest.xml) | 10 | Android launcher |
+| [apps/backend/src/index.ts](../../apps/backend/src/index.ts) | 124 | Device registration API path |
+| [apps/backend/src/index.ts](../../apps/backend/src/index.ts) | 149 | Device binding API path |
+| [apps/backend/src/index.ts](../../apps/backend/src/index.ts) | 204 | Recording upload URL API path |
+| [apps/backend/src/index.ts](../../apps/backend/src/index.ts) | 230 | Recording completion API path |
+
+The four legacy TypeScript matches are generic `bota<any>` calls whose template
+arguments are API paths passed to Node's [Fetch API](https://nodejs.org/api/globals.html#fetch).
+The helper parses JSON responses, and Express returns them through
+[`res.json`](https://expressjs.com/en/4x/api.html#res.json); these sites do not
+construct or render HTML. The rule's angle-bracket expression also matches the
+TypeScript generic call before a template string. Canonical LF source reproduces
+the four notices locally. Exact annotations preserve identical emitted JavaScript.
+This disposition does not qualify the legacy backend's existing caller
+authentication, ownership or token-boundary limitations.
 
 ## Shell parser coverage
 
@@ -91,6 +105,6 @@ static results, hosted Linux results and merge enforcement are distinct gates.
 | Every new PR has static analysis | Unfiltered PR events, merge-group trigger, no dependency/secret prerequisite | Matched in source; hosted execution separate |
 | Findings and analyzer errors fail | Real Semgrep 1.168 scan: 920 files, zero findings/errors; strict flags and zero-file guard | Matched locally |
 | Canonical shell sources retain coverage | Three unchanged source hashes; ShellCheck 0.11.0 zero findings; unsafe fixture fails | Matched locally |
-| Dispositions remain bound to reviewed source | 22 exact annotations, 25 source hashes; changed-hash/path-escape controls fail | Matched locally |
-| Adjacent rendering behavior remains valid | Web format/type/build checks and 69 UI checks pass; Python AST and manifest element shapes preserved | Matched locally |
+| Dispositions remain bound to reviewed source | 26 exact annotations, 26 unique source hashes; changed-hash/path-escape controls fail | Matched locally |
+| Adjacent rendering behavior remains valid | Web format/type/build checks and 69 UI checks pass; Python AST, manifest elements and legacy backend JavaScript emit preserved | Matched locally |
 | Exact hosted Linux result and merge enforcement | Requires the exact PR run and separate repository rule readback | Unverified here |
