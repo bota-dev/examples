@@ -354,6 +354,31 @@ platform-specific acceptance gates still apply to each changed example.
   [CLAUDE.md](CLAUDE.md): entry points for coding tools.
 - [Public Bota docs](https://docs.bota.dev): API and SDK contracts.
 
+## Security scanning
+
+The pinned `Semgrep` workflow runs the read-only `Scan` check on every PR,
+including drafts and any target branch, merge queues, pushes to `main`, manual
+dispatches and the weekly schedule. It scans the full source checkout without
+installing dependencies or requiring a Semgrep token. Findings, scanner errors
+and an empty scan fail the check. Existing CodeQL default analysis continues
+separately.
+
+Rules include security-audit, OWASP, JavaScript, TypeScript, Node.js, React,
+Python, Kotlin, Swift, Ruby and GitHub Actions. This is the configured community
+rule coverage; it does not establish complete language coverage for Dart or
+Objective-C. Each run retains JSON/SARIF results, scanned-file counts, immutable
+source/workflow identities and exact rule snapshots with SHA-256 hashes for 90
+days. Maintainers register the literal `Scan` check name for SAST enforcement.
+
+Manual dispatch accepts an optional full 40-character `revision` commit SHA.
+That scan is labeled retrospective and does not establish that the original
+PR passed SAST before merge.
+
+The [review and source-bound dispositions](docs/design-reviews/2026-10-27-sast-coverage.md)
+record the audit annotations and canonical shell coverage. Unannotated historical
+source receives ordinary analysis; annotations without a matching review ledger
+or changes to reviewed sources fail until reviewed.
+
 ## License
 
 Bota-authored sample code uses the [MIT license](LICENSE). Third-party

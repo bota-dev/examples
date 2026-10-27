@@ -1,0 +1,263 @@
+{
+  "review_date": "2026-10-27",
+  "hash_basis": "Canonical checked-in UTF-8/LF source bytes",
+  "reviewed_findings": [
+    {
+      "path": "api/api-health-python/main.py",
+      "line": 84,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "e2860888653921b3e4cc630588e7e54f54084819e956e10945b4bc840fd53711",
+      "reviewed_site": "connection = http.client.HTTPSConnection(host, port, timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/connection-config-python/main.py",
+      "line": 83,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "cff118881b84b661d96f587a1f4fcf00d20fe0a8645b1d0979d02f48a5b952cc",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=min(10, remaining))",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/create-ask-session-python/main.py",
+      "line": 171,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "18b35a84534f14e2bbd29a33e158efd2762ce9b8e9137719e77e8f99bbcade17",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"], timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/download-firmware-python/main.py",
+      "line": 103,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "b3b1940aa8a8d2ac858753c7df9f2ac5e897a009c3e4b7672d03abbcf272c900",
+      "reviewed_site": "connection = http.client.HTTPSConnection(host, 443, timeout=min(15, remaining_time(deadline)))",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/download-recording-python/main.py",
+      "line": 106,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "cf3ff07157ff9f47ea6e9a568dd3bfc540c1017072f652e7c11e18c6c2345157",
+      "reviewed_site": "connection = http.client.HTTPSConnection(host, port, timeout=min(10, remaining_time(deadline)))",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/end-user-ota-config-python/main.py",
+      "line": 83,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "6a1223eea35d4bb532dcb97aa65a3d58d35a3956c1f558951f13072fe11a3dce",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/end-user-processing-config-python/main.py",
+      "line": 83,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "b5cfb9d64b6279f28261c3fdb0bbb03ccdc2429e73798c17d2162ecc0a326f62",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/end-user-upload-config-python/main.py",
+      "line": 84,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "07ae7be0a5c32ba2f9018ac55e28ed7d5f2666024231a4d49045af8fd61b9667",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/export-transcription-csv-python/main.py",
+      "line": 108,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "6b95547c5d6c2c69b1e51eb5d14800549903b951067d032489c837a196168fa2",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"],",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/export-transcription-html-python/main.py",
+      "line": 128,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "805c6f13e8b231641c2e3dd7ae91ea7108449defbb22fd2cf5cf53886b6b0314",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"],",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/export-transcription-vtt-python/main.py",
+      "line": 105,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "f692e78b4dc737bf3d6f60b6c0be265aac52b0026bd6ff549318b29734f429e8",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"],",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/inspect-ask-session-python/main.py",
+      "line": 108,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "53c4e89f70be31ad9e5675970546e9ea1073de3cd83b15bf711bde347cc03315",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"], timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/inspect-recording-integrity-python/main.py",
+      "line": 107,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "f3567c7e6d0d8c93d182dbcf0cdb15505dc0f7697308fa67c56045a44a5a6fcb",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"], timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/inspect-summary-python/main.py",
+      "line": 101,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "e0cf236be57ef814f46d58ef328cd180bd2ced77d59d33ac3ff74c090babe6fe",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"], timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/list-summaries-python/main.py",
+      "line": 90,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "60da0052f93d34db4e2011cbc61fb8393620e029e8eb9289bd77fc52444c3770",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"], timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/ota-config-python/main.py",
+      "line": 83,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "b54e6290d78cf9effdaf5d61613c7761843a65aaf39f719188101f2c05f836ca",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=min(10, remaining))",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/project-ota-config-python/main.py",
+      "line": 77,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "273adf761a95c86b8b5a3959232ad4c38d1661ae1127639be64cbf62c14af0e8",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/rename-device-python/main.py",
+      "line": 208,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "88632b84c06f055ff561abd31beadfd598313d582085089bc8cb847aa190533c",
+      "reviewed_site": "connection = http.client.HTTPSConnection(config[\"host\"], config[\"port\"], timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "api/upload-security-config-python/main.py",
+      "line": 85,
+      "rule_id": "python.lang.security.audit.httpsconnection-detected.httpsconnection-detected",
+      "source_sha256": "0a96655618797f6a8b359e806fe89d07b079d4b9f672eed657c1e65c209430db",
+      "reviewed_site": "connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=remaining)",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Python >=3.12 is required; this constructor uses the default certificate and hostname validation context.",
+      "contract": "https://docs.python.org/3.12/library/http.client.html#http.client.HTTPSConnection"
+    },
+    {
+      "path": "app-sdk/android-device-connect/app/src/main/AndroidManifest.xml",
+      "line": 11,
+      "rule_id": "java.android.security.exported_activity.exported_activity",
+      "source_sha256": "ccd2b264d34f77848303a9e35002e39a9d82dcaa3fc4036fd440da1ecce6c2e0",
+      "reviewed_site": "<activity android:name=\".MainActivity\" android:exported=\"true\" android:configChanges=\"orientation|screenSize\">",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Required MAIN/LAUNCHER entry point; reviewed MainActivity consumes no external Intent data or extras.",
+      "contract": "https://developer.android.com/about/versions/12/behavior-changes-12#exported"
+    },
+    {
+      "path": "app-sdk/android-recording-catalog/app/src/main/AndroidManifest.xml",
+      "line": 11,
+      "rule_id": "java.android.security.exported_activity.exported_activity",
+      "source_sha256": "7edd5b28987b0cc0349ad80efb6df3465ca2cc488cfd446968d84026ccce99c8",
+      "reviewed_site": "<activity android:name=\".MainActivity\" android:exported=\"true\" android:configChanges=\"orientation|screenSize\">",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Required MAIN/LAUNCHER entry point; reviewed MainActivity consumes no external Intent data or extras.",
+      "contract": "https://developer.android.com/about/versions/12/behavior-changes-12#exported"
+    },
+    {
+      "path": "end-to-end/recordings/clients/android-kotlin/app/src/main/AndroidManifest.xml",
+      "line": 10,
+      "rule_id": "java.android.security.exported_activity.exported_activity",
+      "source_sha256": "0d1379e5d8a5aa33a06ba12474802938cab20ccccd244337d674fab9694049cb",
+      "reviewed_site": "<activity android:name=\".MainActivity\" android:exported=\"true\">",
+      "decision": "not_applicable_at_reviewed_site",
+      "reason": "Required MAIN/LAUNCHER entry point; reviewed MainActivity consumes no external Intent data or extras.",
+      "contract": "https://developer.android.com/about/versions/12/behavior-changes-12#exported"
+    }
+  ],
+  "related_sources": [
+    {
+      "path": "app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt",
+      "source_sha256": "26dc74a496d42e574d727d13290e2e585eacc375aa9d463edd0ca0db15aa43ae",
+      "reason": "Activity source inspected for externally supplied Intent control/data"
+    },
+    {
+      "path": "app-sdk/android-recording-catalog/app/src/main/java/dev/bota/examples/catalog/MainActivity.kt",
+      "source_sha256": "fda05cc181341e0531c6e2aec98e70cdc42258e3d75837f950548c5603cc51b7",
+      "reason": "Activity source inspected for externally supplied Intent control/data"
+    },
+    {
+      "path": "end-to-end/recordings/clients/android-kotlin/app/src/main/java/dev/bota/examples/recordings/MainActivity.kt",
+      "source_sha256": "2ec2bb2b103376b12e132c3407c7cfc1f118735298df4331d6fddfb4ba70215e",
+      "reason": "Activity source inspected for externally supplied Intent control/data"
+    }
+  ],
+  "parser_fallbacks": [
+    {
+      "path": "app-sdk/android-device-connect/gradlew",
+      "source_sha256": "734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933",
+      "reason": "Semgrep1.168 partial Bash parser support for canonical Gradle POSIX command lists and implicit argument loops",
+      "secondary_scanner": "ShellCheck0.11.0 --norc; every finding/error fails Scan"
+    },
+    {
+      "path": "app-sdk/android-recording-catalog/gradlew",
+      "source_sha256": "734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933",
+      "reason": "Semgrep1.168 partial Bash parser support for canonical Gradle POSIX command lists and implicit argument loops",
+      "secondary_scanner": "ShellCheck0.11.0 --norc; every finding/error fails Scan"
+    },
+    {
+      "path": "end-to-end/recordings/clients/android-kotlin/gradlew",
+      "source_sha256": "734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933",
+      "reason": "Semgrep1.168 partial Bash parser support for canonical Gradle POSIX command lists and implicit argument loops",
+      "secondary_scanner": "ShellCheck0.11.0 --norc; every finding/error fails Scan"
+    }
+  ]
+}
