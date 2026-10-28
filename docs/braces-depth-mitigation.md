@@ -141,3 +141,22 @@ matching/watcher and exports are recorded in [the current scope](metro-public-ma
 Legacy root #113 and its six-asset parser guard remain unchanged. Source
 admission, first-push/native results, scanner closure and physical acceptance
 are separate; this prospective local evidence claims no published fix.
+
+## October 13 current legacy root successor
+
+The legacy root now carries the prospective [owning public-parent replacement](legacy-public-parent-matching-removal.md)
+for #113, with a read-only asset/absence hook and 20 actual-parent cases. The
+six-file source and 22-case parser suite above remain byte-identical historical
+evidence under `vendor/braces-security/historical/`; the fixed AST/depth/accessor
+policy is not presented as a universal replacement API. Current source checks
+remove physical/locked Braces and Micromatch. Independent source review, normal
+main/hosted/scanner delivery and installed/native acceptance remain separate.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

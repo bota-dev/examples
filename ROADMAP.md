@@ -6,19 +6,38 @@ shared Node backend, platform clients and copyable feature modules. Retain usefu
 standalone Node/Python quickstarts. General capabilities are the current product
 layer; vertical/app-type examples come later.
 
+The separately requested [October 14 SDK adoption](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
+updates all device SDK clients to public beta.18. It does not complete missing
+platform hosts or the remaining consolidation below.
+The [October 20 iOS/mobile pass](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+adds the Swift/Flutter iOS hosts, RN cloud iOS support and ordinary mobile media;
+its four touched SDK roots use public beta.19. Native and physical evidence stay
+specific to the recorded source and platform.
+The [SDK/catalog follow-up](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
+aligns the remaining six SDK roots to beta.19 and adds the shared Swift metadata
+catalog's iOS host. No recording transfer or new device acceptance is implied.
+The [native/cloud and Web-device pass](docs/design-reviews/2026-10-20-native-cloud-web-device.md)
+adds small Kotlin Android and Swift iOS/macOS cloud readers plus optional Web
+connection/status. The new Web feature uses public beta.20; existing SDK roots
+retain beta.19. These features do not supply complete native recording parity.
+
 ## 1. Consolidate the existing backend features compatibly
 
-**Delivered first step:** recording reads, transcription/general notes and Ask
-have one implementation in the [integrated core](end-to-end/recordings/README.md).
-Both existing backends use compatibility exports and preserve their DTOs.
-Auth, upload/webhook features and stores still run in two existing listeners.
+**Implemented:** shared recording/processing/Ask features and the
+[combined launcher](end-to-end/recordings/README.md) compose existing service
+factories on one Node listener. Cookie/Bearer adapters, routes/DTOs and all three
+journals remain intact. Original absolute paths, schema/index/scope and configured
+account mapping validate before writable startup; explicit fresh initialization
+requires all journals absent. Mixed credentials are rejected. Processing/Ask
+claims coordinate in this process and refuse matching peer intent, even known or
+complete, without Web peer-ID adoption. Existing own GET recovery and exact
+native/library known-ID reconciliation remain.
 
-**Next:** coordinate same-owner writes and retained intent across web, mobile
-library and native journals; preserve absolute/state-path resolution and request
-limits, and reject mixed cookie/Bearer credentials. Then consolidate the hosts
-into one Node sample backend. Preserve explicit browser-cookie and mobile-bearer
-adapters that authenticate callers and derive principals; do not replace web
-account isolation with the mobile sample's fixed test identity.
+**Qualification:** stop old listeners and verify the combined auth/input,
+development-file denial, retained-state and startup/shutdown contracts on every
+affected consumer. The common 10/30-second incoming header/body limits are
+stricter than standalone Web; upstream processing deadlines are unchanged.
+Other writers and concurrent filesystem changes remain outside these guarantees.
 
 Use compatibility routes and persistence adapters before moving files or
 merging storage. Preserve configured scope, account/resource IDs, existing
@@ -30,18 +49,32 @@ feature reuse, not a new API SDK, generic proxy or authentication product.
 **Acceptance:** both current backend adapters and all affected clients retain
 compatible routes/DTOs and auth/store behavior. Tests exercise ownership and
 source isolation, uncertainty recovery and existing native host-callback
-boundaries. No uncertain operation is
-lost or replayed. The approved single backend is not claimed until this migration
-and its affected checks pass. SDK version upgrades and hardware operations are
+boundaries. No uncertain operation is lost or replayed. Report the combined
+listener's source/local/hosted evidence separately from production or hardware
+acceptance. SDK version upgrades and hardware operations are
 outside this work.
 
-## 2. Connect existing clients and make feature code easy to adapt
+## 2. Maintain relocated mobile clients and qualify further moves
 
 Connect the web, React Native and Flutter clients to the shared backend through
 their existing auth adapters. Preserve independent manifests, locks, native
 identities and install/build instructions. Expose actual public calls in plain
 backend/client feature files, with narrow contract fixtures shared where useful.
 Keep UI, permissions and SDK lifecycle native to each platform.
+
+**Mobile clients relocated:** complete Flutter and RN Android install roots now
+live at `end-to-end/recordings/clients/flutter/` and `clients/react-native/`.
+Their license helpers/native/vendor/guard graphs, CI/Dependabot/discovery paths
+and old README forwarding entries move together. Native identity, SDK pins and
+locks are unchanged. Client/native-host origins retain `8787` defaults; preserve
+the original origin for retained capture recovery. The combined host supports
+`PORT=8787` with matching `APP_ORIGIN`, while fresh cloud setup may explicitly
+use `5173`. Never reset journals or change capture identity to fit the move.
+Original Web/mobile backend launch bases and journals stay put.
+
+Web remains coupled to Vite/static/state paths. Further moves require compatible
+source/build gates and updated links/install instructions; no new UI or universal
+model layer is needed.
 
 Lead the README with workflow → language/platform → source → run/adapt
 instructions. Curate connection/status/loss, recording metadata/supported
@@ -64,13 +97,24 @@ root install or universal example framework is required.
 
 ## 3. Fill useful native platform hosts and SDK modules
 
+**Implemented in source:** Swift iOS connection/status shares the macOS feature;
+both Flutter roots now have iOS hosts, and the RN recording app has a cloud-only
+iOS host. Each has an unsigned hosted build gate. These additions do not supply
+an iOS implementation of the custom Android encrypted-upload adapter.
+The Swift metadata catalog also shares its feature across iOS/macOS, with fresh
+pairing before listing and no audio transfer or recording cleanup.
+
+Kotlin and Swift now also provide small native cloud readers using the shared
+Bearer backend: local sample or live first-page library, transcript and existing
+general notes. They add no processing writes, media or device SDK dependency.
+Web integrates optional public-SDK connection/status, with explicit preparation
+and a user-activated chooser. Demo mode never loads the SDK.
+
 Kotlin, Swift, React Native, Flutter and Web examples have equal importance.
-Complete small supported host/workflow paths; prioritize missing Swift iOS and
-Flutter iOS hosts alongside documented RN iOS support. Native Kotlin and Swift
-clients start with an idiomatic runnable SDK host and focused
-connection/status/recording feature files. Add cloud/library UI where it teaches
-a useful platform integration; do not duplicate full clients by default or
-create another root per SDK method.
+Extend supported feature files where they teach a useful integration. Native
+media/processing and device-to-cloud workflows remain separate capability and
+acceptance decisions; do not duplicate full clients by default or create a root
+per SDK method.
 
 Keep capability, host and verification separate. Flutter's selected facade
 cannot provide the RN encrypted-sync path; adding an iOS host or bumping a
@@ -86,6 +130,19 @@ client to implement import, playback or a full consumer UI. Each host states its
 actual capabilities and keeps its SDK-only path independent of the backend.
 
 ## 4. Complete the ordinary recording flow and migrate the layout
+
+**Web playback implemented:** the ordinary-import path requests a fixed public
+WAV export, bounds storage bytes and rechecks owner/source/session before release.
+Signed URLs remain server-side; the browser clears its transient media on source
+refresh, selection changes and sign-out. Device/encrypted sources are unavailable.
+Synthetic tone playback does not establish live API/export/media acceptance.
+The [October 15 live HTTP test](docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+passed for one synthetic WAV import through export, transcription, summary and
+Ask. Browser decoding and other input formats remain acceptance gaps.
+RN and Flutter now support explicit ordinary file import and WAV playback using
+the same backend features, native pickers and transient private audio. The
+mobile adapter adds raw upload and authenticated audio routes without moving
+journals; native decoder and physical acceptance remain separate checks.
 
 Keep Bota Recordings familiar: add/import audio → library → playback/source →
 transcript → general notes → scoped Ask. Ordinary UI serves recording users;
@@ -120,7 +177,9 @@ not implement or approve a particular vertical app.
 
 ## Delivery rules
 
-Existing launch paths, catalog identities, locks and SDK pins remain unchanged.
+Preserve existing launch paths, catalog identities, locks and exact SDK pins
+outside explicitly qualified changes. Ten existing SDK roots pin beta.19; the
+new optional Web app integration pins beta.20.
 The implemented core adds its own catalog entry and frozen dev-tool lock.
 Further consolidation or moves require compatible links,
 catalog/workflow updates and preserved state; legacy retirement retains its

@@ -13,10 +13,25 @@ import {
 } from './features/processing.mjs';
 import { askRecording, refreshAsk } from './features/ask.mjs';
 import { receiveWebhook, listEvents } from './features/webhooks.mjs';
+import { playbackAudio } from './features/playback.mjs';
 
-export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
+export function createApp({
+  config,
+  store,
+  fetchImpl,
+  now,
+  staticDirectory,
+  beforeClaim = () => {},
+  coordinateTranscription = (_recordingId, work) => work(),
+  coordinateSummary = (_transcriptionId, work) => work(),
+  coordinateAsk = (_recordingId, _question, work) => work(),
+  trackWork = (work) => work(),
+}) {
   const app = express();
   const auth = createAuth(config, { now });
+  // Socket closure does not mean an upstream write and its durable save have
+  // settled. A composed host can drain these promises before closing journals.
+  const tracked = (handler) => (req, res, next) => trackWork(() => handler(req, res, next));
   app.disable('x-powered-by');
   app.use((req, res, next) => {
     res.set({
@@ -28,7 +43,7 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
     if (staticDirectory)
       res.set(
         'Content-Security-Policy',
-        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+        "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
       );
     ensure(
       req.headers.host === new URL(config.origin).host,
@@ -41,12 +56,12 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
   app.post(
     '/webhooks/bota',
     express.raw({ type: 'application/json', limit: '1mb', inflate: false }),
-    async (req, res) => {
+    tracked(async (req, res) => {
       ensure(config.webhookSecret, 503, 'WEBHOOK_DISABLED', 'Webhook endpoint is not configured.');
       ensure(Buffer.isBuffer(req.body), 415, 'CONTENT_TYPE', 'Expected JSON bytes.');
       await receiveWebhook({ config, store }, req.body, req.headers);
       res.json({ accepted: true });
-    },
+    }),
   );
   app.use('/api', (req, _res, next) => {
     if (!['GET', 'HEAD'].includes(req.method))
@@ -80,13 +95,22 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
   app.post('/api/logout', (_req, res) =>
     res.set('Set-Cookie', auth.logout(_req.headers.cookie)).json({ ok: true }),
   );
-  const context = (req) => ({
+  const context = (req, signal) => ({
     principal: req.principal,
     config,
     store: {
       ...store,
-      claim(...args) {
-        const result = store.claim(...args);
+      claim(principal, kind, anchor, details = {}) {
+        // A retained own intent keeps its existing GET-only recovery path.
+        // The trusted host guard is synchronous with a genuinely new claim.
+        if (!store.find(principal, kind, anchor)) {
+          const guard = beforeClaim(principal, kind, anchor, details);
+          if (guard && typeof guard.then === 'function') {
+            void Promise.resolve(guard).catch(() => {});
+            ensure(false, 500, 'configuration', 'Claim guards must complete synchronously.');
+          }
+        }
+        const result = store.claim(principal, kind, anchor, details);
         req.operation = result.operation;
         return result;
       },
@@ -96,7 +120,7 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
         return result;
       },
     },
-    ...createClient(config, { fetchImpl }),
+    ...createClient(config, { fetchImpl, signal }),
   });
   const noBody = (req) =>
     ensure(
@@ -112,7 +136,7 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
       limit: '25mb',
       inflate: false,
     }),
-    async (req, res) => {
+    tracked(async (req, res) => {
       let name;
       try {
         name = decodeURIComponent(req.headers['x-file-name'] ?? '');
@@ -126,63 +150,127 @@ export function createApp({ config, store, fetchImpl, now, staticDirectory }) {
           bytes: req.body,
         }),
       );
-    },
+    }),
   );
   app.use('/api', express.json({ limit: '64kb' }));
-  app.get('/api/recordings', async (req, res) => {
-    ensure(
-      Object.keys(req.query).every((key) => key === 'cursor') &&
-        (req.query.cursor === undefined || typeof req.query.cursor === 'string'),
-      400,
-      'INVALID_QUERY',
-      'Only a recording cursor is accepted.',
-    );
-    res.json(await listRecordings(context(req), req.query.cursor));
-  });
-  app.get('/api/recordings/:id', async (req, res) =>
-    res.json(await getRecording(context(req), req.params.id)),
+  app.get(
+    '/api/recordings',
+    tracked(async (req, res) => {
+      ensure(
+        Object.keys(req.query).every((key) => key === 'cursor') &&
+          (req.query.cursor === undefined || typeof req.query.cursor === 'string'),
+        400,
+        'INVALID_QUERY',
+        'Only a recording cursor is accepted.',
+      );
+      res.json(await listRecordings(context(req), req.query.cursor));
+    }),
   );
-  app.get('/api/recordings/:id/transcriptions', async (req, res) =>
-    res.json(await listTranscriptions(context(req), req.params.id)),
+  app.get(
+    '/api/recordings/:id',
+    tracked(async (req, res) => res.json(await getRecording(context(req), req.params.id))),
   );
-  app.post('/api/recordings/:id/transcriptions', async (req, res) => {
-    noBody(req);
-    res.json(await startTranscription(context(req), req.params.id));
-  });
-  app.get('/api/transcriptions/:id/summaries', async (req, res) =>
-    res.json(await listSummaries(context(req), req.params.id)),
+  app.get(
+    '/api/recordings/:id/audio',
+    tracked(async (req, res) => {
+      ensure(
+        req.method === 'GET' && Object.keys(req.query).length === 0 && !req.headers.range,
+        400,
+        'INVALID_REQUEST',
+        'Load the complete recording audio without query or range parameters.',
+      );
+      const abort = new AbortController();
+      const disconnected = () => {
+        if (!res.writableEnded) abort.abort();
+      };
+      req.once('aborted', disconnected);
+      res.once('close', disconnected);
+      try {
+        const bytes = await playbackAudio(context(req, abort.signal), req.params.id);
+        if (req.aborted || res.destroyed) return;
+        ensure(
+          auth.principal(req.headers.cookie) === req.principal,
+          401,
+          'UNAUTHENTICATED',
+          'Sign in again to load recording audio.',
+        );
+        res.set('Content-Type', 'audio/wav').send(bytes);
+      } catch (error) {
+        if (!req.aborted && !res.destroyed) throw error;
+      } finally {
+        req.off('aborted', disconnected);
+        res.off('close', disconnected);
+      }
+    }),
   );
-  app.post('/api/transcriptions/:id/summaries', async (req, res) => {
-    noBody(req);
-    res.json(await startSummary(context(req), req.params.id));
-  });
-  app.post('/api/recordings/:id/ask', async (req, res) => {
-    ensure(
-      object(req.body) &&
-        Object.keys(req.body).length === 1 &&
-        typeof req.body.question === 'string',
-      400,
-      'INVALID_QUESTION',
-      'Supply one question.',
-    );
-    res.json(await askRecording(context(req), req.params.id, req.body.question));
-  });
-  app.get('/api/events', async (req, res) => res.json(await listEvents(context(req))));
+  app.get(
+    '/api/recordings/:id/transcriptions',
+    tracked(async (req, res) => res.json(await listTranscriptions(context(req), req.params.id))),
+  );
+  app.post(
+    '/api/recordings/:id/transcriptions',
+    tracked(async (req, res) => {
+      noBody(req);
+      res.json(
+        await coordinateTranscription(req.params.id, () =>
+          startTranscription(context(req), req.params.id),
+        ),
+      );
+    }),
+  );
+  app.get(
+    '/api/transcriptions/:id/summaries',
+    tracked(async (req, res) => res.json(await listSummaries(context(req), req.params.id))),
+  );
+  app.post(
+    '/api/transcriptions/:id/summaries',
+    tracked(async (req, res) => {
+      noBody(req);
+      res.json(
+        await coordinateSummary(req.params.id, () => startSummary(context(req), req.params.id)),
+      );
+    }),
+  );
+  app.post(
+    '/api/recordings/:id/ask',
+    tracked(async (req, res) => {
+      ensure(
+        object(req.body) &&
+          Object.keys(req.body).length === 1 &&
+          typeof req.body.question === 'string',
+        400,
+        'INVALID_QUESTION',
+        'Supply one question.',
+      );
+      res.json(
+        await coordinateAsk(req.params.id, req.body.question.trim(), () =>
+          askRecording(context(req), req.params.id, req.body.question),
+        ),
+      );
+    }),
+  );
+  app.get(
+    '/api/events',
+    tracked(async (req, res) => res.json(await listEvents(context(req)))),
+  );
   app.get('/api/operations', (req, res) =>
     res.json({ data: store.list(req.principal).map(operationView) }),
   );
-  app.get('/api/operations/:id', async (req, res) => {
-    const op = store.get(req.principal, req.params.id);
-    req.operation = op;
-    const ctx = context(req);
-    res.json(
-      await (op.kind === 'upload'
-        ? refreshUpload(ctx, op.id)
-        : op.kind === 'ask'
-          ? refreshAsk(ctx, op.id)
-          : refreshProcessing(ctx, op.id)),
-    );
-  });
+  app.get(
+    '/api/operations/:id',
+    tracked(async (req, res) => {
+      const op = store.get(req.principal, req.params.id);
+      req.operation = op;
+      const ctx = context(req);
+      res.json(
+        await (op.kind === 'upload'
+          ? refreshUpload(ctx, op.id)
+          : op.kind === 'ask'
+            ? refreshAsk(ctx, op.id)
+            : refreshProcessing(ctx, op.id)),
+      );
+    }),
+  );
   app.use('/api', (_req, _res) => {
     throw new AppError(404, 'NOT_FOUND', 'Route unavailable.');
   });

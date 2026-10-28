@@ -135,6 +135,57 @@ export function createStore(path = ':memory:') {
       );
       return op(row);
     },
+    assertPeerUpload(details, { principal } = {}) {
+      const exclude = principal ? 'AND NOT (account=? AND scope=?)' : '';
+      const owner = principal ? [principal.accountId, principal.scopeId] : [];
+      const peer = db
+        .prepare(
+          `SELECT 1 FROM operations WHERE kind='upload'
+        AND json_extract(details,'$.projectId')=? AND json_extract(details,'$.endUserId')=?
+        AND json_extract(details,'$.name')=? AND json_extract(details,'$.contentType')=?
+        AND json_extract(details,'$.size')=? AND json_extract(details,'$.digest')=? ${exclude} LIMIT 1`,
+        )
+        .get(
+          details.projectId,
+          details.endUserId,
+          details.name,
+          details.contentType,
+          details.size,
+          details.digest,
+          ...owner,
+        );
+      ensure(
+        !peer,
+        409,
+        'cross_intent_reconciliation_required',
+        'A retained upload needs GET reconciliation in its original adapter.',
+      );
+      return true;
+    },
+    assertPeerIntent(kind, anchor, { principal, recordingId } = {}) {
+      // This internal probe includes removed accounts, older scopes and intents
+      // outside Activity's bounded list. Only the exact caller scope is exempt.
+      const exclude = principal ? 'AND NOT (account=? AND scope=?)' : '';
+      const owner = principal ? [principal.accountId, principal.scopeId] : [];
+      let peer = db
+        .prepare(`SELECT 1 FROM operations WHERE kind=? AND anchor=? ${exclude} LIMIT 1`)
+        .get(kind, anchor, ...owner);
+      if (!peer && kind === 'ask' && recordingId)
+        peer = db
+          .prepare(
+            `SELECT 1 FROM operations WHERE kind='ask' AND state!='complete'
+          AND json_extract(details,'$.recordingId')=?
+          AND json_extract(details,'$.questionFormat') IS NOT 'trim-v1' ${exclude} LIMIT 1`,
+          )
+          .get(recordingId, ...owner);
+      ensure(
+        !peer,
+        409,
+        'cross_intent_reconciliation_required',
+        'A retained request requires reconciliation before a new action.',
+      );
+      return true;
+    },
     list(principal) {
       return db
         .prepare(

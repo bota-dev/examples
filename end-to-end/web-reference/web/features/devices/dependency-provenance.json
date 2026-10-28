@@ -1,0 +1,24 @@
+{
+  "checkedAt": "2026-10-21T00:53:38.027Z",
+  "distTags": {
+    "latest": "2.0.0-beta.0",
+    "beta": "2.0.0-beta.20"
+  },
+  "version": "2.0.0-beta.20",
+  "publishedAt": "2026-10-21T00:34:50.486Z",
+  "license": "MIT",
+  "bytes": 375802,
+  "integrity": "sha512-4n2OkCZw/g5e6PtsBcI0pZY2i5NP5Bhd9uTCZA7nXCCr+DHXZaN1V+HOlRxxRI9MCoBZKOQqQgUpoD/kHAT2OQ==",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "dependencies": {},
+  "archiveVerified": true,
+  "ageException": "Owner requests latest public SDK; exception does not apply to unrelated packages."
+}

@@ -1,9 +1,37 @@
 import { createHash } from 'node:crypto';
 
+// A two-second quiet tone, not speech or a representation of the synthetic transcript.
+export function syntheticPlaybackAudio() {
+  const rate = 8000;
+  const samples = rate * 2;
+  const wav = Buffer.alloc(44 + samples * 2);
+  wav.write('RIFF', 0);
+  wav.writeUInt32LE(wav.length - 8, 4);
+  wav.write('WAVEfmt ', 8);
+  wav.writeUInt32LE(16, 16);
+  wav.writeUInt16LE(1, 20);
+  wav.writeUInt16LE(1, 22);
+  wav.writeUInt32LE(rate, 24);
+  wav.writeUInt32LE(rate * 2, 28);
+  wav.writeUInt16LE(2, 32);
+  wav.writeUInt16LE(16, 34);
+  wav.write('data', 36);
+  wav.writeUInt32LE(samples * 2, 40);
+  for (let index = 0; index < samples; index++) {
+    const fade = Math.min(1, index / 400, (samples - index - 1) / 400);
+    wav.writeInt16LE(
+      Math.round(Math.sin((index * 2 * Math.PI * 440) / rate) * 3276 * fade),
+      44 + index * 2,
+    );
+  }
+  return wav;
+}
+
 // Synthetic in-process upstream. It never delegates to global fetch or any network.
 export function demoFetch({ onEvent = () => {} } = {}) {
   const at = '2026-10-12T10:00:00.000Z';
   const recordings = new Map();
+  const playbackBytes = syntheticPlaybackAudio();
   const transcriptions = new Map();
   const summaries = new Map();
   const sessions = new Map();
@@ -57,10 +85,15 @@ export function demoFetch({ onEvent = () => {} } = {}) {
       end_user_id: 'eu_demo',
       project_id: 'proj_demo',
       source: 'api_upload',
+      upload_method: 'import',
+      device_id: null,
+      encryption_version: null,
+      mime_type: 'audio/wav',
+      file_size_bytes: playbackBytes.length,
       status: 'uploaded',
       created_at: at,
       duration_seconds: 42,
-      content_sha256: digest(id),
+      content_sha256: digest(playbackBytes),
       content_sha256_verified_at: at,
     });
   }
@@ -87,6 +120,19 @@ export function demoFetch({ onEvent = () => {} } = {}) {
       row.storedHash = digest(options.body);
       return new Response(null, { status: 200 });
     }
+    if (url.hostname === 'storage.example.test' && method === 'GET') {
+      const match = /^\/(rec_[A-Za-z0-9]+)\/playback\.wav$/.exec(url.pathname);
+      if (
+        !match ||
+        !recordings.has(match[1]) ||
+        options.headers?.Authorization ||
+        options.headers?.Cookie
+      )
+        return response({}, 403);
+      return new Response(playbackBytes, {
+        headers: { 'Content-Type': 'audio/wav', 'Content-Length': String(playbackBytes.length) },
+      });
+    }
     if (url.hostname !== 'fixture.bota.invalid')
       throw new Error('Demo does not permit external networking.');
     const path = url.pathname.replace(/^\/v1/, '');
@@ -106,6 +152,10 @@ export function demoFetch({ onEvent = () => {} } = {}) {
         end_user_id: body.end_user_id,
         project_id: 'proj_demo',
         source: 'api_upload',
+        upload_method: 'import',
+        device_id: null,
+        encryption_version: null,
+        mime_type: null,
         status: 'pending',
         created_at: at,
         duration_seconds: null,
@@ -114,16 +164,33 @@ export function demoFetch({ onEvent = () => {} } = {}) {
       return response(row, 201);
     }
     const recordingMatch =
-      /^\/recordings\/(rec_[A-Za-z0-9]+)(?:\/(upload-url|upload-complete))?$/.exec(path);
+      /^\/recordings\/(rec_[A-Za-z0-9]+)(?:\/(upload-url|upload-complete|download-url))?$/.exec(
+        path,
+      );
     if (recordingMatch) {
       const row = recordings.get(recordingMatch[1]);
       if (!row) return response({}, 404);
       if (method === 'GET' && !recordingMatch[2]) return response(row);
-      if (method === 'POST' && recordingMatch[2] === 'upload-url')
+      if (
+        method === 'GET' &&
+        recordingMatch[2] === 'download-url' &&
+        url.searchParams.get('format') === 'wav' &&
+        url.searchParams.get('use_enhanced') === 'false'
+      )
+        return response({
+          download_url: `https://storage.example.test/${row.id}/playback.wav`,
+          expires_in: 3600,
+          content_type: 'audio/wav',
+          file_size_bytes: playbackBytes.length,
+        });
+      if (method === 'POST' && recordingMatch[2] === 'upload-url') {
+        row.mime_type = body.content_type;
+        row.file_size_bytes = body.file_size_bytes;
         return response({
           upload_url: `https://storage.example.test/${row.id}`,
           content_type: body.content_type,
         });
+      }
       if (method === 'POST' && recordingMatch[2] === 'upload-complete') {
         if (row.storedHash !== body.content_sha256) return response({}, 409);
         row.content_sha256 = body.content_sha256;

@@ -1,8 +1,75 @@
 # Connect to a device with Flutter
 
-An Android Flutter application using published `bota_app_sdk: 2.0.0-beta.13` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
+An Android and iOS Flutter application using published `bota_app_sdk: 2.0.0-beta.19` (beta). Scan, select, verify the exact serial through the SDK, read status, and disconnect. No backend, API key, binding, or recording operations.
 
-## Current beta.13 adoption
+## iOS host and beta.19 — October 20, 2026
+
+The normal Flutter 3.47.5 `ios/Runner` host targets iOS 15+ and uses bundle ID
+`dev.bota.examples.botaConnect`. Its Podfile enables only the Bluetooth permission
+handler; `NSBluetoothAlwaysUsageDescription` explains the explicit access request.
+No background Bluetooth entitlement or recording permission is added. Android
+keeps its existing identity and permission flow. Both use the same public SDK
+calls; iOS never queries Android device information or requests Android location.
+
+The exact pub.dev beta.19 lock has SHA-256
+`7dceb9bf60f823edef977d1a03d6d47ed13a9d4e3b961abbe2bcd721459aab24`.
+Its public plugin pins matching beta.19 Apple and Android dependencies. No other
+locked package changes. The foreground screen drains pending configuration,
+subscriptions and SDK destruction before navigation completes. Failed destruction
+retains a visible failed gate. Unit/widget checks use the published testing
+boundary; native linking and real iPhone behavior require their separate checks.
+Local frozen installation, analysis, all 13 lifecycle/permission widget tests,
+44 dependency license notices and Android debug APK assembly pass on October 20.
+**Close connection** awaits SDK teardown. At the application's home route it
+shows a closed screen instead of popping the last route. A terminated connection
+observer clears candidates and rejects retained callbacks until the screen closes.
+The [registry receipt](dependency-provenance.json) records the public archive,
+publication time, Apache-2.0 identity and the owner's latest-SDK age exception.
+
+At source `4d79085`, [hosted CI](https://github.com/bota-dev/examples/actions/runs/39514738797)
+passes the Android APK and unsigned iOS simulator/device builds, alongside the
+Android analysis/tests/license gates. Physical iOS Bluetooth remains unverified;
+see the [current review](../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md).
+
+On macOS with Xcode and CocoaPods installed:
+
+```sh
+flutter precache --ios
+flutter pub get --enforce-lockfile
+flutter build ios --debug --no-codesign
+flutter run -d <iphone-id>
+```
+
+Choose your own signing team in `ios/Runner.xcworkspace` before a physical run.
+The iOS simulator does not qualify Bluetooth behavior. CI adds an unsigned iOS
+build; its result must be read separately from local Windows analysis/tests and
+Android assembly. No physical-device or encrypted-upload-v2 acceptance is claimed.
+
+## Historical beta.18 adoption — 2026-10-14
+
+The exact public pub.dev pin and regenerated lock select beta.18, archive SHA-256
+`30441cc7c83bb9cef7fddac19d047a59b4ad38c4a3dcb27de3dad4700613ab4a`.
+Its published plugin selects matching beta.18 Android/Apple dependencies. Only
+the Bota version/hash changes; app source and non-SDK dependencies remain.
+New frozen-install, analysis, six lifecycle tests and Android build evidence
+belongs to the [beta.18 adoption review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md). No beta.18 phone or iOS acceptance is claimed.
+
+## Historical beta.17 adoption — 2026-10-14
+
+The exact pub.dev pin and regenerated archive lock select beta.17; the published
+plugin pins matching Android Maven and Apple CocoaPods versions. Only the Bota
+lock entry changed. Frozen installation, clean analysis and all six existing
+lifecycle widget cases pass on Flutter 3.47.5. The application code and device
+scope stay unchanged. Android debug assembly and hosted results are recorded in
+the [SDK adoption review](../../docs/design-reviews/2026-10-14-native-sdk-adoption.md); no beta.17 phone or iOS test was performed.
+
+At the earlier `6dd54747` snapshot, beta.17 was still the latest public pub.dev
+package while other clients selected native beta.18. The
+[beta.17 job at a7b34175](https://github.com/bota-dev/examples/actions/runs/38654533678/job/116161047442)
+and [beta.17 job at 6dd54747](https://github.com/bota-dev/examples/actions/runs/38660573465/job/116180576977)
+passed. These historical results do not qualify the new beta.18 package.
+
+## Historical beta.13 adoption
 
 The exact pub.dev pin and archive lock select beta.13; its Android Maven and
 Apple CocoaPods dependencies select that same version. The dependency update
@@ -15,7 +82,7 @@ retain their original versions and limits. See the
 
 ## Run
 
-Use Flutter **3.47.5**, JDK 17, Android SDK 37 tooling, and an Android 8+ (API 26+) phone with Bluetooth. Flutter 3.44 cannot resolve this SDK's `meta` dependency. This example includes an Android host only; SDK iOS support is not an iOS example acceptance claim.
+Use Flutter **3.47.5**. Android needs JDK 17, Android SDK 37 tooling and an Android 8+ (API 26+) phone with Bluetooth. iOS needs macOS, Xcode, CocoaPods and iOS 15+. Flutter 3.44 cannot resolve this SDK's `meta` dependency.
 
 Android's `.gradle/` and `.kotlin/` directories are generated local build state
 and are excluded from version control.
@@ -30,7 +97,7 @@ flutter run
 
 Enable Bluetooth access, enter the exact printed device serial, scan, and select a candidate. Android 12+ prompts for Nearby Devices access; earlier releases require location permission and may need Location enabled. Denied access can be granted in system Settings before retrying. Close other apps connected to the device. Read status and disconnect when done.
 
-The SDK verifies connected identity, not the advertised name. Selection cancels scanning before connecting. Connection events clear stale selection and status; teardown cancels subscriptions and destroys the SDK. Beta.9 handles Android adapter shutdown even when the platform omits its GATT disconnect callback. After connection loss, restore Bluetooth, scan, and select the device to reconnect explicitly. The SDK does not reconnect automatically. Explicit Disconnect also clears selection if its SDK call fails. This is a foreground development app; configure your own signing before distribution.
+The SDK verifies connected identity, not the advertised name. Selection cancels scanning before connecting. Connection events clear stale selection and status; teardown drains subscriptions and configuration, then awaits SDK destruction. After connection loss, restore Bluetooth, scan, and select the device to reconnect explicitly. The SDK does not reconnect automatically. Explicit Disconnect also clears selection if its SDK call fails. This is a foreground development app; configure your own signing before distribution.
 
 ## Verify
 
@@ -73,6 +140,7 @@ The example workflow preserves `flutter-connect-debug-apk` for on-device testing
 ```sh
 flutter analyze
 flutter test
+node scripts/check-flutter-licenses.mjs
 flutter build apk --debug
 ```
 

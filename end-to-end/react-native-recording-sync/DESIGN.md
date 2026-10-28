@@ -2,13 +2,18 @@
 
 ## Purpose and layout
 
-This current integrated-sample source contains independently installed React Native (`app/`)
-and Flutter (`flutter/`) clients sharing one Node backend (`backend/`). They
+This compatibility root retains the mobile backend and setup for independently installed
+React Native ([setup](../recordings/clients/react-native/README.md))
+and Flutter ([setup](../recordings/clients/flutter/README.md))
+clients sharing the retained mobile adapter (`backend/`). They
 belong to the **Bota Recordings** foundation alongside the web client. The target
 has one shared customer backend and clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../recordings/README.md)
-is implemented, but a single backend runtime and integrated Kotlin/Swift clients
-are not. The recording experience connects
+and combined listener are implemented, preserving original auth/DTOs and three
+journals. Flutter and RN clients are relocated; Web/backend retain existing paths.
+Small native Kotlin/Swift cloud readers also use the existing Bearer adapter,
+limited to the first recording page and existing transcript/general notes.
+The recording experience connects
 audio input → library → supported playback/source review → transcript → general
 notes → recording-scoped Ask. Use familiar mobile navigation, normal native SDK
 UI and short state messages. Public-call/copy guides belong in README/source.
@@ -31,27 +36,40 @@ permit private Bota application imports. Demo/Bota One inform the journey only.
 
 | Capability | Current mobile implementation |
 | --- | --- |
-| Audio input | RN can sync an already-provisioned encrypted-v2 device recording. Neither client implements microphone capture or file import. Flutter has no device transfer in this example. |
+| Audio input | Both clients import ordinary audio files. Android RN can also sync an already-provisioned encrypted-v2 device recording. No microphone capture or Flutter device transfer is added. |
 | Library and results | Both clients show owned cloud recordings, transcripts, general notes and recording-scoped Ask. A live library needs existing authorized audio or RN device sync. |
-| Playback | Not implemented. The target adds playback only for a supported, authorized audio representation. |
+| Playback | Explicit authenticated WAV load/play/pause for verified ordinary imports, with native private temporary media and joined cleanup. Device/encrypted sources are unavailable. |
 | Device SDK | Optional RN encrypted sync and Flutter connection/status, enabled explicitly in live mode. Their supported workflows differ. |
-| Hosts | Android hosts are supplied. Common-app iOS hosts are missing; that is separate from the SDKs' iOS support. |
+| Hosts | Both clients supply Android/iOS cloud app hosts. The RN custom encrypted-upload adapter remains Android-only. Build/runtime evidence is recorded separately. |
 | Synthetic mode | Local DTO fixtures and synthetic results with no network or SDK work. They do not prove live processing, upload or cleanup. |
 
 Mobile and web now use one recording/processing/Ask implementation and common
 error types under [the integrated core](../recordings/README.md), through thin
-compatibility shims. Two active listeners/auth adapters and three journal models
-remain unchanged; upload/webhook/native service modules remain local. Mobile
+compatibility shims. One combined listener composes the original factories, while
+auth adapters and three journal models remain unchanged. Older launchers remain
+for compatibility; upload/webhook/native service modules remain local. Mobile
 uses default strict recording/job project checks, while web's explicit legacy
 policy permits missing `project_id` but preserves supplied-project/source/owner
-checks and its existing DTO projection. This is not a unified runtime.
+checks and its existing DTO projection. Complete RN/Flutter install roots and
+required helper/guard graphs now live under `recordings/clients/`.
 
-Single-listener migration belongs to the [root roadmap](../../ROADMAP.md). It
-needs cross-store arbitration and compatible auth, Origin and strict body gates.
+Combined-host qualification and client relocation follow the [root roadmap](../../ROADMAP.md).
+Fresh processing/Ask claims refuse matching peer intent, even known/complete,
+without Web resource-ID adoption. Existing own GET recovery and native/library
+exact-known-ID paths remain. Stop old listeners; default configured startup
+validates original absolute paths/schema/scope/account mapping before writable
+stores open. Fresh initialization permits only all-three-missing journals.
+Preserve separate auth, Origin and strict body gates; 10/30-second input limits
+do not change upstream processing deadlines or establish external-writer/file-race guarantees.
 Preserve bearer authentication, routes/DTOs, install roots, CWD-relative journal
 paths and scope/anchors. Retain known IDs and unresolved-write locks without
 reinterpreting account/key ownership; do not move or merge databases implicitly.
-The shared core folder exists; additional clients/listener layout is planned.
+The combined entry and relocated RN/Flutter clients exist; additional client/auth/store
+folders are planned. Package/native identities, SDK pins and locks are preserved.
+Old client READMEs forward to new setup; mobile backend launch bases, bearer
+authorization, scope hashes and journals stay. Original UI/native-host `8787`
+defaults and retained capture backend origin remain; configure the combined host
+at the original origin rather than reset journals or rewrite capture identity.
 
 Live responses and synthetic fixtures should follow their client's DTO contract.
 Shared cloud features must preserve source identities and customer authorization.
@@ -74,19 +92,19 @@ and uncertain action. Saved IDs remain metadata, not content/cleanup authority.
   retained in client memory. The server owns project/end-user configuration and
   the Bota API key. Sign-out clears content and fences late results.
 - **React Native device path:** retain the Android encrypted-v2 host and its
-  exact public beta.13 SDK. Open it explicitly from the live app; keep fresh
+  exact public beta.19 SDK. Open it explicitly from the live app; keep fresh
   identity/pairing, idle/no-direct-upload, generation and completion boundaries.
-- **Flutter device path:** public beta.13 connection/status only. Its current
+- **Flutter device path:** public beta.19 connection/status only. Its selected
   facade lacks the fresh pairing and encrypted-upload host interfaces needed
   for this example's device sync. Do not bypass those gaps.
 
-Keep existing exact beta.13 manifest/lock pins. Version adoption needs its own
+Keep existing exact public manifest/lock pins. Version adoption needs its own
 public-contract/build/recovery evidence; do not assume a new version closes a
 facade gap. Native Windows SDK support is
 [planned upstream](https://github.com/bota-dev/app-sdk#supported-platforms);
 it is a capability gap rather than only a missing example host.
 
-This example supplies Android hosts. An iOS host, full platform parity and physical
+This example supplies Android/iOS cloud hosts. Full device platform parity and physical
 qualification require separate implementation/evidence. API library access is
 independent of device presence and grants no device-cleanup authority.
 

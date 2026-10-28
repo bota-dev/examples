@@ -100,7 +100,7 @@ that must survive curation and backend consolidation.
 ## Device and asynchronous application lifecycle
 
 - Select devices through configured identity and public SDK read-back. Advertising
-  names are insufficient. Already-provisioned Android beta.13 flows require a fresh,
+  names are insufficient. Already-provisioned Android beta.18 flows require a fresh,
   connection-fenced public pairing-state read: snapshot `isProvisioned` defaults
   to false and cannot establish that gate. False/error means pairing unconfirmed.
 - Public pairing state does not replace server ownership, binding generation or

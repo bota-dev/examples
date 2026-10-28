@@ -1,7 +1,14 @@
 # Bota Example Mobile App
 
-Expo 57 app demonstrating `@bota.dev/react-native-app-sdk@2.0.0-beta.6`
-(beta) with the existing local example backend. App/native runtime: 0.2.0.
+Expo 57 app demonstrating `@bota.dev/react-native-app-sdk@2.0.0-beta.19`
+(beta) with the existing local example backend. App/native runtime: 0.5.0.
+
+This update retains the public native-workflow compatibility entry, local-only
+backend and legacy provisioning/recovery limits. It does not adopt the
+generated-JavaScript `/runtime` entry. Current package and build evidence is in
+the [SDK adoption review](../../docs/design-reviews/2026-10-20-sdk19-catalog-ios.md).
+The `appVersion` OTA policy now selects runtime 0.5.0: rebuild the native app
+before using this SDK update. Older native runtimes must not receive its JavaScript.
 
 ## Run
 
@@ -32,3 +39,26 @@ source-map, query-string and native checks remain required where applicable.
 See [the exact scope and local/hosted limits](../../docs/native-expo-signing-replacement.md).
 No public SDK/Expo version or application/device behavior is upgraded by this
 development-tool replacement.
+
+The legacy root also carries the [maintained public-parent matching replacement](../../docs/legacy-public-parent-matching-removal.md)
+for Braces #113. Keep its mandatory read-only asset/absence attestation and
+20-case suite active. The dated remediation preserved SDK beta.6/runtime 0.2.0;
+this separate SDK beta.19 update retains the native/signing workflows and
+requires a new native runtime.
+Local exports/prebuilds do not establish hosted assembly,
+installed Bluetooth behavior or scanner closure.
+
+CI assembles Android Debug separately for `arm64-v8a`, `armeabi-v7a`, `x86`
+and `x86_64` in parallel. The `Android native example` check requires all four
+builds to pass. Gradle caches are keyed by the dependency lock and Expo config;
+each build still runs frozen installation, mandatory postinstall guards and
+native project generation before assembly.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](../../docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

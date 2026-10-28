@@ -1,0 +1,9 @@
+.build/
+.swiftpm/
+BotaRecordings.app/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+.DS_Store
+.env
+.env.*

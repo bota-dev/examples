@@ -10,17 +10,24 @@ may guide the work; the selected public contract defines supported behavior.
 **Bota Recordings** is the sample foundation: copyable recording features, one
 shared customer backend and platform clients for Web, RN, Flutter, native
 Android/Kotlin and Apple/Swift. The [shared feature core](../end-to-end/recordings/README.md)
-now implements recording, processing/general-notes and Ask logic plus error
-types. Current web and Android RN/Flutter clients consume it through shims, but
-two listeners/auth adapters and three journal models remain. Upload/webhook/native
-service code is still local. One backend runtime and integrated Kotlin/Swift
-clients are not built.
+now implements recording, ordinary upload/playback, processing/general-notes and Ask logic plus error
+types. The combined Node launcher now composes existing Web/mobile factories on
+one listener. Both credential-specific adapters, DTOs and all three journals
+remain, with compatibility exports at the existing Web upload/playback paths and local webhook/native source. Complete
+[Flutter](../end-to-end/recordings/clients/flutter/README.md) and
+[RN](../end-to-end/recordings/clients/react-native/README.md) install roots have relocated.
+Web/backend paths stay. Small [Kotlin](../end-to-end/recordings/clients/android-kotlin/README.md)
+and [Swift](../end-to-end/recordings/clients/apple-swift/README.md) cloud readers
+use the same Bearer adapter and [read contract](../end-to-end/recordings/contracts/native-library-read.md).
+They read the first recording page and existing transcript/general notes; no
+upload, playback, processing writes, Ask or device SDK is added to those clients.
 
 Use the [README entry paths](../README.md#start-with-bota-recordings), then choose
 the feature/platform below. Run only the relevant documented install root(s)
 and copy the feature's complete imports. Use a full repository checkout or include
-both the chosen compatibility root and `end-to-end/recordings/backend/` when
-copying. The old web/mobile folder alone is no longer a complete runtime copy.
+the Web installation, mobile backend source and `end-to-end/recordings/backend/`
+when copying the combined runtime. An old web/mobile folder alone is no longer
+a complete runtime copy.
 Do not silently redirect a client to another listener or store.
 The [approved decision](design-decisions/2026-10-12-integrated-recordings.md)
 defines the foundation. Exactly two product layers remain: general capabilities
@@ -37,10 +44,11 @@ app, follow that application's instructions and replace its identity/auth adapte
 | --- | --- | --- |
 | List/read recordings | [Shared recordings](../end-to-end/recordings/backend/features/recordings.mjs); [React library](../end-to-end/web-reference/web/features/recordings/Recordings.tsx) | [Web README](../end-to-end/web-reference/README.md) |
 | Import/verify audio | [upload.mjs](../end-to-end/web-reference/server/features/upload.mjs); [React upload](../end-to-end/web-reference/web/features/uploads/Upload.tsx) | Web; storage PUT keeps API credentials separate |
+| Play an ordinary import | [shared playback](../end-to-end/recordings/backend/features/playback.mjs); [Web player](../end-to-end/web-reference/web/features/playback/AudioPlayer.tsx); [RN media](../end-to-end/recordings/clients/react-native/media-controller.ts); [Flutter media](../end-to-end/recordings/clients/flutter/lib/recording_media.dart) | Web/mobile; authenticated bounded WAV export, no device decryption |
 | Transcript/general notes | [Shared processing](../end-to-end/recordings/backend/features/processing.mjs); [Transcript](../end-to-end/web-reference/web/features/transcription/Transcript.tsx) / [Summary](../end-to-end/web-reference/web/features/summaries/Summaries.tsx) | Web or [mobile README](../end-to-end/react-native-recording-sync/README.md) |
 | Recording-scoped Ask | [Shared Ask](../end-to-end/recordings/backend/features/ask.mjs); [React Ask](../end-to-end/web-reference/web/features/ask/Ask.tsx) | Exact owner/session/source checks and durable intent |
 | Webhook/saved-operation refresh | [webhooks.mjs](../end-to-end/web-reference/server/features/webhooks.mjs); [Activity](../end-to-end/web-reference/web/features/webhooks/Activity.tsx) | Signed customer callback; refresh never resends a write |
-| Android RN encrypted sync | [DeviceSync.tsx](../end-to-end/react-native-recording-sync/app/DeviceSync.tsx) | [Complete host/backend setup](../end-to-end/react-native-recording-sync/README.md) |
+| Android RN encrypted sync | [DeviceSync.tsx](../end-to-end/recordings/clients/react-native/DeviceSync.tsx) | [Complete host/backend setup](../end-to-end/react-native-recording-sync/README.md) |
 
 The web [recipe table](../end-to-end/web-reference/README.md#pick-a-recipe) names
 the public `/v1/*` calls and UI/backend modules. Those files also depend on HTTP,
@@ -69,11 +77,11 @@ and authorized upload use the customer backend.
 
 | Platform | Existing public-call source | Current host/support |
 | --- | --- | --- |
-| Kotlin / Android | [MainActivity.kt](../app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](../app-sdk/android-device-connect/README.md) | Native Android connection/status; integrated recording client planned |
-| Swift / Apple | [App.swift](../app-sdk/apple-device-connect/Sources/BotaConnect/App.swift); [setup](../app-sdk/apple-device-connect/README.md) | macOS SwiftUI connection/status; no native iOS host or integrated recording client yet |
-| React Native | [App.tsx](../app-sdk/react-native-device-connect/App.tsx); [setup](../app-sdk/react-native-device-connect/README.md) | Android/iOS connection hosts; recording/sync client currently Android-only |
-| Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android host; beta.13 lacks fresh-pairing/encrypted-v2 interfaces needed for RN sync |
-| Web / Chromium | [page.ts](../app-sdk/web-device-connect/page.ts) + [main.ts](../app-sdk/web-device-connect/main.ts); [setup](../app-sdk/web-device-connect/README.md) | Supported Web Bluetooth/secure context/firmware identity; not yet integrated into the API recording client |
+| Kotlin / Android | [SDK connection](../app-sdk/android-device-connect/README.md); [cloud reader](../end-to-end/recordings/clients/android-kotlin/README.md) | Native Android SDK starter and separate GET-only recording library/results |
+| Swift / Apple | [SDK connection](../app-sdk/apple-device-connect/README.md); [cloud reader](../end-to-end/recordings/clients/apple-swift/README.md) | Shared iOS/macOS SDK starter and separate GET-only SwiftUI library/results |
+| React Native | [App.tsx](../app-sdk/react-native-device-connect/App.tsx); [recording app](../end-to-end/recordings/clients/react-native/README.md) | Android/iOS cloud app; encrypted device sync stays Android-only |
+| Flutter | [main.dart](../app-sdk/flutter-device-connect/lib/main.dart); [setup](../app-sdk/flutter-device-connect/README.md) | Android/iOS connection/status and cloud app; no selected RN encrypted-v2 host workflow |
+| Web / Chromium | [device-session.ts](../end-to-end/web-reference/web/features/devices/device-session.ts); [setup](../end-to-end/web-reference/README.md) | Optional connection/status in the recording app; explicit lazy preparation/chooser, secure context and supported Web Bluetooth |
 
 Missing public capability, missing host and missing verification are different
 gaps. Native Windows/Electron SDK support is planned upstream. Do not use private
@@ -81,16 +89,25 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 
 ## Preserve the migration and copy boundary
 
-1. Inspect the selected README, source/imports, manifest and lockfile. Public
-   SDK pins remain beta.13; historical prose does not override current manifests.
+1. Inspect the selected README, source/imports, manifest and lockfile. Ten existing
+   SDK roots use exact public beta.19; the optional Web app feature uses exact
+   public beta.20. Native Kotlin/Swift cloud readers use HTTP without a Bota SDK.
+   Historical prose does
+   not override current manifests. RN uses native compatibility factories, not
+   the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-20-sdk19-catalog-ios.md).
 2. Install only in documented roots with lifecycle scripts enabled. Keep native
    Expo signing integrity, braces and other mandatory guard/test chains; do not
    bypass postinstall to get a clean install.
 3. Keep Bota keys server-side. Derive project/end-user authorization from the
    customer's authenticated identity and retain exact owner/source checks.
-4. Shared feature implementation does not unify runtime authorization or stores.
-   Two listeners and three journal models remain; single-listener work needs
-   compatible auth/body/Origin gates and cross-store arbitration. Preserve current
+4. The combined listener retains separate auth adapters and three journal models.
+   Default startup validates original absolute paths/schema/scope/account mapping;
+   fresh `--initialize` requires every journal absent. Stop old listeners. Mixed
+   credentials refuse; preserve separate body/Origin gates and 10/30-second input
+   budgets, with upstream processing deadlines unchanged. Fresh processing/Ask
+   claims refuse matching peer intent even known/complete, without Web ID adoption.
+   Own GET recovery and native/library exact-known-ID paths remain. These are
+   in-process guards, not external-writer or atomic file-race guarantees. Preserve current
    routes/DTOs, journal scope/anchors, known IDs and unresolved writes. No journal
    deletion, account remapping or replacement write may force apparent success.
    Retain syntactically valid returned job/session IDs before later validation;
@@ -103,9 +120,12 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
    integrated foundation after compatibility checks; do not introduce a general
    wrapper SDK, hidden cross-root dependency or universal UI framework.
 
-Sample content is synthetic; current web has no playback, and mobile has no
-ordinary import/playback. These are honest implementation gaps, not fixture proof
-of completion. Original downloads are not necessarily playable/decrypted audio.
+Sample content is synthetic. Web implements ordinary-import WAV playback; its
+[live HTTP acceptance](design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+does not establish browser decoding. Mobile now implements ordinary import/WAV
+playback; its [host/media evidence](design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+is distinct from actual native decoding and physical device acceptance.
+Original downloads are not necessarily playable/decrypted audio.
 Read [CONTRIBUTING.md](../CONTRIBUTING.md) and
 [example contracts](example-contracts.md) before repository changes.
 
@@ -141,10 +161,22 @@ existing SDK-only sources for device capabilities; those need no backend for
 connection/status. If editing this repo, follow AGENTS.md/local instructions.
 
 Report the source/setup/copy boundary, then adapt the feature with my application's
-auth mapping. Recording/processing/Ask share an implemented core, but two listeners,
-auth adapters and three journal models remain. Copy the core and compatibility
+auth mapping. The combined listener shares recording/processing/Ask while retaining
+separate auth adapters and three journal models. Copy the Web installation, mobile
+backend source, core and compatibility
 adapters; preserve routes/DTOs, journal scope, known IDs and uncertain writes.
-Single-listener consolidation and integrated Kotlin/Swift clients remain planned.
+Use original explicit paths/schema/scope/account mapping; initialize only a fresh
+all-missing set and stop old listeners. Refuse fresh peer known/complete claims
+without Web ID adoption; retain own GET/native-library exact-known-ID recovery.
+Flutter and RN now live under end-to-end/recordings/clients; old READMEs forward.
+Web/backend launch bases and journals remain at existing paths. Client/native-host
+origin defaults stay 8787. Retained native capture recovery keeps its original
+origin: configure combined PORT=8787 and matching APP_ORIGIN where needed; do not
+reset journals or rewrite capture scope. Fresh cloud setup may explicitly select
+5173 with matching phone forwarding.
+Kotlin/Swift cloud readers implement only first-page library and existing results
+through the same Bearer backend. Optional Web connection/status uses beta.20;
+its demo is inert. No external-writer or atomic file-race guarantee is added.
 Keep keys server-side, SDK pins unchanged,
 owner/source and receipt/cleanup gates intact. No private helpers, hardcoded
 devices or duplicate uncertain writes. Use normal platform UI and supported
@@ -156,5 +188,6 @@ capabilities; report exact checks and deferred live/hardware acceptance.
 The two independent RN roots keep their public SDK/Expo/device contracts and
 ordinary install/test chains. Read [public Metro matching removal and delivery
 limits](metro-public-matching-removal.md) before changing their parent artifacts,
-overrides or zero-braces asset guard. Legacy root retains its separate braces
-parser guard and source/scanner limits.
+overrides or zero-braces asset guard. The legacy root uses its separate
+[public-parent matching and absence verification](legacy-public-parent-matching-removal.md)
+and source/scanner limits.

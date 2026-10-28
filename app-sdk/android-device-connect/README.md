@@ -1,8 +1,45 @@
 # Connect to a device with Kotlin
 
-A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.13` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
+A minimal native Android app using the public Maven Central artifact `dev.bota:bota-app-sdk:2.0.0-beta.19` (beta). Scan, select, verify the exact serial through the SDK, read status, disconnect. No backend, API key, provisioning, or recording operations.
 
-## Current beta.13 adoption
+## Current beta.19 adoption — 2026-10-20
+
+The exact public Maven pin and targeted Gradle lock update select beta.19 at SDK
+tag `v2.0.0-beta.19` / source `7a4ff0093629c030416f80113c585e10d0177e68`.
+The only dependency-lock change is the Bota coordinate. Application source,
+native identity, SDK call sites and all non-Bota locked dependencies stay intact.
+
+[Public package provenance](dependency-provenance.json) records the downloaded
+AAR, POM and Gradle-module SHA-256 values, matched against Maven Central sidecars.
+The POM and release-tag license identify MIT. All three detached signatures are
+cryptographically valid in an isolated verification keyring; independent trust
+in the signing-key owner remains unverified. No signer-owner claim or recursive
+transitive-license audit is implied.
+
+Public resolution/Kotlin compilation/Android debug APK assembly and a separate
+offline frozen-lock build pass locally on JDK 17 / Android SDK 36. This connection
+app has no JVM test suite. [Hosted APK assembly](https://github.com/bota-dev/examples/actions/runs/39521265119)
+also passes at `aa726e3`. Physical behavior remains unverified; no phone session
+or encrypted-upload-v2 acceptance is claimed for this update.
+
+## Historical beta.18 adoption — 2026-10-14
+
+The exact public Maven pin and regenerated lock select beta.18. Only the Bota
+lock entry changes; application/controller source and non-SDK packages remain.
+New local and hosted checks for this package are recorded separately in the
+[beta.18 adoption review](../../docs/design-reviews/2026-10-14-native-sdk-beta18-adoption.md); beta.17 results below qualify their original source only.
+No physical beta.18 session is claimed.
+
+## Historical beta.17 adoption — 2026-10-14
+
+The exact public Maven pin and regenerated dependency lock select beta.17.
+Only the Bota lock entry changed; non-SDK dependencies and app lifecycle code
+remain unchanged. Public resolution and a separate frozen-lock Android debug
+build pass locally with JDK 17/SDK 36. Hosted builds and physical beta.17
+acceptance are separate gates; earlier device results qualify only their
+recorded versions. See the [SDK adoption review](../../docs/design-reviews/2026-10-14-native-sdk-adoption.md).
+
+## Historical beta.13 adoption
 
 The exact public Maven pin and dependency lock select beta.13. This release
 includes the SDK's Android connect/MTU failure cleanup; transport recovery remains

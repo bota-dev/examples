@@ -8,7 +8,12 @@
     "node": ">=22.23.2"
   },
   "scripts": {
-    "check": "node --check backend/errors.mjs && node --check backend/features/recordings.mjs && node --check backend/features/processing.mjs && node --check backend/features/ask.mjs",
+    "demo": "node backend/main.mjs --demo --dev",
+    "dev": "node --env-file-if-exists=.env backend/main.mjs --dev",
+    "start": "node --env-file-if-exists=.env backend/main.mjs",
+    "initialize": "node --env-file-if-exists=.env backend/main.mjs --initialize",
+    "account": "node --env-file-if-exists=.env backend/account.mjs",
+    "check": "node --check backend/account.mjs && node --check backend/config.mjs && node --check backend/main.mjs && node --check backend/server.mjs && node --check backend/errors.mjs && node --check backend/http.mjs && node --check backend/features/upload.mjs && node --check backend/features/playback.mjs && node --check backend/features/recordings.mjs && node --check backend/features/processing.mjs && node --check backend/features/ask.mjs",
     "lint": "eslint backend contracts scripts eslint.config.mjs",
     "format:check": "prettier --check .",
     "test": "node --test contracts/*.test.mjs scripts/test-licenses.mjs",
@@ -16,8 +21,8 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "eslint": "10.12.0",
+    "eslint": "10.13.0",
     "globals": "17.13.0",
-    "prettier": "3.8.5"
+    "prettier": "3.9.10"
   }
 }
