@@ -25,6 +25,12 @@ On Windows use `gradlew.bat`. The APK is
 `dev.bota.examples.recordings.kotlin`. Install it yourself or run it from Android
 Studio, then choose **Try Sample**. No backend is needed for Sample.
 
+The TestNG 7.12.0 update also resolves JCommander 1.83 and SLF4J 2.0.16.
+Their public Maven Central POMs, publication dates, artifact hashes and bundled
+notices are included in `dependency-provenance.json`. The same strict resolved
+inventory and license checks apply to the updated JVM test graph; the Android
+application's runtime dependencies and JDK 17 target remain unchanged.
+
 For Live, follow the [combined backend setup](../../README.md#run-a-client) or
 [retained mobile backend setup](../../../react-native-recording-sync/backend/README.md).
 Keep the Bota key on that backend. Preserve its existing scope, origin and journals;

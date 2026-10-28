@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-21T02:07:46Z",
+  "checkedAt": "2026-10-28T23:30:00Z",
   "scope": "Complete debug/release application and JVM-test compile/runtime module graph. Each consumed binary matches anonymously downloaded public Central bytes and its published SHA-1; SHA-256 below pins those bytes. Metadata-only BOM/multiplatform nodes have no consumed binary.",
   "registry": "https://repo.maven.apache.org/maven2/",
   "agePolicy": "At least seven full days, based on public POM Last-Modified. Every selected version is at least seven days old at review.",
@@ -13,23 +13,6 @@
     "auditLimit": "These pinned build tools, Android SDK and JDK are outside the recursive app/test license inventory."
   },
   "artifacts": [
-    {
-      "coordinate": "com.beust:jcommander:1.82",
-      "pomUrl": "https://repo.maven.apache.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.pom",
-      "pomSha256": "246344170b513b801ccf812234d4e1324a0f6ed2a81e90aa618913b66b9cc173",
-      "publishedAt": "2022-01-11T04:27:03Z",
-      "publicationEvidence": "Public Central POM Last-Modified timestamp",
-      "license": "Apache-2.0",
-      "pomLicenseNames": [
-        "Apache License, Version 2.0"
-      ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.pom",
-      "licenseSourceSha256": "246344170b513b801ccf812234d4e1324a0f6ed2a81e90aa618913b66b9cc173",
-      "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/com/beust/jcommander/1.82/jcommander-1.82.jar",
-      "sha256": "deeac157c8de6822878d85d0c7bc8467a19cc8484d37788f7804f039dde280b1",
-      "publishedSha1": "0a7c5fef184d238065de38f81bbc6ee50cca2e21"
-    },
     {
       "coordinate": "org.apache.httpcomponents.core5:httpcore5:5.3.6",
       "pomUrl": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/core5/httpcore5/5.3.6/httpcore5-5.3.6.pom",
@@ -55,6 +38,23 @@
       "artifactUrl": "https://repo.maven.apache.org/maven2/org/apache/httpcomponents/core5/httpcore5/5.3.6/httpcore5-5.3.6.jar",
       "sha256": "8fb4528d3e970aca440523a1bd698a389fa710ecfea4c5c6096698b86d1669ce",
       "publishedSha1": "2c7f0d11747f9485a02c9f622c0f0477d7ce8677"
+    },
+    {
+      "coordinate": "org.jcommander:jcommander:1.83",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jcommander/jcommander/1.83/jcommander-1.83.pom",
+      "pomSha256": "05887b04b15ef2ee2dfa0668cc47c245a3b890b67333e82336024454028b3020",
+      "publishedAt": "2023-08-21T15:46:45Z",
+      "publicationEvidence": "Public Central POM Last-Modified timestamp",
+      "license": "Apache-2.0",
+      "pomLicenseNames": [
+        "Apache License, Version 2.0"
+      ],
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jcommander/jcommander/1.83/jcommander-1.83.pom",
+      "licenseSourceSha256": "05887b04b15ef2ee2dfa0668cc47c245a3b890b67333e82336024454028b3020",
+      "bundledNotices": [],
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jcommander/jcommander/1.83/jcommander-1.83.jar",
+      "sha256": "e65f49c2119a1859b9076061e561fb5958a2fa6ffdb49f051ca8d59a0b3f87e4",
+      "publishedSha1": "c342a2ad17ec08db105146e27c7ba9c535c9bb46"
     },
     {
       "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.1.20",
@@ -224,43 +224,48 @@
       "publishedSha1": "8cc20c07506ec18e0834947b84a864bfc094484e"
     },
     {
-      "coordinate": "org.slf4j:slf4j-api:1.7.36",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.pom",
-      "pomSha256": "fb046a9c229437928bb11c2d27c8b5d773eb8a25e60cbd253d985210dedc2684",
-      "publishedAt": "2022-02-08T13:33:51Z",
+      "coordinate": "org.slf4j:slf4j-api:2.0.16",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.pom",
+      "pomSha256": "b1a00f5b1c4dbe62b805d65d23911a6f77063889d7cb1e86fe8389d6190473f7",
+      "publishedAt": "2024-08-10T09:15:08Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "MIT",
       "pomLicenseNames": [
         "MIT License"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-parent/1.7.36/slf4j-parent-1.7.36.pom",
-      "licenseSourceSha256": "bb388d37fbcdd3cde64c3cede21838693218dc451f04040c5df360a78ed7e812",
-      "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar",
-      "sha256": "d3ef575e3e4979678dc01bf1dcce51021493b4d11fb7f1be8ad982877c16a1c0",
-      "publishedSha1": "6c62681a2f655b49963a5983b8b0950a6120ae14"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-bom/2.0.16/slf4j-bom-2.0.16.pom",
+      "licenseSourceSha256": "0566048ec825cdf28758620af64d9e14ae38a9cd8748dd6fafa6df4a4194c279",
+      "bundledNotices": [
+        {
+          "path": "META-INF/LICENSE.txt",
+          "sha256": "4e7f90c86ab51278228bce153122f1d8df30149d13ce9ef524c8444a84c32dcc"
+        }
+      ],
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/slf4j/slf4j-api/2.0.16/slf4j-api-2.0.16.jar",
+      "sha256": "a12578dde1ba00bd9b816d388a0b879928d00bab3c83c240f7013bf4196c579a",
+      "publishedSha1": "0172931663a09a1fa515567af5fbef00897d3c04"
     },
     {
-      "coordinate": "org.testng:testng:7.10.2",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/testng/testng/7.10.2/testng-7.10.2.pom",
-      "pomSha256": "d6d51d678ad4cd3d5b228066ba0b88677976f10ad03521fe30433f2532461647",
-      "publishedAt": "2024-04-28T13:19:06Z",
+      "coordinate": "org.testng:testng:7.12.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/testng/testng/7.12.0/testng-7.12.0.pom",
+      "pomSha256": "5a055a0cc43ea2af725eb097eeb61e8b462bba075c709d629aa4346659259f02",
+      "publishedAt": "2026-01-22T05:19:41Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache License, Version 2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/testng/testng/7.10.2/testng-7.10.2.pom",
-      "licenseSourceSha256": "d6d51d678ad4cd3d5b228066ba0b88677976f10ad03521fe30433f2532461647",
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/testng/testng/7.12.0/testng-7.12.0.pom",
+      "licenseSourceSha256": "5a055a0cc43ea2af725eb097eeb61e8b462bba075c709d629aa4346659259f02",
       "bundledNotices": [
         {
           "path": "META-INF/LICENSE.txt",
           "sha256": "de260a483f1c8a229d61d833aaabad9f9a7438f3384c59abefa50182cb798199"
         }
       ],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/testng/testng/7.10.2/testng-7.10.2.jar",
-      "sha256": "225fd56447f2e5e439db3b483a79cd9f294fad9f357f8352b12ee6a3411ebb15",
-      "publishedSha1": "30742acada21960d4333a4204039fbdc6a92083a"
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/testng/testng/7.12.0/testng-7.12.0.jar",
+      "sha256": "5147e65e0bf0d0f9c7f18a4b2b182d3e4efb7391195e130a64ca9f755e0a6d33",
+      "publishedSha1": "55b39526598d8eb2e0e75bffbbd4b683adb85dcc"
     },
     {
       "coordinate": "org.webjars:jquery:3.7.1",
