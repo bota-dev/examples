@@ -6,6 +6,7 @@
     "apps/*"
   ],
   "scripts": {
+    "test:integration": "node scripts/run-api-integration-tests.mjs",
     "postinstall": "node scripts/patch-query-string.mjs && node scripts/verify-native-expo-signing.mjs && node scripts/apply-braces-security.mjs",
     "test": "node --test scripts/test-*.mjs",
     "dev": "npm run dev -w @bota-dev/example-backend",

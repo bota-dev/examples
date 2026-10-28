@@ -1,0 +1,611 @@
+name: Semgrep
+
+on:
+  workflow_dispatch:
+    inputs:
+      revision:
+        description: Optional immutable 40-character commit SHA for a retrospective scan
+        type: string
+        required: false
+        default: ''
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review, edited]
+  merge_group:
+    types: [checks_requested]
+  push:
+    branches: [main]
+  schedule:
+    - cron: '23 3 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sast-${{ github.event.pull_request.number || github.ref }}-${{ inputs.revision || 'current' }}
+  cancel-in-progress: ${{ github.event_name != 'workflow_dispatch' }}
+
+jobs:
+  scan:
+    name: Scan
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    container:
+      image: semgrep/semgrep:1.168.0@sha256:59fbed6127ea7c5dde3ba6a85142733bb20ea9aaa36120c953904f1539aaf66e
+    env:
+      SCANNER_IMAGE: semgrep/semgrep:1.168.0@sha256:59fbed6127ea7c5dde3ba6a85142733bb20ea9aaa36120c953904f1539aaf66e
+      RULE_PACKS: '["security-audit","owasp-top-ten","javascript","typescript","nodejs","react","python","github-actions","kotlin","swift","ruby"]'
+      EXPECTED_SHELLCHECK_FILES: '{"app-sdk/android-device-connect/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933","app-sdk/android-recording-catalog/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933","end-to-end/recordings/clients/android-kotlin/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933"}'
+    steps:
+      - name: Validate retrospective revision
+        env:
+          REQUESTED_REVISION: ${{ inputs.revision }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -n "$REQUESTED_REVISION" && ! "$REQUESTED_REVISION" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo 'revision must be a full immutable 40-character commit SHA' >&2
+            exit 1
+          fi
+
+      - name: Capture current maintained-vendor classification before checkout
+        id: vendor_policy
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import base64, hashlib, json, os, pathlib, zlib
+          # Trusted workflow constants; historical source cannot supply policy.
+          encoded = (
+              'eNrtXV1vY8lxffevEPY1S01X9Xf8FBh+CJA4ge08GcaiP6pn6ZVEgaR2dxL4v+e0KI00i0tKpEiRku4OVjPi/eDtqq5Tp7qr6v7f'
+              '787OvluUH+UyffevZ/T96tfZteC37/5wM5/L1fLsl9n8p3Yx++WsXKTFYtqmJS2ns6uzWTu7TNOrJf6XevazXNXZ/Gx6dX2zXPz+'
+              '7MfpYjmb49SLM9y+/DTDp2clXV3NlmeLm+vriy9n17OLafny3epLZzfzIj+U2eXldNm/XBltc0nGFG18TikqU7MIZ6WiolIcRyo4'
+              'YXX5xRSXLXDd/+E3/J7m5cfpz/JD/rKU/rGhaLQy33979FIus8z7cVYm3B2UX6/TVZX69VqtrTVG893x1UVfjwYdglP3F/88lV++'
+              'HiLc1Hp3d2iZ5utvuUw1LdOjK9n89thytkwXX89w1uqvd56n8tOjB757JBz8561wplfQDZTxBcf+dnvJSko4dJ2WP3Zpp+vryaL+'
+              '9GkuqSwnV9DvzzKp8vO0yKTMrq6kLD+tFPwp49tkMVlIuZlPl18+/ce//+GPf/rLH7/7/v6el7N6O31IKWfMw+cPg4v09cPFj4mt'
+              '66dD3bUGKFzr6KEuqEypli3+l1ascC2JSnKOS05SfXLBVwmGS8heNX74om+nab835plcLWSCyYd/PZy5lF+XP9xPT5y4nN/I7bF/'
+              'fr93ObXpr8ubuSw+/Uy44nr54+TzTZrX838szleTfwsJam8HJNikkq5KbFKkiyQdpbJor3wWWIvW4jnih9WZfdApliwmR5YafchR'
+              'NklwLsvpXOpk9agTjLjK1VOi/HoQ4lqs7vPn1X3OfiOds9V9z/A1KzRJi7P77/j9WbkDout0+9f08vpCLvGv26dbnOFTwM79Ldtc'
+              'ZHJ9k6HzyeqCxXevodOb5fRisYs22VIY0Ga2ydvoUnLeA7qIsy6KozQVMevFZedzEGNsaa1qW6lyBKrEEqJyrvhRm9tq82KaP8EB'
+              'XU8vZCer9GpIj+RUil6LwPRqcC56V2olm7QB2hHDGLkmW2NiZyLZzASrlGQbUc1ZjXrcRY8vRFjN7Ad06UIUKqFVMsUzm9xKo1xt'
+              'qypVzbpJcdaTYaVLSzp7yzpq7XSokZOMutxJlytGtpMalRpSY/d32lUGvcze5JBIA1krW9NilSxgmEJSrRcJlor2uiUh3/FWrCth'
+              'VOMuasR3LHYCVq9oiO6oqgorG0XrVBtsrBTmVDOskJ2IIhDNQB5OsTXtQsokHFopwFgpbTTG3bS4WM6nV5+n7ctOmryPhr5l/hHW'
+              'VRHf2VIKGExIOoVqdWBKrmqozAVYoPc1ExcVdSOEhQBiZRAR2DoqchdF7s5XEVEM+UajvWk2A1FVc6Ij+RpVMlYn4GZxphQFZwn3'
+              'aXFJ0trjv1izia5xJRq1uK0Wr+czHEl4SKgRA3y2Bi1sa0CDRcpteEgOoXc2yjWfc3YwvmJaAbshCqaAyZjQWjFWSSCraqyw2IKw'
+              'fZMGp1dL+dyfevLw1K8Th4M9zO7PWEw/XwG9PhWZL1ePJ3dzapdlDDe0jCGcXTaetJhgAua1laRUdLaA75uYYtOSchUiABhCcMU+'
+              'VUQEolNrJplTW8Z4pvj+57//8tc///Hf/nPyp//6KyR5vvx1uYUoTdADorRN12jI1UAsmGkGcrMZvjtRC4qqJQNsaT5A2FYl7xgf'
+              'IYBKjuDeOb9RUfY11fPyj8U2kWfwPCDAQI4tcYumBfjQxFEXmD7k6eBvyYltiE5qUFoTQtEYU/GxT1CrvHXRbRLgw8rv5LcOZCMY'
+              '9xXSO0hfXa0I6PXdMWRcz5eLbdxeHHJ7oC3BsGQ4N0W5VQO5Fm0jK6+UNhRAORFDlAYmg79CzWCqwlKpZY+LXkfGfL58dRlfp/JT'
+              '+rytb/I0JGUYvzU1IqImW4GvOfQF8AjiUCHlmFXEBPaQbgTFhL9SySqK2QcXRcFbbZLy3XNO7lfaTwoMIJTlPZ/AHfpS/3JbcFBk'
+              'BkSKGdpM7I6clTRtwduaV16rmLPSgNzS14Rbjlysh1itTzorYQ2Zk0+vBA764OBwMZ1A7ddLfBuGIcvFp3wzvaifFvPyaX5z9Wk6'
+              'W3wqkPFf7i74yx39Ot9GCcYNcubsKwcbSpSQrZbYl44MpK6L2GQzkLlKC1YUDvqCf1kox7rQwBWaM+p1dGCOoIPdwMPEQWKbK0A6'
+              'xgoIlhxDy4UTi8rCNSangMMFNK22xOzFUaklEHit8wYMzrX8RtADwrn/ZfIIShYTda7O3b/Ir6mHLovz1XXndP6zPl9+/t9tKK/n'
+              'IShJmJRJe0xKKjmkbIOvwVVigHM21TlEB5SVb544Ge1KhvSZHUlLKam0MXC4vLxZpnwhk7td2/UCbuli8TCP7zd557OL20HdhXEQ'
+              '6Bwf1wlsezm9RLCWvlzMUj3oBL/9rM9y66EK9kO64C11QTpEPegrjc3BRxVb8KXHHskBTFI1gsksIHnaAMo1qRbAChGA5KAsqRhj'
+              'IBNF3r02Zg1DmqaLyW/VsqUGtDJKD8WAsAQHGlKbIbhYTdHnGBW7pqN1unIBB/QR5NxY6xozZyM+4CMJJbncXkUDX6Vwc71YQpKX'
+              'jyLzyezq4stBdXCn58nXdYEtkT6GEIaW9qNNyiJCrEmA3qqCrUgMRvBrUF3shsgUa71DSBSzqz463bd1tG/GUno7axj3i0y7LgIR'
+              'ew88HgwbvRThVDg7xIORQKhtBV6YrIp3mWsmXY3PhvHTVtMoMTxDq9lrs9ldnpYM53LL9e5RZ3F+/WWbffswJD0TCfMMXq7lAJEU'
+              '0LdAzaWSjCol1+R1awZHmzaGkouQYLYqMSUbbYivw+lsH+q+RAvuM5/dRymXaQmguXd6q0NtCry6TNcroNXnd6cuZpeyHeZ6o9TQ'
+              'XlBGfNi0jhJTido5RcE6J7opayTXJlRb7QgMrgcnSH35GXSaQ3YqWqXflc8bVsdvNKHOgzm3u2sCsQrFAU1wzmLJiTK1wQV2NFYu'
+              'VQUFGCkMPojYEdSFrPKZOwbZAvDwnG1UXuUPoIlv+cewhWyliwCSN7iACvlXds7CV1YCEfGIH5s3AY7PRoM/iCW9dtb1VAaOFWiE'
+              '0F6adbWRlHfGQ57QxrCBbEnKrQ1DjDDA1ZrKxHABoOdsVWFpnKxTTRJCTZeASgEkXcPvinISGphiCjCerJ35EJrYmcr44AYzBLQu'
+              'LYuq7C1inVh9a1o1VmKryuAyznBMHYkaKQIldAQLoVqbqtXYyqdJZNYIb/X7avlkcpeYuDUlZG3U0BY9+KB3fSvBWONM7EtUFANL'
+              'IWUKBTEapCZRMcKlaEe1WAiWNDXtBZP/LUnyjhRuxwWjHwLgUALYhw3aFKmtcLMlgy9r8OQaG5eec1SF4RvJ+FC1ZqdMCKwCbL9U'
+              '/zpc0D3JBSGuyXI2wV+QTpnNK+S06Mt2fX/7G0mPWeJ7EdeYLH6i6Rr7Ve2YM/5OlDqmjr87dY4Z5O9OpWMi+XvS5phP/o6UOaaV'
+              'vy99jtnl70SZHzjJfHvhjbnmryjFD5tyfjCJfrTMc/9kYuNhRf2BEtDD+fJYov6AeegHk+VHT0ePr4UYY1b6E6ogdTxVfMTk9D0J'
+              'c8xRP1he0n40NKaqn6BSxoz1PeQn7UcVY+L6vgQ55q/vS5QfNo2d6ACpS2M2+ym6xTGp/U0oZMxtPypjGVPc34RCPnKm+95kOCa8'
+              '71egHy3vnfhJ8vjtnvjA7vun8uPsp2lN84k+d+dq8ujh7udnvZxiBLOrybYrWVphbg5lhTIYRXA2OQuqka3zOoWIP06DlBTtkxfN'
+              'gbKq2QCJ1a3YqTTtYhNpp09Gnhb7LbsYphePdLAlG7dqEAq8A4waC8+GMxp4RIkpa24lk9fSF28zISiKlHoYlEuC1E31jGNivSnv'
+              'Qd4tLZaTzxezjHmuXyBjUOJgB+E29+xJ37JS2ZJh7xCU+8A98myOXeSAiJ5q1EliiRxdkYZ5T4hBTeb3IOPVbC6zqzb9vKJm7jGe'
+              'zH65XTRfnZVvrurFlsENwy25oejG68IJ9KCvNlFKxSGESbn0mLJZuDqgi00hWGOgoezEl+JIKEcG/hRt34/wf8OMd57miCN5SNKp'
+              '7+nkvi1vCT/6+004Zmt1gf/TrnAtBXASwNmYRECbq1YicI1kTHD1vUravUDSKg7tqlWu3AQxeVBSU4KIe62TbRThPQtVV8HVQqjR'
+              'witKRVDTd5jFh56Lr96Hk9w5ygBSKDO0KMhcQ0oZlNeCgfhcIC1HmbRU00pLVrxFyNHEkjdOonI+eJONUnCNbXP6w55Z8dPiwXS7'
+              '+GV6VctiAa9mzinuPAtD30kf4moFkklgwAUk12sqbBtIWI6JqJq+3agjTm0+xZ6846WK6il9LouLMdo3B60fs95zLOJ8W1nRY2Xm'
+              'G9fUw8vlPqX+KrnJb044v9xBc0bzUPhnqDjflGMmp5lMSCBu1RYRohRjSaWn+NXUgglsVGk2AuFbUxXxikt21Nwazd3mEu5DcWQN'
+              'Dzlfw9o0IRBuH3NiIY/QpRpYnwYTzCFWq5xkBJimRWeTaRxjqAWHQs11tLmxxPkN6misW34behqLkU9eRWOF8alraCwbfgNKGmuB'
+              'T1lDH7jAd6za3ZNoPmwp7lhfuynB4umXt4xFs5vkZ86Xe5XfB6yEHctbt5lw9kUGO9asPiVft2f5fsRC1LG69Jj7vGPJ6DElPdaB'
+              '7iGJfyzu3FU6Y8XmRvl83DJM/5BJj59/72fentUH9rdv5bjm/b9HiHxn8+nn6dXDIz5+zNd+xfPt9/00var9+3rY8dODUr6e8s/v'
+              'Nz/nIZnRag7LZZb5Iz73xEAeTbA7DJ/c3eLZYzr2OzGPNe4TabdysOHf/evvg1i75v3Vr7+4c2yI+Gat601jxPqRvHOQOOjA3wBK'
+              'vGz8W8KEXkMlDr0md0SceHLJ8q3CxnYDe78o8upyOG1Q2b84tsQYM4gxB1+WfjWI2ccq/qExZ/sVxzWz6YVDOz7qvCNJHKt/4fEE'
+              'siXy2G8WlF5t4ei1kGfT8tnzAGVLebpheR66pcUh5Pnsjh4HEaQ/9RW81+uYfxD5hhNf/XjFLvkHkW889bDxeP3cDyHvVevuE6bQ'
+              'J9TD/SDypxMnEofvinoQsfKJ84kDNgo7iDz1qdOKE+QKq5zRE+YKp0gAVnmPp0wA3oJXdyfu1d+kq/Yn7qqP73/vV1coDM4/1oPe'
+              'oroSXK2wzULeUYnGJJVjcTE1Ys9NDMEpxAbfi4kqBe64RKq5hN4kgI4Rzu/Qgnzj2tYv/cYy7zP78nJ2dVpre29PBNvN1rgGLQe7'
+              '+/aSU3bFMfxIsoDAolviZLXF7HaquUzW2UZeSBUvsG+4p9ariUOCv37bk/X+ztMyn93efnXliWwF7qMv/ekM/PTs9A0L4WQnwVZI'
+              'xcOrNWQG0/M9CEUUkI7SOwGCx7koYB66o5U0Fp1tCxnkA8dJEtgwjlK2RXPK3odjQNVe9NSZ4ht0qCc59u3m53D+MJvBvqDBN92M'
+              'WBGqVhL1l6uA5t02eneSta4UdHTBBw6K2DTbew7plAJTTJbe2fw8bxezXz7yJH2hALabqbwmQhlsE8CSU7Dkm6QYfVaZLWVPJZGh'
+              'YJJGaBxaMDrUVFTvRdKaRoiSeget4BLvHsztt+/6afJvHl5cNHFowadW1jZU41lMb9FQVXYSLHi3RyxdXcwt2WxEmq5Vx6yTNrYh'
+              'pqRmEJOnt6WK31jfQanWnhtzP8f0T3947v0M7/k9lp+gv6ekrZ1b9K8Z49Wsyg+Xs3pzIXdfMfDR1zlyQHVvh6BmTVww+AY1bU2u'
+              'TVmVC7kKQA2RdWs5B2sKG3YqtMQR2Gk8PnbFVqFShLRJtnE4CITuHVsOz/uPgCinM6hTMrxXJyzDe1TBDL4jyIKU2BxCIy6IqiVQ'
+              'bNnY0F+Kp6Vv9kUjXsdYourvnWjV52SrLrGve79ke+WQzuC2Be3F9DFh6Zj3ejoY3uKK0YTBlqlUHKRqW7apiTOpUgzK+BrZ+tp7'
+              'nrmaIfNqQnIxOV29ZxtsbRRFyenqYNUK+GqJO76i8IezDHtrv6HoyXGsEH8t1kE9VGwP5lty1han4H9cYwPpZ1M1fqiqxSQm7+C+'
+              'Qml8msLvCHRUAxjeY4tMNNjutOmctHMh1BIgcdNstKWqcNvKjZsF1vT3d2ZJyvdfyBVSvqYQcmzudHVwHAMY3jLi6MMQ/MAxNGat'
+              'ioSkACjUu9KkGGzUlFxpJKpJve1Ik5NpAe4iC5AKOJWNo3gQ6e/+urw12oCw5dfX04EeXgwPTg3mePUmmL4oFSHhHIztL0VN5IO1'
+              'kpPSPhnljdcJuspRnO+eWTXSSaS/o+htqKAbw+33TW5bWvcrX1Ehw6u/kPDQrn/EzObiLFXLNatsY19hM5m0jkHgqivXmnqPZvbU'
+              'Ss79PVyttiYlOHOgKOSZ79ZbI/3ZzXLVYPeIOuA1OlBDnrmUAH/s9W1fpgKTgLRDNID/KFYj/INj0LG/pEvDXUMZDJpUqteIBfur'
+              'NU5aB/jGpcz3Kfuv/VTuzh9oqfIqndFerwPaozY9L+zWdCvZ/tAPfb6nV7jhcjb/8sOjhry9F68TGHwyzvWOxYFYgQ+alIRVqH0X'
+              'qL+NFZ6y2aJMVEqR5tKMs8086li8kAspS6nrp+Rze2k80SZnfUbsvrNinwzin133/0RXj7X5qvvOWd1hRM9LqHyiH8H63NJ955c+'
+              'E8cP09rvNVv4HQAqINCNYOGKNWKgETLFVdgWplzxcEzRRDYmA+ZC0S3DdUUMtHhxTdlI5CUhsH8hWOyYlfpEFfvahN19J+1uOTGP'
+              '3ZHhaE7vhQMfHePoGEfH+HLH+Oq9GY7oPF8NckYHezoO9kRa/RzNz+5n/KO7Hd3t6G5f7m6P1QDoiF73tQFodL5vMrrdW5HNw7a5'
+              'UWqo1CwrY5vWUQDAUffs+GCdEw0tG8m1CdVW+wsBgGGY+dTfrgdRcMhORav0Hujl8GDXd53/OrnD5rltSgpkMaF1k4SH1YZzNEZr'
+              'B2/LKlKGb4qlQaclUqOMKWCBd5USzLmUfcztp9KHNhe1ri1s3Xdx6w6u6bl1SpsLIdcVQ+67IPK1TXW7CoaHxApPg9mUnLNYkCZw'
+              'kOZC7S+XUC6BR9VmpDA4MdwvfBmBPWXur12wBXr3nG0EPcnHtFJ69OKRITNVEaTPSIIJVsnaa29Eg/qCD5PXICONG4NhlKxtbaBf'
+              'BACCCIyGo1XKvMxM3+o0fradPieJcXMJ4NoywH2XAu5tdANFPpuryNZWku27muzgDPntM4d9jXkkECOBOBqBOE4l5NF4xCva7Egn'
+              'Rjox0ond6MRBikwfiIJVyg21iHAKFmkZjsSqVqGnmLLmVjIMUvo7SDMl098f3FtU5ZKyMaZ6xjGx3pQn0j82jOblFKDUHAyQsILl'
+              'hAxMMVR0zv3lqH2tvnpDRmJUUJHlGi2VSl45p1U1XoI/BgX4tux8ben5vsvPdzC3bQuRNxd1ryvs3ndx996NbquyxMc+nod8fOqv'
+              '7819S8ISfsCeDMdsLbyF6ltlXEuByQXVc51FJGGUSsSEQJCHqwc1t6e8t9Zkg/YKYE+tVaCccRGEOlZjYwvJ9TKqzk/7eQ4T01qA'
+              'hY3Jlwx+wi+zt52cm9ng3B5I2L7LY1/q3EZbe0a17CNbU4PdZSpXxEZgzEFJTQlGVuHrwLgi94T26iomfAhwDBrspZK1fRNNfMjV'
+              'NiXtqLbmlfV4drgyMESQ4mh6KZYIR0B8b0KcoS+vGNQk4nl9SLVpigEumT3892hro63tqfTuUXmz82poQ7ZoGFhtfV8dMR0Vts3F'
+              'lmMiqqanguiIU5tPse/Oe6mC4WfjsrgYo7UHtTS2dvNCktdJgfgmU6xHVJabaKuMeAoFD0xFmoM/y1VAe5PkIqqAXIH1GwRt8YUL'
+              'Sc+sot5cgL62CH3fheg7GNtTJcqby7rXlnbvu7z7BWtkbwY5tgLIXSalXzu+x4Xh+y4O33GAW03K9Qu3j8ut911yvXfQ373c9Ot4'
+              'e8rbkA8gkKocnIXemH22DrAaIv4g3HapaJ+8aA7wBlCisVndvlyBSgP5anJgthU3egDL0rilqBueuFqtuKhocvKBrdSQYs7wb8Fk'
+              'idWx9xLY9ESzFKoHW3Ev8wDDRdOb683X15zvu+58R8R/qvx1cyn32nLufZd0793Anlm6+qA7z2Fo/04KGDBG0rJS2ZJh7xr1Cdkb'
+              'yTfHLnIQTlQjxgJ3zdGBp8DigPrOPA61D2BNdnPmLOh5VSZwwrxTIPOlQk/ZJM2IaZqKHhiXfF9dhDJ8g/FRJNNijhrm5u3LzOn5'
+              'Jdibq9fXVrDvu4p9Bwt7usR5c1X42srwfVeHH2iFYOfWUw92F7x3Qwt0XhdOEQhpJFFK4CXMKZe+O95sAPMAWYZ7tsbAOsHEfCmO'
+              'BMSZ4fUQFxzW8ILeaHmwquoqt2IVKLDJXgnIBXeiaGLIIPORHAKdkDChG4h+T8hnmKNO4FYvtbwDNPB6u2sMB20jeNpLEl+bJAB6'
+              'byfRD3fvFPlh9U6RVab7t2f0Ed2yS/7dP3/3/3aVOrg='
+          )
+          body = zlib.decompress(base64.b64decode(encoded, validate=True))
+          if hashlib.sha256(body).hexdigest() != 'c044f9c30fcd9f2459ba1bf0e111e13e777fd93c659e17d4fac1d0a0800268a1':
+              raise SystemExit('Current vendor classification integrity mismatch')
+          document = json.loads(body)
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          root.mkdir(parents=True, exist_ok=True)
+          (root / 'vendor-policy.json').write_bytes(body)
+          print(json.dumps({'classified_vendor_entries': len(document['inventory']), 'expected_source_views': document['expected_views']}))
+          PY
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        id: source
+        with:
+          ref: ${{ inputs.revision || github.sha }}
+          persist-credentials: false
+
+      - name: Trust the checked-out workspace for read-only Git analysis
+        shell: bash
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+      - name: Snapshot community security rules and scan identity
+        id: identity
+        env:
+          REQUESTED_REVISION: ${{ inputs.revision }}
+          SOURCE_WORKFLOW_SHA: ${{ github.workflow_sha }}
+          SOURCE_WORKFLOW_REF: ${{ github.workflow_ref }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import datetime, hashlib, json, os, pathlib, subprocess, urllib.request
+          from ruamel.yaml import YAML
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          policy = root / 'policy'
+          policy.mkdir(parents=True, exist_ok=True)
+          actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip()
+          requested = os.environ.get('REQUESTED_REVISION', '')
+          if requested and actual.lower() != requested.lower():
+              raise SystemExit('Checked-out commit does not match requested immutable revision')
+          snapshots = []
+          for pack in json.loads(os.environ['RULE_PACKS']):
+              url = 'https://semgrep.dev/c/p/' + pack
+              request = urllib.request.Request(url, headers={'User-Agent': 'bota-sast-rule-snapshot'})
+              with urllib.request.urlopen(request, timeout=60) as response:
+                  body = response.read()
+              document = YAML(typ='safe').load(body)
+              if not isinstance(document.get('rules'), list) or not document['rules']:
+                  raise SystemExit('Rule pack did not contain rules: ' + pack)
+              path = policy / (pack + '.yaml')
+              path.write_bytes(body)
+              snapshots.append({'source': url, 'file': path.name, 'sha256': hashlib.sha256(body).hexdigest(), 'rules': len(document['rules'])})
+          identity = {
+              'repository': os.environ['GITHUB_REPOSITORY'], 'scanned_sha': actual,
+              'requested_revision': requested or None, 'retrospective': bool(requested),
+              'original_premerge_verification_claimed': False if requested else None,
+              'event': os.environ['GITHUB_EVENT_NAME'], 'github_sha': os.environ['GITHUB_SHA'],
+              'workflow_sha': os.environ['SOURCE_WORKFLOW_SHA'], 'workflow_ref': os.environ['SOURCE_WORKFLOW_REF'],
+              'pr_head_sha': os.environ.get('PR_HEAD_SHA') or None, 'pr_base_sha': os.environ.get('PR_BASE_SHA') or None,
+              'run_id': os.environ['GITHUB_RUN_ID'], 'run_attempt': os.environ['GITHUB_RUN_ATTEMPT'],
+              'recorded_at': datetime.datetime.now(datetime.timezone.utc).isoformat(),
+              'scanner_image': os.environ['SCANNER_IMAGE'],
+              'scanner_version': subprocess.check_output(['semgrep', '--version'], text=True).strip(),
+              'rule_snapshots': snapshots,
+          }
+          (root / 'identity.json').write_text(json.dumps(identity, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'scanned_sha': actual, 'retrospective': bool(requested), 'rule_packs': len(snapshots)}))
+          PY
+
+      - name: Verify exact sources of reviewed audit annotations
+        id: reviewed_annotations
+        if: ${{ always() && steps.identity.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          workspace = pathlib.Path(os.environ['GITHUB_WORKSPACE']).resolve()
+          rules = ('python.lang.security.audit.httpsconnection-detected.httpsconnection-detected',
+                   'java.android.security.exported_activity.exported_activity',
+                   'javascript.express.security.injection.raw-html-format.raw-html-format')
+          annotations = set()
+          tracked = subprocess.check_output(['git', 'ls-files', '-z'], cwd=workspace).decode().split('\0')
+          for name in filter(None, tracked):
+              path = workspace / name
+              if path.suffix not in ('.py', '.xml', '.ts'):
+                  continue
+              for line in path.read_text(encoding='utf-8').splitlines():
+                  if 'nosemgrep:' in line:
+                      annotations.update((name, rule) for rule in rules if rule in line)
+          ledger_path = workspace / '.github/sast-reviewed-findings.json'
+          if not ledger_path.exists():
+              if annotations:
+                  raise SystemExit('Reviewed audit annotations require a matching source ledger')
+              print(json.dumps({'reviewed_source_hashes': 0, 'findings': 0, 'ledger': 'absent; ordinary analysis'}))
+              raise SystemExit(0)
+          ledger = json.loads(ledger_path.read_text(encoding='utf-8'))
+          entries = ledger['reviewed_findings'] + ledger['related_sources']
+          sources = {entry['path']: entry['source_sha256'] for entry in entries}
+          if any(sources[entry['path']] != entry['source_sha256'] for entry in entries):
+              raise SystemExit('Conflicting reviewed source hashes')
+          for name, digest in sources.items():
+              path = (workspace / name).resolve()
+              if not path.is_relative_to(workspace):
+                  raise SystemExit('Reviewed source path escapes the workspace')
+              canonical = path.read_bytes().replace(b'\r\n', b'\n')
+              if hashlib.sha256(canonical).hexdigest() != digest:
+                  raise SystemExit('Reviewed source changed; recheck its annotation: ' + name)
+          approved = {(entry['path'], entry['rule_id']) for entry in ledger['reviewed_findings']}
+          if annotations != approved:
+              raise SystemExit('Audit annotations do not match the reviewed source ledger')
+          print(json.dumps({'reviewed_source_hashes': len(sources), 'findings': len(ledger['reviewed_findings'])}))
+          PY
+
+      - name: Install verified ShellCheck for reviewed shell sources
+        id: shellcheck_install
+        if: ${{ always() && steps.identity.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import hashlib, io, json, os, pathlib, subprocess, tarfile, urllib.request
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          tool = root / 'tools' / 'shellcheck'
+          tool.parent.mkdir(parents=True, exist_ok=True)
+          url = 'https://github.com/koalaman/shellcheck/releases/download/v0.11.0/shellcheck-v0.11.0.linux.x86_64.tar.gz'
+          expected = 'b7af85e41cc99489dcc21d66c6d5f3685138f06d34651e6d34b42ec6d54fe6f6'
+          with urllib.request.urlopen(url, timeout=60) as response:
+              archive_bytes = response.read()
+          actual = hashlib.sha256(archive_bytes).hexdigest()
+          if actual != expected:
+              raise SystemExit('ShellCheck archive SHA-256 mismatch')
+          with tarfile.open(fileobj=io.BytesIO(archive_bytes), mode='r:gz') as archive:
+              member = archive.getmember('shellcheck-v0.11.0/shellcheck')
+              if not member.isfile():
+                  raise SystemExit('ShellCheck archive member is not a regular file')
+              tool.write_bytes(archive.extractfile(member).read())
+          tool.chmod(0o755)
+          version = subprocess.check_output([str(tool), '--version'], text=True).strip()
+          if 'version: 0.11.0' not in version:
+              raise SystemExit('Unexpected ShellCheck version')
+          receipt = {'source_url': url, 'archive_sha256': actual, 'version': version,
+                     'binary_sha256': hashlib.sha256(tool.read_bytes()).hexdigest()}
+          (root / 'shellcheck-tool.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'shellcheck_version': '0.11.0', 'archive_sha256': actual}))
+          PY
+
+      - name: Analyze exact reviewed shell sources with ShellCheck
+        id: shellcheck
+        if: ${{ always() && steps.identity.outcome == 'success' && steps.shellcheck_install.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import hashlib, json, os, pathlib, subprocess
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          expected = json.loads(os.environ['EXPECTED_SHELLCHECK_FILES'])
+          sources, absent = [], []
+          for name, digest in expected.items():
+              path = pathlib.Path(name)
+              if not path.exists() and not path.is_symlink():
+                  absent.append(name)
+                  continue
+              if path.is_symlink() or not path.is_file():
+                  raise SystemExit('Expected a regular canonical shell source: ' + name)
+              actual = hashlib.sha256(path.read_bytes()).hexdigest()
+              if actual != digest:
+                  raise SystemExit('Reviewed shell source changed; review its parser exception: ' + name)
+              sources.append({'path': name, 'sha256': actual})
+          result = subprocess.run([str(root / 'tools' / 'shellcheck'), '--norc', '--format=json',
+                                   *[source['path'] for source in sources]], capture_output=True, text=True) if sources else subprocess.CompletedProcess([], 0, '[]', '')
+          (root / 'shellcheck-results.json').write_text(result.stdout, encoding='utf-8')
+          (root / 'shellcheck-stderr.txt').write_text(result.stderr, encoding='utf-8')
+          findings = json.loads(result.stdout)
+          for source in sources:
+              if hashlib.sha256(pathlib.Path(source['path']).read_bytes()).hexdigest() != source['sha256']:
+                  raise SystemExit('Shell source changed during static analysis')
+          receipt = {'version': '0.11.0', 'sources': sources, 'absent_paths': absent, 'exit_code': result.returncode,
+                     'findings': len(findings), 'source_execution': False, 'rc_files': False}
+          (root / 'shellcheck-summary.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(receipt))
+          if result.returncode != 0 or findings:
+              raise SystemExit('ShellCheck reported findings or analysis errors')
+          PY
+
+      - name: Verify maintained vendor inventory and materialize exact source views
+        id: vendor_sources
+        if: ${{ always() && steps.identity.outcome == 'success' && steps.vendor_policy.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -I - <<'PY'
+          import gzip, hashlib, io, json, os, pathlib, subprocess, tarfile
+
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          workspace = pathlib.Path(os.environ['GITHUB_WORKSPACE']).resolve()
+          policy_bytes = (root / 'vendor-policy.json').read_bytes()
+          policy = json.loads(policy_bytes)
+          limits = policy['limits']
+          views_root = root / 'vendor-source-views'
+          views_root.mkdir(parents=True, exist_ok=False)
+
+          def digest(data):
+              return hashlib.sha256(data).hexdigest()
+
+          def fail(message):
+              raise SystemExit(message)
+
+          def canonical_path(name):
+              path = pathlib.PurePosixPath(name)
+              if not name or '\0' in name or '\\' in name or ':' in name or pathlib.PureWindowsPath(name).drive or path.is_absolute() or '..' in path.parts or str(path) != name:
+                  fail('Noncanonical vendor path: ' + name)
+              return path
+
+          def bounded_tar_bytes(data):
+              # Bound decompression and inspect raw headers before tarfile can consume
+              # PAX/GNU metadata internally. Current payloads need only per-file PAX path.
+              with gzip.GzipFile(fileobj=io.BytesIO(data)) as compressed:
+                  raw = compressed.read(limits['tar_bytes'] + 1)
+              if len(raw) > limits['tar_bytes'] or len(raw) % 512:
+                  fail('Archive decompression or block alignment limit failed')
+              offset, headers, pax_headers, metadata_total, pending_path = 0, 0, 0, 0, False
+              while offset + 512 <= len(raw):
+                  header = raw[offset:offset + 512]
+                  if header == bytes(512):
+                      if pending_path or raw[offset:offset + 1024] != bytes(1024) or any(raw[offset:]):
+                          fail('Archive has incomplete metadata or invalid end blocks')
+                      return raw, {'expanded_tar_bytes': len(raw), 'raw_headers': headers, 'pax_headers': pax_headers}
+                  headers += 1
+                  if headers > limits['archive_members']:
+                      fail('Raw archive header count limit exceeded')
+                  def octal(field):
+                      value = field.strip(b'\0 ')
+                      if not value or any(byte not in b'01234567' for byte in value):
+                          fail('Archive numeric field is not bounded unsigned octal')
+                      return int(value, 8)
+                  if octal(header[148:156]) != sum(header[:148]) + 8 * 32 + sum(header[156:]):
+                      fail('Archive raw header checksum mismatch')
+                  size, kind = octal(header[124:136]), header[156:157]
+                  end = offset + 512 + ((size + 511) // 512) * 512
+                  if size > limits['member_bytes'] or end > len(raw):
+                      fail('Raw archive member size exceeds available bounded bytes')
+                  if kind == b'x':
+                      pax_headers += 1
+                      metadata_total += size
+                      if pending_path or size > limits['metadata_bytes'] or metadata_total > limits['metadata_total_bytes']:
+                          fail('Archive PAX metadata bound exceeded')
+                      body = raw[offset + 512:offset + 512 + size]
+                      space = body.find(b' ')
+                      if space <= 0 or not body[:space].isdigit() or int(body[:space]) != len(body) or not body.endswith(b'\n'):
+                          fail('Archive PAX record has invalid finite length')
+                      key, separator, value = body[space + 1:-1].partition(b'=')
+                      if key != b'path' or not separator or b'\n' in value:
+                          fail('Only one bounded per-file PAX path record is supported')
+                      name = value.decode('utf-8')
+                      canonical_path(name)
+                      if not name.startswith('package/'):
+                          fail('PAX path must be canonical under package/')
+                      pending_path = True
+                  elif kind in (b'0', b'\0', b'5'):
+                      if kind == b'5' and size:
+                          fail('Archive directory has unexpected payload bytes')
+                      pending_path = False
+                  else:
+                      fail('Archive raw type is prohibited, including GNU/global metadata and links')
+                  offset = end
+              fail('Archive lacks complete finite end blocks')
+
+          entries = {}
+          for row in filter(None, subprocess.check_output(['git', 'ls-files', '--stage', '-z'], cwd=workspace).decode().split('\0')):
+              metadata, name = row.split('\t', 1)
+              mode, oid, stage = metadata.split()
+              if 'vendor' not in canonical_path(name).parts:
+                  continue
+              if name in entries or stage != '0' or mode not in ('100644', '100755'):
+                  fail('Vendor inventory has a nonregular or unresolved entry: ' + name)
+              entries[name] = {'mode': mode, 'oid': oid}
+          expected = {entry['path']: entry for entry in policy['inventory']}
+          if len(expected) != len(policy['inventory']) or set(entries) != set(expected):
+              fail('Tracked vendor inventory differs from current workflow classification; new=' + repr(sorted(set(entries) - set(expected))) + '; absent=' + repr(sorted(set(expected) - set(entries))))
+
+          source_bytes, sources = {}, []
+          for name, entry in expected.items():
+              path = workspace / name
+              if entries[name]['mode'] != entry['mode']:
+                  fail('Vendor source mode changed: ' + name)
+              if any(candidate.is_symlink() for candidate in (path, *path.parents)) or not path.is_file():
+                  fail('Vendor source must be an ordinary file with ordinary parents: ' + name)
+              if not path.resolve().is_relative_to(workspace):
+                  fail('Vendor source escapes workspace: ' + name)
+              cap = limits['archive_bytes'] if entry['classification'] == 'immutable-archive' else limits['tracked_bytes']
+              if not 0 <= entry['bytes'] <= cap:
+                  fail('Classified vendor size exceeds finite input cap: ' + name)
+              blob_size = int(subprocess.check_output(['git', 'cat-file', '-s', entries[name]['oid']], cwd=workspace, text=True))
+              if blob_size != entry['bytes']:
+                  fail('Git vendor blob size differs from current classification: ' + name)
+              canonical = subprocess.check_output(['git', 'cat-file', 'blob', entries[name]['oid']], cwd=workspace)
+              if len(canonical) != entry['bytes'] or digest(canonical) != entry['sha256']:
+                  fail('Classified vendor bytes changed; review current policy: ' + name)
+              checkout_cap = entry['bytes'] * (2 if entry['text_checkout'] else 1)
+              if path.stat().st_size > checkout_cap:
+                  fail('Vendor checkout exceeds finite classified size: ' + name)
+              with path.open('rb') as stream:
+                  working = stream.read(checkout_cap + 1)
+              if len(working) > checkout_cap:
+                  fail('Vendor checkout grew beyond finite classified size: ' + name)
+              # Git's Windows text checkout may expand LF to CRLF. The analyzed view is
+              # always the exact canonical Git blob, and neither form is written back.
+              if working != canonical and not (entry['text_checkout'] and working.replace(b'\r\n', b'\n') == canonical):
+                  fail('Working vendor file differs from its classified Git blob: ' + name)
+              source_bytes[name] = canonical
+              sources.append({'path': name, 'classification': entry['classification'], 'sha256': digest(canonical),
+                              'bytes': len(canonical), 'checkout_sha256': digest(working), 'checkout_bytes': len(working)})
+
+          view_data, archive_receipts = {}, []
+          for entry in policy['inventory']:
+              if entry['classification'] == 'maintained-source':
+                  view_data[entry['view']] = source_bytes[entry['path']]
+          if len(view_data) != policy['expected_tracked_sources']:
+              fail('Retained vendor source count differs from current classification')
+
+          for entry in policy['archives']:
+              data = source_bytes[entry['path']]
+              if len(data) > limits['archive_bytes'] or len(data) != entry['bytes'] or digest(data) != entry['sha256']:
+                  fail('Archive does not match current immutable provenance: ' + entry['path'])
+              raw, preflight = bounded_tar_bytes(data)
+              files, names, expanded, count = {}, set(), 0, 0
+              with tarfile.open(fileobj=io.BytesIO(raw), mode='r:') as archive:
+                  for member in archive:
+                      count += 1
+                      if count > limits['archive_members']:
+                          fail('Archive member count limit exceeded')
+                      name = member.name.rstrip('/') if member.isdir() else member.name
+                      canonical_path(name)
+                      if not (name.startswith('package/') or (name == 'package' and member.isdir())) or name in names:
+                          fail('Archive member is duplicate or outside package/: ' + name)
+                      names.add(name)
+                      if member.type not in (tarfile.REGTYPE, tarfile.AREGTYPE, tarfile.DIRTYPE):
+                          fail('Archive links, devices and special members are prohibited: ' + name)
+                      if member.isdir():
+                          continue
+                      expanded += member.size
+                      if member.size > limits['member_bytes'] or expanded > limits['expanded_bytes']:
+                          fail('Archive expanded size limit exceeded')
+                      content = archive.extractfile(member).read(limits['member_bytes'] + 1)
+                      if len(content) != member.size:
+                          fail('Archive member size mismatch: ' + name)
+                      files[name] = {'data': content, 'mode': member.mode & 0o777}
+              rows = [{'path': name.removeprefix('package/'), 'bytes': len(value['data']), 'mode': value['mode'], 'sha256': digest(value['data'])}
+                      for name, value in sorted(files.items())]
+              inventory_hash = digest(json.dumps(rows, separators=(',', ':')).encode())
+              if len(rows) != entry['members'] or inventory_hash != entry['inventory_sha256']:
+                  fail('Archive complete member inventory differs from reviewed provenance: ' + entry['path'])
+              for selected in entry['selected']:
+                  content = files[selected['member']]['data']
+                  if len(content) > limits['view_bytes'] or len(content) != selected['bytes'] or digest(content) != selected['sha256']:
+                      fail('Maintained archive source differs from reviewed bytes: ' + selected['member'])
+                  if selected['view'] in view_data and view_data[selected['view']] != content:
+                      fail('Deduplicated source views are not byte identical')
+                  view_data[selected['view']] = content
+              archive_receipts.append({'path': entry['path'], 'sha256': digest(data), 'members': len(rows),
+                                       'inventory_sha256': inventory_hash, 'selected': entry['selected'], 'provenance': entry['provenance'], 'raw_preflight': preflight})
+
+          if set(view_data) != {view['view'] for view in policy['views']} or len(view_data) != policy['expected_views']:
+              fail('Source view population differs from current reviewed classification')
+          views = []
+          for view in policy['views']:
+              name, content = view['view'], view_data[view['view']]
+              if canonical_path(name).name != name or pathlib.PurePosixPath(name).suffix not in ('.js', '.ts', '.py'):
+                  fail('Expected a flat source view with a recognized language extension')
+              if len(content) > limits['view_bytes'] or len(content) != view['bytes'] or digest(content) != view['sha256']:
+                  fail('Source view SHA or finite size invariant failed: ' + name)
+              (views_root / name).write_bytes(content)
+              views.append(view)
+          receipt = {'policy_sha256': digest(policy_bytes), 'scanned_sha': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=workspace, text=True).strip(),
+                     'source_execution': False, 'source_repacked': False, 'tracked_inventory': sources, 'archives': archive_receipts, 'views': views}
+          (root / 'vendor-source-identity.json').write_text(json.dumps(receipt, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps({'tracked_vendor_entries': len(sources), 'derived_archives': len(archive_receipts), 'source_views': len(views), 'source_execution': False}))
+          PY
+
+      - name: Analyze maintained vendor source views with the same security rules
+        id: vendor_analysis
+        if: ${{ always() && steps.identity.outcome == 'success' && steps.vendor_sources.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          configs=()
+          for config in "$RUNNER_TEMP/sast-evidence/policy/"*; do
+            configs+=(--config="$config")
+          done
+          cd "$RUNNER_TEMP/sast-evidence/vendor-source-views"
+          semgrep scan \
+            --oss-only --strict --error --metrics=off --disable-version-check --no-rewrite-rule-ids \
+            --jobs=2 --timeout=30 --no-git-ignore --max-target-bytes=1048576 \
+            --json-output "$RUNNER_TEMP/sast-evidence/vendor-results.json" \
+            --sarif-output "$RUNNER_TEMP/sast-evidence/vendor-results.sarif" \
+            "${configs[@]}" .
+
+      - name: Run full repository security analysis
+        id: analysis
+        if: ${{ always() && steps.identity.outcome == 'success' }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          configs=()
+          for config in "$RUNNER_TEMP/sast-evidence/policy/"*; do
+            configs+=(--config="$config")
+          done
+          semgrep scan \
+            --oss-only --strict --error --metrics=off --disable-version-check --no-rewrite-rule-ids \
+            --jobs=2 --timeout=30 \
+            --json-output "$RUNNER_TEMP/sast-evidence/results.json" \
+            --sarif-output "$RUNNER_TEMP/sast-evidence/results.sarif" \
+            --exclude=/app-sdk/android-device-connect/gradlew \
+            --exclude=/app-sdk/android-recording-catalog/gradlew \
+            --exclude=/end-to-end/recordings/clients/android-kotlin/gradlew \
+            "${configs[@]}" .
+
+      - name: Record findings, errors and scanned file count
+        if: ${{ always() && steps.identity.outcome == 'success' }}
+        env:
+          ANALYSIS_OUTCOME: ${{ steps.analysis.outcome }}
+          SHELLCHECK_OUTCOME: ${{ steps.shellcheck.outcome }}
+          VENDOR_SOURCES_OUTCOME: ${{ steps.vendor_sources.outcome }}
+          VENDOR_ANALYSIS_OUTCOME: ${{ steps.vendor_analysis.outcome }}
+        shell: bash
+        run: |
+          python3 -I - <<'PY'
+          import hashlib, json, os, pathlib
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'sast-evidence'
+          report = json.loads((root / 'results.json').read_text(encoding='utf-8'))
+          summary = {'analysis_outcome': os.environ['ANALYSIS_OUTCOME'], 'findings': len(report.get('results', [])), 'errors': len(report.get('errors', [])), 'scanned_files': len(report.get('paths', {}).get('scanned', [])), 'semgrep_version': report.get('version')}
+          summary['shellcheck_outcome'] = os.environ['SHELLCHECK_OUTCOME']
+          vendor = {'sources_outcome': os.environ['VENDOR_SOURCES_OUTCOME'], 'analysis_outcome': os.environ['VENDOR_ANALYSIS_OUTCOME']}
+          if (root / 'vendor-results.json').exists() and (root / 'vendor-source-identity.json').exists():
+              vendor_report = json.loads((root / 'vendor-results.json').read_text(encoding='utf-8'))
+              receipt = json.loads((root / 'vendor-source-identity.json').read_text(encoding='utf-8'))
+              expected = {view['view'] for view in receipt['views']}
+              scanned = vendor_report.get('paths', {}).get('scanned', [])
+              vendor.update({'findings': len(vendor_report.get('results', [])), 'errors': len(vendor_report.get('errors', [])),
+                             'scanned_files': len(scanned), 'expected_files': len(expected), 'semgrep_version': vendor_report.get('version'),
+                             'exact_view_population_scanned': len(scanned) == len(expected) and set(scanned) == expected,
+                             'source_views_unchanged': all(hashlib.sha256((root / 'vendor-source-views' / view['view']).read_bytes()).hexdigest() == view['sha256'] for view in receipt['views'])})
+          (root / 'vendor-summary.json').write_text(json.dumps(vendor, indent=2) + '\n', encoding='utf-8')
+          summary['maintained_vendor'] = vendor
+          (root / 'summary.json').write_text(json.dumps(summary, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(summary))
+          if vendor.get('sources_outcome') != 'success' or vendor.get('analysis_outcome') != 'success' or not vendor.get('exact_view_population_scanned') or not vendor.get('source_views_unchanged') or vendor.get('errors') or vendor.get('findings'):
+              raise SystemExit('Maintained vendor analysis failed, changed source, or omitted an expected view')
+          if not summary['scanned_files']:
+              raise SystemExit('SAST scanned zero files; applicability needs a separate review')
+          if summary['shellcheck_outcome'] != 'success':
+              raise SystemExit('ShellCheck did not complete successfully')
+          if summary['errors']:
+              raise SystemExit('SAST reported analysis errors; evidence is incomplete')
+          PY
+
+      - name: Retain scan identity, exact rules and results
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: sast-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/sast-evidence/
+          if-no-files-found: error
+          retention-days: 90

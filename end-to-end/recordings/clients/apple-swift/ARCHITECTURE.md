@@ -7,7 +7,8 @@ existing cloud results without adding device integration or processing controls.
 ## Boundaries
 
 `App.swift` owns one `RecordingsModel` and renders inert SwiftUI text on iOS and
-macOS. The model owns a session and one serialized chain of reader tasks. The
+macOS. Its application-level `StateObject` is shared above all window/view
+creation. The model owns a session and one serialized chain of reader tasks. The
 checked-in iOS project compiles the same five Swift files as the macOS Swift
 package; it contains no package or binary dependency. Apple system frameworks
 are the complete runtime dependency set.
@@ -55,6 +56,11 @@ reader and transport closure must finish before replacement can open. A cleanup
 failure is sticky and requires an app restart. Stale content or
 errors cannot restore a retired session; a same-session stale reader cleanup
 failure still closes admission.
+After either a reader or close cleanup failure, the model explicitly retains
+the retired API in quarantine for its remaining lifetime. Completed task
+captures are not ownership storage. Window recreation shares this same model,
+including its refusal flag and quarantine; successful retirement releases its
+ordinary API after the reader and close work join.
 
 ## Deliberate limits
 

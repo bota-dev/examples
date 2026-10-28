@@ -184,7 +184,7 @@ backend launch base or journals, add iOS/playback/import, or expand SDK capabili
 The separate [October 20 implementation](../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
 adds iOS hosts and ordinary mobile import/playback; it does not alter those
 relocation guarantees or add Flutter/iOS encrypted device sync.
-Only SDK-only connection/status workflows are backend-free; the native encrypted
+SDK-only connection/status and local Sample modes need no backend; the native encrypted
 upload path retains its documented backend and completion requirements.
 
 ## Copy or adapt a feature

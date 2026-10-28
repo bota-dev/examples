@@ -65,6 +65,9 @@ internal class TestExchange(private val socket: Socket) : AutoCloseable {
             override fun close() { if (!closed) { closed = true; stream.write("0\r\n\r\n".toByteArray(Charsets.US_ASCII)); stream.close() } }
         } else stream
     }
+    /** Deliberately malformed HTTP fixtures exercise the real transport parser. */
+    fun writeRaw(value: String) { socket.getOutputStream().apply { write(value.toByteArray(Charsets.US_ASCII)); flush() } }
+    fun awaitPeerClose(): Boolean { socket.soTimeout = 3000; return socket.getInputStream().read() == -1 }
     override fun close() { try { if (::responseBody.isInitialized) responseBody.close() } finally { socket.close() } }
 }
 internal class TestBackend(handler: (TestExchange) -> Unit) : AutoCloseable {

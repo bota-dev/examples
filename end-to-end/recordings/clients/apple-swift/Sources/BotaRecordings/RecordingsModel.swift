@@ -16,6 +16,8 @@ import Foundation
     @Published private(set) var message: String?
 
     private var api: LibraryAPI?
+    // App-level ownership survives window recreation and completed Task capture release.
+    private var quarantinedAPI: LibraryAPI?
     private var epoch = 0
     private var selection = 0
     private var work: Task<Void, Never>?
@@ -149,6 +151,7 @@ import Foundation
                 self?.cleanupBlocked = true
                 self?.message = LibraryFailure.cleanup.message
             }
+            if self?.cleanupBlocked == true { self?.quarantinedAPI = closing }
             self?.retiringEpoch = nil
             self?.retiring = false
         }

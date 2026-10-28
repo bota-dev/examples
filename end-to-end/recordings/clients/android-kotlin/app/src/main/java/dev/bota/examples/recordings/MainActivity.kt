@@ -14,7 +14,7 @@ import kotlinx.coroutines.*
 /** Ordinary recording UI. All integration calls and ownership rules live outside the Activity. */
 class MainActivity : Activity() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
-    private val controller = LibraryController(scope)
+    private val controller = AppLibrarySessions.attach()
     private lateinit var content: LinearLayout
     private var origin: EditText? = null
     private var token: EditText? = null
@@ -127,7 +127,8 @@ class MainActivity : Activity() {
         super.onStop()
     }
     override fun onDestroy() {
-        controller.signOut().invokeOnCompletion { scope.cancel() }
+        controller.detach()
+        scope.cancel() // View collection ends; process-owned reader retirement keeps running.
         super.onDestroy()
     }
     override fun onSaveInstanceState(outState: Bundle) {
@@ -135,7 +136,7 @@ class MainActivity : Activity() {
         outState.clear() // Credentials/content are never restored by Android saved-view state.
     }
     @Deprecated("Uses the ordinary library back action")
-    @SuppressLint("GestureBackNavigation") // API33+ uses the native callback above; this is the API26–32 fallback.
+    @SuppressLint("GestureBackNavigation") // API33+ uses the native callback above; this is the API29–32 fallback.
     override fun onBackPressed() = back()
     private fun back() { if (controller.state.value.selected != null) controller.back() else finish() }
 }

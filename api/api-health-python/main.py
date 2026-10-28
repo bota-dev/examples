@@ -79,6 +79,8 @@ def read_health(host, port, total_deadline):
     deadline = min(total_deadline, time.monotonic() + REQUEST_SECONDS)
     remaining = deadline - time.monotonic()
     require(remaining > 0, "Health probe exceeded its elapsed-time budget.")
+    # Python 3.12+ default TLS validates certificates and the hostname.
+    # nosemgrep: python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
     connection = http.client.HTTPSConnection(host, port, timeout=remaining)
     timer = None
     try:

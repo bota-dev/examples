@@ -63,8 +63,12 @@ an exhaustive snapshot. Refresh performs another explicit GET.
 
 Tokens and content exist only in process memory. Sign-out, leaving the foreground
 or a 401 clears the session; returning requires an explicit Sample/Live choice.
-Rotation can retire the foreground session too. No app content or token is saved
-to Android view state, disk, backups, logs or analytics. Screenshot capture is
+Rotation can retire the foreground session too. A process-owned controller joins
+the old reader before a replacement Activity can connect; a late callback from
+the destroyed Activity cannot clear or observe the replacement session. Failed
+cleanup remains blocked across Activity recreation until process restart.
+No app content or token is saved to Android view state, disk, backups, logs or
+analytics. Screenshot capture is
 disabled. The app does not automatically reconnect or retry a failed read.
 
 ## Copy and adapt
@@ -74,6 +78,7 @@ disabled. The app does not automatically reconnect or retry a failed read.
 | [LibraryApi.kt](app/src/main/java/dev/bota/examples/recordings/LibraryApi.kt) | Fixed customer-backend GET routes, separate Bearer token, per-client no-cookie/no-cache transport, deadline and streaming byte cap |
 | [Models.kt](app/src/main/java/dev/bota/examples/recordings/Models.kt) | Exact allowlisted DTOs, source relationships, UTF-16 content caps and bounded JSON depth |
 | [LibraryController.kt](app/src/main/java/dev/bota/examples/recordings/LibraryController.kt) | Session/selection fences and joined reader cancellation before replacement |
+| [LibrarySessions.kt](app/src/main/java/dev/bota/examples/recordings/LibrarySessions.kt) | Process-owned admission/retirement and per-Activity leases that fence old callbacks and content |
 | [MainActivity.kt](app/src/main/java/dev/bota/examples/recordings/MainActivity.kt) | Ordinary library/detail/Transcript/Notes UI and foreground-only lifecycle |
 | [SampleLibrary.kt](app/src/main/java/dev/bota/examples/recordings/SampleLibrary.kt) | Synthetic local source without transport initialization |
 
@@ -96,10 +101,24 @@ For ordinary upload/playback or processing actions, consult
 
 Live uses exact HTTP 200 GET responses, a 30-second cancellation deadline and a
 2 MiB streamed JSON byte cap, including chunked responses. Apache HttpCore
-**5.4.4** provides the ordinary HTTP/1.1 requester and unchanged system TLS trust
+**5.3.6** provides the ordinary HTTP/1.1 requester and unchanged system TLS trust
 and HTTPS endpoint verification. This root requires API 29 because its default
 TLS path uses `SSLEngine.getApplicationProtocol`. The independent device SDK
 starters still support API 26; they have different runtime requirements.
+
+The 5.3.6 pin avoids 5.4.4's unconditional JDK-specific socket setup,
+which calls `jdk.net.Sockets.supportedOptions`, unavailable on Android 29. Keep the 5.3.6 default
+extended-keepalive tunables unchanged. Upgrades need actual Android runtime checks
+as well as JVM tests and an APK build.
+
+HttpCore5.3.6 remains within the affected artifact range for
+[CVE-2026-54399](https://github.com/advisories/GHSA-hf6x-8p5f-cgmf).
+This requester supplies explicit `Http1Config` limits of 100 headers and 8192
+bytes per line, matching [Apache's finite-defaults fix](https://github.com/apache/httpcomponents-core/commit/d96a00f).
+The same configuration bounds response headers, folded-line accumulation and
+chunked trailers, including unfinished lines. Preserve it when copying the code.
+This mitigates that issue on this configured HTTP/1 path; the upstream artifact
+is not patched, and no advisory suppression or scanner-closure claim is made.
 
 There are no redirect, HTTP-auth follow-up, automatic retry, content-decoding,
 cookie or cache layers. A host-global `CookieHandler` is not consulted. Content
@@ -117,7 +136,7 @@ uninterruptible platform DNS lookup or final cleanup can delay error reporting
 and retirement beyond it. Replacement stays blocked until actual work finishes.
 Cleanup failure refuses new sessions until process restart. Never replace this
 join with a cancelled-Future or `SHUT_DOWN` status check. The zero-wait single-worker
-join relies on the reviewed exact 5.4.4 public implementation; re-review it on
+join relies on the reviewed exact 5.3.6 public implementation; re-review it on
 upgrade. Public test keys in `app/src/sharedTest/resources/tls` are synthetic and
 are excluded from application APKs.
 
@@ -138,13 +157,22 @@ the checks without that flag. Never refresh locks to hide an unexplained change.
 
 The [owning workflow](../../../../.github/workflows/android-recordings.yml) runs
 JVM tests with local synthetic HTTP/TLS, Android lint, license verification and a
-Debug APK/test-host build. Its separate API 29 emulator job runs four actual
+Debug APK/test-host build. Before Gradle, `bash scripts/test-runtime-result.sh`
+checks the runtime receipt gate with success/failure fixtures. The emulator gate
+requires the five-case success summary and exactly one raw final `-1` record;
+failure markers, wrong/missing or duplicate final records refuse success.
+Its separate API 29 emulator job runs five actual
 HTTP/TLS/cancellation checks, including invalid DNS/IP peers and an untrusted
-chain, with a gated real reactor callback proving cancellation joins work.
+chain, oversized headers/trailers and a gated real reactor callback proving
+cancellation joins work.
 JVM tests also qualify cookie/redirect refusal, response/deadline bounds, DTO/source
-validation, late results, sign-out and Sample isolation. Run the hosted emulator
+validation, late results, sign-out, Sample isolation and process admission across
+two Activity leases, including blocked readers and failed cleanup. Run the hosted emulator
 lane with `bash scripts/test-emulator.sh` only in a prepared temporary SDK/AVD
 workspace (see the workflow). Local Windows checks build both APKs; hosted runtime
 success remains a separate acceptance gate. These tests establish no live API,
 installed UI walkthrough, audio, device, cloud write or encrypted-upload-v2
 acceptance.
+
+See the [platform review](../../../../docs/design-reviews/2026-10-20-native-cloud-web-device.md)
+for hosted test/build results and the remaining live and physical checks.

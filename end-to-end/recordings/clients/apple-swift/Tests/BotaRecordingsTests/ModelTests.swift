@@ -19,6 +19,40 @@ private actor Gate<Value: Sendable> {
     func finish(_ value: Value) { continuation?.resume(returning: value); continuation = nil }
 }
 
+private final class LifetimeOwner: @unchecked Sendable {}
+private final class WeakOwner {
+    weak var value: LifetimeOwner?
+    init(_ value: LifetimeOwner) { self.value = value }
+}
+private final class ConsumingAPIFactory: @unchecked Sendable {
+    private let lock = NSLock()
+    private var api: LibraryAPI?
+    init(_ api: LibraryAPI) { self.api = api }
+    func take() throws -> LibraryAPI {
+        lock.lock(); defer { lock.unlock() }
+        guard let api else { throw LibraryFailure.configuration }
+        self.api = nil // The retained factory must not accidentally keep the source alive.
+        return api
+    }
+}
+private enum RetirementOutcome: Equatable, Sendable { case success, readCleanupFailure, closeCleanupFailure }
+private func lifetimeFactory(_ outcome: RetirementOutcome, readGate: Gate<Result<Recording, LibraryFailure>>? = nil) throws -> (ConsumingAPIFactory, WeakOwner) {
+    let owner = LifetimeOwner(), weakOwner = WeakOwner(owner)
+    var api = try Sample.api()
+    api.close = { [owner] in
+        withExtendedLifetime(owner) {}
+        if outcome == .closeCleanupFailure { throw LibraryFailure.cleanup }
+    }
+    if outcome == .readCleanupFailure {
+        api.detail = { [owner] _ in
+            withExtendedLifetime(owner) {}
+            if let readGate { let result = await readGate.read(); return try result.get() }
+            throw LibraryFailure.cleanup
+        }
+    }
+    return (ConsumingAPIFactory(api), weakOwner)
+}
+
 @MainActor final class ModelTests: XCTestCase {
     func testSampleNeverConstructsLiveTransportAndShowsOrdinaryContent() async throws {
         let model = RecordingsModel(liveFactory: { _, _ in XCTFail("Sample constructed a live transport"); throw LibraryFailure.configuration })
@@ -146,5 +180,43 @@ private actor Gate<Value: Sendable> {
         XCTAssertTrue(model.cleanupBlocked); XCTAssertFalse(model.canOpen)
         XCTAssertEqual(model.message, LibraryFailure.cleanup.message)
         model.openSample(); XCTAssertNil(model.mode)
+    }
+    func testFailedReadAndCloseKeepQuarantinedOwnerForModelLifetime() async throws {
+        for outcome in [RetirementOutcome.readCleanupFailure, .closeCleanupFailure] {
+            let (factory, weakOwner) = try lifetimeFactory(outcome)
+            var model: RecordingsModel? = RecordingsModel(liveFactory: { _, _ in try factory.take() })
+            model?.openLive(origin: "unused", token: "unused"); await model?.waitForReads()
+            if outcome == .readCleanupFailure {
+                model?.select("rec_sample_walk"); await model?.waitForReads()
+            } else { model?.retire() }
+            await model?.waitForRetirement()
+            XCTAssertTrue(model?.cleanupBlocked == true)
+            XCTAssertNotNil(weakOwner.value, "Failed native ownership must survive completed retirement tasks")
+            model?.openSample(); XCTAssertNil(model?.mode)
+            model = nil
+            XCTAssertNil(weakOwner.value, "The app-level owner is released only with its process model")
+        }
+    }
+    func testRetiringReadFailureKeepsOwnerEvenWhenCloseAlreadySucceeded() async throws {
+        let gate = Gate<Result<Recording, LibraryFailure>>()
+        let (factory, weakOwner) = try lifetimeFactory(.readCleanupFailure, readGate: gate)
+        var model: RecordingsModel? = RecordingsModel(liveFactory: { _, _ in try factory.take() })
+        model?.openLive(origin: "unused", token: "unused"); await model?.waitForReads()
+        model?.select("rec_sample_walk"); await gate.waitForRead()
+        model?.retire()
+        await gate.finish(.failure(.cleanup)); await model?.waitForRetirement()
+        XCTAssertTrue(model?.cleanupBlocked == true)
+        XCTAssertNotNil(weakOwner.value)
+        model = nil
+        XCTAssertNil(weakOwner.value)
+    }
+    func testSuccessfulRetirementDoesNotQuarantineOrdinaryOwner() async throws {
+        let (factory, weakOwner) = try lifetimeFactory(.success)
+        let model = RecordingsModel(liveFactory: { _, _ in try factory.take() })
+        model.openLive(origin: "unused", token: "unused"); await model.waitForReads()
+        XCTAssertNotNil(weakOwner.value)
+        model.retire(); await model.waitForRetirement()
+        XCTAssertTrue(model.canOpen)
+        XCTAssertNil(weakOwner.value, "Successful cleanup must release the ordinary source")
     }
 }

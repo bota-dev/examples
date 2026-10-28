@@ -3,10 +3,57 @@ package dev.bota.examples.recordings
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
 internal object RuntimeChecks {
+    fun httpMessageLimitsRejectOversizedHeadsAndTrailers() {
+        val body = pageJson()
+        val head = "HTTP/1.1 200 OK\r\nContent-Type: application/json\r\nConnection: close\r\n"
+        fun fixed(extra: String) = head + "Content-Length: ${body.length}\r\n" + extra + "\r\n" + body
+        fun chunked(trailers: String) = head + "Transfer-Encoding: chunked\r\n\r\n" +
+            body.length.toString(16) + "\r\n" + body + "\r\n0\r\n" + trailers + "\r\n"
+        // 3 ordinary fields + 98 extras = 101 total header fields.
+        val attacks = listOf(
+            fixed((0 until 98).joinToString("") { "X-Synthetic-$it: value\r\n" }),
+            fixed("X-Long: " + "x".repeat(8193 - "X-Long: ".length) + "\r\n"),
+            fixed("X-Fold: " + "x".repeat(4094) + "\r\n " + "x".repeat(4098) + "\r\n"),
+            chunked((0 until 101).joinToString("") { "X-Trailer-$it: value\r\n" }),
+            chunked("X-Long: " + "x".repeat(8193 - "X-Long: ".length) + "\r\n"),
+            chunked("X-Fold: " + "x".repeat(4094) + "\r\n " + "x".repeat(4098) + "\r\n"),
+        )
+        for (attack in attacks) {
+            val calls = AtomicInteger()
+            TestBackend { request -> calls.incrementAndGet(); request.writeRaw(attack) }.use { backend ->
+                LiveLibrary.connect(backend.origin, TEST_TOKEN).use { api ->
+                    val failure = try { api.list(ReadCancellation()); error("Oversized HTTP message accepted") }
+                        catch (error: LibraryFailure) { error }
+                    check(failure.failure == Failure.NETWORK || failure.failure == Failure.RESPONSE)
+                    check(calls.get() == 1) { "Invalid HTTP message caused an automatic retry" }
+                }
+            }
+        }
+        // The attacker never terminates this line. The parser must enforce its
+        // bound while accumulating fragments, without waiting for CRLF or EOF.
+        val closed = AtomicBoolean(); val observed = CountDownLatch(1); val calls = AtomicInteger()
+        TestBackend { request ->
+            calls.incrementAndGet()
+            try {
+                request.writeRaw(head + "X-Unfinished: ")
+                repeat(5) { request.writeRaw("x".repeat(2048)) }
+                closed.set(request.awaitPeerClose())
+            } catch (_: java.net.SocketTimeoutException) { closed.set(false) }
+            catch (_: java.io.IOException) { closed.set(true) }
+            finally { observed.countDown() }
+        }.use { backend -> LiveLibrary.connect(backend.origin, TEST_TOKEN).use { api ->
+            val failure = try { api.list(ReadCancellation()); error("Unterminated oversized HTTP line accepted") }
+                catch (error: LibraryFailure) { error }
+            check(failure.failure == Failure.NETWORK || failure.failure == Failure.RESPONSE)
+            check(observed.await(5, TimeUnit.SECONDS) && closed.get()) { "Oversized unfinished line was not bounded before EOF" }
+            check(calls.get() == 1)
+        } }
+    }
     fun authenticatedGetAndNoRetry() {
         val calls = AtomicInteger()
         TestBackend { request ->
