@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-21T02:07:46Z",
+  "checkedAt": "2026-10-28T23:32:57.113196Z",
   "scope": "Complete debug/release application and JVM-test compile/runtime module graph. Each consumed binary matches anonymously downloaded public Central bytes and its published SHA-1; SHA-256 below pins those bytes. Metadata-only BOM/multiplatform nodes have no consumed binary.",
   "registry": "https://repo.maven.apache.org/maven2/",
   "agePolicy": "At least seven full days, based on public POM Last-Modified. Every selected version is at least seven days old at review.",
@@ -7,7 +7,7 @@
     "gradle": "8.13",
     "gradleDistributionSha256": "20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78",
     "androidGradlePlugin": "8.13.2",
-    "kotlin": "2.1.20",
+    "kotlin": "2.4.21",
     "jdk": "17",
     "androidCompileSdk": 36,
     "auditLimit": "These pinned build tools, Android SDK and JDK are outside the recursive app/test license inventory."
@@ -57,21 +57,21 @@
       "publishedSha1": "2c7f0d11747f9485a02c9f622c0f0477d7ce8677"
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.1.20",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.20/kotlin-stdlib-2.1.20.pom",
-      "pomSha256": "6750e1799ee502077dae5c3d599796f667606f60d35e95cb790448dc7912b40b",
-      "publishedAt": "2025-03-19T18:39:41Z",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.4.21",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/kotlin-stdlib-2.4.21.pom",
+      "pomSha256": "b92b23ec9c444b2578b9852447565efc72c24b3ea77b4c3bf4e644f685eeef07",
+      "publishedAt": "2026-10-08T07:57:54Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
-        "The Apache License, Version 2.0"
+        "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.20/kotlin-stdlib-2.1.20.pom",
-      "licenseSourceSha256": "6750e1799ee502077dae5c3d599796f667606f60d35e95cb790448dc7912b40b",
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/kotlin-stdlib-2.4.21.pom",
+      "licenseSourceSha256": "b92b23ec9c444b2578b9852447565efc72c24b3ea77b4c3bf4e644f685eeef07",
       "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.20/kotlin-stdlib-2.1.20.jar",
-      "sha256": "1bcc74e8ce84e2c25eaafde10f1248349cce3062b6e36978cbeec610db1e930a",
-      "publishedSha1": "aa8ca79cd50578314f6d1180c47cbe14c0fee567"
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/kotlin-stdlib-2.4.21.jar",
+      "sha256": "bd8250210584cb659847dce9cda660f8e9906e5def7fbebcea93dc6dcb6a88a3",
+      "publishedSha1": "c343e135bd1e7dd94b7ed76b4159068d888d09db"
     },
     {
       "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2",
@@ -134,77 +134,80 @@
       "licenseSourceSha256": "519da5400096f3462a4dae80783ad050413d4bc81ec7ae53fae76aef0ccbed4c"
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.8.1",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-bom/1.8.1/kotlinx-serialization-bom-1.8.1.pom",
-      "pomSha256": "00f3555ae7624851c67db12c308bc9ce26ae327cf0d724766a401e5ba00608c7",
-      "publishedAt": "2025-03-31T19:52:36Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.12.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-bom/1.12.0/kotlinx-serialization-bom-1.12.0.pom",
+      "pomSha256": "923d2c3d93ced44b3d4545150bc428808bcde086af56fbbc611853c424feef39",
+      "publishedAt": "2026-10-19T18:21:41Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-bom/1.8.1/kotlinx-serialization-bom-1.8.1.pom",
-      "licenseSourceSha256": "00f3555ae7624851c67db12c308bc9ce26ae327cf0d724766a401e5ba00608c7"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-bom/1.12.0/kotlinx-serialization-bom-1.12.0.pom",
+      "licenseSourceSha256": "923d2c3d93ced44b3d4545150bc428808bcde086af56fbbc611853c424feef39",
+      "bundledNotices": []
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.8.1",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.8.1/kotlinx-serialization-core-jvm-1.8.1.pom",
-      "pomSha256": "446655e8d43828bfbb387ce9d151a9371a3092b48b909e80606b53fc58979e28",
-      "publishedAt": "2025-03-31T19:54:02Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-core-jvm:1.12.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.12.0/kotlinx-serialization-core-jvm-1.12.0.pom",
+      "pomSha256": "16483c676ede344e09addfecb4b228238aa8ebd111eef201bbe9e490c0c6e384",
+      "publishedAt": "2026-10-19T18:21:42Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.8.1/kotlinx-serialization-core-jvm-1.8.1.pom",
-      "licenseSourceSha256": "446655e8d43828bfbb387ce9d151a9371a3092b48b909e80606b53fc58979e28",
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.12.0/kotlinx-serialization-core-jvm-1.12.0.pom",
+      "licenseSourceSha256": "16483c676ede344e09addfecb4b228238aa8ebd111eef201bbe9e490c0c6e384",
       "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.8.1/kotlinx-serialization-core-jvm-1.8.1.jar",
-      "sha256": "3565b6d4d789bf70683c45566944287fc1d8dc75c23d98bd87d01059cc76f2b3",
-      "publishedSha1": "510cb839cce9a3e708052d480a6fbf4a7274dfcd"
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core-jvm/1.12.0/kotlinx-serialization-core-jvm-1.12.0.jar",
+      "sha256": "bcfddcac76159058ba0953af05938c17111d238cd41be7191874656454d62f1a",
+      "publishedSha1": "60e7a99e653c96101a80f817b57bf698e40bf66c"
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-core:1.8.1",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core/1.8.1/kotlinx-serialization-core-1.8.1.pom",
-      "pomSha256": "473f0aa3e4a17aab7860dca490dc42eabb6124f1d2953e6a995a08717e50c714",
-      "publishedAt": "2025-03-31T19:54:06Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-core:1.12.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core/1.12.0/kotlinx-serialization-core-1.12.0.pom",
+      "pomSha256": "fb4a9f16bd9b6f6ec5f5bd5524153fac1580c2dd0d1390433b5091e27e3d664b",
+      "publishedAt": "2026-10-19T18:21:42Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core/1.8.1/kotlinx-serialization-core-1.8.1.pom",
-      "licenseSourceSha256": "473f0aa3e4a17aab7860dca490dc42eabb6124f1d2953e6a995a08717e50c714"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-core/1.12.0/kotlinx-serialization-core-1.12.0.pom",
+      "licenseSourceSha256": "fb4a9f16bd9b6f6ec5f5bd5524153fac1580c2dd0d1390433b5091e27e3d664b",
+      "bundledNotices": []
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.8.1",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json-jvm/1.8.1/kotlinx-serialization-json-jvm-1.8.1.pom",
-      "pomSha256": "d665d6b41fe058f666a6f386ad2e49cc101ef8fd2eefefefcbc111e91ee82436",
-      "publishedAt": "2025-03-31T19:55:07Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-json-jvm:1.12.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json-jvm/1.12.0/kotlinx-serialization-json-jvm-1.12.0.pom",
+      "pomSha256": "4965002d7bc71f7a2db201f07d30c579ff12f20a050f7b307d3e2a2b12d3ded7",
+      "publishedAt": "2026-10-19T18:21:43Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json-jvm/1.8.1/kotlinx-serialization-json-jvm-1.8.1.pom",
-      "licenseSourceSha256": "d665d6b41fe058f666a6f386ad2e49cc101ef8fd2eefefefcbc111e91ee82436",
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json-jvm/1.12.0/kotlinx-serialization-json-jvm-1.12.0.pom",
+      "licenseSourceSha256": "4965002d7bc71f7a2db201f07d30c579ff12f20a050f7b307d3e2a2b12d3ded7",
       "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json-jvm/1.8.1/kotlinx-serialization-json-jvm-1.8.1.jar",
-      "sha256": "8769e5647557e3700919c32d508f5c5dad53c5d8234cd10846354fbcff14aa24",
-      "publishedSha1": "4de3bace4b175753df5484d2acd74c14bfeb5be9"
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json-jvm/1.12.0/kotlinx-serialization-json-jvm-1.12.0.jar",
+      "sha256": "879eb73e46cb63253ab0fa7cca4448f5c96bca1a16ff377abcb71ebab60e0631",
+      "publishedSha1": "3e4ae142f2e099c52e99d2ea8256f6ad1b9518ce"
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.1",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json/1.8.1/kotlinx-serialization-json-1.8.1.pom",
-      "pomSha256": "c7700c99c83de02b46541a3d7e4b69b388749b7c0f57dceb454d143f2cd87a7b",
-      "publishedAt": "2025-03-31T19:55:11Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json/1.12.0/kotlinx-serialization-json-1.12.0.pom",
+      "pomSha256": "bf8dcd36b8b83e6f38d165d391ffdb5d7743acd9cba076fc0318e733d878985f",
+      "publishedAt": "2026-10-19T18:21:43Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json/1.8.1/kotlinx-serialization-json-1.8.1.pom",
-      "licenseSourceSha256": "c7700c99c83de02b46541a3d7e4b69b388749b7c0f57dceb454d143f2cd87a7b"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-serialization-json/1.12.0/kotlinx-serialization-json-1.12.0.pom",
+      "licenseSourceSha256": "bf8dcd36b8b83e6f38d165d391ffdb5d7743acd9cba076fc0318e733d878985f",
+      "bundledNotices": []
     },
     {
       "coordinate": "org.jetbrains:annotations:23.0.0",
