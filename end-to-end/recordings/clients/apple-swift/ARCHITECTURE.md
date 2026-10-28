@@ -7,7 +7,8 @@ existing cloud results without adding device integration or processing controls.
 ## Boundaries
 
 `App.swift` owns one `RecordingsModel` and renders inert SwiftUI text on iOS and
-macOS. The model owns a session and one serialized chain of reader tasks. The
+macOS. Its application-level `StateObject` is shared above all window/view
+creation. The model owns a session and one serialized chain of reader tasks. The
 checked-in iOS project compiles the same five Swift files as the macOS Swift
 package; it contains no package or binary dependency. Apple system frameworks
 are the complete runtime dependency set.
@@ -39,9 +40,14 @@ revision and exact selected ID fence all result publication.
 Each GET creates an ephemeral URLSession with no credential/cookie store or
 cache. It refuses redirects, allows only the validated backend origin and fixed
 GET routes, requests identity encoding, bounds streaming bytes to 2 MiB and sets
-both request and resource deadlines to 30 seconds. The per-request session is
-invalidated and joined before the read returns, including cancellation before
-headers. The API actor retains the token only until session retirement.
+both request and resource deadlines to 30 seconds. A streaming data-task delegate
+owns the buffer and explicitly cancels any redirect while preserving its
+controlled error. A separate 30-second timer also cancels a stalled task.
+Task completion and final session invalidation must both arrive before a read
+returns. A five-second finalizer deadline returns sticky cleanup failure and
+retains native ownership if callbacks do not join; it never reports cleanup
+success in that case. This also covers cancellation before headers. The API
+actor retains the token only until session retirement.
 
 Sign-out, window inactivity/disappearance and 401 retirement clear the model's
 content and drop the admitted API immediately. They start transport closure to
@@ -50,6 +56,11 @@ reader and transport closure must finish before replacement can open. A cleanup
 failure is sticky and requires an app restart. Stale content or
 errors cannot restore a retired session; a same-session stale reader cleanup
 failure still closes admission.
+After either a reader or close cleanup failure, the model explicitly retains
+the retired API in quarantine for its remaining lifetime. Completed task
+captures are not ownership storage. Window recreation shares this same model,
+including its refusal flag and quarantine; successful retirement releases its
+ordinary API after the reader and close work join.
 
 ## Deliberate limits
 

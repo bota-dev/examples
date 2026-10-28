@@ -55,8 +55,10 @@ Share backend features and narrow DTO/fixture contracts, not a universal UI or
 cross-language controller framework. Short local configuration/HTTP/UI glue can
 repeat to keep modules understandable. Substantial device protocol logic stays
 in the published SDK; the sample is not a new API SDK or privileged generic
-proxy. Native Kotlin/Swift clients begin with supported SDK workflows; missing
-iOS/native hosts do not wait for full app import/playback or identical UI.
+proxy. Native Kotlin/Swift clients offer separate SDK starters and GET-only cloud
+readers. Cloud readers share the authenticated HTTP contract, not a runtime UI
+framework or device authority. Full app import/playback and identical UI are not
+prerequisites for a useful native integration.
 
 The common app's end-user flow is **add/import audio → library → playback/source →
 transcript → notes → recording-scoped Ask**. Everyday screens show recordings
@@ -84,10 +86,11 @@ quickstarts still install independently:
 | Location | Implemented role and limits |
 | --- | --- |
 | [Integrated backend](end-to-end/recordings/README.md) | One combined Node listener composes Web/mobile factories, shared recording/processing/Ask features and all three original journals; Express/Vite resolve from the Web install. |
-| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, ordinary-import playback, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK or capture. |
+| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, ordinary-import playback, library, Transcript/Summary/Ask and webhook metadata. Optional desktop Chromium SDK connection/status; no capture or transfer. |
 | [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains backend/setup and original journals; links to Android/iOS RN and Flutter clients. Shared ordinary upload/playback retains existing cookie/Bearer adapters. |
 | [React Native](end-to-end/recordings/clients/react-native/README.md) | Complete relocated install root; common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
 | [Flutter](end-to-end/recordings/clients/flutter/README.md) | Android/iOS hosts with ordinary import/playback, cloud-content flow and secondary connection/status. The selected public facade does not supply this sample's encrypted-upload host workflow. |
+| [Kotlin](end-to-end/recordings/clients/android-kotlin/README.md) / [Swift](end-to-end/recordings/clients/apple-swift/README.md) | Independent native Android and iOS/macOS GET-only cloud readers. Local sample or live library/detail/transcript/general notes; no Bota SDK or write operations. |
 | [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
 | [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its native compatibility path pins beta.19 with app/runtime 0.5.0; dependency guards remain. Its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
 
@@ -108,7 +111,8 @@ preserved. Native recovery identity includes the backend origin: retain that
 origin, using combined `PORT=8787` with matching `APP_ORIGIN` where applicable,
 rather than resetting journals or rewriting capture scope. Fresh cloud setup
 may explicitly select `5173`. Folder relocation adds no SDK capability.
-All ten SDK install roots pin exact public beta.19. They install independently. The
+Ten existing SDK roots pin exact public beta.19; the optional Web recording-app
+device integration pins exact public beta.20. They install independently. The
 [current adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
 records package and host checks. RN retains its native-workflow compatibility
 factory; generated-JS `/runtime` adoption is separate. Swift and Flutter supply

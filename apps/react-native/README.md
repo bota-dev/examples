@@ -48,6 +48,12 @@ requires a new native runtime.
 Local exports/prebuilds do not establish hosted assembly,
 installed Bluetooth behavior or scanner closure.
 
+CI assembles Android Debug separately for `arm64-v8a`, `armeabi-v7a`, `x86`
+and `x86_64` in parallel. The `Android native example` check requires all four
+builds to pass. Gradle caches are keyed by the dependency lock and Expo config;
+each build still runs frozen installation, mandatory postinstall guards and
+native project generation before assembly.
+
 
 October 13 Chokidar public-boundary correction: the original maintained parent
 nomination remains historical and held. The corrected 3.6.0 archive preflights

@@ -18,10 +18,14 @@ features. They add no routes, processing writes, SDK wrapper or backend service.
 - Requests are explicit GETs to the fixed routes below, with no body, cookies,
   redirects or cache. There is no automatic retry, arbitrary proxy path or direct
   request to storage/Bota from the native client.
-- Each response has a 30-second deadline and a 2 MiB byte limit while reading,
+- Each response has a 30-second cancellation deadline and a 2 MiB byte limit while reading,
   even if `Content-Length` is absent or misleading. Require JSON and reject an
   unexpected final origin/path, invalid UTF-8, malformed JSON or DTO mismatch.
   Large otherwise-valid results can exceed this deliberate client limit.
+  Cancellation does not prove native cleanup: Android can wait for an operating
+  system DNS call to return before joining its worker. Swift quarantines the
+  native owner if finalization does not finish within five seconds. Neither
+  client admits a replacement while cleanup is uncertain.
 - Sample mode constructs only local synthetic data and performs no network or
   SDK initialization. It establishes no live API, audio or device result.
 

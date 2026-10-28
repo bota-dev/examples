@@ -13,7 +13,8 @@
 
 - Start from the [README](README.md), [AI guide](docs/using-examples-with-ai.md), selected README and local DESIGN/AGENTS. Use [examples.json](examples.json) for the extended inventory.
 - Install only inside the selected documented install root. Root npm commands apply to the legacy `apps/` workspace.
-- Use published Bota SDK packages and public API contracts. All ten SDK install roots pin exact beta.19; npm's `latest` remains beta.0. See [current SDK/catalog evidence](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md) and [iOS/mobile evidence](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md). Manifests/locks take precedence over historical prose.
+- Use published Bota SDK packages and public API contracts. Ten existing SDK roots pin exact beta.19; the optional Web recording-app integration pins beta.20. Native Kotlin/Swift cloud readers have no Bota SDK dependency. See [current platform evidence](docs/design-reviews/2026-10-20-native-cloud-web-device.md); manifests/locks take precedence over historical prose.
+- Native cloud readers follow the [shared read contract](end-to-end/recordings/contracts/native-library-read.md): first page only, existing results, app token in memory, no writes/cookies/redirects. Drain actual readers before replacement and refuse admission after failed cleanup. Keep SDK starters separate from cloud authority.
 - Web/mobile share ordinary upload/playback and bounded transport in `recordings/backend/`; old Web files are compatibility exports. Keep exact storage-host configuration, separate journals, peer-upload refusal and GET-only recovery. Native mobile media must drain and delete private temporary files before replacement; encrypted device sync remains a separate Android-only RN path.
 - Demo/Bota One are read-only behavioral references. No private helpers, unpublished facade methods, custom GATT/crypto or sibling-repo runtime/install dependencies.
 - Consolidate the integrated sample's backend feature implementation at `end-to-end/recordings/backend/`. Existing web/mobile paths may import that shared core as compatibility adapters. Preserve their auth, DTOs, launch CWD and journal anchors until tested migration. Independent API/SDK quickstarts stay self-contained; no private dependencies, wrapper SDK or universal UI framework.
@@ -41,6 +42,18 @@
 - Package/scanner identities, native builds and physical acceptance are separate evidence. Do not suppress alerts or claim closure from a downstream source patch.
 
 ## Verify, document and deliver
+
+- Keep the repository-wide `Scan` security workflow on every PR without path
+  or target-branch filters. It scans source without installing app dependencies.
+  Retain its immutable source identity, exact rules and results; manual historical
+  scans are retrospective evidence. See [security scanning](README.md#security-scanning).
+
+- `npm run test:integration` needs Node 22.23.2 or newer and the Web backend host
+  install (`npm ci --prefix end-to-end/web-reference`), without a root
+  dependency install. It discovers independent API and integrated backend suites and emits
+  JUnit under `test-results/`. The all-PR `Integration tests` job runs local
+  HTTP/transport/durability coverage; changed-example, live and physical gates
+  remain separate.
 
 - State scope, assumptions and observable acceptance before implementation. Follow [CONTRIBUTING.md](CONTRIBUTING.md); run the selected example's meaningful tests/build checks, including required security suites.
 - For docs/catalog changes: `node scripts/check-catalog.mjs` and `node --test scripts/test-catalog.mjs` on Node 22.23.2+. Check new docs' file links separately; the catalog checker has a fixed document set. No install or hardware run is needed for a docs-only change.

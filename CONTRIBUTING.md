@@ -98,8 +98,10 @@ API/App SDK quickstarts remain self-contained. No mass move/deletion is needed. 
   exact-generation and host authorization gates.
 - Fence late results after account/selection changes and drain native work before
   admitting a replacement session. Preserve the selected example's recovery limits.
-- Keep exact public SDK pins. All ten SDK install roots pin beta.19. A version
-  bump supplies neither a missing host nor physical acceptance.
+- Keep exact public SDK pins. Ten existing SDK install roots pin beta.19;
+  the optional Web recording-app integration pins beta.20. The Kotlin/Swift
+  cloud readers have no Bota SDK dependency. A version bump supplies neither
+  a missing host nor physical acceptance.
 - Keep lifecycle scripts enabled and preserve required postinstall/security-test
   chains. See [dependency security](DEPENDENCY_SECURITY.md) before changing locks,
   overrides or source guards; passing a patch test is not scanner closure.
