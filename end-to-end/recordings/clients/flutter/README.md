@@ -17,9 +17,9 @@ are not included. This is a development template, not a production authenticatio
 Use Flutter **3.47.5**, JDK 17 and Android SDK 37. Android media plugins also need
 SDK Platform 35, NDK `28.2.13676358` and CMake `3.22.1` installed through your
 licensed Android SDK Manager. The direct SDK dependency is
-exact public `bota_app_sdk: 2.0.0-beta.19` (beta); no private packages or sibling
+exact public `bota_app_sdk: 2.0.0-beta.20` (beta); no private packages or sibling
 repositories are required. The regenerated pub lock selects archive SHA-256
-`7dceb9bf60f823edef977d1a03d6d47ed13a9d4e3b961abbe2bcd721459aab24`.
+`62a29ec4bf6e60dc1a7e98b8741e1201a8ab936b70090c7f9684fc7267bf11e5`.
 The October 20 source adds public `file_selector: 1.1.0` (BSD),
 `just_audio: 0.10.6` (MIT) and `path_provider: 2.1.6` (BSD) plus their frozen
 dependencies. Existing non-SDK lock entries stay unchanged. See the historical
@@ -30,8 +30,9 @@ for that earlier package; it does not qualify this new source.
 archive hashes, publication times and licenses. The two Apple selector plugins
 retain compatible `file_selector_ios 0.5.3+6` and `file_selector_macos 0.9.5+1`:
 their newer releases are less than seven days old at this check. All other new
-third-party locked releases meet that age floor. The owner explicitly requested
-the latest published Bota SDK, which is the beta.19 age exception.
+third-party locked releases meet that age floor. The beta.20 SDK archive was
+published on October 21 and meets the seven-day age floor at the October 28 update review. Earlier beta.19 acceptance remains
+historical evidence for its recorded source and package.
 
 Historical [beta.17 qualification](../../../../docs/design-reviews/2026-10-14-native-sdk-adoption.md)
 and its [passing hosted job at a7b34175](https://github.com/bota-dev/examples/actions/runs/38654533509/job/116161047923)
@@ -141,7 +142,7 @@ source content. No automatic processing polling is added in this template.
 
 Live mode's settings menu includes **Device connection**. Enter the printed
 serial, explicitly enable Bluetooth access, scan, select and read status. This
-secondary [screen](lib/device_page.dart) calls only the public beta.19
+secondary [screen](lib/device_page.dart) calls only the public beta.20
 `BotaDeviceClient.configure`, `devices.scan/connect/readStatus/disconnect` and
 `destroy`. SDK identity reads verify the serial; advertised names are not identity.
 Connection loss clears/fences stale metadata. Restore Bluetooth and reconnect
