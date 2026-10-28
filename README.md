@@ -13,9 +13,10 @@ now provides one Node listener for the existing Web cookie and mobile Bearer
 adapters, with shared recording, upload/playback, transcription/general-notes
 and Ask features. The three original journals and response contracts remain
 separate; webhook and native service modules retain their compatibility paths.
-Flutter and React Native now have complete install roots under
-`end-to-end/recordings/clients/`. Web retains its existing path; integrated
-Kotlin/Swift clients are not built. All ten SDK install roots use public beta.19.
+Flutter and React Native have complete install roots under
+`end-to-end/recordings/clients/`, alongside small Kotlin and Swift cloud readers.
+Web retains its existing path and adds optional device connection/status with
+public SDK beta.20. The ten existing SDK roots retain exact public beta.19.
 Native identities, backend launch bases and journal
 locations are unchanged.
 
@@ -28,11 +29,11 @@ focused guides/quickstarts belong to the general layer. `api/`, `app-sdk/` and
 
 | Client | Run and adapt | Implemented today |
 | --- | --- | --- |
-| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, ordinary-import playback, library, Transcript/Summary/Ask; API-only |
+| React web | [Web sample](end-to-end/web-reference/README.md) | Audio import, ordinary-import playback, library, Transcript/Summary/Ask; optional desktop Chromium device connection/status |
 | React Native Android / iOS | [RN sample](end-to-end/recordings/clients/react-native/README.md) | File import, ordinary-import playback, library and Transcript/Summary/Ask; encrypted device sync is Android-only |
 | Flutter Android / iOS | [Flutter sample](end-to-end/recordings/clients/flutter/README.md) | File import, ordinary-import playback, library and AI views; optional device connection/status |
-| Kotlin / Android | [SDK connection](app-sdk/android-device-connect/README.md) and [recording catalog](app-sdk/android-recording-catalog/README.md) | Native device workflows; integrated recording client is planned |
-| Swift / Apple | [SDK connection](app-sdk/apple-device-connect/README.md) and [recording catalog](app-sdk/apple-recording-catalog/README.md) | Shared iOS/macOS connection/status and recording metadata catalog |
+| Kotlin / Android | [Cloud reader](end-to-end/recordings/clients/android-kotlin/README.md); [SDK connection](app-sdk/android-device-connect/README.md) / [device catalog](app-sdk/android-recording-catalog/README.md) | Native sample/live recording library, transcript and existing general notes; separate device starters |
+| Swift / iOS and macOS | [Cloud reader](end-to-end/recordings/clients/apple-swift/README.md); [SDK connection](app-sdk/apple-device-connect/README.md) / [device catalog](app-sdk/apple-recording-catalog/README.md) | SwiftUI sample/live recording library, transcript and existing general notes; separate device starters |
 
 Try the web sample without credentials or hardware using Node **22.23.2+**:
 
@@ -49,8 +50,8 @@ npm ci
 npm run demo
 ```
 
-Open **http://127.0.0.1:5173** and select **Open demo**. Mobile READMEs cover
-native builds and **Try sample recordings**. Sample content/actions are synthetic
+Open **http://127.0.0.1:5173** and select **Open demo**. Native client READMEs cover
+their own builds and local sample modes. Sample content/actions are synthetic
 and make no external calls; they establish no live upload, provider or hardware
 success.
 
@@ -61,6 +62,12 @@ and playback use the same backend features, with platform-native pickers and
 temporary media. Standalone device connection/status needs no backend.
 Cloud features and authorized device upload need the customer backend; device
 presence never gates browsing existing cloud recordings.
+
+The Kotlin and Swift readers are smaller starting points: read the first page of
+recordings, select one and view its existing transcript and general notes. Their
+sample mode needs no server; live mode uses the same backend and separate app
+token. They add no upload, playback, processing writes, Ask or device SDK dependency.
+See the [native read contract](end-to-end/recordings/contracts/native-library-read.md).
 
 For configured use, follow the [combined setup](end-to-end/recordings/README.md).
 Default startup requires explicit original launch bases and existing journals
@@ -128,15 +135,17 @@ Different public SDK capabilities do not imply identical UI or full device parit
 
 | Platform | Current SDK public-call source | Current host and capability limits |
 | --- | --- | --- |
-| Kotlin / Android | [MainActivity.kt](app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [setup](app-sdk/android-device-connect/README.md) | Native Android, API 26+; catalog reads metadata, not audio transfer; integrated recording client is planned |
-| Swift / Apple | [ConnectModel.swift](app-sdk/apple-device-connect/Sources/BotaConnect/ConnectModel.swift); [catalog setup](app-sdk/apple-recording-catalog/README.md) | iOS/macOS connection/status and metadata catalog; no integrated cloud client |
+| Kotlin / Android | [MainActivity.kt](app-sdk/android-device-connect/app/src/main/java/dev/bota/examples/connect/MainActivity.kt); [cloud reader](end-to-end/recordings/clients/android-kotlin/README.md) | Device starters: API 26+; GET-only cloud library: Android 10 / API 29+ |
+| Swift / Apple | [ConnectModel.swift](app-sdk/apple-device-connect/Sources/BotaConnect/ConnectModel.swift); [cloud reader](end-to-end/recordings/clients/apple-swift/README.md) | iOS/macOS connection/status, separate device metadata catalog and GET-only cloud library |
 | React Native | [App.tsx](app-sdk/react-native-device-connect/App.tsx); [recording app](end-to-end/recordings/clients/react-native/README.md) | Android/iOS connection and cloud app hosts; encrypted-v2 sync remains Android-only with documented backend/firmware gates |
 | Flutter | [main.dart](app-sdk/flutter-device-connect/lib/main.dart); [setup](app-sdk/flutter-device-connect/README.md) | Android/iOS hosts; the selected Dart facade does not supply this sample's RN encrypted-v2 host workflow |
-| Web / desktop Chromium | [page.ts](app-sdk/web-device-connect/page.ts) and [main.ts](app-sdk/web-device-connect/main.ts); [setup](app-sdk/web-device-connect/README.md) | Supported Web Bluetooth, secure context and firmware identity service required; not integrated into the API recording client yet |
+| Web / desktop Chromium | [device-session.ts](end-to-end/web-reference/web/features/devices/device-session.ts); [standalone setup](app-sdk/web-device-connect/README.md) | Optional connection/status in the recording app; supported Web Bluetooth, secure context and firmware identity service required |
 | Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
 
-All ten device SDK install roots pin public **2.0.0-beta.19**. Each client
-installs independently; manifests/locks declare its exact public version.
+The ten existing device SDK roots pin public **2.0.0-beta.19**; the new optional
+Web recording-app integration pins public **2.0.0-beta.20**. The Kotlin/Swift
+cloud readers use HTTP and have no Bota SDK dependency. Each client installs
+independently; manifests/locks declare its exact public version.
 npm's `latest` tag remains beta.0. Native RN workflows use the compatibility
 factory; this package update does not migrate them to generated JS `/runtime`.
 Inspect the selected manifest/lockfile and README for tooling and public methods.
@@ -243,8 +252,8 @@ provides API/SDK installation guidance.
 | [Apple recording catalog](app-sdk/apple-recording-catalog/README.md) | Verify exact serial and fresh pairing, then list legacy/encrypted-v2 metadata on iOS/macOS | Yes |
 | [Flutter connect](app-sdk/flutter-device-connect/README.md) | Flutter Android/iOS connection/status using pub.dev | Yes |
 | [Mobile recording apps](end-to-end/react-native-recording-sync/README.md) | Retained backend and setup; RN/Flutter Android/iOS recording apps with import/playback and optional supported device paths | No; device path optional |
-| [Bota Recordings web sample](end-to-end/web-reference/README.md) | Common recording app template: React + Node, audio import/playback, Transcript/Summary/Ask and webhook/recovery recipes; API-only synthetic demo and scoped live mode | No |
-| [Integrated Recordings sample](end-to-end/recordings/README.md) | Combined Node backend with retained auth/journals and RN/Flutter Android/iOS clients; Web/backend compatibility paths remain | No |
+| [Bota Recordings web sample](end-to-end/web-reference/README.md) | React + Node recording app with import/playback, Transcript/Summary/Ask and optional desktop Chromium device connection/status | No; device feature requires hardware |
+| [Integrated Recordings sample](end-to-end/recordings/README.md) | Shared backend, RN/Flutter apps and small Kotlin Android/Swift iOS/macOS cloud readers | No |
 
 </details>
 
@@ -313,10 +322,30 @@ reference-style/HTML links or fenced snippets.
 Use the selected example's own README and path-filtered CI for behavioral tests,
 typechecks and platform builds. Root `npm test`, `npm run typecheck` and
 `npm run build` cover the legacy workspace; its CI also exports Expo platforms
-and builds Android. Source/build checks, authorized live API checks and
+and builds all four Android ABIs. Legacy CI skips changes confined to the
+independent `api/`, `app-sdk/` and `end-to-end/` install roots; their own
+path-filtered checks still apply. Root, workflow, shared tooling or mixed changes
+retain the full legacy checks. Source/build checks, authorized live API checks and
 physical-device scenarios establish different evidence. See the
 [implementation review](docs/independent-examples-review.md) for current results
 and open acceptance gaps.
+
+`npm run test:integration` runs the existing independent Node API and integrated
+backend suites without installing the legacy workspace. First run
+`npm ci --prefix end-to-end/web-reference` to install the backend host and
+development-server test dependencies. It discovers the `api/*-node/*.test.mjs`
+suites (currently download, list, search, summarize, upload/transcribe and webhook
+receiver), shared backend contracts, Web server and mobile backend suites. It
+preserves their transport, authorization, integrity and durability
+checks, including real localhost CLI/HTTP and SQLite persistence scenarios.
+Use Node 22.23.2 or newer. These local fixtures do not establish live cloud or
+physical-device acceptance.
+
+The all-PR and main-push `Integration tests` check runs these suites and retains
+`test-results/api-integration.xml` for 90 days. Existing path-filtered checks and
+platform-specific acceptance gates still apply to each changed example.
+Catalog and integration checks use PR runs for feature branches, avoiding duplicate
+branch-push runs. Manual dispatch remains available.
 
 ## Documentation
 
@@ -329,6 +358,42 @@ and open acceptance gaps.
 - [AI guide](docs/using-examples-with-ai.md), [AGENTS.md](AGENTS.md) and
   [CLAUDE.md](CLAUDE.md): entry points for coding tools.
 - [Public Bota docs](https://docs.bota.dev): API and SDK contracts.
+
+## Security scanning
+
+The pinned `Semgrep` workflow runs the read-only `Scan` check on every PR,
+including drafts and any target branch, merge queues, pushes to `main`, manual
+dispatches and the weekly schedule. It scans the full source checkout without
+installing dependencies or requiring a Semgrep token. Findings, scanner errors
+and an empty scan fail the check. Existing CodeQL default analysis continues
+separately.
+
+Semgrep's ordinary dependency-directory defaults omit `vendor`. The same required
+check also analyzes exact maintained vendor source views under the same rules.
+The reviewed [inventory](.github/sast-maintained-vendor.json) freezes every tracked
+vendor file and classifies current payloads, official provenance and retired
+evidence. It selects retained source files and maintained archive patch members;
+each view preserves the original Git blob or archive-member bytes and records
+its source path, SHA-256 and size. Unknown or changed vendor inventory, unsafe
+archives, missing views, findings and analyzer errors fail the check. The policy
+is captured from the current workflow before any historical checkout. No vendor
+source is executed or repacked, and existing payload-integrity checks remain.
+
+Rules include security-audit, OWASP, JavaScript, TypeScript, Node.js, React,
+Python, Kotlin, Swift, Ruby and GitHub Actions. This is the configured community
+rule coverage; it does not establish complete language coverage for Dart or
+Objective-C. Each run retains JSON/SARIF results, scanned-file counts, immutable
+source/workflow identities and exact rule snapshots with SHA-256 hashes for 90
+days. Maintainers register the literal `Scan` check name for SAST enforcement.
+
+Manual dispatch accepts an optional full 40-character `revision` commit SHA.
+That scan is labeled retrospective and does not establish that the original
+PR passed SAST before merge.
+
+The [review and source-bound dispositions](docs/design-reviews/2026-10-27-sast-coverage.md)
+record the audit annotations and canonical shell coverage. Unannotated historical
+source receives ordinary analysis; annotations without a matching review ledger
+or changes to reviewed sources fail until reviewed.
 
 ## License
 

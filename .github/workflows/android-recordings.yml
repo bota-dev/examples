@@ -1,0 +1,108 @@
+name: Kotlin recordings
+
+on:
+  push:
+    branches: [main]
+    paths: ['end-to-end/recordings/clients/android-kotlin/**', 'end-to-end/recordings/contracts/native-library-read.md', '.github/workflows/android-recordings.yml']
+  pull_request:
+    paths: ['end-to-end/recordings/clients/android-kotlin/**', 'end-to-end/recordings/contracts/native-library-read.md', '.github/workflows/android-recordings.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kotlin-recordings-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: 'true'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: end-to-end/recordings/clients/android-kotlin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - run: chmod +x gradlew
+      - name: Test runtime result acceptance
+        run: bash scripts/test-runtime-result.sh
+      - name: Record anonymous public repository responses
+        run: bash scripts/check-public-repositories.sh
+      - name: Verify frozen build
+        run: |
+          set -o pipefail
+          ./gradlew :app:resolveDependencies :app:checkDependencyLicenses :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest --info --no-daemon --max-workers=2 2>&1 | tee app/build/reports/ci/gradle.log
+      - name: Preserve repository and Gradle diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: kotlin-recordings-diagnostics-${{ github.sha }}
+          path: end-to-end/recordings/clients/android-kotlin/app/build/reports/ci/
+          if-no-files-found: warn
+      - name: Verify frozen lock
+        run: git diff --exit-code -- app/gradle.lockfile
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: kotlin-recordings-${{ github.sha }}
+          path: |
+            end-to-end/recordings/clients/android-kotlin/app/build/outputs/apk/debug/app-debug.apk
+            end-to-end/recordings/clients/android-kotlin/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk
+            end-to-end/recordings/clients/android-kotlin/app/build/test-results/
+            end-to-end/recordings/clients/android-kotlin/app/build/reports/lint-results-debug.*
+            end-to-end/recordings/clients/android-kotlin/app/gradle.lockfile
+            end-to-end/recordings/clients/android-kotlin/dependency-provenance.json
+          if-no-files-found: error
+  runtime:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    defaults:
+      run:
+        working-directory: end-to-end/recordings/clients/android-kotlin
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-java@de7274f081f381c8f8158605e0321c36c376e2e6 # v6
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Install Android 10 emulator
+        run: |
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" 'platforms;android-36' 'build-tools;36.0.0' 'platform-tools' 'emulator' 'system-images;android-29;google_apis;x86_64'
+          test -e /dev/kvm
+          sudo chmod 666 /dev/kvm
+      - run: chmod +x gradlew
+      - name: Record anonymous public repository responses
+        run: bash scripts/check-public-repositories.sh
+      - name: Build frozen runtime hosts
+        run: |
+          set -o pipefail
+          ./gradlew :app:checkDependencyLicenses :app:assembleDebug :app:assembleDebugAndroidTest --info --no-daemon --max-workers=2 2>&1 | tee app/build/reports/ci/gradle.log
+      - name: Preserve runtime build diagnostics
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: kotlin-recordings-runtime-diagnostics-${{ github.sha }}
+          path: end-to-end/recordings/clients/android-kotlin/app/build/reports/ci/
+          if-no-files-found: warn
+      - name: Test real Android HTTP, TLS and joined cancellation
+        run: bash scripts/test-emulator.sh
+      - name: Verify frozen lock
+        run: git diff --exit-code -- app/gradle.lockfile
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: always()
+        with:
+          name: kotlin-recordings-api29-${{ github.sha }}
+          path: end-to-end/recordings/clients/android-kotlin/app/build/reports/runtime/
+          if-no-files-found: warn
