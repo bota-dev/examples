@@ -10,18 +10,26 @@ import { Transcript } from './features/transcription/Transcript';
 import { Summaries } from './features/summaries/Summaries';
 import { Ask } from './features/ask/Ask';
 import { Activity } from './features/webhooks/Activity';
+import { Devices } from './features/devices/Devices';
+import { DeviceSession } from './features/devices/device-session';
+
+// The page owns the host across keyed recording/account views. A remount must
+// join its previous teardown rather than silently create a second Bluetooth owner.
+const browserDevices = new DeviceSession();
 
 interface AppSession extends Session {
   phase: 'loading' | 'unavailable' | 'signed-out' | 'signing-out' | 'signed-in';
   epoch: number;
+  deviceOwner: object | null;
 }
 
-export default function App() {
+export default function App({ devices = browserDevices }: { devices?: DeviceSession }) {
   const [session, setSession] = useState<AppSession>({
     user: null,
     mode: 'demo',
     phase: 'loading',
     epoch: 0,
+    deviceOwner: null,
   });
   const [notice, setNotice] = useState('');
   const [discoveryRevision, setDiscoveryRevision] = useState(0);
@@ -30,11 +38,23 @@ export default function App() {
   const invalidate = useCallback(
     (message: string, phase: 'signed-out' | 'signing-out' = 'signed-out') => {
       generation.current += 1;
+      devices.replaceSession(null, 'demo');
       setSession((previous) => ({ ...previous, user: null, phase, epoch: generation.current }));
       setNotice(message);
     },
-    [],
+    [devices],
   );
+  useEffect(() => {
+    const close = () => {
+      void devices.closePage();
+    };
+    window.addEventListener('pagehide', close);
+    return () => {
+      window.removeEventListener('pagehide', close);
+      // The host retains this joined cleanup/admission gate across component remounts.
+      devices.replaceSession(null, 'demo');
+    };
+  }, [devices]);
   const api = useMemo(() => {
     const expected = session.epoch;
     return createApi(() => {
@@ -48,8 +68,16 @@ export default function App() {
     void discoveryApi
       .get<Session>('/api/me', controller.signal)
       .then((value) => {
-        if (current && generation.current === 0)
-          setSession({ ...value, phase: value.user ? 'signed-in' : 'signed-out', epoch: 0 });
+        if (current && generation.current === 0) {
+          const deviceOwner = value.user ? {} : null;
+          devices.replaceSession(deviceOwner, value.mode);
+          setSession({
+            ...value,
+            phase: value.user ? 'signed-in' : 'signed-out',
+            epoch: 0,
+            deviceOwner,
+          });
+        }
       })
       .catch((error) => {
         if (current && !controller.signal.aborted) {
@@ -61,12 +89,14 @@ export default function App() {
       current = false;
       controller.abort();
     };
-  }, [discoveryApi, discoveryRevision]);
+  }, [discoveryApi, discoveryRevision, devices]);
   const authenticate = (value: Session, expected: number) => {
     if (generation.current !== expected || !value.user) return;
     generation.current += 1;
+    const deviceOwner = {};
+    devices.replaceSession(deviceOwner, value.mode);
     setNotice('');
-    setSession({ ...value, phase: 'signed-in', epoch: generation.current });
+    setSession({ ...value, phase: 'signed-in', epoch: generation.current, deviceOwner });
   };
   const logout = () => {
     invalidate('Signing out. Your recording content has been cleared.', 'signing-out');
@@ -152,7 +182,13 @@ export default function App() {
             </p>
           </div>
         ) : session.user ? (
-          <RecordingApp key={session.epoch} api={api} mode={session.mode} />
+          <RecordingApp
+            key={session.epoch}
+            api={api}
+            mode={session.mode}
+            devices={devices}
+            deviceOwner={session.deviceOwner!}
+          />
         ) : (
           <Login
             key={session.epoch}
@@ -169,7 +205,7 @@ export default function App() {
             target="_blank"
             rel="noopener noreferrer"
           >
-            Setup & sample code
+            Setup &amp; sample code
           </a>
         </span>
         {!['loading', 'unavailable'].includes(session.phase) ? (
@@ -300,7 +336,17 @@ function Login({
   );
 }
 
-function RecordingApp({ api, mode }: { api: ApiClient; mode: Mode }) {
+function RecordingApp({
+  api,
+  mode,
+  devices,
+  deviceOwner,
+}: {
+  api: ApiClient;
+  mode: Mode;
+  devices: DeviceSession;
+  deviceOwner: object;
+}) {
   const [selected, setSelected] = useState<string | null>(null);
   const previousSelection = useRef<string | null>(null);
   const [revision, setRevision] = useState(0);
@@ -353,6 +399,7 @@ function RecordingApp({ api, mode }: { api: ApiClient; mode: Mode }) {
           )}
         </div>
       </div>
+      <Devices devices={devices} owner={deviceOwner} mode={mode} />
       <Activity api={api} localOperations={operations} onReviewed={intentScope.record} />
     </IntentContext.Provider>
   );

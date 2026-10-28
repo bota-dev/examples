@@ -75,7 +75,7 @@ export function Activity({
     <details className="activity-panel">
       <summary>
         <span>
-          <span className="activity-dot" aria-hidden="true" /> Activity & request review
+          <span className="activity-dot" aria-hidden="true" /> Activity &amp; request review
         </span>
         <span className="activity-count">
           {rows.length} {rows.length === 1 ? 'request' : 'requests'}{' '}

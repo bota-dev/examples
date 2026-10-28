@@ -13,6 +13,13 @@ The [October 20 iOS/mobile pass](docs/design-reviews/2026-10-20-ios-mobile-recor
 adds the Swift/Flutter iOS hosts, RN cloud iOS support and ordinary mobile media;
 its four touched SDK roots use public beta.19. Native and physical evidence stay
 specific to the recorded source and platform.
+The [SDK/catalog follow-up](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
+aligns the remaining six SDK roots to beta.19 and adds the shared Swift metadata
+catalog's iOS host. No recording transfer or new device acceptance is implied.
+The [native/cloud and Web-device pass](docs/design-reviews/2026-10-20-native-cloud-web-device.md)
+adds small Kotlin Android and Swift iOS/macOS cloud readers plus optional Web
+connection/status. The new Web feature uses public beta.20; existing SDK roots
+retain beta.19. These features do not supply complete native recording parity.
 
 ## 1. Consolidate the existing backend features compatibly
 
@@ -94,14 +101,20 @@ root install or universal example framework is required.
 both Flutter roots now have iOS hosts, and the RN recording app has a cloud-only
 iOS host. Each has an unsigned hosted build gate. These additions do not supply
 an iOS implementation of the custom Android encrypted-upload adapter.
+The Swift metadata catalog also shares its feature across iOS/macOS, with fresh
+pairing before listing and no audio transfer or recording cleanup.
+
+Kotlin and Swift now also provide small native cloud readers using the shared
+Bearer backend: local sample or live first-page library, transcript and existing
+general notes. They add no processing writes, media or device SDK dependency.
+Web integrates optional public-SDK connection/status, with explicit preparation
+and a user-activated chooser. Demo mode never loads the SDK.
 
 Kotlin, Swift, React Native, Flutter and Web examples have equal importance.
-Complete small supported host/workflow paths; prioritize missing Swift iOS and
-Flutter iOS hosts alongside documented RN iOS support. Native Kotlin and Swift
-clients start with an idiomatic runnable SDK host and focused
-connection/status/recording feature files. Add cloud/library UI where it teaches
-a useful platform integration; do not duplicate full clients by default or
-create another root per SDK method.
+Extend supported feature files where they teach a useful integration. Native
+media/processing and device-to-cloud workflows remain separate capability and
+acceptance decisions; do not duplicate full clients by default or create a root
+per SDK method.
 
 Keep capability, host and verification separate. Flutter's selected facade
 cannot provide the RN encrypted-sync path; adding an iOS host or bumping a
@@ -164,7 +177,9 @@ not implement or approve a particular vertical app.
 
 ## Delivery rules
 
-Existing launch paths, catalog identities, locks and SDK pins remain unchanged.
+Preserve existing launch paths, catalog identities, locks and exact SDK pins
+outside explicitly qualified changes. Ten existing SDK roots pin beta.19; the
+new optional Web app integration pins beta.20.
 The implemented core adds its own catalog entry and frozen dev-tool lock.
 Further consolidation or moves require compatible links,
 catalog/workflow updates and preserved state; legacy retirement retains its

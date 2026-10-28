@@ -8,6 +8,7 @@ Use the [AI guide](docs/using-examples-with-ai.md) to locate the integrated
 sample's [combined launcher](end-to-end/recordings/README.md), relocated [Flutter](end-to-end/recordings/clients/flutter/README.md)/[RN](end-to-end/recordings/clients/react-native/README.md) clients, feature modules or a focused quickstart. Preserve public package pins, authorization,
 durable recovery and dependency guards; report the exact verification performed.
 For iOS hosts and ordinary mobile import/playback, use the [current capability and evidence review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md).
+For the ten existing beta.19 pins and Swift metadata catalog, use the [SDK/catalog review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md). For Kotlin/Swift cloud readers and the Web app's optional beta.20 device feature, use the [current platform review](docs/design-reviews/2026-10-20-native-cloud-web-device.md).
 
 For legacy root dependency changes, also read the [current public-parent matching scope](docs/legacy-public-parent-matching-removal.md).
 

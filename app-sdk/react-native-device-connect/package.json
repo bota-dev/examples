@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "node --experimental-strip-types --test identity.test.mjs && npm run test:native-expo-signing && npm run test:braces-security && npm run test:source-map-security",
     "export": "expo export --platform android --max-workers 2",
+    "export:ios": "expo export --platform ios --max-workers 1",
     "postinstall": "node scripts/verify-native-expo-signing.mjs && node scripts/apply-braces-security.mjs",
     "test:braces-security": "node --test scripts/test-braces-security.mjs",
     "test:source-map-security": "node --test scripts/test-source-map-security.mjs",
@@ -19,7 +20,7 @@
     "node": ">=22.23.2"
   },
   "dependencies": {
-    "@bota.dev/react-native-app-sdk": "2.0.0-beta.18",
+    "@bota.dev/react-native-app-sdk": "2.0.0-beta.19",
     "expo": "57.0.4",
     "expo-build-properties": "57.0.15",
     "react": "19.2.3",

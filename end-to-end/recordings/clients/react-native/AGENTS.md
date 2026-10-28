@@ -9,6 +9,7 @@
 
 - Node 22.23.2+, npm; keep lifecycle scripts enabled: `npm ci`, `npm run license-check`, `npm run typecheck`, `npm test`, `npm run export`.
 - Android uses JDK 17 and the documented Expo toolchain. Generated `android/`: `./gradlew :recording-sync:testDebugUnitTest :app:assembleDebug`. iOS: `npm run export:ios`, `npm run prebuild:ios`, then macOS `npm run ios`. No iOS encrypted-upload host here.
+- Preserve the serial iOS export and owning CI's 4 GiB Node heap; see the README's generated-source memory receipt and native qualification limits.
 
 ## Key conventions
 
