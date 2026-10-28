@@ -1,8 +1,11 @@
 # Kotlin recording reader
 
 `MainActivity` renders ordinary library/detail/Transcript/Notes views and passes
-foreground user actions to `LibraryController`. The controller owns one in-memory
-source and publishes immutable UI snapshots on the UI dispatcher.
+foreground user actions through a `LibrarySessions.Owner` lease. `LibrarySessions`
+retains one `LibraryController` in a process scope without Activity references.
+The controller owns one in-memory source and publishes immutable UI snapshots on
+the UI dispatcher. Each Activity lease has a separate snapshot; replacing or
+detaching it clears that snapshot and fences all later callbacks from that lease.
 
 `SampleLibrary` constructs local synthetic values. It has no transport or SDK
 dependency. `LiveLibrary` owns a separate app token and an isolated Apache HttpCore5 requester per explicit GET,
@@ -23,9 +26,12 @@ content before awaiting anything. Cancellation revokes the active HTTP call;
 the controller joins the old blocking worker and response-body close before
 starting a replacement. Sign-out, background retirement and 401 clear the token
 immediately, then finish cleanup. Cleanup failure permanently blocks replacement.
-Activity recreation starts empty; Android saved state and backups do not retain
-app credentials/content. Native reads, worker cleanup and UI state remain separate
-ownership boundaries.
+Activity recreation starts empty and cannot admit a new source until the process
+controller finishes the previous reader and cleanup. Cancelling view collection
+does not cancel that retirement. The cleanup-failure latch survives Activity
+destruction and requires process restart. Android saved state and backups do not
+retain app credentials/content. Native reads, worker cleanup and UI state remain
+separate ownership boundaries.
 
 This cloud reader requires Android10/API29+ for its default TLS API. The only cleartext network exception is exact loopback in Debug, for explicit
 `adb reverse` development. Live requires an origin without credentials/path/query/

@@ -16,3 +16,4 @@ apps/react-native/ios/
 !vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz
 !vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz
 !vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz
+test-results/
