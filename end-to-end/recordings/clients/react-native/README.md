@@ -262,6 +262,11 @@ heap before native compilation. Keep the serial export and heap setting when
 using a small-memory host; this changes build resources, not SDK code or guards.
 In PowerShell, set `$env:NODE_OPTIONS='--max-old-space-size=4096'` before the command.
 
+The TypeScript 7.0.2 dependency update retains these export resources and the
+Expo 57 / React Native 0.86.3 runtime. Verify it with the same frozen install,
+typecheck, security suites and platform exports; the compiler update does not
+change the supported native runtime.
+
 New focused tests exercise the real adapter/controller used by these screens:
 synthetic flow without network, source/citation projection, stale content,
 signout disposal, lasting action locks and GET-only known-request recovery.
