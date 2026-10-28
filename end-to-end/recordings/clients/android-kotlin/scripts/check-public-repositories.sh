@@ -13,7 +13,7 @@ probes=(
   'google-agp|https://dl.google.com/dl/android/maven2/com/android/tools/build/gradle/8.13.2/gradle-8.13.2.pom'
 )
 for probe in "${probes[@]}"; do
-  name="${probe%%|*}"; url="${probe#*|}"
+  name="${probe%%\|*}"; url="${probe#*\|}"
   for agent in curl gradle; do
     user_agent=()
     if [[ "$agent" == gradle ]]; then user_agent=(--user-agent 'Gradle/8.13'); fi

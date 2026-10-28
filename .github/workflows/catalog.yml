@@ -2,6 +2,7 @@ name: Catalog and documentation
 
 on:
   push:
+    branches: [main]
   pull_request:
   workflow_dispatch:
 
