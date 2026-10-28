@@ -845,3 +845,44 @@ input[type='file']::file-selector-button {
     padding: 16px;
   }
 }
+/* Optional device controls stay secondary to the recording library. */
+.devices-panel {
+  margin-top: 1rem;
+  border: 1px solid #dfe4e8;
+  border-radius: 8px;
+  background: #fff;
+}
+.devices-panel summary {
+  padding: 1rem;
+  cursor: pointer;
+  font-weight: 600;
+}
+.devices-panel summary span {
+  margin-left: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+.devices-content {
+  padding: 0 1rem 1rem;
+}
+.device-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.device-actions input {
+  width: min(100%, 16rem);
+}
+.device-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.device-status dt {
+  color: #52616b;
+  font-size: 0.875rem;
+}
+.device-status dd {
+  margin: 0.25rem 0 0;
+}

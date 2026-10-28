@@ -26,6 +26,11 @@ observer clears candidates and rejects retained callbacks until the screen close
 The [registry receipt](dependency-provenance.json) records the public archive,
 publication time, Apache-2.0 identity and the owner's latest-SDK age exception.
 
+At source `4d79085`, [hosted CI](https://github.com/bota-dev/examples/actions/runs/39514738797)
+passes the Android APK and unsigned iOS simulator/device builds, alongside the
+Android analysis/tests/license gates. Physical iOS Bluetooth remains unverified;
+see the [current review](../../docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md).
+
 On macOS with Xcode and CocoaPods installed:
 
 ```sh
