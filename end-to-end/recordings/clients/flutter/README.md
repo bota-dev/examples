@@ -27,10 +27,10 @@ dependencies. Existing non-SDK lock entries stay unchanged. See the historical
 for that earlier package; it does not qualify this new source.
 
 [Public dependency provenance](dependency-provenance.json) matches the frozen
-archive hashes, publication times and licenses. The two Apple selector plugins
-retain compatible `file_selector_ios 0.5.3+6` and `file_selector_macos 0.9.5+1`:
-their newer releases are less than seven days old at this check. All other new
-third-party locked releases meet that age floor. The beta.20 SDK archive was
+archive hashes, publication times and licenses. The October 20 media review
+retained compatible `file_selector_ios 0.5.3+6` and `file_selector_macos 0.9.5+1`
+while their newer releases were younger than seven days. This SDK update keeps
+those non-SDK pins. The beta.20 SDK archive was
 published on October 21 and meets the seven-day age floor at the October 28 update review. Earlier beta.19 acceptance remains
 historical evidence for its recorded source and package.
 
