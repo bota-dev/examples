@@ -322,7 +322,10 @@ reference-style/HTML links or fenced snippets.
 Use the selected example's own README and path-filtered CI for behavioral tests,
 typechecks and platform builds. Root `npm test`, `npm run typecheck` and
 `npm run build` cover the legacy workspace; its CI also exports Expo platforms
-and builds Android. Source/build checks, authorized live API checks and
+and builds all four Android ABIs. Legacy CI skips changes confined to the
+independent `api/`, `app-sdk/` and `end-to-end/` install roots; their own
+path-filtered checks still apply. Root, workflow, shared tooling or mixed changes
+retain the full legacy checks. Source/build checks, authorized live API checks and
 physical-device scenarios establish different evidence. See the
 [implementation review](docs/independent-examples-review.md) for current results
 and open acceptance gaps.
@@ -338,9 +341,11 @@ checks, including real localhost CLI/HTTP and SQLite persistence scenarios.
 Use Node 22.23.2 or newer. These local fixtures do not establish live cloud or
 physical-device acceptance.
 
-The all-PR and branch-push `Integration tests` check runs these suites and retains
+The all-PR and main-push `Integration tests` check runs these suites and retains
 `test-results/api-integration.xml` for 90 days. Existing path-filtered checks and
 platform-specific acceptance gates still apply to each changed example.
+Catalog and integration checks use PR runs for feature branches, avoiding duplicate
+branch-push runs. Manual dispatch remains available.
 
 ## Documentation
 
