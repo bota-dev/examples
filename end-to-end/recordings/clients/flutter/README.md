@@ -1,5 +1,11 @@
 # Bota Recordings with Flutter
 
+The device-info dependency is pinned to public `device_info_plus` 13.3.0.
+Its Android response includes the required integer build `time`; synthetic
+platform fixtures include that field so the Bluetooth lifecycle tests exercise
+initialization and cleanup with the native plugin's response shape. The reviewed
+archive identity and BSD license are recorded in `dependency-provenance.json`.
+
 A common Android and iOS recording-app template: import ordinary audio, play
 verified imports, browse cloud recordings, read a
 transcript, create a general summary and ask about one recording. It shares
