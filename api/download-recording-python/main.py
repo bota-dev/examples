@@ -101,6 +101,8 @@ def header(response, name):
 
 @contextmanager
 def response_for(host, port, path, headers, deadline):
+    # Python 3.12+ default TLS validates certificates and the hostname.
+    # nosemgrep: python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
     connection = http.client.HTTPSConnection(host, port, timeout=min(10, remaining_time(deadline)))
     timer = None
     try:

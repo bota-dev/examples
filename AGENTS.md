@@ -43,6 +43,11 @@
 
 ## Verify, document and deliver
 
+- Keep the repository-wide `Scan` security workflow on every PR without path
+  or target-branch filters. It scans source without installing app dependencies.
+  Retain its immutable source identity, exact rules and results; manual historical
+  scans are retrospective evidence. See [security scanning](README.md#security-scanning).
+
 - `npm run test:integration` needs Node 22.23.2 or newer and the Web backend host
   install (`npm ci --prefix end-to-end/web-reference`), without a root
   dependency install. It discovers independent API and integrated backend suites and emits

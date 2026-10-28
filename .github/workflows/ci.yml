@@ -2,10 +2,12 @@ name: CI
 
 on:
   push:
-    branches: [main, fix/app-sdk-migration]
+    branches: [main]
+    paths-ignore: ['api/**', 'app-sdk/**', 'end-to-end/**']
   workflow_dispatch:
   pull_request:
     branches: [main]
+    paths-ignore: ['api/**', 'app-sdk/**', 'end-to-end/**']
 
 permissions:
   contents: read
@@ -65,8 +67,10 @@ jobs:
       - run: npm ci
       - run: npx expo prebuild --platform android --no-install
         working-directory: apps/react-native
-      - run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures=${{ matrix.architecture }}
+      - run: ./gradlew :app:assembleDebug --no-daemon --build-cache -PreactNativeArchitectures="$TARGET_ARCHITECTURE"
         working-directory: apps/react-native/android
+        env:
+          TARGET_ARCHITECTURE: ${{ matrix.architecture }}
 
   android:
     name: Android native example

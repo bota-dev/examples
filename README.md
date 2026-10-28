@@ -322,7 +322,10 @@ reference-style/HTML links or fenced snippets.
 Use the selected example's own README and path-filtered CI for behavioral tests,
 typechecks and platform builds. Root `npm test`, `npm run typecheck` and
 `npm run build` cover the legacy workspace; its CI also exports Expo platforms
-and builds Android. Source/build checks, authorized live API checks and
+and builds all four Android ABIs. Legacy CI skips changes confined to the
+independent `api/`, `app-sdk/` and `end-to-end/` install roots; their own
+path-filtered checks still apply. Root, workflow, shared tooling or mixed changes
+retain the full legacy checks. Source/build checks, authorized live API checks and
 physical-device scenarios establish different evidence. See the
 [implementation review](docs/independent-examples-review.md) for current results
 and open acceptance gaps.
@@ -338,9 +341,11 @@ checks, including real localhost CLI/HTTP and SQLite persistence scenarios.
 Use Node 22.23.2 or newer. These local fixtures do not establish live cloud or
 physical-device acceptance.
 
-The all-PR and branch-push `Integration tests` check runs these suites and retains
+The all-PR and main-push `Integration tests` check runs these suites and retains
 `test-results/api-integration.xml` for 90 days. Existing path-filtered checks and
 platform-specific acceptance gates still apply to each changed example.
+Catalog and integration checks use PR runs for feature branches, avoiding duplicate
+branch-push runs. Manual dispatch remains available.
 
 ## Documentation
 
@@ -353,6 +358,42 @@ platform-specific acceptance gates still apply to each changed example.
 - [AI guide](docs/using-examples-with-ai.md), [AGENTS.md](AGENTS.md) and
   [CLAUDE.md](CLAUDE.md): entry points for coding tools.
 - [Public Bota docs](https://docs.bota.dev): API and SDK contracts.
+
+## Security scanning
+
+The pinned `Semgrep` workflow runs the read-only `Scan` check on every PR,
+including drafts and any target branch, merge queues, pushes to `main`, manual
+dispatches and the weekly schedule. It scans the full source checkout without
+installing dependencies or requiring a Semgrep token. Findings, scanner errors
+and an empty scan fail the check. Existing CodeQL default analysis continues
+separately.
+
+Semgrep's ordinary dependency-directory defaults omit `vendor`. The same required
+check also analyzes exact maintained vendor source views under the same rules.
+The reviewed [inventory](.github/sast-maintained-vendor.json) freezes every tracked
+vendor file and classifies current payloads, official provenance and retired
+evidence. It selects retained source files and maintained archive patch members;
+each view preserves the original Git blob or archive-member bytes and records
+its source path, SHA-256 and size. Unknown or changed vendor inventory, unsafe
+archives, missing views, findings and analyzer errors fail the check. The policy
+is captured from the current workflow before any historical checkout. No vendor
+source is executed or repacked, and existing payload-integrity checks remain.
+
+Rules include security-audit, OWASP, JavaScript, TypeScript, Node.js, React,
+Python, Kotlin, Swift, Ruby and GitHub Actions. This is the configured community
+rule coverage; it does not establish complete language coverage for Dart or
+Objective-C. Each run retains JSON/SARIF results, scanned-file counts, immutable
+source/workflow identities and exact rule snapshots with SHA-256 hashes for 90
+days. Maintainers register the literal `Scan` check name for SAST enforcement.
+
+Manual dispatch accepts an optional full 40-character `revision` commit SHA.
+That scan is labeled retrospective and does not establish that the original
+PR passed SAST before merge.
+
+The [review and source-bound dispositions](docs/design-reviews/2026-10-27-sast-coverage.md)
+record the audit annotations and canonical shell coverage. Unannotated historical
+source receives ordinary analysis; annotations without a matching review ledger
+or changes to reviewed sources fail until reviewed.
 
 ## License
 
