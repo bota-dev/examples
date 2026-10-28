@@ -62,3 +62,21 @@ reviews also verify moved setup links and unchanged workflow pins/job identities
 Folder relocation establishes no additional platform or SDK capability. Existing
 evidence retains its original date/source; the relocated host's exact-source
 hosted build still needs its separate result after the ordinary direct push.
+
+## Hosted relocation qualification
+
+The complete client move is delivered at
+`573abc20da9c39cc77422f1264b98421f8144e2f`. Its
+[mobile workflow](https://github.com/bota-dev/examples/actions/runs/38357919016)
+passes both backend matrices, the unchanged RN Android build and the relocated
+Flutter Android build, including frozen install, moved license gate, format,
+analysis, all tests and uploaded debug APK at the new path. The
+[core](https://github.com/bota-dev/examples/actions/runs/38357918845),
+[Web](https://github.com/bota-dev/examples/actions/runs/38357919040) and
+[catalog](https://github.com/bota-dev/examples/actions/runs/38357918932)
+Linux/Windows matrices also pass. Legacy verification passes; its separate
+Android assembly is still running at this observation.
+
+The compatible Flutter relocation gate is met. The next independent client move
+is tracked in the [React Native relocation review](2026-10-12-react-native-client-move.md).
+No live, installed-app, iOS or physical acceptance follows from these builds.

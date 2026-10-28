@@ -55,17 +55,27 @@ Share backend features and narrow DTO/fixture contracts, not a universal UI or
 cross-language controller framework. Short local configuration/HTTP/UI glue can
 repeat to keep modules understandable. Substantial device protocol logic stays
 in the published SDK; the sample is not a new API SDK or privileged generic
-proxy. Native Kotlin/Swift clients begin with supported SDK workflows; missing
-iOS/native hosts do not wait for full app import/playback or identical UI.
+proxy. Native Kotlin/Swift clients offer separate SDK starters and GET-only cloud
+readers. Cloud readers share the authenticated HTTP contract, not a runtime UI
+framework or device authority. Full app import/playback and identical UI are not
+prerequisites for a useful native integration.
 
 The common app's end-user flow is **add/import audio → library → playback/source →
 transcript → notes → recording-scoped Ask**. Everyday screens show recordings
 and content; public-call explanations and adaptation instructions belong in
 README/source. Technical request/recovery metadata remains secondary.
-Playback is **not implemented** in the current references. Qualify the public audio
-retrieval, format, encryption and authorization contract before adding it:
-an encrypted original or URL issuance does not prove playable/decrypted audio, and
-synthetic output must not imply successful live playback or device transfer.
+Web playback uses a bounded public WAV export for authorized ordinary imports;
+device/encrypted sources and missing source/encryption evidence are unavailable.
+The cookie-authenticated backend retains signed URLs, checks the current owner
+before and after retrieval, and rechecks the session before returning bytes.
+Browser/native decoding remains separate from format-signature checks. Mobile
+imports and WAV playback use the same shared features through Bearer-authenticated
+routes; platform pickers and private temporary media stay native. Signed storage
+URLs never reach the clients. Synthetic tones establish no device transfer.
+The [October 15 acceptance](docs/design-reviews/2026-10-14-web-playback.md#october-15-live-http-acceptance)
+qualifies the live HTTP flow for one synthetic WAV import through export,
+transcription, summary and Ask; browser decoding and other input formats remain
+unverified.
 
 ## Current implementation
 
@@ -76,12 +86,13 @@ quickstarts still install independently:
 | Location | Implemented role and limits |
 | --- | --- |
 | [Integrated backend](end-to-end/recordings/README.md) | One combined Node listener composes Web/mobile factories, shared recording/processing/Ask features and all three original journals; Express/Vite resolve from the Web install. |
-| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, library, Transcript/Summary/Ask and webhook metadata. API-only; no device SDK, capture or playback. |
-| [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains React Native and the mobile backend; links to the relocated Flutter client. Both common app hosts are Android only. |
-| [React Native](end-to-end/react-native-recording-sync/app/README.md) | Common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
-| [Flutter](end-to-end/recordings/clients/flutter/README.md) | First relocated client: complete Android install root with cloud-content flow and secondary connection/status. Published beta.13 lacks the fresh pairing and verified encrypted-upload host surfaces required for device sync. |
+| [Web](end-to-end/web-reference/README.md) | React + Node recording app; audio import, ordinary-import playback, library, Transcript/Summary/Ask and webhook metadata. Optional desktop Chromium SDK connection/status; no capture or transfer. |
+| [Mobile compatibility root](end-to-end/react-native-recording-sync/README.md) | Retains backend/setup and original journals; links to Android/iOS RN and Flutter clients. Shared ordinary upload/playback retains existing cookie/Bearer adapters. |
+| [React Native](end-to-end/recordings/clients/react-native/README.md) | Complete relocated install root; common cloud-content flow plus optional public-SDK encrypted-v2 sync for an already-provisioned device. Broader binding/recovery and physical acceptance remain separate. |
+| [Flutter](end-to-end/recordings/clients/flutter/README.md) | Android/iOS hosts with ordinary import/playback, cloud-content flow and secondary connection/status. The selected public facade does not supply this sample's encrypted-upload host workflow. |
+| [Kotlin](end-to-end/recordings/clients/android-kotlin/README.md) / [Swift](end-to-end/recordings/clients/apple-swift/README.md) | Independent native Android and iOS/macOS GET-only cloud readers. Local sample or live library/detail/transcript/general notes; no Bota SDK or write operations. |
 | [Focused catalog](README.md#example-catalog) | Independent API and platform SDK recipes, with their own scope and evidence. Connection/catalog samples do not establish complete app parity. |
-| [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its beta.6 compatibility path and dependency guards are retained; its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
+| [Legacy workspace](docs/app-sdk-migration.md) | Existing `apps/` and root npm commands remain until replacement gates pass. Its native compatibility path pins beta.19 with app/runtime 0.5.0; dependency guards remain. Its unauthenticated backend is local-only and raw-token provisioning does not meet the target binding contract. |
 
 The web and mobile backends now import the integrated core through compatible
 feature paths and DTO projections. Authentication, bounded HTTP clients, upload,
@@ -92,13 +103,22 @@ in-process processing/Ask arbitration and retained peer-intent refusal. Existing
 launchers remain available for compatibility and must stop before the combined
 host runs; other writers are not coordinated.
 SDK-only modules remain usable without that service.
-Flutter now lives under `recordings/clients/flutter/`, including its license helpers;
-the old README is a forwarding entry. Web/RN clients, mobile backend launch base
-and all journal locations remain at their existing paths. Client/native identity
-and dependency pins/locks are preserved; folder relocation adds no SDK capability.
-Independent device examples retain exact public beta.13 pins. Native iOS common
-apps, Flutter iOS and native Windows samples are not supplied here; Windows
-native SDK availability is planned upstream and requires public-contract
+Flutter and RN now live under `recordings/clients/`, including complete native
+install roots and required helper/guard graphs. Old READMEs are forwarding entries.
+Web, mobile backend launch base and all journal locations retain existing paths.
+Client/native identity, dependency pins/locks and original `8787` defaults are
+preserved. Native recovery identity includes the backend origin: retain that
+origin, using combined `PORT=8787` with matching `APP_ORIGIN` where applicable,
+rather than resetting journals or rewriting capture scope. Fresh cloud setup
+may explicitly select `5173`. Folder relocation adds no SDK capability.
+Ten existing SDK roots pin exact public beta.19; the optional Web recording-app
+device integration pins exact public beta.20. They install independently. The
+[current adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
+records package and host checks. RN retains its native-workflow compatibility
+factory; generated-JS `/runtime` adoption is separate. Swift and Flutter supply
+iOS connection/status, and Swift also hosts the metadata catalog on iOS/macOS;
+RN iOS provides the cloud recording app with no custom
+device upload host. Native Windows SDK availability is planned upstream and requires public-contract
 qualification before an example can depend on it. Current local, hosted, live
 and hardware evidence remains in each README and the
 [implementation review](docs/independent-examples-review.md).
@@ -251,14 +271,20 @@ Dependency mitigation requirements are maintained in
 
 ## Delivery and qualification
 
-The first compatible consolidation of recording/processing/Ask features is
-delivered. Existing clients use the core through their original adapters, with
-direct feature-source entry points in README. Next qualify shared write
-arbitration and auth/path compatibility before combining the listeners.
+The shared recording/processing/Ask core and one combined Node listener are
+implemented within their documented qualification bounds. The listener retains
+cookie/Bearer service factories, three original journals and in-process
+processing/Ask intent arbitration. Existing compatibility listeners must stop
+before using the combined host; see the
+[combined review](docs/design-reviews/2026-10-12-unified-recordings.md).
 Fill qualified iOS/native hosts and useful SDK modules without waiting for every
 client's full recording UI. Complete ordinary intake/playback only after its
 public contract is qualified. Vertical apps remain the later product layer.
-One executable backend, playback and new hosts remain planned work. The
+Ordinary mobile import/playback and the Swift, Flutter and RN cloud iOS hosts
+are implemented; see the [October 20 review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+for native build and runtime evidence. Remaining Web/auth/store relocation and
+physical mobile acceptance stay separate work.
+The
 [consolidation review](docs/design-reviews/2026-10-12-integrated-recordings.md)
 records the current implementation and its bounded verification.
 
@@ -309,3 +335,25 @@ matching/watcher and exports are recorded in [the current scope](docs/metro-publ
 Legacy root #113 and its six-asset parser guard remain unchanged. Source
 admission, first-push/native results, scanner closure and physical acceptance
 are separate; this prospective local evidence claims no published fix.
+
+## October 13 current legacy matching replacement
+
+The prospective legacy workspace source now replaces the actual Braces/Micromatch
+development-tool routes through maintained public parents. Metro-config 0.84.6
+physically owns its original Metro 0.84.6 and adapted nested file-map; root
+file-map stays 0.84.5. Mandatory read-only parent-asset/absence verification
+supersedes the legacy six-file parser patch while retaining its exact history.
+Application/SDK/runtime, independent roots and workflows remain unchanged.
+See [local source qualification and remaining gates](docs/legacy-public-parent-matching-removal.md).
+This updates only the legacy #113 scope of the dated checkpoint above. Source
+admission, normal main publication, hosted Android/scanner and installed behavior
+remain separate; no production or certificate authority transfers.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).

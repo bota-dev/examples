@@ -7,3 +7,13 @@ dist/
 .DS_Store
 apps/react-native/android/
 apps/react-native/ios/
+
+# Exact qualified maintained public parent archives.
+!vendor/braces-free-public-parents/expo--metro-file-map-57.0.3-maintained.tgz
+!vendor/braces-free-public-parents/metro-file-map-0.84.5-maintained.tgz
+!vendor/braces-free-public-parents/metro-file-map-0.84.6-maintained.tgz
+!vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz
+!vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz
+!vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz
+!vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz
+test-results/

@@ -9,6 +9,7 @@ import { tokenHash } from '../../server/auth.mjs';
 import { createHash, createHmac } from 'node:crypto';
 import { gzipSync } from 'node:zlib';
 import { AppError } from '../../server/errors.mjs';
+import { fileURLToPath } from 'node:url';
 
 async function fixture(run, intercept, options = {}) {
   const config = configuration({}, { demo: true });
@@ -49,6 +50,34 @@ async function fixture(run, intercept, options = {}) {
     store.close();
   }
 }
+
+test('served app permits same-origin WebAssembly without general script evaluation', async () =>
+  fixture(
+    async ({ request }) => {
+      const response = await request('/api/me');
+      assert.equal(response.status, 200);
+      const policy = response.headers.get('content-security-policy');
+      assert.ok(policy);
+      const directives = new Map(
+        policy.split(';').map((entry) => {
+          const [name, ...values] = entry.trim().split(/\s+/);
+          return [name, values];
+        }),
+      );
+      assert.deepEqual(directives.get('script-src'), ["'self'", "'wasm-unsafe-eval'"]);
+      assert.deepEqual(directives.get('default-src'), ["'self'"]);
+      assert.deepEqual(directives.get('object-src'), ["'none'"]);
+      assert.deepEqual(directives.get('base-uri'), ["'none'"]);
+      assert.deepEqual(directives.get('frame-ancestors'), ["'none'"]);
+      assert.equal(directives.get('script-src').includes("'unsafe-eval'"), false);
+      assert.equal(directives.get('script-src').includes("'unsafe-inline'"), false);
+      assert.equal(response.headers.get('cache-control'), 'no-store');
+      assert.equal(response.headers.get('x-content-type-options'), 'nosniff');
+      assert.equal(response.headers.get('referrer-policy'), 'no-referrer');
+    },
+    undefined,
+    { staticDirectory: fileURLToPath(new URL('../../web', import.meta.url)) },
+  ));
 
 test('full synthetic workflow: login, recordings, upload, transcript, summary, Ask, events and logout', async () =>
   fixture(async ({ request }) => {

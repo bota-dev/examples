@@ -119,6 +119,8 @@ app.post('/api/devices/register', async (req, res, next) => {
         }),
       }));
 
+    // This template is an API path; bota() reads a JSON response via fetch().
+    // nosemgrep: javascript.express.security.injection.raw-html-format.raw-html-format
     const bound = await bota<any>(`/devices/${device.id}/bind`, {
       method: 'POST',
       body: JSON.stringify({
@@ -142,6 +144,8 @@ app.post('/api/devices/register', async (req, res, next) => {
 app.post('/api/devices/:deviceId/token', async (req, res, next) => {
   try {
     const input = bindDeviceSchema.parse(req.body);
+    // This template is an API path; bota() reads a JSON response via fetch().
+    // nosemgrep: javascript.express.security.injection.raw-html-format.raw-html-format
     const bound = await bota<any>(`/devices/${req.params.deviceId}/bind`, {
       method: 'POST',
       body: JSON.stringify({
@@ -195,6 +199,8 @@ app.post('/api/recordings/upload-info', async (req, res, next) => {
       }),
     });
 
+    // This template is an API path; bota() reads a JSON response via fetch().
+    // nosemgrep: javascript.express.security.injection.raw-html-format.raw-html-format
     const upload = await bota<any>(`/recordings/${recording.id}/upload-url`, {
       method: 'POST',
       body: JSON.stringify({
@@ -219,6 +225,8 @@ app.post('/api/recordings/upload-info', async (req, res, next) => {
 app.post('/api/recordings/:recordingId/upload-complete', async (req, res, next) => {
   try {
     const input = completeUploadSchema.parse(req.body);
+    // This template is an API path; bota() reads a JSON response via fetch().
+    // nosemgrep: javascript.express.security.injection.raw-html-format.raw-html-format
     const recording = await bota<any>(`/recordings/${req.params.recordingId}/upload-complete`, {
       method: 'POST',
       body: JSON.stringify(input),

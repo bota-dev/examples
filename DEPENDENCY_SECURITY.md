@@ -6,6 +6,40 @@ and export limitations below describe their dated checks. The decoder/Xcode
 overrides and guarded adapter remain required; the existing security tests
 must pass against the new consumer graph before release.
 
+The [October 20 iOS/mobile review](docs/design-reviews/2026-10-20-ios-mobile-recording-flows.md)
+adds public Expo 57 media packages and Flutter file selector/audio/cache packages.
+Exact registry versions, publication dates, archive integrity and licenses are
+recorded in the [RN provenance](end-to-end/recordings/clients/react-native/media-dependencies.json)
+and [Flutter provenance](end-to-end/recordings/clients/flutter/dependency-provenance.json).
+Frozen installs retain the existing signing, Metro, source-map and license gates.
+The ten existing SDK install roots use owner-requested public beta.19. The
+[remaining SDK adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
+records unchanged non-SDK locks and independent consumer checks. This latest-SDK
+request permits the beta.19 release younger than the usual seven-day age floor;
+it does not waive that floor for unrelated dependencies. Native builds and
+actual decoder behavior remain separate evidence.
+
+## Native reader HTTP parser limits
+
+The [Kotlin cloud reader](end-to-end/recordings/clients/android-kotlin/README.md)
+pins public Apache HttpCore 5.3.6 because 5.4.4's default socket setup calls a
+JDK method unavailable on Android 29. The 5.3.6 coordinate remains affected by
+[CVE-2026-54399](https://github.com/advisories/GHSA-hf6x-8p5f-cgmf).
+Its sole HTTP/1 requester explicitly configures 100 headers and 8192 bytes per
+line, matching [Apache's finite-defaults fix](https://github.com/apache/httpcomponents-core/commit/d96a00f).
+Keep these supported configuration limits and the actual-client malformed
+header/trailer regressions when copying or changing the transport. This is a
+configured-path mitigation; the upstream artifact is unchanged and the scanner
+identity remains open. No suppression or license exception is used. Adopt a
+patched, Android-compatible public release after its actual runtime checks pass.
+
+The [platform review](docs/design-reviews/2026-10-20-native-cloud-web-device.md)
+records JVM/native evidence, the resolved-module and bundled-license gate, and
+remaining qualification. Swift has zero third-party dependencies. The optional
+Web recording-app device feature pins public beta.20 under the owner's latest-SDK
+request; it does not change the ten existing SDK roots or waive the age floor
+for unrelated dependencies.
+
 ## Scope and choice (2026-09-26)
 
 Dependabot #100/#101 concern image-size 1.2.1 parser loops:
@@ -226,3 +260,37 @@ matching/watcher and exports are recorded in [the current scope](docs/metro-publ
 Legacy root #113 and its six-asset parser guard remain unchanged. Source
 admission, first-push/native results, scanner closure and physical acceptance
 are separate; this prospective local evidence claims no published fix.
+
+## October 13 current legacy public-parent replacement
+
+The prospective current4e05 legacy root replaces its six actual Braces/Micromatch
+parent profiles and the actual owning Metro-config/Metro bundle. Current normal
+and frozen source checks qualify local Braces/Micromatch absence, seven exact
+parent archives and the 20-case actual-parent suite. The old six-file guard and
+22 cases remain historical source; they are not package-removal evidence.
+All other roots/locks, SDK/runtime, guards and workflows are conserved. Read
+[full current source, resolver/output scopes and pending delivery gates](docs/legacy-public-parent-matching-removal.md).
+The exact post-delivery readback marks original #113 fixed at
+`2026-10-13T19:30:37Z` after main source `17c292e92b577a8096f6306ab14b96a075dc9513`.
+That scanner closure is separate from hosted, native and deployment acceptance;
+no advisory-wide withdrawal, dismissal or inherited approval is claimed.
+
+
+October 13 Chokidar public-boundary correction: the original maintained parent
+nomination remains historical and held. The corrected 3.6.0 archive preflights
+selected normalized brace selectors before public watch/add state or async work,
+with prospective full-array ignore ordering and unchanged literal/non-glob paths.
+Run the required public-boundary cases through `npm run test:braces-security`;
+independent shared component clearance does not replace current-owner source,
+normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).
+
+The exact `17c292e` Linux verification job passed normal frozen installation but
+failed one of 110 tests: the `disableGlobbing` control used a 403-character
+literal component, producing filesystem `ENAMETOOLONG`. Typecheck, build and
+all-platform export were skipped. Its Android native example and two catalog
+jobs passed, giving three successes and one failure. The fixture now distributes the
+same balanced depth-200 string across 100/203/100-character components and
+asserts that removing the separators reproduces the original string. All
+enabled-glob rejection inputs and zero-error assertions remain intact. Runtime,
+archives, locks and workflows are unchanged. This fixture-only successor still
+requires its own fresh hosted results.

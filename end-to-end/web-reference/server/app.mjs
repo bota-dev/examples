@@ -13,6 +13,7 @@ import {
 } from './features/processing.mjs';
 import { askRecording, refreshAsk } from './features/ask.mjs';
 import { receiveWebhook, listEvents } from './features/webhooks.mjs';
+import { playbackAudio } from './features/playback.mjs';
 
 export function createApp({
   config,
@@ -42,7 +43,7 @@ export function createApp({
     if (staticDirectory)
       res.set(
         'Content-Security-Policy',
-        "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+        "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
       );
     ensure(
       req.headers.host === new URL(config.origin).host,
@@ -94,7 +95,7 @@ export function createApp({
   app.post('/api/logout', (_req, res) =>
     res.set('Set-Cookie', auth.logout(_req.headers.cookie)).json({ ok: true }),
   );
-  const context = (req) => ({
+  const context = (req, signal) => ({
     principal: req.principal,
     config,
     store: {
@@ -119,7 +120,7 @@ export function createApp({
         return result;
       },
     },
-    ...createClient(config, { fetchImpl }),
+    ...createClient(config, { fetchImpl, signal }),
   });
   const noBody = (req) =>
     ensure(
@@ -168,6 +169,39 @@ export function createApp({
   app.get(
     '/api/recordings/:id',
     tracked(async (req, res) => res.json(await getRecording(context(req), req.params.id))),
+  );
+  app.get(
+    '/api/recordings/:id/audio',
+    tracked(async (req, res) => {
+      ensure(
+        req.method === 'GET' && Object.keys(req.query).length === 0 && !req.headers.range,
+        400,
+        'INVALID_REQUEST',
+        'Load the complete recording audio without query or range parameters.',
+      );
+      const abort = new AbortController();
+      const disconnected = () => {
+        if (!res.writableEnded) abort.abort();
+      };
+      req.once('aborted', disconnected);
+      res.once('close', disconnected);
+      try {
+        const bytes = await playbackAudio(context(req, abort.signal), req.params.id);
+        if (req.aborted || res.destroyed) return;
+        ensure(
+          auth.principal(req.headers.cookie) === req.principal,
+          401,
+          'UNAUTHENTICATED',
+          'Sign in again to load recording audio.',
+        );
+        res.set('Content-Type', 'audio/wav').send(bytes);
+      } catch (error) {
+        if (!req.aborted && !res.destroyed) throw error;
+      } finally {
+        req.off('aborted', disconnected);
+        res.off('close', disconnected);
+      }
+    }),
   );
   app.get(
     '/api/recordings/:id/transcriptions',

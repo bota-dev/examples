@@ -118,6 +118,44 @@ export function operationMetadata(value: unknown): Operation | undefined {
 
 export type ApiClient = ReturnType<typeof createApi>;
 
+const MAX_AUDIO_BYTES = 25 * 1024 * 1024;
+
+async function readAudioBody(response: Response, signal?: AbortSignal) {
+  const length = response.headers.get('Content-Length');
+  const declared = length === null ? null : /^\d+$/.test(length) ? Number(length) : NaN;
+  const limit = response.ok ? MAX_AUDIO_BYTES : 16 * 1024;
+  if (declared !== null && (!Number.isSafeInteger(declared) || declared < 1 || declared > limit)) {
+    await response.body?.cancel();
+    throw new ApiError(response.status, 'invalid_audio', 'This audio response is unavailable.');
+  }
+  const reader = response.body?.getReader();
+  if (!reader)
+    throw new ApiError(response.status, 'invalid_audio', 'This audio response is unavailable.');
+  const chunks: Uint8Array<ArrayBuffer>[] = [];
+  let size = 0;
+  const cancel = () => void reader.cancel().catch(() => {});
+  signal?.addEventListener('abort', cancel, { once: true });
+  try {
+    signal?.throwIfAborted();
+    while (true) {
+      const { done, value } = await reader.read();
+      signal?.throwIfAborted();
+      if (done) break;
+      size += value.byteLength;
+      if (size > limit)
+        throw new ApiError(response.status, 'audio_too_large', 'Audio must be at most 25 MiB.');
+      chunks.push(new Uint8Array(value));
+    }
+    if (!size || (declared !== null && size !== declared))
+      throw new ApiError(response.status, 'invalid_audio', 'The audio response was incomplete.');
+    return new Blob(chunks, { type: 'audio/wav' });
+  } finally {
+    signal?.removeEventListener('abort', cancel);
+    await reader.cancel().catch(() => {});
+    reader.releaseLock();
+  }
+}
+
 export function createApi(onExpired: () => void) {
   async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
     if (!path.startsWith('/api/'))
@@ -171,6 +209,52 @@ export function createApi(onExpired: () => void) {
         body: file,
         signal,
       }),
+    audio: async (recordingId: string, signal?: AbortSignal): Promise<Blob> => {
+      let response: Response;
+      try {
+        response = await fetch(`/api/recordings/${encodeURIComponent(recordingId)}/audio`, {
+          signal,
+          credentials: 'same-origin',
+          redirect: 'error',
+        });
+      } catch (error) {
+        if (signal?.aborted) throw error;
+        throw new ApiError(0, 'audio_unavailable', 'The audio could not be loaded. Try again.');
+      }
+      if (signal?.aborted) {
+        await response.body?.cancel().catch(() => {});
+        signal.throwIfAborted();
+      }
+      if (response.status === 401) onExpired();
+      if (
+        response.ok &&
+        response.headers.get('Content-Type')?.split(';')[0].trim().toLowerCase() !== 'audio/wav'
+      ) {
+        await response.body?.cancel();
+        throw new ApiError(response.status, 'invalid_audio', 'This audio format is unavailable.');
+      }
+      try {
+        const body = await readAudioBody(response, signal);
+        if (response.ok) return body;
+        const value = JSON.parse(await body.text()) as {
+          error?: { code?: unknown; message?: unknown };
+        };
+        throw new ApiError(
+          response.status,
+          typeof value?.error?.code === 'string' ? value.error.code : 'audio_unavailable',
+          typeof value?.error?.message === 'string'
+            ? value.error.message.slice(0, 300)
+            : 'The audio could not be loaded.',
+        );
+      } catch (error) {
+        if (signal?.aborted || error instanceof ApiError) throw error;
+        throw new ApiError(
+          response.status,
+          'invalid_audio',
+          'The audio could not be read. Try again.',
+        );
+      }
+    },
   };
 }
 

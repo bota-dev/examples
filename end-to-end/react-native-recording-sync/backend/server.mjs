@@ -6,6 +6,7 @@ import { pathToFileURL } from 'node:url';
 import { readConfig, RequestError, SyncService } from './service.mjs';
 import { LibraryService } from './library.mjs';
 import { errorOperation } from './library/errors.mjs';
+import { audioTypes } from '../../recordings/backend/http.mjs';
 
 export function configureMobileCoordination(service, library) {
   if (library) {
@@ -31,24 +32,47 @@ export function createRequestHandler(service, appToken, library, { coordinate = 
       const libraryRequest = request.url?.startsWith('/api/library/');
       const path = request.url?.split('?')[0];
       if (!request.url?.startsWith('/api/') || request.url.includes('#') || path.includes('%') || path.includes('..') || (!libraryRequest && request.url.includes('?'))) throw new RequestError(404, 'route_not_found');
+      if (libraryRequest && !library) throw new RequestError(404, 'route_not_found');
+      const upload = libraryRequest && request.method === 'POST' && request.url === '/api/library/uploads';
+      if (upload && (!audioTypes.has(request.headers['content-type']) ||
+        !['identity', undefined].includes(request.headers['content-encoding']))) throw new RequestError(415, 'unsupported_audio_type');
       const chunks = []; let length = 0;
       for await (const chunk of request) {
         length += chunk.length;
-        if (length > 32 * 1024) throw new RequestError(413, 'request_too_large');
+        if (length > (upload ? 25 * 1024 * 1024 : 32 * 1024)) throw new RequestError(413, 'request_too_large');
         chunks.push(chunk);
       }
       let body = {};
-      if (length) {
+      if (length && !upload) {
         if (!/^application\/json(?:;|$)/i.test(request.headers['content-type'] ?? '')) throw new RequestError(415, 'json_required');
         try { body = JSON.parse(Buffer.concat(chunks).toString('utf8')); } catch { throw new RequestError(400, 'invalid_json'); }
       }
-      if (libraryRequest && !library) throw new RequestError(404, 'route_not_found');
-      const result = libraryRequest
+      let result;
+      if (upload) {
+        let name;
+        try { name = decodeURIComponent(request.headers['x-file-name'] ?? ''); }
+        catch { throw new RequestError(400, 'invalid_file_name'); }
+        result = await library.upload({ name, contentType: request.headers['content-type'], bytes: Buffer.concat(chunks) });
+      } else if (libraryRequest && request.method === 'GET' && path.endsWith('/audio')) {
+        if (request.headers.range || length) throw new RequestError(400, 'invalid_request');
+        const abort = new AbortController();
+        const disconnected = () => { if (!response.writableEnded) abort.abort(); };
+        request.once('aborted', disconnected); response.once('close', disconnected);
+        try { result = await library.route(request.method, request.url, body, { signal: abort.signal }); }
+        finally { request.off('aborted', disconnected); response.off('close', disconnected); }
+        if (request.aborted || response.destroyed) return;
+        response.setHeader('Content-Type', 'audio/wav');
+        response.setHeader('Content-Length', result.length);
+        response.statusCode = 200;
+        response.end(result);
+        return;
+      } else result = libraryRequest
         ? await library.route(request.method, request.url, body)
         : await service.route(request.method, request.url, body, request.headers['x-bota-binding-generation']);
       response.statusCode = result === null ? 204 : 200;
       response.end(result === null ? undefined : JSON.stringify(result));
     } catch (error) {
+      if (response.destroyed) return;
       const known = error instanceof RequestError;
       response.statusCode = known ? error.status : 500;
       const operation = errorOperation(error);
@@ -79,6 +103,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     let library;
     try {
       library = new LibraryService(config, { database: libraryDatabase,
+        fetchImpl: service.fetch,
         request: (method, path, body) => service.upstream(path, method, body, path.startsWith('/ask/') ? 180_000 : 25_000) });
     } catch (error) { service.close(); throw error; }
     const server = createApp(service, config.appToken, library);

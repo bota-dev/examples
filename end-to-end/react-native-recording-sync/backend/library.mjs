@@ -5,12 +5,15 @@ import { RequestError } from './service.mjs';
 import { getRecording, listRecordings } from './library/recordings.mjs';
 import { listSummaries, listTranscriptions, refreshProcessing, startSummary, startTranscription } from './library/processing.mjs';
 import { askRecording, refreshAsk } from './library/ask.mjs';
+import { createClient } from '../../recordings/backend/http.mjs';
+import { uploadAudio, refreshUpload } from '../../recordings/backend/features/upload.mjs';
+import { playbackAudio } from '../../recordings/backend/features/playback.mjs';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
 
 /** Cloud ownership is independent from device connection and upload cleanup authority. */
 export class LibraryService {
-  constructor(config, { database = ':memory:', request } = {}) {
+  constructor(config, { database = ':memory:', request, fetchImpl = fetch } = {}) {
     ensure(typeof request === 'function', 500, 'configuration', 'A bounded public API client is required.');
     const scopeId = createHash('sha256').update(JSON.stringify([
       config.apiBase, config.projectId, config.endUserId, config.apiKey,
@@ -42,8 +45,15 @@ export class LibraryService {
         throw error;
       }
     } };
+    this.mediaContext = (signal) => {
+      ensure(config.storageHosts?.length > 0, 503, 'media_not_configured',
+        'Configure the independent exact storage-host allowlist before importing or loading audio.');
+      return { ...this.context, ...createClient(config, { fetchImpl, signal }) };
+    };
   }
   close() { this.store.close(); }
+  upload(input) { return uploadAudio(this.mediaContext(), input); }
+  assertPeerUpload(details) { return this.store.assertPeerUpload(details); }
   assertPeerIntent(kind, anchor, recordingId) {
     const code = 'cross_intent_reconciliation_required';
     const message = 'A retained operation needs reconciliation in its original adapter. No replacement is allowed.';
@@ -59,7 +69,7 @@ export class LibraryService {
     ensure(!known || (existingId && known.resourceId === existingId), 409,
       'library_transcription_reconciliation_required', 'The library transcription intent needs GET reconciliation. No native replacement is allowed.');
   }
-  async route(method, raw, body = {}) {
+  async route(method, raw, body = {}, { signal } = {}) {
     const url = new URL(raw, 'http://127.0.0.1');
     const path = url.pathname;
     const ctx = this.context;
@@ -73,6 +83,8 @@ export class LibraryService {
     if (list) return listRecordings(ctx, url.searchParams.get('cursor') ?? undefined);
     let match = path.match(/^\/api\/library\/recordings\/(rec_[A-Za-z0-9_-]+)$/);
     if (match && method === 'GET') return getRecording(ctx, match[1]);
+    match = path.match(/^\/api\/library\/recordings\/(rec_[A-Za-z0-9_-]+)\/audio$/);
+    if (match && method === 'GET') return playbackAudio(this.mediaContext(signal), match[1]);
     match = path.match(/^\/api\/library\/recordings\/(rec_[A-Za-z0-9_-]+)\/transcriptions$/);
     if (match && ['GET', 'POST'].includes(method)) {
       ensure(Object.keys(body).length === 0, 400, 'invalid_request', 'This action accepts an empty object.');
@@ -95,7 +107,8 @@ export class LibraryService {
     if (match && method === 'GET') {
       ensure(UUID.test(match[1]), 400, 'invalid_operation', 'Choose a valid operation.');
       const operation = this.store.get(this.principal, match[1]);
-      return operation.kind === 'ask' ? refreshAsk(ctx, operation.id) : refreshProcessing(ctx, operation.id);
+      return operation.kind === 'upload' ? refreshUpload(ctx, operation.id)
+        : operation.kind === 'ask' ? refreshAsk(ctx, operation.id) : refreshProcessing(ctx, operation.id);
     }
     ensure(false, 404, 'route_not_found', 'Route unavailable.');
   }

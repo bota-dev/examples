@@ -79,6 +79,8 @@ def read_json(base, key, path, deadline):
     remaining = request_deadline - time.monotonic()
     require(remaining > 0, "Configuration read exceeded its elapsed-time budget.")
     url = urllib.parse.urlsplit(base)
+    # Python 3.12+ default TLS validates certificates and the hostname.
+    # nosemgrep: python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
     connection = http.client.HTTPSConnection(url.hostname, url.port, timeout=remaining)
     timer = None
     try:

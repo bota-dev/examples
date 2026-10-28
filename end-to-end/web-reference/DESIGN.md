@@ -8,9 +8,12 @@ web client of the integrated **Bota Recordings** foundation: one shared customer
 backend, platform clients and copyable features. Client targets include React
 web, RN, Flutter, native Android/Kotlin and Apple/Swift. The
 [combined backend](../recordings/README.md) now composes the existing Web/mobile
-factories on one listener with original journals/auth/DTOs retained. Integrated
-Flutter is the first relocated client at [recordings/clients/flutter](../recordings/clients/flutter/README.md).
-Web/RN retain existing paths; integrated Kotlin/Swift recording clients are not built.
+factories on one listener with original journals/auth/DTOs retained.
+Complete [Flutter](../recordings/clients/flutter/README.md) and
+[RN](../recordings/clients/react-native/README.md) clients are relocated under
+`recordings/clients/`, alongside small Kotlin/Swift cloud readers using the same
+Bearer backend. Web/backend paths stay. Native readers show only the first
+recording page and existing transcript/notes; full feature parity is not implied.
 
 The recording experience is audio input → library → supported playback/source
 review → transcript → general notes → recording-scoped Ask. Use normal platform
@@ -31,13 +34,13 @@ credential/input boundaries and the absence of external-writer guarantees.
 
 ## Implemented subset and target
 
-| Capability          | Current web implementation                                                                            |
-| ------------------- | ----------------------------------------------------------------------------------------------------- |
-| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                    |
-| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                |
-| Playback            | Not implemented. The target adds playback only for a supported, authorized audio representation.      |
-| Device SDK          | Not integrated. The separate browser connection sample does not make this app a device-sync template. |
-| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.         |
+| Capability          | Current web implementation                                                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Audio input         | Import a supported audio file through the customer backend. No microphone capture.                                                 |
+| Library and results | Recording list/detail, explicit transcription, general notes and recording-scoped Ask.                                             |
+| Playback            | Explicitly load an authorized ordinary import as WAV, then use native audio controls. Device/encrypted sources are unavailable.    |
+| Device SDK          | Optional public Web SDK exact-serial connection, current status and disconnect. No pairing proof, catalog, capture or device sync. |
+| Synthetic mode      | In-process API fixtures and synthetic results; no external upload/provider/device acceptance.                                      |
 
 The [root roadmap](../../ROADMAP.md) owns the remaining integrated-sample/platform work.
 Do not describe target features as available controls or add overlapping app
@@ -87,7 +90,7 @@ withhold operation metadata as well as content.
   and account/sign-out controls.
 - Recording library: title, date, duration and concise state in each row;
   **Upload audio** and Refresh actions. Show the actual selected file before upload.
-- Recording detail: title/metadata, then **Transcript**, **Summary** and **Ask**
+- Recording detail: title/metadata and a compact explicit-load audio player, then **Transcript**, **Summary** and **Ask**
   tabs. Display one feature at a time with explicit processing actions.
 - Short loading, empty, pending and failure states. Use a simple selection prompt
   before a recording is opened; no hero or oversized blank illustration.
@@ -96,6 +99,10 @@ withhold operation metadata as well as content.
 - **Activity** is a secondary, initially collapsed panel for saved-operation
   GET reconciliation and webhook metadata. It never resends a write or displays
   recovered answer content.
+- **Devices** is optional and initially collapsed. Prepare Bluetooth explicitly,
+  then enter the printed serial and choose Connect from a separate user gesture.
+  Status/disconnect controls do not gate recording navigation or cloud features.
+  Demo and unsupported browsers disable device actions without importing the SDK.
 
 Use white/gray surfaces, system sans-serif text, modest spacing, clear buttons,
 visible focus and useful contrast. Avoid editorial headlines or ornamental
@@ -122,10 +129,19 @@ over another overlapping implementation. No universal UI framework, wrapper SDK
 or private runtime dependency is introduced to share concrete backend logic.
 
 Use normal platform UI and published public SDK surfaces for optional device
-paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.13/frameworks/web)
+paths. The [Web SDK contract](https://github.com/bota-dev/app-sdk/tree/v2.0.0-beta.20/frameworks/web)
 targets foreground desktop Chromium, a secure context and compatible device
-Identity service; API-only browser use and browser Bluetooth have different
-boundaries. Existing exact SDK pins stay unchanged in this design revision.
+Identity service; cloud API use and browser Bluetooth have different boundaries.
+This app's Web SDK is pinned independently; the existing standalone starter
+retains its own qualified version. The App owns one device-session host across
+recording views and account replacement. Device identity/status clear immediately
+on observed loss, errors, sign-out, replacement or page teardown; pending creation,
+picker, read, disconnect and destruction join before another SDK owner may enter.
+Failed cleanup blocks device admission until reload. No persistence namespace is
+supplied and no SDK-owned retained state is cleared. A restored closed page must
+reload; page unloading cannot guarantee completion of asynchronous browser work.
+The public facade has no connection subscription or fresh pairing contract;
+cached-getter observation grants no ownership, upload or cleanup authority.
 Connection/catalog samples do not establish complete app parity or hardware
 acceptance. Vertical workflows and production identity/deployment remain later
 or customer-owned work, respectively.

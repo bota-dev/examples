@@ -1,3 +1,5 @@
 **/vendor/braces-security/** -text
 **/scripts/*braces*security.mjs text eol=lf
 **/vendor/braces-security/**/*.source whitespace=-blank-at-eof
+**/vendor/braces-free-public-parents/*.tgz -text
+**/vendor/expo-native-signing/public-provenance.json text eol=lf

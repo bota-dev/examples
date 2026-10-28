@@ -1,4 +1,7 @@
 node_modules/
 package-lock.json
-# Flutter is an independent install root with its own Dart formatter and checks.
+# Platform clients are independent install roots with their own checks.
 clients/flutter/**
+clients/react-native/**
+clients/android-kotlin/**
+clients/apple-swift/**

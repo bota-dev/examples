@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:bota_app_sdk/bota_app_sdk.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, TargetPlatform;
 import 'package:permission_handler/permission_handler.dart';
 
 class DevicePage extends StatefulWidget {
@@ -31,7 +33,7 @@ class _DevicePageState extends State<DevicePage> {
   String message = 'Read-only discovery and status. No API key required.';
 
   Future<void> run(Future<void> Function() action) async {
-    if (busy || closing) return;
+    if (busy || closing || observationEnded) return;
     final epoch = connectionEpoch;
     setState(() => busy = true);
     try {
@@ -50,11 +52,18 @@ class _DevicePageState extends State<DevicePage> {
 
   Future<void> initialize() async {
     if (observationEnded || closing) return;
-    final info = await DeviceInfoPlugin().androidInfo;
+    final List<Permission> permissions;
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      permissions = [Permission.bluetooth];
+    } else if (defaultTargetPlatform == TargetPlatform.android) {
+      final info = await DeviceInfoPlugin().androidInfo;
+      permissions = info.version.sdkInt >= 31
+          ? [Permission.bluetoothScan, Permission.bluetoothConnect]
+          : [Permission.locationWhenInUse];
+    } else {
+      throw UnsupportedError('Use the Android or iOS host.');
+    }
     if (!mounted || closing) return;
-    final permissions = info.version.sdkInt >= 31
-        ? [Permission.bluetoothScan, Permission.bluetoothConnect]
-        : [Permission.locationWhenInUse];
     final grants = await permissions.request();
     if (grants.values.any((status) => !status.isGranted)) {
       if (mounted && !closing) {
@@ -99,6 +108,7 @@ class _DevicePageState extends State<DevicePage> {
             connected = null;
             ready = false;
             observationEnded = true;
+            devices.clear();
             message =
                 'Connection observation ended. Leave this screen before connecting again.';
           });
@@ -113,24 +123,26 @@ class _DevicePageState extends State<DevicePage> {
 
   Future<void> startScan() async {
     await scan?.cancel();
-    if (!mounted || closing) return;
+    if (!mounted || closing || !ready || observationEnded) return;
     setState(() {
       devices.clear();
       message = 'Scanning for ten seconds...';
     });
     scan = client.devices.scan().listen(
       (device) {
-        if (mounted && !closing) setState(() => devices[device.id] = device);
+        if (mounted && !closing && ready && !observationEnded) {
+          setState(() => devices[device.id] = device);
+        }
       },
       onError: (Object error) {
-        if (mounted && !closing) {
+        if (mounted && !closing && ready && !observationEnded) {
           setState(
             () => message = 'Scan failed. Check Bluetooth and permissions.',
           );
         }
       },
       onDone: () {
-        if (mounted && !closing) {
+        if (mounted && !closing && ready && !observationEnded) {
           setState(() => message = 'Scan finished. Select a device.');
         }
       },
@@ -231,7 +243,7 @@ class _DevicePageState extends State<DevicePage> {
           if (connected == null)
             ...devices.values.map(
               (candidate) => TextButton(
-                onPressed: busy
+                onPressed: busy || !ready || observationEnded
                     ? null
                     : () => run(() async {
                         final expected = serial.text.trim();
@@ -243,7 +255,9 @@ class _DevicePageState extends State<DevicePage> {
                           return;
                         }
                         await scan?.cancel();
-                        if (!mounted || closing) return;
+                        if (!mounted || closing || !ready || observationEnded) {
+                          return;
+                        }
                         final epoch = connectionEpoch;
                         final device = await client.devices.connect(
                           candidate,

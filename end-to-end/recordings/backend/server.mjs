@@ -21,6 +21,7 @@ function coordinateWrites(store, service, library) {
     store.assertPeerIntent('transcription', recordingId);
   };
   library.beforeClaim = (kind, anchor, details) => {
+    if (kind === 'upload') store.assertPeerUpload(details);
     if (kinds.has(kind)) store.assertPeerIntent(kind, anchor, { recordingId: details.recordingId });
   };
   library.coordinateSummary = (id, work) =>
@@ -40,6 +41,11 @@ function coordinateWrites(store, service, library) {
 
   return {
     beforeClaim(principal, kind, anchor, details) {
+      if (kind === 'upload') {
+        store.assertPeerUpload(details, { principal });
+        library.assertPeerUpload(details);
+        return;
+      }
       if (!kinds.has(kind)) return;
       store.assertPeerIntent(kind, anchor, { principal, recordingId: details.recordingId });
       library.assertPeerIntent(kind, anchor, details.recordingId);

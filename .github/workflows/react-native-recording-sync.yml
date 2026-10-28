@@ -45,7 +45,7 @@ jobs:
     timeout-minutes: 35
     defaults:
       run:
-        working-directory: end-to-end/react-native-recording-sync/app
+        working-directory: end-to-end/recordings/clients/react-native
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -70,7 +70,7 @@ jobs:
       - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
         with:
           name: recording-sync-android-${{ github.sha }}
-          path: end-to-end/react-native-recording-sync/app/android/app/build/outputs/apk/debug/app-debug.apk
+          path: end-to-end/recordings/clients/react-native/android/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
 
   flutter-android:
@@ -90,6 +90,8 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+      - name: Install native media build tools
+        run: '"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "ndk;28.2.13676358" "cmake;3.22.1"'
       - name: Install Flutter 3.47.5
         run: |
           git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
@@ -110,3 +112,90 @@ jobs:
           name: mobile-recordings-flutter-android-${{ github.sha }}
           path: end-to-end/recordings/clients/flutter/build/app/outputs/flutter-apk/app-debug.apk
           if-no-files-found: error
+
+  ios:
+    runs-on: macos-26
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: end-to-end/recordings/clients/react-native
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.6.app/Contents/Developer
+      CI: '1'
+      NODE_OPTIONS: --max-old-space-size=4096
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22.23.2'
+      - name: Prepare native tooling
+        run: |
+          xcodebuild -version
+          node -e "console.log({architecture: process.arch, memoryMiB: Math.round(require('node:os').totalmem()/1048576), heapLimitMiB: Math.round(require('node:v8').getHeapStatistics().heap_size_limit/1048576)})"
+          gem install --no-document cocoapods -v 1.16.2
+          echo "$(ruby -e 'print Gem.bindir')" >> "$GITHUB_PATH"
+          "$(ruby -e 'print Gem.bindir')/pod" _1.16.2_ --version
+      - run: npm ci
+      - run: npm run license-check
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run export:ios
+      - run: npm run prebuild:ios
+      - name: Resolve public native pods
+        working-directory: end-to-end/recordings/clients/react-native/ios
+        run: pod _1.16.2_ install
+      - name: Build cloud-only iOS simulator host
+        shell: bash
+        run: |
+          workspaces=(ios/*.xcworkspace)
+          test "${#workspaces[@]}" -eq 1
+          workspace="${workspaces[0]}"
+          scheme="$(basename "$workspace" .xcworkspace)"
+          xcodebuild -workspace "$workspace" -scheme "$scheme" -configuration Debug \
+            -destination 'generic/platform=iOS Simulator' -derivedDataPath ios-build \
+            CODE_SIGNING_ALLOWED=NO build > "$RUNNER_TEMP/recordings-ios.log" 2>&1 || {
+              tail -n 150 "$RUNNER_TEMP/recordings-ios.log"
+              exit 1
+            }
+      - name: Preserve native build evidence
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: recordings-ios-evidence-${{ github.sha }}
+          path: |
+            ${{ runner.temp }}/recordings-ios.log
+            end-to-end/recordings/clients/react-native/ios/Podfile.lock
+
+  flutter-ios:
+    runs-on: macos-15
+    timeout-minutes: 40
+    defaults:
+      run:
+        working-directory: end-to-end/recordings/clients/flutter
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.3.app/Contents/Developer
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7
+        with:
+          node-version: '22.23.2'
+      - name: Install Flutter 3.47.5
+        run: |
+          git clone --depth 1 --branch 3.47.5 https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          test "$(git -C "$RUNNER_TEMP/flutter" rev-parse HEAD)" = 6a19cca56475dbfba1478ee68d7bd0c2ef891da1
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - run: flutter precache --ios
+      - run: flutter pub get --enforce-lockfile
+      - name: Dependency licenses
+        run: |
+          node --test scripts/test-flutter-licenses.mjs
+          node scripts/check-flutter-licenses.mjs
+      - run: dart format --output=none --set-exit-if-changed lib test
+      - run: flutter analyze
+      - run: flutter test
+      - run: flutter build ios --simulator --debug
+      - run: flutter build ios --no-codesign --debug

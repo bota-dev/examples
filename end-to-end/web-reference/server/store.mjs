@@ -135,6 +135,33 @@ export function createStore(path = ':memory:') {
       );
       return op(row);
     },
+    assertPeerUpload(details, { principal } = {}) {
+      const exclude = principal ? 'AND NOT (account=? AND scope=?)' : '';
+      const owner = principal ? [principal.accountId, principal.scopeId] : [];
+      const peer = db
+        .prepare(
+          `SELECT 1 FROM operations WHERE kind='upload'
+        AND json_extract(details,'$.projectId')=? AND json_extract(details,'$.endUserId')=?
+        AND json_extract(details,'$.name')=? AND json_extract(details,'$.contentType')=?
+        AND json_extract(details,'$.size')=? AND json_extract(details,'$.digest')=? ${exclude} LIMIT 1`,
+        )
+        .get(
+          details.projectId,
+          details.endUserId,
+          details.name,
+          details.contentType,
+          details.size,
+          details.digest,
+          ...owner,
+        );
+      ensure(
+        !peer,
+        409,
+        'cross_intent_reconciliation_required',
+        'A retained upload needs GET reconciliation in its original adapter.',
+      );
+      return true;
+    },
     assertPeerIntent(kind, anchor, { principal, recordingId } = {}) {
       // This internal probe includes removed accounts, older scopes and intents
       // outside Activity's bounded list. Only the exact caller scope is exempt.

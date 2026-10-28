@@ -33,7 +33,7 @@ try {
     connect.onclick = () => { void page?.connect(serial.value); };
     status.onclick = () => { void page?.readStatus(); };
     disconnect.onclick = () => { void page?.disconnect(); };
-    // beta.13 has no public connection subscription. This reads a local SDK getter,
+    // The public facade has no connection subscription. This reads a local SDK getter,
     // never a GATT characteristic, and performs no automatic reconnect.
     observation = window.setInterval(page.observeConnection, 250);
   }

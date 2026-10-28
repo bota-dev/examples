@@ -18,6 +18,13 @@ zero timestamps/ownership and a portable gzip header. Normal unflagged `npm ci`
 runs the native integrity check and every unrelated existing install guard.
 The separate lock-only resolver uses no lifecycle qualification credit.
 
+The October 14 SDK update adds an LF checkout rule for all three hashed
+`vendor/expo-native-signing/public-provenance.json` files. Windows CRLF conversion
+otherwise changes their physical hash and correctly fails the existing guard.
+The committed provenance bytes, declared hashes and guard stay unchanged. See
+the [SDK adoption review](design-reviews/2026-10-14-published-sdk-adoption.md)
+for fresh consumer checks; earlier exact-input qualification below is historical.
+
 ## Public contracts and deliberate bounds
 
 The adapter implements the fourteen synchronous public signing functions using

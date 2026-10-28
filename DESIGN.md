@@ -33,9 +33,9 @@ authorized principal; clients never hold Bota secret keys.
 The target layout is **partially implemented**. Shared recording, processing and
 Ask modules, contract tests and one combined Node listener now exist in
 `end-to-end/recordings/`. It composes existing cookie/Bearer service factories
-and all three journals. The complete Flutter Android install root is the first
-relocated client at `clients/flutter/`; Web/RN clients and auth/store service
-files retain their existing paths. The broader target remains:
+and all three journals. Flutter and React Native Android/iOS install roots
+now live at `clients/flutter/` and `clients/react-native/`. Web and auth/store
+service files retain their existing paths. The broader target remains:
 
 ```text
 end-to-end/recordings/
@@ -52,9 +52,9 @@ end-to-end/recordings/
 Each client has its own language, package manager, normal UI, permissions and SDK
 lifecycle. It builds independently and declares only its implemented and
 qualified capabilities. A connection/status module can run without the backend
-or a complete recording UI. Native Kotlin and Swift clients begin with the
-smallest useful public-SDK host; cloud features can be added where they teach a
-useful integration. Identical UI and full feature parity are not requirements.
+or a complete recording UI. Native Kotlin and Swift provide separate small
+public-SDK hosts and cloud readers, each with an explicit supported surface.
+Identical UI and full feature parity are not requirements.
 
 Developers can run a client, inspect one feature or copy a bounded workflow
 without adopting the entire app. Put direct public calls in plain feature files,
@@ -134,15 +134,19 @@ production account product or forced cross-platform consumer-app parity is neede
 | Area | Available now | Important gap |
 | --- | --- | --- |
 | API workflows | Node/Python workflow recipes and an extended inventory | Curated entry points, clearer copy boundaries and consistent evidence remain ongoing work |
-| SDK starters | RN Android/iOS connection; Flutter Android connection; Kotlin Android and Swift macOS connection/catalog; desktop Chromium connection | Native Swift iOS and Flutter iOS hosts are missing; supported workflow coverage varies |
-| React web reference | Audio import, library, Transcript/Summary/Ask, synthetic mode and configured API path | Playback is missing; web is API-only |
-| RN/Flutter Android references | Cloud library/results/Ask, sample mode and one shared mobile adapter; Flutter now lives in `recordings/clients/flutter/`, RN retains its compatibility path | Ordinary import/playback and common-app iOS hosts are missing; Flutter connection/status does not expose the selected encrypted-sync facade contract |
-| Combined backend | One listener composes Web/mobile service factories, shared recording/processing/Ask features and retained journals | Auth/store/Web/RN files retain existing paths; external writers and atomic file races are not coordinated |
+| SDK starters | RN/Flutter Android/iOS connection; Kotlin Android; Swift iOS/macOS connection and metadata catalog; desktop Chromium connection | Host/build evidence and physical qualification remain separate; workflow coverage varies |
+| React web reference | Audio import, authorized ordinary-import WAV playback, library, Transcript/Summary/Ask, synthetic mode and optional SDK connection/status | Device/encrypted playback and capture/transfer are unavailable; Bluetooth requires supported desktop Chromium |
+| RN/Flutter references | Android/iOS hosts under `recordings/clients/`; ordinary file import/playback, cloud library/results/Ask and sample mode; optional Android RN encrypted-v2 sync or Flutter connection/status | iOS cloud support supplies no Kotlin upload host; Flutter does not expose the selected encrypted-sync facade contract; native/media/physical evidence remains scoped |
+| Kotlin/Swift cloud readers | Native Android and SwiftUI iOS/macOS sample/live library, transcript and existing general notes through the shared Bearer backend | First page only; no import, playback, processing writes, Ask or device SDK dependency |
+| Combined backend | One listener composes Web/mobile service factories, shared recording/upload/playback/processing/Ask features and retained journals | Auth/store/Web files retain existing paths; external writers and atomic file races are not coordinated |
 | Windows | API web app and supported Chromium Web Bluetooth sample | Native Windows/Electron device SDK support is planned upstream |
 
 Keep SDK capability, implemented host and verification as separate facts.
-Current independent device examples pin public beta.13; legacy `apps/` remains
-beta.6 compatibility code with its local-only authentication/provisioning limits.
+Ten existing device SDK roots use exact public beta.19; the optional Web app
+integration uses exact public beta.20. Legacy `apps/` retains
+compatibility code with its local-only authentication/provisioning limits.
+The [SDK adoption review](docs/design-reviews/2026-10-14-beta18-sdk-adoption.md)
+separates package/build checks from physical acceptance and generated-JS migration.
 The first runtime consolidation preserves SDK pins, device behavior and journal
 locations. The core has pinned development tools and no duplicated runtime
 dependencies; Express/Vite resolve from the existing Web installation.
@@ -174,10 +178,12 @@ never falls back between credentials; peer-intent checks refuse fresh
 processing/Ask claims even for known/complete work, without Web peer-ID adoption.
 Existing own GET recovery and native/library exact-known-ID reconciliation remain.
 Stop older listeners first. This is in-process coordination, not a guarantee for
-other writers or concurrent file replacement. Flutter's complete install root
-and license helper graph have moved together without changing SDK/native identity,
-pub pins/lock or backend launch bases. The old Flutter README forwards to its new
-setup; Web/RN relocation remains separate work after compatible qualification.
+other writers or concurrent file replacement. Flutter and RN complete install
+roots and helper/guard graphs have moved without changing SDK/native identity,
+pins/locks, backend launch bases or journals. Old client READMEs forward to new
+setup. Retained native capture recovery preserves its original backend origin;
+the combined host may use `PORT=8787` and matching `APP_ORIGIN` instead of requiring
+a new origin or journal reset. Web relocation remains separately qualified work.
 
 [ARCHITECTURE.md](ARCHITECTURE.md) owns integration boundaries;
 [ROADMAP.md](ROADMAP.md) orders work;

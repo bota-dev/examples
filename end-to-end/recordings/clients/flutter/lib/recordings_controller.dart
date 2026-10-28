@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart' show ChangeNotifier;
 import 'api.dart';
 import 'models.dart';
+import 'recording_media.dart';
 
 class WriteIntent {
   bool busy = false;
@@ -12,6 +13,169 @@ class WriteIntent {
 
 /// App-owned presentation state. Bota keys and authorization stay on the backend.
 class RecordingsController extends ChangeNotifier {
+  RecordingsController({RecordingMedia? media})
+    : _media = media ?? NativeRecordingMedia();
+  final RecordingMedia _media;
+  Future<void> _mediaCleanup = Future<void>.value();
+  Future<void> _nativeLoad = Future<void>.value();
+  Future<void> _pickerDrain = Future<void>.value();
+  int _audioRead = 0;
+  int _playRead = 0;
+  bool audioLoading = false;
+  bool audioReady = false;
+  bool playing = false;
+  bool mediaBlocked = false;
+  bool picking = false;
+  String audioError = '';
+  bool get canUseMedia =>
+      !sample && _api is MediaRecordingsApi && !mediaBlocked;
+
+  void _clearAudio() {
+    _audioRead++;
+    _playRead++;
+    audioLoading = audioReady = playing = false;
+    audioError = mediaBlocked
+        ? 'Audio cleanup failed. Restart the sample before loading audio.'
+        : '';
+    _mediaCleanup = _nativeLoad.then((_) => _media.reset()).catchError((
+      Object _,
+    ) {
+      mediaBlocked = true;
+      audioError =
+          'Audio cleanup failed. Restart the sample before loading audio.';
+      _notify();
+    });
+  }
+
+  void stopAudio() {
+    _clearAudio();
+    _notify();
+  }
+
+  Future<void> importAudio() async {
+    final api = _api;
+    if (!canUseMedia ||
+        api is! MediaRecordingsApi ||
+        picking ||
+        locked('upload')) {
+      return;
+    }
+    final account = _account;
+    picking = true;
+    _notify();
+    try {
+      await Future.wait([_mediaCleanup, _pickerDrain]);
+      if (!_current(account) || mediaBlocked) return;
+      final picker = _media.pick();
+      _pickerDrain = picker.then<void>((_) {}, onError: (Object _) {});
+      final file = await picker;
+      if (file == null || !_current(account)) return;
+      final intent = WriteIntent()..busy = true;
+      intents['upload'] = intent;
+      _notify();
+      try {
+        final response = await api.upload(file);
+        final operation = Operation.fromJson(object(response['operation']));
+        if (operation.kind != 'upload') {
+          throw const FormatException('Wrong upload operation.');
+        }
+        if (!_current(account)) return;
+        intent.operation = operation;
+        _record(operation);
+        if (operation.state == 'complete') intents.remove('upload');
+        await refreshLibrary();
+      } catch (e) {
+        if (!_current(account)) return;
+        intent.error = _message(e);
+        if (e is ApiException && e.operation?.kind == 'upload') {
+          intent.operation = e.operation;
+          _record(e.operation!);
+        }
+        _failure(e, account);
+      } finally {
+        if (_current(account)) intent.busy = false;
+      }
+    } catch (_) {
+      if (_current(account)) {
+        error = 'Choose a supported audio file up to 25 MiB.';
+      }
+    } finally {
+      if (_current(account)) {
+        picking = false;
+        _notify();
+      }
+    }
+  }
+
+  Future<void> loadAudio() async {
+    final api = _api, recordingId = selectedId;
+    if (!canUseMedia ||
+        api is! MediaRecordingsApi ||
+        recordingId == null ||
+        audioLoading) {
+      return;
+    }
+    _clearAudio();
+    final account = _account, selection = _selection, read = _audioRead;
+    bool current() => _current(account, selection) && read == _audioRead;
+    audioLoading = true;
+    _notify();
+    try {
+      await Future.wait([_mediaCleanup, _pickerDrain]);
+      if (!current() || mediaBlocked) return;
+      final bytes = await api.audio(recordingId);
+      if (!current()) return;
+      final loading = _media.load(bytes);
+      _nativeLoad = loading.catchError((Object _) {});
+      await loading;
+      if (current()) audioReady = true;
+    } catch (e) {
+      if (current()) {
+        _clearAudio();
+        audioError =
+            'Audio unavailable. Only verified ordinary imports support playback.';
+        _failure(e, account, selection);
+      }
+    } finally {
+      if (current()) {
+        audioLoading = false;
+        _notify();
+      }
+    }
+  }
+
+  Future<void> togglePlayback() async {
+    if (!audioReady || mediaBlocked || !canUseMedia) return;
+    final account = _account, selection = _selection, read = _audioRead;
+    final play = ++_playRead;
+    final wasPlaying = playing;
+    playing = !playing;
+    _notify();
+    try {
+      if (wasPlaying) {
+        await _media.pause();
+      } else {
+        await _media.play();
+      }
+    } catch (_) {
+      if (_current(account, selection) &&
+          read == _audioRead &&
+          play == _playRead) {
+        _clearAudio();
+        audioError = 'Audio could not play. Reload audio to try again.';
+        _notify();
+      }
+    } finally {
+      if (_current(account, selection) &&
+          read == _audioRead &&
+          play == _playRead &&
+          !wasPlaying) {
+        playing = false;
+        _notify();
+      }
+    }
+  }
+
   RecordingsApi? _api;
   int _account = 0;
   int _selection = 0;
@@ -84,6 +248,7 @@ class RecordingsController extends ChangeNotifier {
   }
 
   void signOut() {
+    _clearAudio();
     _account++;
     _selection++;
     _detailRead++;
@@ -94,7 +259,7 @@ class RecordingsController extends ChangeNotifier {
     _api = null;
     sample = false;
     incomplete = false;
-    loading = detailLoading = summaryLoading = false;
+    loading = detailLoading = summaryLoading = picking = false;
     selectedId = null;
     selected = null;
     recordings = [];
@@ -133,6 +298,7 @@ class RecordingsController extends ChangeNotifier {
 
   Future<void> select(String recordingId) async {
     validatedId(recordingId);
+    _clearAudio();
     _selection++;
     _detailRead++;
     _summaryRead++;
@@ -149,6 +315,7 @@ class RecordingsController extends ChangeNotifier {
   }
 
   void leaveDetail() {
+    _clearAudio();
     _selection++;
     _detailRead++;
     _summaryRead++;
@@ -170,6 +337,7 @@ class RecordingsController extends ChangeNotifier {
     final api = _api;
     final recordingId = selectedId;
     if (api == null || recordingId == null) return;
+    _clearAudio();
     final account = _account, selection = _selection;
     final read = ++_detailRead;
     bool current() => _current(account, selection) && read == _detailRead;
@@ -410,6 +578,11 @@ class RecordingsController extends ChangeNotifier {
           intent.operation = operation;
           intent.error = '';
         }
+      }
+      if (operation.kind == 'upload' &&
+          operation.state == 'complete' &&
+          intents['upload']?.operation?.id == operation.id) {
+        intents.remove('upload');
       }
       // Recovery presents metadata. Read source tabs explicitly for content.
       _notify();

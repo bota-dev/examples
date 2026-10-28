@@ -33,6 +33,7 @@ async function fixture(t, intercept = (_call, next) => next()) {
     BOTA_END_USER_ID: 'eu_demo',
     BOTA_DEVICE_ID: 'dev_demo',
     APP_ACCESS_TOKEN: mobileToken,
+    BOTA_STORAGE_HOSTS: 'storage.example.test',
   });
   const calls = [],
     upstream = demoFetch();
@@ -57,6 +58,7 @@ async function fixture(t, intercept = (_call, next) => next()) {
   const store = createStore();
   const service = new SyncService(mobile, { database: ':memory:', fetchImpl });
   const library = new LibraryService(mobile, {
+    fetchImpl,
     request: (method, path, body) => service.upstream(path, method, body),
   });
   const { server } = createIntegratedServer({
@@ -131,6 +133,66 @@ test('one URL keeps distinct cookie/native DTOs and Bearer library results', asy
   assert.equal(f.server.requestTimeout, 30_000);
   assert.equal(f.server.headersTimeout, 10_000);
 });
+
+for (const peer of ['web', 'mobile'])
+  for (const state of ['uncertain', 'complete'])
+    test(`${peer} retained ${state} upload refuses a fresh claim from the other adapter`, async (t) => {
+      const f = await fixture(t);
+      const bytes = Buffer.from('Synthetic ordinary import');
+      const details = {
+        name: 'Synthetic.wav',
+        contentType: 'audio/wav',
+        size: bytes.length,
+        digest: hash(bytes),
+        ...(peer === 'web'
+          ? { ...f.principal, accountId: 'removed-account', scopeId: 'historical-scope' }
+          : f.library.principal),
+      };
+      const anchor = hash(
+        JSON.stringify({
+          accountId: details.accountId,
+          name: details.name,
+          contentType: details.contentType,
+          size: details.size,
+          digest: details.digest,
+        }),
+      );
+      const owner =
+        peer === 'web'
+          ? { ...f.principal, accountId: details.accountId, scopeId: details.scopeId }
+          : f.library.principal;
+      const store = peer === 'web' ? f.store : f.library.store;
+      const op = store.claim(owner, 'upload', anchor, details).operation;
+      store.save(owner, op.id, {
+        state,
+        ...(state === 'complete' ? { resourceId: recordingId } : {}),
+      });
+      const result = await f.request(peer === 'web' ? '/api/library/uploads' : '/api/uploads', {
+        as: peer === 'web' ? 'mobile' : 'web',
+        method: 'POST',
+        bytes,
+        headers: {
+          'Content-Type': details.contentType,
+          'X-File-Name': encodeURIComponent(details.name),
+        },
+      });
+      assert.equal(result.status, 409);
+      assert.equal(result.value.error.code, 'cross_intent_reconciliation_required');
+      assert.equal(result.value.operation, undefined);
+      assert.equal(JSON.stringify(result).includes(op.id), false);
+      assert.equal(f.calls.length, 0);
+      assert.equal(
+        (peer === 'web' ? f.library.store.list(f.library.principal) : f.store.list(f.principal))
+          .length,
+        0,
+      );
+      if (peer === 'mobile' && state === 'uncertain') {
+        const recovery = await f.request(`/api/library/operations/${op.id}`, { as: 'mobile' });
+        assert.equal(recovery.status, 200);
+        assert.equal(recovery.value.operation.state, 'uncertain');
+        assert.equal(f.calls.length, 0);
+      }
+    });
 
 test('mixed/wrong credentials and mobile Origin never fall back or call upstream', async (t) => {
   const f = await fixture(t);

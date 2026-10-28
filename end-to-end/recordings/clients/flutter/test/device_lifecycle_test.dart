@@ -6,7 +6,11 @@ import 'package:bota_app_sdk/bota_app_sdk.dart';
 // ignore: implementation_imports
 import 'package:bota_app_sdk/src/platform.dart';
 import 'package:mobile_recordings_flutter/device_page.dart';
+import 'package:mobile_recordings_flutter/main.dart';
+import 'package:mobile_recordings_flutter/recordings_controller.dart';
+import 'package:mobile_recordings_flutter/sample_api.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -86,6 +90,34 @@ void main() {
       },
     );
   });
+
+  testWidgets('iOS requests Bluetooth only and never reads Android metadata', (
+    tester,
+  ) async {
+    var infoReads = 0;
+    List<Object?>? permissions;
+    final messenger =
+        TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger;
+    messenger.setMockMethodCallHandler(
+      const MethodChannel('dev.fluttercommunity.plus/device_info'),
+      (_) async {
+        infoReads++;
+        throw StateError('Android metadata must not be read on iOS');
+      },
+    );
+    messenger.setMockMethodCallHandler(
+      const MethodChannel('flutter.baseflow.com/permissions/methods'),
+      (call) async {
+        permissions = call.arguments as List<Object?>;
+        return <int, int>{
+          for (final permission in permissions!) permission! as int: 1,
+        };
+      },
+    );
+    await _prepare(tester);
+    expect(permissions, [Permission.bluetooth.value]);
+    expect(infoReads, 0);
+  }, variant: TargetPlatformVariant({TargetPlatform.iOS}));
 
   testWidgets('late connect completion cannot restore a lost connection', (
     tester,
@@ -238,6 +270,37 @@ void main() {
     },
   );
 
+  testWidgets('ended observation rejects a retained candidate callback', (
+    tester,
+  ) async {
+    final platform = await _prepare(tester);
+    final stale = tester
+        .widget<TextButton>(
+          find.widgetWithText(TextButton, 'Bota test - -40 dBm'),
+        )
+        .onPressed!;
+    await platform.connection.close();
+    await tester.pumpAndSettle();
+    expect(find.text('Bota test - -40 dBm'), findsNothing);
+    platform.discovery.add(
+      BotaDiscoveredDevice(
+        id: 'late',
+        name: 'Late candidate',
+        rssi: -30,
+        discoveredAt: DateTime.utc(2026),
+      ),
+    );
+    await tester.pumpAndSettle();
+    expect(find.textContaining('Late candidate'), findsNothing);
+    expect(
+      find.textContaining('Connection observation ended.'),
+      findsOneWidget,
+    );
+    stale();
+    await tester.pumpAndSettle();
+    expect(platform.serials, isEmpty);
+  });
+
   testWidgets('device route waits for SDK destruction before returning', (
     tester,
   ) async {
@@ -305,6 +368,51 @@ void main() {
             .onPressed,
         isNull,
       );
+    },
+  );
+
+  testWidgets(
+    'parent admits one terminal SDK session while cloud stays usable',
+    (tester) async {
+      final state = RecordingsController();
+      addTearDown(state.dispose);
+      await state.connect(SampleApi(), isSample: false);
+      final platform = _FakePlatform();
+      var pages = 0;
+      await tester.pumpWidget(
+        RecordingsApp(
+          controller: state,
+          deviceAdmission: DeviceSessionAdmission(),
+          devicePageBuilder: (onCleanup) {
+            pages++;
+            return DevicePage(
+              client: BotaDeviceClient.forTesting(platform),
+              onCleanup: onCleanup,
+            );
+          },
+        ),
+      );
+      await tester.tap(find.byTooltip('Sample settings'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Device connection'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.byTooltip('Back to recordings'));
+      await tester.pumpAndSettle();
+      expect(platform.destroyCalls, 1);
+      expect(
+        find.textContaining('Restart the sample to connect again.'),
+        findsOneWidget,
+      );
+      expect(find.text('Team catch-up'), findsOneWidget);
+      await tester.tap(find.byTooltip('Sample settings'));
+      await tester.pumpAndSettle();
+      final action = tester.widget<PopupMenuItem<String>>(
+        find.widgetWithText(PopupMenuItem<String>, 'Device connection'),
+      );
+      expect(action.enabled, false);
+      expect(pages, 1);
+      expect(state.signedIn, true);
+      expect(tester.takeException(), isNull);
     },
   );
 

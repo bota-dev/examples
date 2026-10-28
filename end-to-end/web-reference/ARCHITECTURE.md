@@ -10,10 +10,24 @@ configuration, operations and acceptance limits, and [DESIGN](DESIGN.md) for UI 
 Bota Recordings is a common app sample/template for developers building for
 their own end users, inspired by Demo/Bota One. Its compact recording library
 opens a selected detail with Transcript/Summary/Ask tabs. Technical public-call
-and source recipes live in README, not the everyday UI. This is an API-only
-implementation with audio import; it adds no device SDK, capture or playback.
+and source recipes live in README, not the everyday UI. Cloud features use the
+API, including audio import and ordinary-import WAV playback. An optional
+desktop Chromium panel uses the public Web SDK for connection/status only.
+It adds no capture, device recording transfer or cloud/device binding.
 Other platforms can follow the same journey through their supported public
 surfaces; existing connection/catalog samples are not complete app equivalents.
+
+Playback is a Web feature composed by both existing listeners. It requests the
+public WAV export with enhanced substitution disabled, then downloads a bounded
+buffer from an independently configured exact storage host without API credentials.
+Explicit ordinary-import/unencrypted metadata, verified upload evidence and fresh
+owner/source checks gate release; session expiry/logout during retrieval denies
+the response. No signed URL reaches React or a journal. The player owns one
+temporary Blob URL and aborts/pauses/resets/revokes it on refresh, selection change
+or sign-out. Only the media CSP directive permits `blob:`. WAV signature checks
+are not decoding proof; device/encrypted playback remains unavailable. RN/Flutter
+players use the shared backend through their own native media hosts.
+See [playback contract](README.md#playback-contract).
 
 ```text
 React feature → same-origin /api route → authenticated web principal
@@ -61,11 +75,22 @@ Syntactically valid returned job/session IDs are retained before further respons
 validation, and awaited known-resource GET failures preserve uncertainty/recovery
 identity. Such IDs do not grant content access or replacement-write authority.
 Web 401/403/404 errors withhold operation metadata. SDK receipt/exact-generation
-cleanup remains outside this API-only client's authority.
+cleanup remains outside this client's authority.
 Activity is a secondary, initially collapsed panel. It can GET-reconcile
 persisted operations after reopening, retaining only narrow metadata. UI
 sign-out removes content before awaiting cookie expiration
 and serializes the next login behind that response.
+
+The page owns one Bluetooth session across recording navigation. Explicit
+preparation lazily loads the published SDK/WASM with no storage namespace;
+a separate Connect click invokes the chooser without awaiting an import.
+Exact printed serial and current connection identity gate status publication.
+Cached public connection observation detects facade-reported loss without GATT
+polling. Auth/page/source retirement clears the UI immediately, joins pending
+preparation/chooser/read and public destruction, and refuses replacement after
+an exposed cleanup failure. Supported browser callback delivery and physical
+disconnect remain separate acceptance gates. Production CSP permits same-origin
+WASM with `wasm-unsafe-eval` and grants no general script evaluation.
 
 Demo mode uses synthetic in-process upstream responses and an in-memory store,
 with no external calls. Feature, HTTP and UI tests exercise scope, durable intent,

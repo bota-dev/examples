@@ -171,6 +171,17 @@ test('same file/name/type intent creates, PUTs and completes only once, includin
   assert.equal(f.putCount(), 1);
 });
 
+test('Web import preserves its omitted-project response compatibility', async () => {
+  const f = fixture({
+    modifyRead: (row) => {
+      const { project_id: _project, ...rest } = row;
+      return rest;
+    },
+  });
+  assert.equal((await uploadAudio(f.ctx, input())).operation.state, 'complete');
+  assert.equal((await refreshUpload(f.ctx, f.active().id)).operation.state, 'complete');
+});
+
 for (const lose of ['create', 'url', 'put'])
   test(`lost ${lose} outcome retains intent and never resends writes`, async () => {
     const f = fixture({ lose });
@@ -268,7 +279,13 @@ test('forged create owner and changed ownership before storage prevent the next 
   const created = fixture({ modifyCreate: (row) => ({ ...row, end_user_id: 'eu_other' }) });
   await assert.rejects(uploadAudio(created.ctx, input()), { status: 403 });
   assert.equal(created.writes.length, 1);
-  assert.equal(created.active().resourceId, null);
+  assert.equal(created.active().resourceId, 'rec_1');
+  assert.equal(created.active().state, 'uncertain');
+  assert.equal(
+    (await refreshUpload(created.ctx, created.active().id)).operation.state,
+    'uncertain',
+  );
+  assert.equal(created.writes.length, 1);
   const changed = fixture({
     modifyRead: (row, { writes }) =>
       writes.length >= 2 ? { ...row, end_user_id: 'eu_other' } : row,

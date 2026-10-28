@@ -1,0 +1,78 @@
+{
+  "reviewedOn": "2026-10-20",
+  "note": "Public Expo 57 media packages, explicit matching asset/constant peer versions, original SDK identity. Registry metadata is package provenance, not platform runtime acceptance.",
+  "entries": [
+    {
+      "name": "expo-audio",
+      "version": "57.0.5",
+      "source": "https://registry.npmjs.org/expo-audio",
+      "publishedAt": "2026-09-11T11:32:56.290Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/expo-audio/-/expo-audio-57.0.5.tgz",
+      "integrity": "sha512-39fX5JC5zDvELB4/eDJPj2XAYRN0W9+K2DfDWm5N3aC5WZ7HRrhupWtT6hbH09NlfYpsRSqYOwEZnocFM42ynQ=="
+    },
+    {
+      "name": "expo-document-picker",
+      "version": "57.0.3",
+      "source": "https://registry.npmjs.org/expo-document-picker",
+      "publishedAt": "2026-09-29T10:55:45.784Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/expo-document-picker/-/expo-document-picker-57.0.3.tgz",
+      "integrity": "sha512-XlxdZ0zzv44JRD8O15DISgIO8FTaZ581oc4kQp6MJoR7vdahjcY+2qCuDt5k1J8/lc0YR+bXon/v81norciuxw=="
+    },
+    {
+      "name": "expo-file-system",
+      "version": "57.0.7",
+      "source": "https://registry.npmjs.org/expo-file-system",
+      "publishedAt": "2026-09-11T11:32:30.252Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/expo-file-system/-/expo-file-system-57.0.7.tgz",
+      "integrity": "sha512-1vkZRadOsIputFDBcclqBa1pO3iXOO6iIsdqJipQWw4V5TSnWgmRTuOF7ro8IzrVue+PHbum++KCG3Tawem4cg=="
+    },
+    {
+      "name": "expo-asset",
+      "version": "57.0.19",
+      "source": "https://registry.npmjs.org/expo-asset",
+      "publishedAt": "2026-10-06T12:09:40.922Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/expo-asset/-/expo-asset-57.0.19.tgz",
+      "integrity": "sha512-y9ymKidyPBDUFXljbvo7LNgivQvMhEJEoEXi6aLRugUxRDUvAKoZsy+KB5UXSjLMS7l7JNDwYKk5thovI0MLog=="
+    },
+    {
+      "name": "expo-constants",
+      "version": "57.0.21",
+      "source": "https://registry.npmjs.org/expo-constants",
+      "publishedAt": "2026-10-06T12:10:52.271Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/expo-constants/-/expo-constants-57.0.21.tgz",
+      "integrity": "sha512-D5fV2GELYGbNkoiEVZZp5zrUXZDaAx6ZzErDzGirm3jCjOhaE8iU/GyJiB0ZQE+K4Bg8gY82nIQ/RZR8CJLVjA=="
+    },
+    {
+      "name": "@bota.dev/react-native-app-sdk",
+      "version": "2.0.0-beta.19",
+      "source": "https://registry.npmjs.org/%40bota.dev%2Freact-native-app-sdk",
+      "publishedAt": "2026-10-16T02:54:30.632Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/@bota.dev/react-native-app-sdk/-/react-native-app-sdk-2.0.0-beta.19.tgz",
+      "integrity": "sha512-D1zXjM28Iv9DfWAIx3SsVTPquG5a0pOuc8LQJm0xR1Yo/YSrNvRUCHpDOlDhuY7S3lceEbIDRgsIAJHHmxjtwg=="
+    },
+    {
+      "name": "@expo/image-utils",
+      "version": "0.11.6",
+      "source": "https://registry.npmjs.org/%40expo%2Fimage-utils",
+      "publishedAt": "2026-10-06T12:10:23.818Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/@expo/image-utils/-/image-utils-0.11.6.tgz",
+      "integrity": "sha512-rmMpn7QGp6pUGRCQ3vvB9RP/vqq2q/PpToRh4dL/FbhSZOLZ1YTotpuLHf71FGOEfgKil/4PCd3hkWe/CCeiEg=="
+    },
+    {
+      "name": "@expo/require-utils",
+      "version": "57.0.6",
+      "source": "https://registry.npmjs.org/%40expo%2Frequire-utils",
+      "publishedAt": "2026-10-06T12:09:56.512Z",
+      "license": "MIT",
+      "tarball": "https://registry.npmjs.org/@expo/require-utils/-/require-utils-57.0.6.tgz",
+      "integrity": "sha512-PKWfFdMgwWrlSP6NGplCi2nK0dEM5MeJ2Cj1ijr5VWTmZ+pKsJsJw2dWkBtlFDyxMY8eUjCPZ7hoqFEnbc0Pcw=="
+    }
+  ]
+}

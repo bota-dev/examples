@@ -1,0 +1,21 @@
+{
+  "expo": {
+    "name": "Bota Recordings Sample",
+    "slug": "bota-recording-sync-example",
+    "version": "1.0.0",
+    "platforms": ["android", "ios"],
+    "newArchEnabled": true,
+    "android": {
+      "package": "dev.bota.examples.recordingsync",
+      "permissions": ["BLUETOOTH_SCAN", "BLUETOOTH_CONNECT", "ACCESS_FINE_LOCATION"]
+    },
+    "ios": {
+      "bundleIdentifier": "dev.bota.examples.recordingsync",
+      "infoPlist": { "NSAppTransportSecurity": { "NSAllowsLocalNetworking": true } }
+    },
+    "plugins": [
+      ["expo-build-properties", {"android": {"minSdkVersion": 26, "usesCleartextTraffic": true}}],
+      ["expo-audio", { "microphonePermission": false, "recordAudioAndroid": false, "enableBackgroundRecording": false, "enableBackgroundPlayback": false }]
+    ]
+  }
+}
