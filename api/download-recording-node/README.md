@@ -82,6 +82,12 @@ The public contracts are [Get Recording](https://docs.bota.dev/api-reference/rec
 
 Local checks on Windows with Node 22.23.2 passed **21 tests**, including loopback HTTP redirect refusal and timeouts. Frozen installation, syntax checks and the same suite also passed in a standalone copy outside the repository. These tests contain synthetic bytes only.
 
+The stalled-storage regression controls the total-deadline signal after the
+storage stream starts, while asserting the configured total and per-request
+durations. This avoids a loaded CI host expiring the deadline during filesystem
+preflight, before the stream-abort assertion can apply. Real HTTP per-request
+timeout coverage remains in the same suite.
+
 The [download workflow](https://github.com/bota-dev/examples/actions/runs/37086235029) passed at source `ccbdd422a540d361bc7a2818ffa83c5d19ec12b7`. The same-source [search workflow](https://github.com/bota-dev/examples/actions/runs/37086234980), [root CI including the legacy Android build](https://github.com/bota-dev/examples/actions/runs/37086234986), and [CodeQL](https://github.com/bota-dev/examples/actions/runs/37086235115) also passed without reruns. These checks add no live download or physical-device coverage.
 
 At **2026-10-03 01:26:02 UTC** (October 2 local), an authorized live run downloaded a known synthetic fixture using two API GETs and one storage GET. Its **333,326 bytes** matched the independently known original SHA-256, and the storage request contained no API bearer. A second invocation with the same destination refused before making any request, preserving the file's hash. The run performed no cloud mutation, conversion, decryption or playback. This verifies the selected fixture, not the format or integrity of every stored object.
