@@ -425,3 +425,7 @@ with prospective full-array ignore ordering and unchanged literal/non-glob paths
 Run the required public-boundary cases through `npm run test:braces-security`;
 independent shared component clearance does not replace current-owner source,
 normal/frozen, hosted/native/scanner or production gates. See [the bounded review](docs/legacy-public-parent-matching-removal.md#october-13-public-chokidar-boundary-correction).
+
+### Coordinated toolchain updates
+
+Dependabot retains the recordings clients' qualified toolchains: Expo 57 with React 19.2 and React Native 0.86, and the Android Gradle 8 / Android plugin 8 pair. Major toolchain updates require a coordinated migration with frozen native checks and review of the wrapper scan exception; compatible updates remain enabled.
