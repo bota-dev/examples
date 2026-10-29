@@ -429,3 +429,5 @@ normal/frozen, hosted/native/scanner or production gates. See [the bounded revie
 ### Coordinated toolchain updates
 
 Dependabot retains the recordings clients' qualified toolchains: Expo 57 with React 19.2 and React Native 0.86, and the Android Gradle 8 / Android plugin 8 pair. Major toolchain updates require a coordinated migration with frozen native checks and review of the wrapper scan exception; compatible updates remain enabled.
+
+The Web reference retains TypeScript 6.0: its typescript-eslint 8.72 peer range excludes TypeScript 6.1 and newer. Dependabot defers those compiler updates until the lint toolchain supports them; normal frozen installation remains required.

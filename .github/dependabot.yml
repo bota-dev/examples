@@ -52,6 +52,10 @@ updates:
         update-types: [minor, patch]
   - package-ecosystem: npm
     directory: /end-to-end/web-reference
+    # typescript-eslint 8.72 supports TypeScript below 6.1.
+    ignore:
+      - dependency-name: typescript
+        versions: [">=6.1"]
     cooldown:
       default-days: 7
     schedule:
