@@ -25,6 +25,11 @@ locked and included in the reviewed public Maven provenance inventory. Gradle
 Serialization **1.12.0** uses Kotlin 2.4 metadata. Its exact public POMs and
 consumed binary hashes are included in the reviewed provenance inventory.
 
+Coroutines **1.11.0** uses Kotlin 2.2 metadata, compatible with the retained
+Kotlin 2.4.21 compiler and JVM 17 target. Its four resolved Android/core/BOM
+modules have reviewed public Maven POMs and publication dates; the two consumed
+JARs match public artifact hashes and the strict bundled-notice inventory.
+
 ```sh
 ./gradlew :app:checkDependencyLicenses :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
 ```
