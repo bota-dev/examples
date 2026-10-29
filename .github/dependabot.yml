@@ -6,6 +6,12 @@ version: 2
 updates:
   - package-ecosystem: gradle
     directory: /end-to-end/recordings/clients/android-kotlin
+    # Upgrade the wrapper and Android plugin together with frozen native checks.
+    ignore:
+      - dependency-name: gradle-wrapper
+        update-types: [version-update:semver-major]
+      - dependency-name: com.android.application
+        update-types: [version-update:semver-major]
     cooldown:
       default-days: 7
     schedule:
@@ -27,6 +33,16 @@ updates:
       interval: weekly
   - package-ecosystem: npm
     directory: /end-to-end/recordings/clients/react-native
+    # Expo 57 owns the compatible React and React Native cohort.
+    ignore:
+      - dependency-name: "expo*"
+        versions: [">=58"]
+      - dependency-name: react
+        versions: [">=19.3"]
+      - dependency-name: "@types/react"
+        versions: [">=19.3"]
+      - dependency-name: react-native
+        versions: [">=0.87"]
     cooldown:
       default-days: 7
     schedule:
