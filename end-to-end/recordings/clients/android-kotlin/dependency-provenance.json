@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T23:30:00Z",
+  "checkedAt": "2026-10-29T01:04:11.446821Z",
   "scope": "Complete debug/release application and JVM-test compile/runtime module graph. Each consumed binary matches anonymously downloaded public Central bytes and its published SHA-1; SHA-256 below pins those bytes. Metadata-only BOM/multiplatform nodes have no consumed binary.",
   "registry": "https://repo.maven.apache.org/maven2/",
   "agePolicy": "At least seven full days, based on public POM Last-Modified. Every selected version is at least seven days old at review.",
@@ -7,7 +7,7 @@
     "gradle": "8.13",
     "gradleDistributionSha256": "20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78",
     "androidGradlePlugin": "8.13.2",
-    "kotlin": "2.1.20",
+    "kotlin": "2.4.21",
     "jdk": "17",
     "androidCompileSdk": 36,
     "auditLimit": "These pinned build tools, Android SDK and JDK are outside the recursive app/test license inventory."
@@ -57,21 +57,21 @@
       "publishedSha1": "c342a2ad17ec08db105146e27c7ba9c535c9bb46"
     },
     {
-      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.1.20",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.20/kotlin-stdlib-2.1.20.pom",
-      "pomSha256": "6750e1799ee502077dae5c3d599796f667606f60d35e95cb790448dc7912b40b",
-      "publishedAt": "2025-03-19T18:39:41Z",
+      "coordinate": "org.jetbrains.kotlin:kotlin-stdlib:2.4.21",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/kotlin-stdlib-2.4.21.pom",
+      "pomSha256": "b92b23ec9c444b2578b9852447565efc72c24b3ea77b4c3bf4e644f685eeef07",
+      "publishedAt": "2026-10-08T07:57:54Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
-        "The Apache License, Version 2.0"
+        "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.20/kotlin-stdlib-2.1.20.pom",
-      "licenseSourceSha256": "6750e1799ee502077dae5c3d599796f667606f60d35e95cb790448dc7912b40b",
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/kotlin-stdlib-2.4.21.pom",
+      "licenseSourceSha256": "b92b23ec9c444b2578b9852447565efc72c24b3ea77b4c3bf4e644f685eeef07",
       "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.1.20/kotlin-stdlib-2.1.20.jar",
-      "sha256": "1bcc74e8ce84e2c25eaafde10f1248349cce3062b6e36978cbeec610db1e930a",
-      "publishedSha1": "aa8ca79cd50578314f6d1180c47cbe14c0fee567"
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.21/kotlin-stdlib-2.4.21.jar",
+      "sha256": "bd8250210584cb659847dce9cda660f8e9906e5def7fbebcea93dc6dcb6a88a3",
+      "publishedSha1": "c343e135bd1e7dd94b7ed76b4159068d888d09db"
     },
     {
       "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2",
