@@ -4,13 +4,13 @@
   "packages": [
     {
       "name": "bota_app_sdk",
-      "version": "2.0.0-beta.19",
-      "archive_sha256": "7dceb9bf60f823edef977d1a03d6d47ed13a9d4e3b961abbe2bcd721459aab24",
-      "published_at": "2026-10-16T06:55:06.826038Z",
-      "registry_url": "https://pub.dev/packages/bota_app_sdk/versions/2.0.0-beta.19",
-      "archive_url": "https://pub.dev/api/archives/bota_app_sdk-2.0.0-beta.19.tar.gz",
-      "license": "Apache-2.0",
-      "age_gate": "Owner explicitly requested latest published Bota SDK."
+      "version": "2.0.0-beta.20",
+      "archive_sha256": "62a29ec4bf6e60dc1a7e98b8741e1201a8ab936b70090c7f9684fc7267bf11e5",
+      "published_at": "2026-10-21T01:14:13.907888Z",
+      "registry_url": "https://pub.dev/packages/bota_app_sdk/versions/2.0.0-beta.20",
+      "archive_url": "https://pub.dev/api/archives/bota_app_sdk-2.0.0-beta.20.tar.gz",
+      "license": "MIT",
+      "age_gate": "Published more than seven days before 2026-10-28."
     },
     {
       "name": "file_selector",

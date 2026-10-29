@@ -16,7 +16,8 @@ separate; webhook and native service modules retain their compatibility paths.
 Flutter and React Native have complete install roots under
 `end-to-end/recordings/clients/`, alongside small Kotlin and Swift cloud readers.
 Web retains its existing path and adds optional device connection/status with
-public SDK beta.20. The ten existing SDK roots retain exact public beta.19.
+public SDK beta.20. The Flutter recording app also pins beta.20; nine existing
+SDK roots retain exact public beta.19.
 Native identities, backend launch bases and journal
 locations are unchanged.
 
@@ -142,8 +143,9 @@ Different public SDK capabilities do not imply identical UI or full device parit
 | Web / desktop Chromium | [device-session.ts](end-to-end/web-reference/web/features/devices/device-session.ts); [standalone setup](app-sdk/web-device-connect/README.md) | Optional connection/status in the recording app; supported Web Bluetooth, secure context and firmware identity service required |
 | Windows | API web client; Chromium device connection where supported | Native Windows/Electron App SDK support is planned upstream; no public native host here |
 
-The ten existing device SDK roots pin public **2.0.0-beta.19**; the new optional
-Web recording-app integration pins public **2.0.0-beta.20**. The Kotlin/Swift
+Nine existing device SDK roots pin public **2.0.0-beta.19**; the Flutter recording
+app and optional Web recording-app integration pin public **2.0.0-beta.20**. The
+Kotlin/Swift
 cloud readers use HTTP and have no Bota SDK dependency. Each client installs
 independently; manifests/locks declare its exact public version.
 npm's `latest` tag remains beta.0. Native RN workflows use the compatibility
