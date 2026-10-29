@@ -30,14 +30,14 @@
     "expo-constants": "57.0.21",
     "expo-document-picker": "57.0.3",
     "expo-file-system": "57.0.7",
-    "react": "19.2.3",
-    "react-native": "0.86.3"
+    "react": "19.3.1",
+    "react-native": "0.88.0"
   },
   "devDependencies": {
     "@expo/cli": "file:vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
     "@expo/code-signing-certificates": "file:vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
     "@expo/metro-file-map": "file:vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
-    "@types/react": "19.2.17",
+    "@types/react": "19.3.0",
     "metro-file-map": "file:vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
     "typescript": "7.0.2"
   },
