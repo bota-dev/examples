@@ -4,8 +4,8 @@
   "registry": "https://repo.maven.apache.org/maven2/",
   "agePolicy": "At least seven full days, based on public POM Last-Modified. Every selected version is at least seven days old at review.",
   "toolchain": {
-    "gradle": "8.13",
-    "gradleDistributionSha256": "20f1b1176237254a6fc204d8434196fa11a4cfb387567519c61556e8710aed78",
+    "gradle": "8.14.6",
+    "gradleDistributionSha256": "7988ed071b2a07900e2ec715fca15c6ab72bce6db433af301fa7fa7e9407bd24",
     "androidGradlePlugin": "8.13.2",
     "kotlin": "2.4.21",
     "jdk": "17",
