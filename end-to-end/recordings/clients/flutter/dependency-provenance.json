@@ -1,5 +1,5 @@
 {
-  "checked_on": "2026-10-20",
+  "checked_on": "2026-10-28",
   "source": "public pub.dev version API matched to frozen lock; resolved package-root license text checked separately",
   "packages": [
     {
@@ -61,6 +61,16 @@
       "archive_url": "https://pub.dev/api/archives/path_provider-2.1.6.tar.gz",
       "license": "BSD-3-Clause",
       "age_gate": "Published more than seven days before 2026-10-20."
+    },
+    {
+      "name": "device_info_plus",
+      "version": "13.3.0",
+      "archive_sha256": "ade1c36f8355d6284c98e4a47992ea263887ed3d1acb281e37635dd45f04c4aa",
+      "published_at": "2026-10-01T19:32:00.385215Z",
+      "registry_url": "https://pub.dev/packages/device_info_plus/versions/13.3.0",
+      "archive_url": "https://pub.dev/api/archives/device_info_plus-13.3.0.tar.gz",
+      "license": "BSD-3-Clause",
+      "age_gate": "Published more than seven days before 2026-10-28."
     }
   ]
 }
