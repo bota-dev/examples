@@ -247,6 +247,12 @@ remain SDK/native responsibilities; do not move them into JavaScript state.
 
 ## Verification
 
+The Expo 57 build-properties plugin is pinned to public `57.0.22`; the qualified
+React 19.2.3 / React Native 0.86.3 runtime remains in place. Retain the configured
+Android minimum API 26 and local-backend cleartext setting when regenerating the
+native projects. The separate React/React Native migration requires its own
+aligned runtime and native qualification.
+
 ```sh
 npm run typecheck
 npm test
@@ -261,6 +267,11 @@ generated TypeScript module; the first two-worker iOS export exceeded its worker
 heap before native compilation. Keep the serial export and heap setting when
 using a small-memory host; this changes build resources, not SDK code or guards.
 In PowerShell, set `$env:NODE_OPTIONS='--max-old-space-size=4096'` before the command.
+
+The TypeScript 7.0.2 dependency update retains these export resources and the
+Expo 57 / React Native 0.86.3 runtime. Verify it with the same frozen install,
+typecheck, security suites and platform exports; the compiler update does not
+change the supported native runtime.
 
 New focused tests exercise the real adapter/controller used by these screens:
 synthetic flow without network, source/citation projection, stale content,

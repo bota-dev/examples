@@ -12,7 +12,9 @@ Exact registry versions, publication dates, archive integrity and licenses are
 recorded in the [RN provenance](end-to-end/recordings/clients/react-native/media-dependencies.json)
 and [Flutter provenance](end-to-end/recordings/clients/flutter/dependency-provenance.json).
 Frozen installs retain the existing signing, Metro, source-map and license gates.
-The ten existing SDK install roots use owner-requested public beta.19. The
+Nine existing SDK install roots retain public beta.19. The Flutter recording
+app now pins beta.20, published October 21 and older than seven days at the
+October 28 update review. The
 [remaining SDK adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
 records unchanged non-SDK locks and independent consumer checks. This latest-SDK
 request permits the beta.19 release younger than the usual seven-day age floor;
@@ -37,7 +39,7 @@ The [platform review](docs/design-reviews/2026-10-20-native-cloud-web-device.md)
 records JVM/native evidence, the resolved-module and bundled-license gate, and
 remaining qualification. Swift has zero third-party dependencies. The optional
 Web recording-app device feature pins public beta.20 under the owner's latest-SDK
-request; it does not change the ten existing SDK roots or waive the age floor
+request; it does not waive the age floor
 for unrelated dependencies.
 
 ## Scope and choice (2026-09-26)
