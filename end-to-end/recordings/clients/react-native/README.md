@@ -247,6 +247,12 @@ remain SDK/native responsibilities; do not move them into JavaScript state.
 
 ## Verification
 
+The Expo 57 build-properties plugin is pinned to public `57.0.22`; the qualified
+React 19.2.3 / React Native 0.86.3 runtime remains in place. Retain the configured
+Android minimum API 26 and local-backend cleartext setting when regenerating the
+native projects. The separate React/React Native migration requires its own
+aligned runtime and native qualification.
+
 ```sh
 npm run typecheck
 npm test
