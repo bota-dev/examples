@@ -22,6 +22,9 @@ locked and included in the reviewed public Maven provenance inventory. Gradle
 8.13 and AGP 8.13.2 remain within Kotlin 2.4.21's
 [supported range](https://kotlinlang.org/docs/gradle-configure-project.html).
 
+Serialization **1.12.0** uses Kotlin 2.4 metadata. Its exact public POMs and
+consumed binary hashes are included in the reviewed provenance inventory.
+
 ```sh
 ./gradlew :app:checkDependencyLicenses :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
 ```
