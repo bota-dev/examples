@@ -205,7 +205,7 @@ export default function App({ devices = browserDevices }: { devices?: DeviceSess
             target="_blank"
             rel="noopener noreferrer"
           >
-            Setup & sample code
+            Setup &amp; sample code
           </a>
         </span>
         {!['loading', 'unavailable'].includes(session.phase) ? (
