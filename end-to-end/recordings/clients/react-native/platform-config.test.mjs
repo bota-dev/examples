@@ -1,8 +1,18 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createRequire } from 'node:module';
 import test from 'node:test';
 
 const json = path => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'));
+const require = createRequire(import.meta.url);
+test('installed React and native renderer match the selected Expo runtime cohort', () => {
+  const pkg = json('./package.json');
+  const cohort = require('expo/bundledNativeModules.json');
+  for (const name of ['react', 'react-native']) {
+    assert.equal(pkg.dependencies[name], cohort[name]);
+    assert.equal(require(`${name}/package.json`).version, cohort[name]);
+  }
+});
 test('iOS cloud host has a reproducible config and no invented encrypted native module', () => {
   const config = json('./app.json').expo;
   assert.deepEqual(config.platforms, ['android', 'ios']);
