@@ -89,9 +89,9 @@ Bota One helpers, custom transports/crypto or invented facade methods to hide ga
 
 ## Preserve the migration and copy boundary
 
-1. Inspect the selected README, source/imports, manifest and lockfile. Ten existing
-   SDK roots use exact public beta.19; the optional Web app feature uses exact
-   public beta.20. Native Kotlin/Swift cloud readers use HTTP without a Bota SDK.
+1. Inspect the selected README, source/imports, manifest and lockfile. Eight existing
+   SDK roots use exact public beta.19; the React Native and Flutter recording apps
+   and optional Web app feature use exact public beta.20. Native Kotlin/Swift cloud readers use HTTP without a Bota SDK.
    Historical prose does
    not override current manifests. RN uses native compatibility factories, not
    the generated-JS `/runtime` route. See [current adoption](design-reviews/2026-10-20-sdk19-catalog-ios.md).

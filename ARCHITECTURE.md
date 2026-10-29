@@ -111,8 +111,8 @@ preserved. Native recovery identity includes the backend origin: retain that
 origin, using combined `PORT=8787` with matching `APP_ORIGIN` where applicable,
 rather than resetting journals or rewriting capture scope. Fresh cloud setup
 may explicitly select `5173`. Folder relocation adds no SDK capability.
-Nine existing SDK roots pin exact public beta.19; the Flutter recording app and
-optional Web recording-app device integration pin exact public beta.20. They
+Eight existing SDK roots pin exact public beta.19; the React Native and Flutter
+recording apps and optional Web recording-app device integration pin exact public beta.20. They
 install independently. The
 [current adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
 records package and host checks. RN retains its native-workflow compatibility

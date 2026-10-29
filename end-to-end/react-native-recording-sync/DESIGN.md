@@ -92,9 +92,9 @@ and uncertain action. Saved IDs remain metadata, not content/cleanup authority.
   retained in client memory. The server owns project/end-user configuration and
   the Bota API key. Sign-out clears content and fences late results.
 - **React Native device path:** retain the Android encrypted-v2 host and its
-  exact public beta.19 SDK. Open it explicitly from the live app; keep fresh
+  exact public beta.20 SDK. Open it explicitly from the live app; keep fresh
   identity/pairing, idle/no-direct-upload, generation and completion boundaries.
-- **Flutter device path:** public beta.19 connection/status only. Its selected
+- **Flutter device path:** public beta.20 connection/status only. Its selected
   facade lacks the fresh pairing and encrypted-upload host interfaces needed
   for this example's device sync. Do not bypass those gaps.
 

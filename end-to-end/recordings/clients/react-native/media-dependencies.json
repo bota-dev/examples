@@ -1,5 +1,5 @@
 {
-  "reviewedOn": "2026-10-28",
+  "reviewedOn": "2026-10-29",
   "note": "Public Expo 57 media packages, explicit matching asset/constant peer versions, original SDK identity. Registry metadata is package provenance, not platform runtime acceptance.",
   "entries": [
     {
@@ -49,12 +49,12 @@
     },
     {
       "name": "@bota.dev/react-native-app-sdk",
-      "version": "2.0.0-beta.19",
+      "version": "2.0.0-beta.20",
       "source": "https://registry.npmjs.org/%40bota.dev%2Freact-native-app-sdk",
-      "publishedAt": "2026-10-16T02:54:30.632Z",
+      "publishedAt": "2026-10-21T00:28:42.485Z",
       "license": "MIT",
-      "tarball": "https://registry.npmjs.org/@bota.dev/react-native-app-sdk/-/react-native-app-sdk-2.0.0-beta.19.tgz",
-      "integrity": "sha512-D1zXjM28Iv9DfWAIx3SsVTPquG5a0pOuc8LQJm0xR1Yo/YSrNvRUCHpDOlDhuY7S3lceEbIDRgsIAJHHmxjtwg=="
+      "tarball": "https://registry.npmjs.org/@bota.dev/react-native-app-sdk/-/react-native-app-sdk-2.0.0-beta.20.tgz",
+      "integrity": "sha512-mpyj93d/GV8BTfGC7bganB4mKVx5rLvd5Fm7o0F1N09gGhft7iGTUMb1Dxr6ryL1KBnJNH/gDBNgRSZKI8MHDQ=="
     },
     {
       "name": "@expo/image-utils",
@@ -74,5 +74,15 @@
       "tarball": "https://registry.npmjs.org/@expo/require-utils/-/require-utils-57.0.6.tgz",
       "integrity": "sha512-PKWfFdMgwWrlSP6NGplCi2nK0dEM5MeJ2Cj1ijr5VWTmZ+pKsJsJw2dWkBtlFDyxMY8eUjCPZ7hoqFEnbc0Pcw=="
     }
-  ]
+  ],
+  "nativeSdk": {
+    "coordinate": "dev.bota:bota-app-sdk:2.0.0-beta.20",
+    "pomUrl": "https://repo.maven.apache.org/maven2/dev/bota/bota-app-sdk/2.0.0-beta.20/bota-app-sdk-2.0.0-beta.20.pom",
+    "publishedAt": "2026-10-21T00:21:52Z",
+    "license": "MIT",
+    "pomSha256": "31139ec11af44dd88cb32424861511c9b99c841eaa974f04d913bfe6167ed21e",
+    "aarSha256": "ef577775d5d3ae353b7deee424e2f435dc6b51fcda6afdd0021bb84af34537a8",
+    "minSdkVersion": 26,
+    "note": "Official Maven Central SHA-256 files match the downloaded public POM/AAR. Matching public npm compatibility facade retains RN0.86.3/Android26/JVM17; native and device qualification remain separate."
+  }
 }

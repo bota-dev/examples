@@ -1,7 +1,7 @@
 # Android recording material adapter
 
 This local Expo module implements application HTTP and journal responsibilities
-using the public beta.19 Kotlin material constructor and React Native material
+using the public beta.20 Kotlin material constructor and React Native material
 registry. It contains no Bluetooth protocol or encryption implementation.
 
 JavaScript passes SDK provider metadata and receives only an opaque registration,

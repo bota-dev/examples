@@ -12,9 +12,11 @@ Exact registry versions, publication dates, archive integrity and licenses are
 recorded in the [RN provenance](end-to-end/recordings/clients/react-native/media-dependencies.json)
 and [Flutter provenance](end-to-end/recordings/clients/flutter/dependency-provenance.json).
 Frozen installs retain the existing signing, Metro, source-map and license gates.
-Nine existing SDK install roots retain public beta.19. The Flutter recording
+Eight existing SDK install roots retain public beta.19. The Flutter recording
 app now pins beta.20, published October 21 and older than seven days at the
-October 28 update review. The
+October 28 update review. The React Native recording app selects the same
+reviewed beta.20 npm/Maven pair while retaining its qualified Expo 57 patch
+cohort. The
 [remaining SDK adoption review](docs/design-reviews/2026-10-20-sdk19-catalog-ios.md)
 records unchanged non-SDK locks and independent consumer checks. This latest-SDK
 request permits the beta.19 release younger than the usual seven-day age floor;
