@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-29T05:25:13.049803Z",
+  "checkedAt": "2026-10-29T05:53:22.844743Z",
   "scope": "Complete debug/release application and JVM-test compile/runtime module graph. Each consumed binary matches anonymously downloaded public Central bytes and its published SHA-1; SHA-256 below pins those bytes. Metadata-only BOM/multiplatform nodes have no consumed binary.",
   "registry": "https://repo.maven.apache.org/maven2/",
   "agePolicy": "At least seven full days, based on public POM Last-Modified. Every selected version is at least seven days old at review.",
@@ -74,64 +74,64 @@
       "publishedSha1": "c343e135bd1e7dd94b7ed76b4159068d888d09db"
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.10.2/kotlinx-coroutines-android-1.10.2.pom",
-      "pomSha256": "b92d3672e7f9e8f4c4e2ab187c3e31fecc506496396f4a5f27ee1c957a42b319",
-      "publishedAt": "2025-04-08T07:03:39Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.11.0/kotlinx-coroutines-android-1.11.0.pom",
+      "pomSha256": "224567420d3e0ed5fef40f789fded45dfd51b162319e28d77d3c9a8dec4821b8",
+      "publishedAt": "2026-05-07T14:02:59Z",
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.11.0/kotlinx-coroutines-android-1.11.0.jar",
+      "sha256": "c2cb206d27017c7d1bf5ff179787397543d13748dbabb0d7237e1585e0b29044",
+      "publishedSha1": "51ffb50a6478872fbbac6cbd48f09553bf4e9e7d",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.10.2/kotlinx-coroutines-android-1.10.2.pom",
-      "licenseSourceSha256": "b92d3672e7f9e8f4c4e2ab187c3e31fecc506496396f4a5f27ee1c957a42b319",
-      "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.10.2/kotlinx-coroutines-android-1.10.2.jar",
-      "sha256": "e713f1f874244115a07571065cffa0f24f5e78300e9720fea16de3af1d75fd41",
-      "publishedSha1": "c8705d275d81f19e8afaf3ff9b5bf7a4b6b6c19b"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-android/1.11.0/kotlinx-coroutines-android-1.11.0.pom",
+      "licenseSourceSha256": "224567420d3e0ed5fef40f789fded45dfd51b162319e28d77d3c9a8dec4821b8",
+      "bundledNotices": []
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.10.2",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.10.2/kotlinx-coroutines-bom-1.10.2.pom",
-      "pomSha256": "faf0c6538e53ddc0499a63664d8e763c216580b2e18e722ccbdf1b431a6afe26",
-      "publishedAt": "2025-04-08T07:01:52Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-bom:1.11.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.11.0/kotlinx-coroutines-bom-1.11.0.pom",
+      "pomSha256": "f65860bce58a2bfadf05fdc516d38333421f0e387fef87e24449c0394c80d254",
+      "publishedAt": "2026-05-07T14:02:59Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.10.2/kotlinx-coroutines-bom-1.10.2.pom",
-      "licenseSourceSha256": "faf0c6538e53ddc0499a63664d8e763c216580b2e18e722ccbdf1b431a6afe26"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-bom/1.11.0/kotlinx-coroutines-bom-1.11.0.pom",
+      "licenseSourceSha256": "f65860bce58a2bfadf05fdc516d38333421f0e387fef87e24449c0394c80d254"
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.10.2",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.10.2/kotlinx-coroutines-core-jvm-1.10.2.pom",
-      "pomSha256": "658f576b96c832e7382406adb197d64d8e2e97de10e96dfa3700decfa2a60def",
-      "publishedAt": "2025-04-08T07:07:18Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.11.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.11.0/kotlinx-coroutines-core-jvm-1.11.0.pom",
+      "pomSha256": "dd54b97aa3fab91fc24f5df2916c22be9429a339d2f45b7ff092332f6c19dc39",
+      "publishedAt": "2026-05-07T14:02:59Z",
+      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.11.0/kotlinx-coroutines-core-jvm-1.11.0.jar",
+      "sha256": "d1d75aa01dffbb4d1c520e67e4c4e7f5f6174718e7cb4632412503f2f0e604fa",
+      "publishedSha1": "3d57dc678bd8d72a60e7adf0eca5c54e3f4f4b79",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.10.2/kotlinx-coroutines-core-jvm-1.10.2.pom",
-      "licenseSourceSha256": "658f576b96c832e7382406adb197d64d8e2e97de10e96dfa3700decfa2a60def",
-      "bundledNotices": [],
-      "artifactUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.10.2/kotlinx-coroutines-core-jvm-1.10.2.jar",
-      "sha256": "5ca175b38df331fd64155b35cd8cae1251fa9ee369709b36d42e0a288ccce3fd",
-      "publishedSha1": "4a9f78ef49483748e2c129f3d124b8fa249dafbf"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core-jvm/1.11.0/kotlinx-coroutines-core-jvm-1.11.0.pom",
+      "licenseSourceSha256": "dd54b97aa3fab91fc24f5df2916c22be9429a339d2f45b7ff092332f6c19dc39",
+      "bundledNotices": []
     },
     {
-      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2",
-      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.10.2/kotlinx-coroutines-core-1.10.2.pom",
-      "pomSha256": "519da5400096f3462a4dae80783ad050413d4bc81ec7ae53fae76aef0ccbed4c",
-      "publishedAt": "2025-04-08T07:07:23Z",
+      "coordinate": "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0",
+      "pomUrl": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.11.0/kotlinx-coroutines-core-1.11.0.pom",
+      "pomSha256": "41b6e78c1b0d11bc99de795390df9e4ece64dc113f482d6e308f1b7a421c1d30",
+      "publishedAt": "2026-05-07T14:02:59Z",
       "publicationEvidence": "Public Central POM Last-Modified timestamp",
       "license": "Apache-2.0",
       "pomLicenseNames": [
         "Apache-2.0"
       ],
-      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.10.2/kotlinx-coroutines-core-1.10.2.pom",
-      "licenseSourceSha256": "519da5400096f3462a4dae80783ad050413d4bc81ec7ae53fae76aef0ccbed4c"
+      "licenseSource": "https://repo.maven.apache.org/maven2/org/jetbrains/kotlinx/kotlinx-coroutines-core/1.11.0/kotlinx-coroutines-core-1.11.0.pom",
+      "licenseSourceSha256": "41b6e78c1b0d11bc99de795390df9e4ece64dc113f482d6e308f1b7a421c1d30"
     },
     {
       "coordinate": "org.jetbrains.kotlinx:kotlinx-serialization-bom:1.12.0",
