@@ -4,7 +4,7 @@ The [design](DESIGN.md) defines one common recording app with React Native and
 Flutter clients. Both now live under `../recordings/clients/`, while this
 compatibility root retains `backend/` and setup. Each client has its own
 manifest/lock and Android/iOS hosts; native identities remain stable and touched
-SDK consumers pin public beta.19. One
+SDK consumers pin public beta.20. One
 combined HTTP backend can serve Web and both mobile clients, through shims importing the
 [canonical recording/processing/Ask core](../recordings/README.md) also used by web.
 Use the full checkout with the Web installation, mobile backend source and
