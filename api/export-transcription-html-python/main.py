@@ -123,6 +123,8 @@ def check_unicode(value):
 
 def read_json(config, path, deadline, byte_limit):
     request_deadline = min(deadline, time.monotonic() + 10)
+    # Python 3.12+ default TLS validates certificates and the hostname.
+    # nosemgrep: python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
     connection = http.client.HTTPSConnection(config["host"], config["port"],
                                              timeout=remaining_time(request_deadline))
     timer = None

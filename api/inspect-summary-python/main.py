@@ -96,6 +96,8 @@ def read_json(config, path, deadline):
     request_deadline = min(deadline, time.monotonic() + 10)
     remaining = request_deadline - time.monotonic()
     require(remaining > 0, "Summary inspection exceeded its elapsed-time budget.")
+    # Python 3.12+ default TLS validates certificates and the hostname.
+    # nosemgrep: python.lang.security.audit.httpsconnection-detected.httpsconnection-detected
     connection = http.client.HTTPSConnection(config["host"], config["port"], timeout=remaining)
     timer = None
     try:

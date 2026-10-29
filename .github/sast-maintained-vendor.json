@@ -1,0 +1,1750 @@
+{
+  "schema": 1,
+  "scope": "Current workflow classification of maintained vendor inputs; historical checkouts cannot supply policy",
+  "source_commit": "0435bca44c347baa904dbee2b00901cc6291cbca",
+  "limits": {
+    "archive_bytes": 4194304,
+    "archive_members": 2048,
+    "expanded_bytes": 33554432,
+    "member_bytes": 8388608,
+    "view_bytes": 1048576,
+    "tar_bytes": 33554432,
+    "metadata_bytes": 1024,
+    "metadata_total_bytes": 65536,
+    "tracked_bytes": 8388608
+  },
+  "inventory": [
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/LICENSE",
+      "mode": "100644",
+      "bytes": 1091,
+      "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/fixtures/v1-depth-guard.js.source",
+      "mode": "100644",
+      "bytes": 1375,
+      "sha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/fixtures/v1-utils.js.source",
+      "mode": "100644",
+      "bytes": 2518,
+      "sha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/lib/compile.js.source",
+      "mode": "100644",
+      "bytes": 1708,
+      "sha256": "160a973ee93ed866976cdd15a348a4123b22da5d9a264915b21e4bea5f11dbb0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/lib/depth-guard.js.source",
+      "mode": "100644",
+      "bytes": 3227,
+      "sha256": "689e1c8fd14c7224bfcf1bd5fd0ad323fec65714203cfa3b7523933638d92ae0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/lib/expand.js.source",
+      "mode": "100644",
+      "bytes": 3007,
+      "sha256": "d97836d2ca4b74b8a13029d254f9debe090e1ed57ee851c373fae177b8ee56c8",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/lib/parse.js.source",
+      "mode": "100644",
+      "bytes": 7015,
+      "sha256": "0d0c2059e33adf638cc22adb3fe26ee01109817955ff368ab1e28fcc915ecfe0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/lib/stringify.js.source",
+      "mode": "100644",
+      "bytes": 776,
+      "sha256": "39ae1d04d5ccc5498a3a8d53821a6d3fcc683fa77db12c093f144ce1c04a1c5d",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/lib/utils.js.source",
+      "mode": "100644",
+      "bytes": 2370,
+      "sha256": "64374f5bb740f6e3917d90a453ab8ec64cc0f1b1c85a25a3377779db496f2d11",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/braces-security/provenance.json",
+      "mode": "100644",
+      "bytes": 5538,
+      "sha256": "cec93e7516190b406f7bbb6683c4fc23f1184cd9248ffc450e8150d9d98ac433",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/LICENSE",
+      "mode": "100644",
+      "bytes": 1061,
+      "sha256": "e2b6b4713e4848d115ea00965c34849a9f3eabde11e1ca9c027ad6cde3aff4a4",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/UPSTREAM-NOTICE.txt",
+      "mode": "100644",
+      "bytes": 1483,
+      "sha256": "5f3d9416d812e1504abd5becfa1f801d5143abf7813e50a762d5115ba61fe02b",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/main.cjs",
+      "mode": "100644",
+      "bytes": 17872,
+      "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-01.js"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/main.d.ts",
+      "mode": "100644",
+      "bytes": 2390,
+      "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-02.ts"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/package.json",
+      "mode": "100644",
+      "bytes": 710,
+      "sha256": "50454d93b715d6b4b865539f2dd0039b091a47c8d977683c0a5019b7869e08ff",
+      "classification": "package-metadata",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/test-public-contract.cjs",
+      "mode": "100644",
+      "bytes": 17014,
+      "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-03.js"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/cli-adapted-assets/build/src/run/ios/codeSigning/Security.js",
+      "mode": "100644",
+      "bytes": 4670,
+      "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-04.js"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/cli-adapted-assets/package.json",
+      "mode": "100644",
+      "bytes": 4938,
+      "sha256": "bd4d899d6d3eb98fbc2a2e0be2d9a60b7cc15edfa227e61cdc810d967448d6fb",
+      "classification": "package-metadata",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+      "mode": "100644",
+      "bytes": 10724,
+      "sha256": "abb5a37aff1cb8ab587d86d12d00b4d66c431b07f712a436cb2e02261efaaa0a",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+      "mode": "100644",
+      "bytes": 1138930,
+      "sha256": "545b87909f87ca009a65a5ad4e8d6e99a347a3310f88c6c02b805109998149ee",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/official-expo-cli-57.0.27.tgz",
+      "mode": "100644",
+      "bytes": 1304031,
+      "sha256": "7af6768df41f493197b99026f39563d2cb63791624556f222b4e78379e8ca6bf",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/payload-integrity.json",
+      "mode": "100644",
+      "bytes": 98887,
+      "sha256": "95a05cfadae7440d32de984eae780b6374114c5576f8c9b6d7963689e37f451a",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/public-provenance.json",
+      "mode": "100644",
+      "bytes": 1277712,
+      "sha256": "817ece2ac2b67999183c5d10f4b0c76b2db13d47b42d475d4f1a2724fdb734fb",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/rebuild-payloads.py",
+      "mode": "100644",
+      "bytes": 2582,
+      "sha256": "491b63436fb84fdc85e81f6aca40ccbda73ff46fbf3441a6975db50a21a59589",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-05.py"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+      "mode": "100644",
+      "bytes": 74005,
+      "sha256": "b045f339e9ac9366018566e3f054ebdfe1dfd026fb7cd6e1a337f8528b609503",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+      "mode": "100644",
+      "bytes": 97119,
+      "sha256": "2bbe516e04df68da05c06ad01df4ec20b47a63891507b227775c27272b59070b",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/official-expo-metro-file-map-57.0.3.tgz",
+      "mode": "100644",
+      "bytes": 80093,
+      "sha256": "58dad2665887d1931759bf7489b65949495687365624bf29da6917aef56df1ec",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/official-metro-file-map-0.84.5.tgz",
+      "mode": "100644",
+      "bytes": 115581,
+      "sha256": "87714d2120cc45b250c2ef2a560fead966a6e18ad432ace06e8f63da8c06b364",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/provenance.json",
+      "mode": "100644",
+      "bytes": 78615,
+      "sha256": "33cfbe0d275f889d7ff30f20e5d0bb0c6429a9150f101576611751ddf0dd45d2",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/public-assets-fixture.json",
+      "mode": "100644",
+      "bytes": 1223406,
+      "sha256": "ece76512f454649b9e31982ec104c18e433ffa1c4e2cc361dc5a91131f37e877",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/rebuild.py",
+      "mode": "100644",
+      "bytes": 2973,
+      "sha256": "8c8ebd5834cedfc2f5cb5d43b73d9f2c9d25de21df1478d332604882083dacd7",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-06.py"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/LICENSE",
+      "mode": "100644",
+      "bytes": 1091,
+      "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/fixtures/v1-depth-guard.js.source",
+      "mode": "100644",
+      "bytes": 1375,
+      "sha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/fixtures/v1-utils.js.source",
+      "mode": "100644",
+      "bytes": 2518,
+      "sha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/lib/compile.js.source",
+      "mode": "100644",
+      "bytes": 1708,
+      "sha256": "160a973ee93ed866976cdd15a348a4123b22da5d9a264915b21e4bea5f11dbb0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/lib/depth-guard.js.source",
+      "mode": "100644",
+      "bytes": 3227,
+      "sha256": "689e1c8fd14c7224bfcf1bd5fd0ad323fec65714203cfa3b7523933638d92ae0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/lib/expand.js.source",
+      "mode": "100644",
+      "bytes": 3007,
+      "sha256": "d97836d2ca4b74b8a13029d254f9debe090e1ed57ee851c373fae177b8ee56c8",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/lib/parse.js.source",
+      "mode": "100644",
+      "bytes": 7015,
+      "sha256": "0d0c2059e33adf638cc22adb3fe26ee01109817955ff368ab1e28fcc915ecfe0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/lib/stringify.js.source",
+      "mode": "100644",
+      "bytes": 776,
+      "sha256": "39ae1d04d5ccc5498a3a8d53821a6d3fcc683fa77db12c093f144ce1c04a1c5d",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/lib/utils.js.source",
+      "mode": "100644",
+      "bytes": 2370,
+      "sha256": "64374f5bb740f6e3917d90a453ab8ec64cc0f1b1c85a25a3377779db496f2d11",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/braces-security/provenance.json",
+      "mode": "100644",
+      "bytes": 5538,
+      "sha256": "cec93e7516190b406f7bbb6683c4fc23f1184cd9248ffc450e8150d9d98ac433",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/LICENSE",
+      "mode": "100644",
+      "bytes": 1061,
+      "sha256": "e2b6b4713e4848d115ea00965c34849a9f3eabde11e1ca9c027ad6cde3aff4a4",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/UPSTREAM-NOTICE.txt",
+      "mode": "100644",
+      "bytes": 1483,
+      "sha256": "5f3d9416d812e1504abd5becfa1f801d5143abf7813e50a762d5115ba61fe02b",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/main.cjs",
+      "mode": "100644",
+      "bytes": 17872,
+      "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-07.js"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/main.d.ts",
+      "mode": "100644",
+      "bytes": 2390,
+      "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-08.ts"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/package.json",
+      "mode": "100644",
+      "bytes": 710,
+      "sha256": "50454d93b715d6b4b865539f2dd0039b091a47c8d977683c0a5019b7869e08ff",
+      "classification": "package-metadata",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/test-public-contract.cjs",
+      "mode": "100644",
+      "bytes": 17014,
+      "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-09.js"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/cli-adapted-assets/build/src/run/ios/codeSigning/Security.js",
+      "mode": "100644",
+      "bytes": 4670,
+      "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-10.js"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/cli-adapted-assets/package.json",
+      "mode": "100644",
+      "bytes": 4938,
+      "sha256": "bd4d899d6d3eb98fbc2a2e0be2d9a60b7cc15edfa227e61cdc810d967448d6fb",
+      "classification": "package-metadata",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+      "mode": "100644",
+      "bytes": 10724,
+      "sha256": "abb5a37aff1cb8ab587d86d12d00b4d66c431b07f712a436cb2e02261efaaa0a",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+      "mode": "100644",
+      "bytes": 1138930,
+      "sha256": "545b87909f87ca009a65a5ad4e8d6e99a347a3310f88c6c02b805109998149ee",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/official-expo-cli-57.0.27.tgz",
+      "mode": "100644",
+      "bytes": 1304031,
+      "sha256": "7af6768df41f493197b99026f39563d2cb63791624556f222b4e78379e8ca6bf",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/payload-integrity.json",
+      "mode": "100644",
+      "bytes": 98887,
+      "sha256": "95a05cfadae7440d32de984eae780b6374114c5576f8c9b6d7963689e37f451a",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/public-provenance.json",
+      "mode": "100644",
+      "bytes": 1277712,
+      "sha256": "817ece2ac2b67999183c5d10f4b0c76b2db13d47b42d475d4f1a2724fdb734fb",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/rebuild-payloads.py",
+      "mode": "100644",
+      "bytes": 2582,
+      "sha256": "491b63436fb84fdc85e81f6aca40ccbda73ff46fbf3441a6975db50a21a59589",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-11.py"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+      "mode": "100644",
+      "bytes": 74005,
+      "sha256": "b045f339e9ac9366018566e3f054ebdfe1dfd026fb7cd6e1a337f8528b609503",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+      "mode": "100644",
+      "bytes": 97119,
+      "sha256": "2bbe516e04df68da05c06ad01df4ec20b47a63891507b227775c27272b59070b",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/official-expo-metro-file-map-57.0.3.tgz",
+      "mode": "100644",
+      "bytes": 80093,
+      "sha256": "58dad2665887d1931759bf7489b65949495687365624bf29da6917aef56df1ec",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/official-metro-file-map-0.84.5.tgz",
+      "mode": "100644",
+      "bytes": 115581,
+      "sha256": "87714d2120cc45b250c2ef2a560fead966a6e18ad432ace06e8f63da8c06b364",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/provenance.json",
+      "mode": "100644",
+      "bytes": 78615,
+      "sha256": "33cfbe0d275f889d7ff30f20e5d0bb0c6429a9150f101576611751ddf0dd45d2",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/public-assets-fixture.json",
+      "mode": "100644",
+      "bytes": 1223406,
+      "sha256": "ece76512f454649b9e31982ec104c18e433ffa1c4e2cc361dc5a91131f37e877",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/rebuild.py",
+      "mode": "100644",
+      "bytes": 2973,
+      "sha256": "8c8ebd5834cedfc2f5cb5d43b73d9f2c9d25de21df1478d332604882083dacd7",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-12.py"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz",
+      "mode": "100644",
+      "bytes": 30340,
+      "sha256": "1270b865a65227b5673a898986306ac37a7e3281b0db445b03b73d1cf369feef",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/expo--metro-file-map-57.0.3-maintained.tgz",
+      "mode": "100644",
+      "bytes": 75006,
+      "sha256": "760e545212750fda6c9ab32fcb173e4d89b1a4091a1a69bcab444d723e4e574c",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz",
+      "mode": "100644",
+      "bytes": 27285,
+      "sha256": "ecbb8a17fb00b514276f1a782fdc8f626928e2a1d93ae9c9296cef3a81f464b2",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz",
+      "mode": "100644",
+      "bytes": 287769,
+      "sha256": "73c2a9a984ea1aac6b22abc37f8f58e4a895a88544a17b6e7cc61e1b92227c35",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/metro-file-map-0.84.5-maintained.tgz",
+      "mode": "100644",
+      "bytes": 97129,
+      "sha256": "a2d9ab003451034bca429b553c60436c2dcc89b80bb21eeeadd30ee48814486d",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/metro-file-map-0.84.6-maintained.tgz",
+      "mode": "100644",
+      "bytes": 97098,
+      "sha256": "d2d2fe63880edaa553d0e55f19270c1d6d13188d95369ed15512c8e78bd5f0ef",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-free-public-parents/provenance.json",
+      "mode": "100644",
+      "bytes": 287042,
+      "sha256": "22d8aab2cc5b867bcbd561b13ed4fcfa5e75e5dfe51746e9067874b4001a6fff",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+      "mode": "100644",
+      "bytes": 846700,
+      "sha256": "c3edadfcc8d3731c25f69fb9a11d41b0739a25f7a9f01b7ede0b6b46be699955",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/braces-security/LICENSE",
+      "mode": "100644",
+      "bytes": 1091,
+      "sha256": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/braces-security/fixtures/v1-depth-guard.js.source",
+      "mode": "100644",
+      "bytes": 1375,
+      "sha256": "fed13d0e5a013cea39ed2e3707be29133e7293e753b2783a9cbe4b92ed978b9e",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/fixtures/v1-utils.js.source",
+      "mode": "100644",
+      "bytes": 2518,
+      "sha256": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/historical/apply-braces-security.mjs.source",
+      "mode": "100644",
+      "bytes": 4326,
+      "sha256": "41c67f06221632148a34bd5cee11a99cac5019daf848240cf599fbff0d2a16a5",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/historical/test-braces-security.mjs.source",
+      "mode": "100644",
+      "bytes": 15420,
+      "sha256": "4234fe1ab079ba2e17e7cd4041355fb89d506ebc8f4f965a4f2998dcfb88dbd7",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/lib/compile.js.source",
+      "mode": "100644",
+      "bytes": 1708,
+      "sha256": "160a973ee93ed866976cdd15a348a4123b22da5d9a264915b21e4bea5f11dbb0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/lib/depth-guard.js.source",
+      "mode": "100644",
+      "bytes": 3227,
+      "sha256": "689e1c8fd14c7224bfcf1bd5fd0ad323fec65714203cfa3b7523933638d92ae0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/lib/expand.js.source",
+      "mode": "100644",
+      "bytes": 3007,
+      "sha256": "d97836d2ca4b74b8a13029d254f9debe090e1ed57ee851c373fae177b8ee56c8",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/lib/parse.js.source",
+      "mode": "100644",
+      "bytes": 7015,
+      "sha256": "0d0c2059e33adf638cc22adb3fe26ee01109817955ff368ab1e28fcc915ecfe0",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/lib/stringify.js.source",
+      "mode": "100644",
+      "bytes": 776,
+      "sha256": "39ae1d04d5ccc5498a3a8d53821a6d3fcc683fa77db12c093f144ce1c04a1c5d",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/lib/utils.js.source",
+      "mode": "100644",
+      "bytes": 2370,
+      "sha256": "64374f5bb740f6e3917d90a453ab8ec64cc0f1b1c85a25a3377779db496f2d11",
+      "classification": "retired-source-evidence",
+      "text_checkout": true,
+      "reason": "Retired braces-security source retained as evidence; current parent implementations are in braces-free-public-parents"
+    },
+    {
+      "path": "vendor/braces-security/provenance.json",
+      "mode": "100644",
+      "bytes": 5538,
+      "sha256": "cec93e7516190b406f7bbb6683c4fc23f1184cd9248ffc450e8150d9d98ac433",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/certificate-source/LICENSE",
+      "mode": "100644",
+      "bytes": 1061,
+      "sha256": "e2b6b4713e4848d115ea00965c34849a9f3eabde11e1ca9c027ad6cde3aff4a4",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/certificate-source/UPSTREAM-NOTICE.txt",
+      "mode": "100644",
+      "bytes": 1483,
+      "sha256": "5f3d9416d812e1504abd5becfa1f801d5143abf7813e50a762d5115ba61fe02b",
+      "classification": "license-notice",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/certificate-source/main.cjs",
+      "mode": "100644",
+      "bytes": 17872,
+      "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-13.js"
+    },
+    {
+      "path": "vendor/expo-native-signing/certificate-source/main.d.ts",
+      "mode": "100644",
+      "bytes": 2390,
+      "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-14.ts"
+    },
+    {
+      "path": "vendor/expo-native-signing/certificate-source/package.json",
+      "mode": "100644",
+      "bytes": 710,
+      "sha256": "50454d93b715d6b4b865539f2dd0039b091a47c8d977683c0a5019b7869e08ff",
+      "classification": "package-metadata",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/certificate-source/test-public-contract.cjs",
+      "mode": "100644",
+      "bytes": 17014,
+      "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-15.js"
+    },
+    {
+      "path": "vendor/expo-native-signing/cli-adapted-assets/build/src/run/ios/codeSigning/Security.js",
+      "mode": "100644",
+      "bytes": 4670,
+      "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-16.js"
+    },
+    {
+      "path": "vendor/expo-native-signing/cli-adapted-assets/package.json",
+      "mode": "100644",
+      "bytes": 4938,
+      "sha256": "bd4d899d6d3eb98fbc2a2e0be2d9a60b7cc15edfa227e61cdc810d967448d6fb",
+      "classification": "package-metadata",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+      "mode": "100644",
+      "bytes": 10724,
+      "sha256": "abb5a37aff1cb8ab587d86d12d00b4d66c431b07f712a436cb2e02261efaaa0a",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+      "mode": "100644",
+      "bytes": 1138930,
+      "sha256": "545b87909f87ca009a65a5ad4e8d6e99a347a3310f88c6c02b805109998149ee",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "current-derived-runtime-payload"
+    },
+    {
+      "path": "vendor/expo-native-signing/official-expo-cli-57.0.27.tgz",
+      "mode": "100644",
+      "bytes": 1304031,
+      "sha256": "7af6768df41f493197b99026f39563d2cb63791624556f222b4e78379e8ca6bf",
+      "classification": "immutable-archive",
+      "text_checkout": false,
+      "archive_role": "official-upstream-provenance-only"
+    },
+    {
+      "path": "vendor/expo-native-signing/payload-integrity.json",
+      "mode": "100644",
+      "bytes": 98887,
+      "sha256": "95a05cfadae7440d32de984eae780b6374114c5576f8c9b6d7963689e37f451a",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/public-provenance.json",
+      "mode": "100644",
+      "bytes": 1277712,
+      "sha256": "817ece2ac2b67999183c5d10f4b0c76b2db13d47b42d475d4f1a2724fdb734fb",
+      "classification": "integrity-provenance",
+      "text_checkout": true
+    },
+    {
+      "path": "vendor/expo-native-signing/rebuild-payloads.py",
+      "mode": "100644",
+      "bytes": 2582,
+      "sha256": "491b63436fb84fdc85e81f6aca40ccbda73ff46fbf3441a6975db50a21a59589",
+      "classification": "maintained-source",
+      "text_checkout": true,
+      "view": "retained-17.py"
+    }
+  ],
+  "views": [
+    {
+      "view": "retained-01.js",
+      "bytes": 17872,
+      "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/main.cjs",
+          "kind": "tracked-source"
+        },
+        {
+          "path": "vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/main.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/main.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/main.cjs",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "retained-02.ts",
+      "bytes": 2390,
+      "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/main.d.ts",
+          "kind": "tracked-source"
+        },
+        {
+          "path": "vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/main.d.ts",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/main.d.ts",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/main.d.ts",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "retained-03.js",
+      "bytes": 17014,
+      "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/certificate-source/test-public-contract.cjs",
+          "kind": "tracked-source"
+        },
+        {
+          "path": "vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/test-public-contract.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/test-public-contract.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+          "member": "package/test-public-contract.cjs",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "retained-04.js",
+      "bytes": 4670,
+      "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/cli-adapted-assets/build/src/run/ios/codeSigning/Security.js",
+          "kind": "tracked-source"
+        },
+        {
+          "path": "vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+          "member": "package/build/src/run/ios/codeSigning/Security.js",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+          "member": "package/build/src/run/ios/codeSigning/Security.js",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+          "member": "package/build/src/run/ios/codeSigning/Security.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "retained-05.py",
+      "bytes": 2582,
+      "sha256": "491b63436fb84fdc85e81f6aca40ccbda73ff46fbf3441a6975db50a21a59589",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/rebuild-payloads.py",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-06.py",
+      "bytes": 2973,
+      "sha256": "8c8ebd5834cedfc2f5cb5d43b73d9f2c9d25de21df1478d332604882083dacd7",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/rebuild.py",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-07.js",
+      "bytes": 17872,
+      "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696",
+      "origins": [
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/main.cjs",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-08.ts",
+      "bytes": 2390,
+      "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f",
+      "origins": [
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/main.d.ts",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-09.js",
+      "bytes": 17014,
+      "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6",
+      "origins": [
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/certificate-source/test-public-contract.cjs",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-10.js",
+      "bytes": 4670,
+      "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640",
+      "origins": [
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/cli-adapted-assets/build/src/run/ios/codeSigning/Security.js",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-11.py",
+      "bytes": 2582,
+      "sha256": "491b63436fb84fdc85e81f6aca40ccbda73ff46fbf3441a6975db50a21a59589",
+      "origins": [
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/rebuild-payloads.py",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-12.py",
+      "bytes": 2973,
+      "sha256": "8c8ebd5834cedfc2f5cb5d43b73d9f2c9d25de21df1478d332604882083dacd7",
+      "origins": [
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/rebuild.py",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-13.js",
+      "bytes": 17872,
+      "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696",
+      "origins": [
+        {
+          "path": "vendor/expo-native-signing/certificate-source/main.cjs",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-14.ts",
+      "bytes": 2390,
+      "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f",
+      "origins": [
+        {
+          "path": "vendor/expo-native-signing/certificate-source/main.d.ts",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-15.js",
+      "bytes": 17014,
+      "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6",
+      "origins": [
+        {
+          "path": "vendor/expo-native-signing/certificate-source/test-public-contract.cjs",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-16.js",
+      "bytes": 4670,
+      "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640",
+      "origins": [
+        {
+          "path": "vendor/expo-native-signing/cli-adapted-assets/build/src/run/ios/codeSigning/Security.js",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "retained-17.py",
+      "bytes": 2582,
+      "sha256": "491b63436fb84fdc85e81f6aca40ccbda73ff46fbf3441a6975db50a21a59589",
+      "origins": [
+        {
+          "path": "vendor/expo-native-signing/rebuild-payloads.py",
+          "kind": "tracked-source"
+        }
+      ]
+    },
+    {
+      "view": "archive-18.js",
+      "bytes": 2372,
+      "sha256": "d6c86dd757c1761c944a0b9c69af1272fe416969f78d285ecd25c91dbc829981",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+          "member": "package/build/watchers/common.js",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+          "member": "package/build/watchers/common.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-19.js",
+      "bytes": 465,
+      "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+          "member": "package/public-micromatch-some.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+          "member": "package/public-micromatch-some.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+          "member": "package/public-micromatch-some.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+          "member": "package/public-micromatch-some.cjs",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-20.js",
+      "bytes": 1430,
+      "sha256": "7db59e1f6c75e5bd869ecbd3a2a5ef2e3b5f8b41ac751ea7a6cbd1b5c32ab778",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+          "member": "package/src/watchers/common.js",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+          "member": "package/src/watchers/common.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-21.js",
+      "bytes": 2498,
+      "sha256": "87f3f4e5ee1d5ea1660196912f456eb33d18396878280124f515b23aa8219a51",
+      "origins": [
+        {
+          "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+          "member": "package/src/watchers/common.js.flow",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+          "member": "package/src/watchers/common.js.flow",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-22.js",
+      "bytes": 2361,
+      "sha256": "2eba8517fea997b0b251b71ca14184a3e058f8438dac0db12ff35c9a976c86a2",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/expo--metro-file-map-57.0.3-maintained.tgz",
+          "member": "package/build/watchers/common.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-23.js",
+      "bytes": 494,
+      "sha256": "dd2358d472e44849d0b6e850f67fbfd69bfa5b4eef3dd39b3a345fc941f4491a",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/expo--metro-file-map-57.0.3-maintained.tgz",
+          "member": "package/build/watchers/public-matching.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "vendor/braces-free-public-parents/metro-file-map-0.84.5-maintained.tgz",
+          "member": "package/src/watchers/public-matching.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "vendor/braces-free-public-parents/metro-file-map-0.84.6-maintained.tgz",
+          "member": "package/src/watchers/public-matching.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+          "member": "package/public-matching.cjs",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz",
+          "member": "package/node_modules/metro/node_modules/metro-file-map/src/watchers/public-matching.cjs",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-24.js",
+      "bytes": 1419,
+      "sha256": "354bdf050bc16ddd28923ffbb854c242608fa299b347ffb6c5de1cce134a5f28",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/metro-file-map-0.84.5-maintained.tgz",
+          "member": "package/src/watchers/common.js",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "vendor/braces-free-public-parents/metro-file-map-0.84.6-maintained.tgz",
+          "member": "package/src/watchers/common.js",
+          "kind": "maintained-archive-member"
+        },
+        {
+          "path": "vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz",
+          "member": "package/node_modules/metro/node_modules/metro-file-map/src/watchers/common.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-25.js",
+      "bytes": 8440,
+      "sha256": "5d695b88f12c778e819fb45895683ef01b94e7399c9036c2fd7ba5d3c9e41640",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+          "member": "package/lib/cli/build/watching.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-26.js",
+      "bytes": 9948,
+      "sha256": "681c6ba55fb5afe64ad198047d9257d50d96dbd3cd48a69a63d772585df19e0e",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+          "member": "package/lib/lib/content.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-27.js",
+      "bytes": 7779,
+      "sha256": "2629dc6bdc569481c5124ffa655c60dd26f24dbdb4d3db40d3e4a21764198cf2",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+          "member": "package/src/cli/build/watching.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-28.js",
+      "bytes": 9211,
+      "sha256": "0df3ba36688dc826f4f595cd08abd5b2f54165887bea07541616c107da88b9f6",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+          "member": "package/src/lib/content.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-29.js",
+      "bytes": 29788,
+      "sha256": "440f2230ce8a019e1ab58a985931a6cf1e0fed7f712ba4f85b8beb5a64ab4619",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz",
+          "member": "package/index.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-30.js",
+      "bytes": 8603,
+      "sha256": "851617c009ba4b845250ca17855eba037a407473a440b9e67ef010f13aeec1d6",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz",
+          "member": "package/lib/brace-expansion.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-31.js",
+      "bytes": 8552,
+      "sha256": "9b462c651d52db0b5985174b13398ea55d2ddac205271fcbbbb21fdffec86428",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz",
+          "member": "package/out/utils/brace-expansion.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    },
+    {
+      "view": "archive-32.js",
+      "bytes": 8509,
+      "sha256": "cc848173b8051c5252058945419e53347b2f3970c13fa6ac2296dcd73e13599f",
+      "origins": [
+        {
+          "path": "vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz",
+          "member": "package/out/utils/pattern.js",
+          "kind": "maintained-archive-member"
+        }
+      ]
+    }
+  ],
+  "archives": [
+    {
+      "path": "vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+      "bytes": 10724,
+      "sha256": "abb5a37aff1cb8ab587d86d12d00b4d66c431b07f712a436cb2e02261efaaa0a",
+      "provenance": "vendor/expo-native-signing/payload-integrity.json",
+      "members": 6,
+      "inventory_sha256": "e713e6e1fca466406f8120e4a4aae208d4f51303412bf5c049000132cf465f43",
+      "selected": [
+        {
+          "member": "package/main.cjs",
+          "view": "retained-01.js",
+          "bytes": 17872,
+          "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696"
+        },
+        {
+          "member": "package/main.d.ts",
+          "view": "retained-02.ts",
+          "bytes": 2390,
+          "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f"
+        },
+        {
+          "member": "package/test-public-contract.cjs",
+          "view": "retained-03.js",
+          "bytes": 17014,
+          "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6"
+        }
+      ]
+    },
+    {
+      "path": "vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+      "bytes": 1138930,
+      "sha256": "545b87909f87ca009a65a5ad4e8d6e99a347a3310f88c6c02b805109998149ee",
+      "provenance": "vendor/expo-native-signing/payload-integrity.json",
+      "members": 797,
+      "inventory_sha256": "6c54e474f14c6d251341c7599949244bc438c3fba6a9545c7e6f059117eadf13",
+      "selected": [
+        {
+          "member": "package/build/src/run/ios/codeSigning/Security.js",
+          "view": "retained-04.js",
+          "bytes": 4670,
+          "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640"
+        }
+      ]
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+      "bytes": 10724,
+      "sha256": "abb5a37aff1cb8ab587d86d12d00b4d66c431b07f712a436cb2e02261efaaa0a",
+      "provenance": "app-sdk/react-native-device-connect/vendor/expo-native-signing/payload-integrity.json",
+      "members": 6,
+      "inventory_sha256": "e713e6e1fca466406f8120e4a4aae208d4f51303412bf5c049000132cf465f43",
+      "selected": [
+        {
+          "member": "package/main.cjs",
+          "view": "retained-01.js",
+          "bytes": 17872,
+          "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696"
+        },
+        {
+          "member": "package/main.d.ts",
+          "view": "retained-02.ts",
+          "bytes": 2390,
+          "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f"
+        },
+        {
+          "member": "package/test-public-contract.cjs",
+          "view": "retained-03.js",
+          "bytes": 17014,
+          "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6"
+        }
+      ]
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+      "bytes": 1138930,
+      "sha256": "545b87909f87ca009a65a5ad4e8d6e99a347a3310f88c6c02b805109998149ee",
+      "provenance": "app-sdk/react-native-device-connect/vendor/expo-native-signing/payload-integrity.json",
+      "members": 797,
+      "inventory_sha256": "6c54e474f14c6d251341c7599949244bc438c3fba6a9545c7e6f059117eadf13",
+      "selected": [
+        {
+          "member": "package/build/src/run/ios/codeSigning/Security.js",
+          "view": "retained-04.js",
+          "bytes": 4670,
+          "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640"
+        }
+      ]
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/code-signing-certificates-0.0.6+examples.native.1.v3.tgz",
+      "bytes": 10724,
+      "sha256": "abb5a37aff1cb8ab587d86d12d00b4d66c431b07f712a436cb2e02261efaaa0a",
+      "provenance": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/payload-integrity.json",
+      "members": 6,
+      "inventory_sha256": "e713e6e1fca466406f8120e4a4aae208d4f51303412bf5c049000132cf465f43",
+      "selected": [
+        {
+          "member": "package/main.cjs",
+          "view": "retained-01.js",
+          "bytes": 17872,
+          "sha256": "8162512f94f8c68a293c538d8161d016e5f933d80331a4199ac799f3e5075696"
+        },
+        {
+          "member": "package/main.d.ts",
+          "view": "retained-02.ts",
+          "bytes": 2390,
+          "sha256": "04d842ebc0f01bfd4016c3592070034188fc51ccf6d31cc8db638e2ed1fb7c0f"
+        },
+        {
+          "member": "package/test-public-contract.cjs",
+          "view": "retained-03.js",
+          "bytes": 17014,
+          "sha256": "920f49ffc420ef35b74f707309bb03812c8b9efb92c5797757a3b0e232dd17a6"
+        }
+      ]
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/expo-cli-57.0.27+examples.native.1.v2.tgz",
+      "bytes": 1138930,
+      "sha256": "545b87909f87ca009a65a5ad4e8d6e99a347a3310f88c6c02b805109998149ee",
+      "provenance": "end-to-end/recordings/clients/react-native/vendor/expo-native-signing/payload-integrity.json",
+      "members": 797,
+      "inventory_sha256": "6c54e474f14c6d251341c7599949244bc438c3fba6a9545c7e6f059117eadf13",
+      "selected": [
+        {
+          "member": "package/build/src/run/ios/codeSigning/Security.js",
+          "view": "retained-04.js",
+          "bytes": 4670,
+          "sha256": "b7d2858c9e8b53e971424b9e3ce5a5bd80def85e053e7cf8559bb568fafff640"
+        }
+      ]
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+      "bytes": 74005,
+      "sha256": "b045f339e9ac9366018566e3f054ebdfe1dfd026fb7cd6e1a337f8528b609503",
+      "provenance": "app-sdk/react-native-device-connect/vendor/metro-public-matching/provenance.json",
+      "members": 87,
+      "inventory_sha256": "4ca8153413fea095342b9443364662091b4f89cfb56c91f1be975707d1a2b8cc",
+      "selected": [
+        {
+          "member": "package/build/watchers/common.js",
+          "view": "archive-18.js",
+          "bytes": 2372,
+          "sha256": "d6c86dd757c1761c944a0b9c69af1272fe416969f78d285ecd25c91dbc829981"
+        },
+        {
+          "member": "package/public-micromatch-some.cjs",
+          "view": "archive-19.js",
+          "bytes": 465,
+          "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2"
+        }
+      ]
+    },
+    {
+      "path": "app-sdk/react-native-device-connect/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+      "bytes": 97119,
+      "sha256": "2bbe516e04df68da05c06ad01df4ec20b47a63891507b227775c27272b59070b",
+      "provenance": "app-sdk/react-native-device-connect/vendor/metro-public-matching/provenance.json",
+      "members": 131,
+      "inventory_sha256": "093e54ea91fdeb37374e3d4f406173fc4f2f22ddcb35dfbc017f8da04349e004",
+      "selected": [
+        {
+          "member": "package/public-micromatch-some.cjs",
+          "view": "archive-19.js",
+          "bytes": 465,
+          "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2"
+        },
+        {
+          "member": "package/src/watchers/common.js",
+          "view": "archive-20.js",
+          "bytes": 1430,
+          "sha256": "7db59e1f6c75e5bd869ecbd3a2a5ef2e3b5f8b41ac751ea7a6cbd1b5c32ab778"
+        },
+        {
+          "member": "package/src/watchers/common.js.flow",
+          "view": "archive-21.js",
+          "bytes": 2498,
+          "sha256": "87f3f4e5ee1d5ea1660196912f456eb33d18396878280124f515b23aa8219a51"
+        }
+      ]
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/expo-metro-file-map-57.0.3.public-some.tgz",
+      "bytes": 74005,
+      "sha256": "b045f339e9ac9366018566e3f054ebdfe1dfd026fb7cd6e1a337f8528b609503",
+      "provenance": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/provenance.json",
+      "members": 87,
+      "inventory_sha256": "4ca8153413fea095342b9443364662091b4f89cfb56c91f1be975707d1a2b8cc",
+      "selected": [
+        {
+          "member": "package/build/watchers/common.js",
+          "view": "archive-18.js",
+          "bytes": 2372,
+          "sha256": "d6c86dd757c1761c944a0b9c69af1272fe416969f78d285ecd25c91dbc829981"
+        },
+        {
+          "member": "package/public-micromatch-some.cjs",
+          "view": "archive-19.js",
+          "bytes": 465,
+          "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2"
+        }
+      ]
+    },
+    {
+      "path": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/metro-file-map-0.84.5.public-some.tgz",
+      "bytes": 97119,
+      "sha256": "2bbe516e04df68da05c06ad01df4ec20b47a63891507b227775c27272b59070b",
+      "provenance": "end-to-end/recordings/clients/react-native/vendor/metro-public-matching/provenance.json",
+      "members": 131,
+      "inventory_sha256": "093e54ea91fdeb37374e3d4f406173fc4f2f22ddcb35dfbc017f8da04349e004",
+      "selected": [
+        {
+          "member": "package/public-micromatch-some.cjs",
+          "view": "archive-19.js",
+          "bytes": 465,
+          "sha256": "3c68326c623b0a5affc3fa2a53537260f6b1565f17e10c7ebf39fff10988a8e2"
+        },
+        {
+          "member": "package/src/watchers/common.js",
+          "view": "archive-20.js",
+          "bytes": 1430,
+          "sha256": "7db59e1f6c75e5bd869ecbd3a2a5ef2e3b5f8b41ac751ea7a6cbd1b5c32ab778"
+        },
+        {
+          "member": "package/src/watchers/common.js.flow",
+          "view": "archive-21.js",
+          "bytes": 2498,
+          "sha256": "87f3f4e5ee1d5ea1660196912f456eb33d18396878280124f515b23aa8219a51"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/expo--metro-file-map-57.0.3-maintained.tgz",
+      "bytes": 75006,
+      "sha256": "760e545212750fda6c9ab32fcb173e4d89b1a4091a1a69bcab444d723e4e574c",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 87,
+      "inventory_sha256": "cdb84b22de9a8b91f41c3bb0b7c8120d7414e99087852d951cd1706630d47e87",
+      "selected": [
+        {
+          "member": "package/build/watchers/common.js",
+          "view": "archive-22.js",
+          "bytes": 2361,
+          "sha256": "2eba8517fea997b0b251b71ca14184a3e058f8438dac0db12ff35c9a976c86a2"
+        },
+        {
+          "member": "package/build/watchers/public-matching.cjs",
+          "view": "archive-23.js",
+          "bytes": 494,
+          "sha256": "dd2358d472e44849d0b6e850f67fbfd69bfa5b4eef3dd39b3a345fc941f4491a"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/metro-file-map-0.84.5-maintained.tgz",
+      "bytes": 97129,
+      "sha256": "a2d9ab003451034bca429b553c60436c2dcc89b80bb21eeeadd30ee48814486d",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 131,
+      "inventory_sha256": "331583708691ffd19a4697d19d459f8a6d50d1c94315861845544459a7cb70b2",
+      "selected": [
+        {
+          "member": "package/src/watchers/common.js",
+          "view": "archive-24.js",
+          "bytes": 1419,
+          "sha256": "354bdf050bc16ddd28923ffbb854c242608fa299b347ffb6c5de1cce134a5f28"
+        },
+        {
+          "member": "package/src/watchers/public-matching.cjs",
+          "view": "archive-23.js",
+          "bytes": 494,
+          "sha256": "dd2358d472e44849d0b6e850f67fbfd69bfa5b4eef3dd39b3a345fc941f4491a"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/metro-file-map-0.84.6-maintained.tgz",
+      "bytes": 97098,
+      "sha256": "d2d2fe63880edaa553d0e55f19270c1d6d13188d95369ed15512c8e78bd5f0ef",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 131,
+      "inventory_sha256": "7057e63b7cf172f29407daee29dac1478b9d0702d5e9bd578adf319874c2732f",
+      "selected": [
+        {
+          "member": "package/src/watchers/common.js",
+          "view": "archive-24.js",
+          "bytes": 1419,
+          "sha256": "354bdf050bc16ddd28923ffbb854c242608fa299b347ffb6c5de1cce134a5f28"
+        },
+        {
+          "member": "package/src/watchers/public-matching.cjs",
+          "view": "archive-23.js",
+          "bytes": 494,
+          "sha256": "dd2358d472e44849d0b6e850f67fbfd69bfa5b4eef3dd39b3a345fc941f4491a"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/tailwindcss-3.4.19-maintained.tgz",
+      "bytes": 846700,
+      "sha256": "c3edadfcc8d3731c25f69fb9a11d41b0739a25f7a9f01b7ede0b6b46be699955",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 255,
+      "inventory_sha256": "473a0da6a4c57f6bbfe3504e718ca9f1cef6158bded72aebce0c35c8284ebf9c",
+      "selected": [
+        {
+          "member": "package/lib/cli/build/watching.js",
+          "view": "archive-25.js",
+          "bytes": 8440,
+          "sha256": "5d695b88f12c778e819fb45895683ef01b94e7399c9036c2fd7ba5d3c9e41640"
+        },
+        {
+          "member": "package/lib/lib/content.js",
+          "view": "archive-26.js",
+          "bytes": 9948,
+          "sha256": "681c6ba55fb5afe64ad198047d9257d50d96dbd3cd48a69a63d772585df19e0e"
+        },
+        {
+          "member": "package/public-matching.cjs",
+          "view": "archive-23.js",
+          "bytes": 494,
+          "sha256": "dd2358d472e44849d0b6e850f67fbfd69bfa5b4eef3dd39b3a345fc941f4491a"
+        },
+        {
+          "member": "package/src/cli/build/watching.js",
+          "view": "archive-27.js",
+          "bytes": 7779,
+          "sha256": "2629dc6bdc569481c5124ffa655c60dd26f24dbdb4d3db40d3e4a21764198cf2"
+        },
+        {
+          "member": "package/src/lib/content.js",
+          "view": "archive-28.js",
+          "bytes": 9211,
+          "sha256": "0df3ba36688dc826f4f595cd08abd5b2f54165887bea07541616c107da88b9f6"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/chokidar-3.6.0-maintained-public-admission-v3.tgz",
+      "bytes": 30340,
+      "sha256": "1270b865a65227b5673a898986306ac37a7e3281b0db445b03b73d1cf369feef",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 9,
+      "inventory_sha256": "52ef2fa93fa89d5302c094ba7825ed8a9bbeda84be9d6277e824c0f0a8d79236",
+      "selected": [
+        {
+          "member": "package/index.js",
+          "view": "archive-29.js",
+          "bytes": 29788,
+          "sha256": "440f2230ce8a019e1ab58a985931a6cf1e0fed7f712ba4f85b8beb5a64ab4619"
+        },
+        {
+          "member": "package/lib/brace-expansion.js",
+          "view": "archive-30.js",
+          "bytes": 8603,
+          "sha256": "851617c009ba4b845250ca17855eba037a407473a440b9e67ef010f13aeec1d6"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/fast-glob-3.3.3-maintained.tgz",
+      "bytes": 27285,
+      "sha256": "ecbb8a17fb00b514276f1a782fdc8f626928e2a1d93ae9c9296cef3a81f464b2",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 56,
+      "inventory_sha256": "1ccd0482a230023fcd851b4a32057f097c10a773e40107f2ef1914f9b935ed75",
+      "selected": [
+        {
+          "member": "package/out/utils/brace-expansion.js",
+          "view": "archive-31.js",
+          "bytes": 8552,
+          "sha256": "9b462c651d52db0b5985174b13398ea55d2ddac205271fcbbbb21fdffec86428"
+        },
+        {
+          "member": "package/out/utils/pattern.js",
+          "view": "archive-32.js",
+          "bytes": 8509,
+          "sha256": "cc848173b8051c5252058945419e53347b2f3970c13fa6ac2296dcd73e13599f"
+        }
+      ]
+    },
+    {
+      "path": "vendor/braces-free-public-parents/metro-config-0.84.6-maintained-owning-metro-bundle.tgz",
+      "bytes": 287769,
+      "sha256": "73c2a9a984ea1aac6b22abc37f8f58e4a895a88544a17b6e7cc61e1b92227c35",
+      "provenance": "vendor/braces-free-public-parents/provenance.json",
+      "members": 583,
+      "inventory_sha256": "a77d6d2fc50e644b70e87b27fbf498b7ba9166a48a855f739faaa2c103ad3d75",
+      "selected": [
+        {
+          "member": "package/node_modules/metro/node_modules/metro-file-map/src/watchers/common.js",
+          "view": "archive-24.js",
+          "bytes": 1419,
+          "sha256": "354bdf050bc16ddd28923ffbb854c242608fa299b347ffb6c5de1cce134a5f28"
+        },
+        {
+          "member": "package/node_modules/metro/node_modules/metro-file-map/src/watchers/public-matching.cjs",
+          "view": "archive-23.js",
+          "bytes": 494,
+          "sha256": "dd2358d472e44849d0b6e850f67fbfd69bfa5b4eef3dd39b3a345fc941f4491a"
+        }
+      ]
+    }
+  ],
+  "expected_tracked_sources": 17,
+  "expected_views": 32
+}
