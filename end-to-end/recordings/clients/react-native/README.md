@@ -253,6 +253,16 @@ Android minimum API 26 and local-backend cleartext setting when regenerating the
 native projects. The separate React/React Native migration requires its own
 aligned runtime and native qualification.
 
+The compatible dependency refresh selects Expo 57.0.31, asset 57.0.20 and
+constants 57.0.22 while retaining React 19.2.3. The beta.20 npm/Maven SDK update
+retains this cohort and its exact asset/constant receipt identities. The platform
+regression checks
+the declared and actually installed React/React Native versions against the
+selected Expo package's own runtime metadata; dependency installation and bundle
+exports alone do not establish that agreement. These native package patches
+still require the normal Android/iOS build checks and fresh host installation
+before claiming physical media or device acceptance.
+
 ```sh
 npm run typecheck
 npm test

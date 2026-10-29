@@ -13,17 +13,24 @@ Ask, connect to devices, transfer recordings or authorize device cleanup.
 ## Run
 
 Use JDK **17**, Android SDK **36** and an Android **10/API 29+** emulator or phone.
-The checksummed Gradle **8.13** wrapper installs the build tool. Android Studio can
+The checksummed Gradle **8.14.6** wrapper installs the build tool. Android Studio can
 open this directory directly; it does not need npm or a sibling repository.
+The 8.14.6 public wrapper scripts/JAR are regenerated from the checksummed
+distribution; the strict ShellCheck source pin tracks that exact launcher.
 
 Kotlin **2.4.21** uses the typed `compilerOptions.jvmTarget` setting with
 `JVM_17`, preserving the Java/Kotlin target. Its matching standard library is
 locked and included in the reviewed public Maven provenance inventory. Gradle
-8.13 and AGP 8.13.2 remain within Kotlin 2.4.21's
+8.14.6 and AGP 8.13.2 remain within Kotlin 2.4.21's
 [supported range](https://kotlinlang.org/docs/gradle-configure-project.html).
 
 Serialization **1.12.0** uses Kotlin 2.4 metadata. Its exact public POMs and
 consumed binary hashes are included in the reviewed provenance inventory.
+
+Coroutines **1.11.0** uses Kotlin 2.2 metadata, compatible with the retained
+Kotlin 2.4.21 compiler and JVM 17 target. Its four resolved Android/core/BOM
+modules have reviewed public Maven POMs and publication dates; the two consumed
+JARs match public artifact hashes and the strict bundled-notice inventory.
 
 ```sh
 ./gradlew :app:checkDependencyLicenses :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
@@ -33,6 +40,12 @@ On Windows use `gradlew.bat`. The APK is
 `app/build/outputs/apk/debug/app-debug.apk`; the app ID is
 `dev.bota.examples.recordings.kotlin`. Install it yourself or run it from Android
 Studio, then choose **Try Sample**. No backend is needed for Sample.
+
+The TestNG 7.12.0 update also resolves JCommander 1.83 and SLF4J 2.0.16.
+Their public Maven Central POMs, publication dates, artifact hashes and bundled
+notices are included in `dependency-provenance.json`. The same strict resolved
+inventory and license checks apply to the updated JVM test graph; the Android
+application retains serialization 1.12.0, Kotlin 2.4.21 and the JDK 17 target.
 
 For Live, follow the [combined backend setup](../../README.md#run-a-client) or
 [retained mobile backend setup](../../../react-native-recording-sync/backend/README.md).

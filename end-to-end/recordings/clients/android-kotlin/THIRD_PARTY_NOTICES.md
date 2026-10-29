@@ -1,13 +1,13 @@
 # Third-party notices
 
 The unmodified `gradlew`, `gradlew.bat` and `gradle/wrapper/gradle-wrapper.jar`
-come from **Gradle 8.13**, licensed under Apache License 2.0. Launcher copyright
+come from **Gradle 8.14.6**, licensed under Apache License 2.0. Launcher copyright
 and license headers are retained. The JAR also contains `META-INF/LICENSE`.
-Its SHA-256 matches Gradle's [official wrapper checksum](https://services.gradle.org/distributions/gradle-8.13-wrapper.jar.sha256):
-`81a82aaea5abcc8ff68b3dfcb58b3c3c429378efd98e7433460610fecd7ae45f`.
+Its SHA-256 matches Gradle's [official wrapper checksum](https://services.gradle.org/distributions/gradle-8.14.6-wrapper.jar.sha256):
+`ad16bca46cb71bb5887c546860d93992aeee35c1fdaf4a242b0a612375d937e0`.
 
 The wrapper downloads the public
-[Gradle 8.13 binary distribution](https://services.gradle.org/distributions/gradle-8.13-bin.zip)
+[Gradle 8.14.6 binary distribution](https://services.gradle.org/distributions/gradle-8.14.6-bin.zip)
 using the distribution SHA-256 in its properties. The exact distribution
 [LICENSE](gradle/wrapper/LICENSE-GRADLE) and [NOTICE](gradle/wrapper/NOTICE-GRADLE)
 are retained here from that checksummed installation. Their broader notices

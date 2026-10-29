@@ -34,7 +34,7 @@ jobs:
     env:
       SCANNER_IMAGE: semgrep/semgrep:1.168.0@sha256:59fbed6127ea7c5dde3ba6a85142733bb20ea9aaa36120c953904f1539aaf66e
       RULE_PACKS: '["security-audit","owasp-top-ten","javascript","typescript","nodejs","react","python","github-actions","kotlin","swift","ruby"]'
-      EXPECTED_SHELLCHECK_FILES: '{"app-sdk/android-device-connect/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933","app-sdk/android-recording-catalog/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933","end-to-end/recordings/clients/android-kotlin/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933"}'
+      EXPECTED_SHELLCHECK_FILES: '{"app-sdk/android-device-connect/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933","app-sdk/android-recording-catalog/gradlew":"734b3879d3501dce471cf0522d3bcbafe76873d9fc5129345b67fb43bd15e933","end-to-end/recordings/clients/android-kotlin/gradlew":"b187b4c52e749f5760afdd6fadc31b2a98ad35fb249bf0dff03b72650f320409"}'
     steps:
       - name: Validate retrospective revision
         env:
