@@ -13,7 +13,7 @@
 
 ## Key conventions
 
-- Preserve exact beta.19 npm/Maven compatibility pins, Expo/native pins, app ID, mandatory 803-asset signing and zero-braces Metro guards, and every existing postinstall/test chain. This client retains the public native-workflow entry; package adoption does not qualify generated-JS `/runtime` ports. Follow [dependency security](../../../../DEPENDENCY_SECURITY.md); the earlier [SDK adoption review](../../../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md) is historical beta.18 evidence.
+- Preserve exact beta.20 npm/Maven compatibility pins, Expo/native pins, app ID, mandatory 803-asset signing and zero-braces Metro guards, and every existing postinstall/test chain. This client retains the public native-workflow entry; package adoption does not qualify generated-JS `/runtime` ports. Follow [dependency security](../../../../DEPENDENCY_SECURITY.md); the earlier [SDK adoption review](../../../../docs/design-reviews/2026-10-14-beta18-sdk-adoption.md) is historical beta.18 evidence.
 - Preserve the `8787` origin defaults and native journal identity. Client relocation does not move server journals or authorize rekeying, deleting or replacing retained captures.
 - Sample mode is local fixtures only; device SDK/transport loading and Bluetooth permissions require the explicit live Android Device action. Expo OS media is separate. Keep caller tokens in memory and Bota keys on the server.
 - Keep source/session fences, uncertain write locks and GET-only recovery. Cloud job success never authorizes device cleanup; SDK receipts and exact-generation checks remain authoritative.

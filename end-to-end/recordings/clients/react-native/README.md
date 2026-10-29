@@ -13,9 +13,9 @@ client changes no SDK pin, native identity, backend launch base or journal.
 The cloud library, ordinary file import, playback and result screens target
 **Android and iOS**. **Device encrypted-v2 sync remains Android only**: its local
 Kotlin host is never loaded or offered by the iOS UI. The public npm package and
-native Maven host both pin SDK **2.0.0-beta.19**. Existing native adapter,
-journals and dependency guards are retained. Android/iOS native builds pass in
-the hosted checks below; actual media decoding needs separate device qualification.
+native Maven host both pin SDK **2.0.0-beta.20**. Existing native adapter,
+journals and dependency guards are retained. This SDK pin requires fresh Android/iOS native builds in
+the owning workflow; actual media decoding needs separate device qualification.
 
 This package update uses the public `BotaClient` / `BotaDeviceSDK`
 native-workflow compatibility entry. It does not migrate to the generated
@@ -301,7 +301,7 @@ These checks establish build integration, not real-phone media or device accepta
 | Native clients over one customer backend | Android/iOS cloud screens and fixed Bearer import/audio routes; Android-only device entry/module | Matched in source and Android/iOS builds; physical behavior unverified |
 | No replay of uncertain writes | Upload intent lock before POST, known-operation GET, exact complete operation and fresh verified recording before another import | Matched in synthetic controller/adapter tests |
 | Account/selection lifecycle and local media | Public loaded/error/deadline gate, late results fenced, sequential replacement player admission, joined sign-out, immediate pause and private-cache/native shared-object release | Matched in synthetic tests; OS media behavior unverified |
-| Public packages and dependency guards | Exact SDK beta.19 npm/Maven and Expo 57 media pins, normal frozen install, all existing mandatory chains | Matched in local and hosted checks |
+| Public packages and dependency guards | Exact SDK beta.20 npm/Maven and Expo 57 media pins, normal frozen install, all existing mandatory chains | Requires selected frozen checks and fresh exact-head native builds |
 | Encrypted device recording acceptance | Retained Android SDK receipt authority and journals; no iOS encrypted host | Unverified; ordinary imports do not qualify it |
 
 The [relocation review](../../../../docs/design-reviews/2026-10-12-react-native-client-move.md)

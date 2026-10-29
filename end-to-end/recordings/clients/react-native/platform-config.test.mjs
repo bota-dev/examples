@@ -18,7 +18,7 @@ test('native media dependencies match Expo57 and both original SDK identities ag
   for (const name of ['expo-audio', 'expo-document-picker', 'expo-file-system', 'expo-asset', 'expo-constants']) {
     assert.match(pkg.dependencies[name], /^57\.0\.\d+$/); assert.equal(lock.packages[`node_modules/${name}`].version, pkg.dependencies[name]);
   }
-  assert.equal(pkg.dependencies['@bota.dev/react-native-app-sdk'], '2.0.0-beta.19');
+  assert.equal(pkg.dependencies['@bota.dev/react-native-app-sdk'], '2.0.0-beta.20');
   assert.equal(lock.packages['node_modules/@bota.dev/react-native-app-sdk'].version, pkg.dependencies['@bota.dev/react-native-app-sdk']);
   assert.ok(readFileSync(new URL('./modules/recording-sync/android/build.gradle', import.meta.url), 'utf8').includes(`dev.bota:bota-app-sdk:${pkg.dependencies['@bota.dev/react-native-app-sdk']}`));
   assert.equal(pkg.scripts['prebuild:ios'], 'expo prebuild --platform ios --no-install');
