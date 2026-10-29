@@ -22,6 +22,9 @@ locked and included in the reviewed public Maven provenance inventory. Gradle
 8.13 and AGP 8.13.2 remain within Kotlin 2.4.21's
 [supported range](https://kotlinlang.org/docs/gradle-configure-project.html).
 
+Serialization **1.12.0** uses Kotlin 2.4 metadata. Its exact public POMs and
+consumed binary hashes are included in the reviewed provenance inventory.
+
 ```sh
 ./gradlew :app:checkDependencyLicenses :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest
 ```
@@ -35,7 +38,7 @@ The TestNG 7.12.0 update also resolves JCommander 1.83 and SLF4J 2.0.16.
 Their public Maven Central POMs, publication dates, artifact hashes and bundled
 notices are included in `dependency-provenance.json`. The same strict resolved
 inventory and license checks apply to the updated JVM test graph; the Android
-application's runtime dependencies and JDK 17 target remain unchanged.
+application retains serialization 1.12.0, Kotlin 2.4.21 and the JDK 17 target.
 
 For Live, follow the [combined backend setup](../../README.md#run-a-client) or
 [retained mobile backend setup](../../../react-native-recording-sync/backend/README.md).
