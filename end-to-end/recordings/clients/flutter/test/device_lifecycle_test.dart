@@ -74,6 +74,7 @@ void main() {
           'type',
         ])
           field: 'test',
+        'time': 0,
         'isPhysicalDevice': false,
         'freeDiskSize': 1024,
         'totalDiskSize': 1024,

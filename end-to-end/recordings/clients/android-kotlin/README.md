@@ -16,11 +16,14 @@ Use JDK **17**, Android SDK **36** and an Android **10/API 29+** emulator or pho
 The checksummed Gradle **8.13** wrapper installs the build tool. Android Studio can
 open this directory directly; it does not need npm or a sibling repository.
 
-The serialization 1.12.0 dependency graph uses Kotlin 2.4 metadata, so its update
-also uses Kotlin **2.4.21** and typed `compilerOptions` with `JVM_17`. Java/Kotlin
-targets, Android API limits and strict dependency/license checks remain the same.
-The exact public serialization and standard-library POMs, dates and consumed
-binary hashes are recorded in `dependency-provenance.json`.
+Kotlin **2.4.21** uses the typed `compilerOptions.jvmTarget` setting with
+`JVM_17`, preserving the Java/Kotlin target. Its matching standard library is
+locked and included in the reviewed public Maven provenance inventory. Gradle
+8.13 and AGP 8.13.2 remain within Kotlin 2.4.21's
+[supported range](https://kotlinlang.org/docs/gradle-configure-project.html).
+
+Serialization **1.12.0** uses Kotlin 2.4 metadata. Its exact public POMs and
+consumed binary hashes are included in the reviewed provenance inventory.
 
 ```sh
 ./gradlew :app:checkDependencyLicenses :app:testDebugUnitTest :app:lintDebug :app:assembleDebug :app:assembleDebugAndroidTest

@@ -1,5 +1,5 @@
 {
-  "checkedAt": "2026-10-28T23:32:57.113196Z",
+  "checkedAt": "2026-10-29T01:04:11.482528Z",
   "scope": "Complete debug/release application and JVM-test compile/runtime module graph. Each consumed binary matches anonymously downloaded public Central bytes and its published SHA-1; SHA-256 below pins those bytes. Metadata-only BOM/multiplatform nodes have no consumed binary.",
   "registry": "https://repo.maven.apache.org/maven2/",
   "agePolicy": "At least seven full days, based on public POM Last-Modified. Every selected version is at least seven days old at review.",
