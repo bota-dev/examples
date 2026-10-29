@@ -198,14 +198,23 @@ test('cancellation before start makes no request or file', async t => {
 
 test('total deadline aborts a stalled stream and removes the partial file', async t => {
   const f = await fixture(t); let aborted = false;
+  const deadline = new AbortController();
+  const timeout = AbortSignal.timeout.bind(AbortSignal);
+  const durations = [];
+  t.mock.method(AbortSignal, 'timeout', duration => {
+    durations.push(duration);
+    return duration === 80 ? deadline.signal : timeout(duration);
+  });
   f.state.intercept = async (url, init) => url.startsWith('https://storage.') ? new Response(new ReadableStream({
     start(controller) {
+      assert.equal(init.signal, deadline.signal);
       controller.enqueue(new Uint8Array([1]));
-      const keepAlive = setTimeout(() => controller.error(new Error('deadline failed')), 2000);
-      init.signal.addEventListener('abort', () => { clearTimeout(keepAlive); aborted = true; controller.error(new Error('aborted')); }, { once: true });
+      init.signal.addEventListener('abort', () => { aborted = true; controller.error(new Error('aborted')); }, { once: true });
+      setImmediate(() => deadline.abort(new DOMException('Timed out', 'TimeoutError')));
     },
   })) : undefined;
   await assert.rejects(f.run({ totalTimeoutMs: 80 }), /deadline/);
+  assert.deepEqual(durations, [80, 10_000, 10_000]);
   assert.equal(aborted, true); await f.empty();
 });
 
