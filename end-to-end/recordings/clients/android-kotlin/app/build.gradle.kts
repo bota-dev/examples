@@ -20,7 +20,6 @@ android {
         testInstrumentationRunner = "dev.bota.examples.recordings.TransportInstrumentation"
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
-    kotlinOptions { jvmTarget = "17" }
     buildFeatures { buildConfig = true }
     sourceSets {
         getByName("test") { java.srcDir("src/sharedTest/java"); resources.srcDir("src/sharedTest/resources") }
@@ -28,6 +27,7 @@ android {
     }
     lint { abortOnError = true } // Retained-version/target advisories remain visible; lint errors still fail.
 }
+kotlin { compilerOptions { jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17) } }
 dependencyLocking { lockAllConfigurations(); lockMode.set(LockMode.STRICT) }
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
