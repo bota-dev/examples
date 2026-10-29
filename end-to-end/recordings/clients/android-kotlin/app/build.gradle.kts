@@ -32,7 +32,7 @@ dependencyLocking { lockAllConfigurations(); lockMode.set(LockMode.STRICT) }
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.12.0")
-    implementation("org.apache.httpcomponents.core5:httpcore5:5.3.6")
+    implementation("org.apache.httpcomponents.core5:httpcore5:5.4.4")
     testImplementation("org.testng:testng:7.12.0")
 }
 tasks.withType<Test>().configureEach { useTestNG() }
