@@ -151,6 +151,9 @@ together on future dependency updates.
 
 ## URL decoder follow-up (2026-09-26)
 
+This dated 0.5.0 qualification is historical. The October 30 follow-up below
+selects 0.5.1 for the later quadratic-replacement advisory.
+
 Dependabot #69 / [GHSA-vcc3-ghjq-m6fr](https://github.com/advisories/GHSA-vcc3-ghjq-m6fr)
 is addressed by a `query-string@7.1.3`-scoped **decode-uri-component 0.5.0**
 override. This MIT release was published June 29, 2026. Both Expo Router 56.2.15
@@ -298,3 +301,45 @@ asserts that removing the separators reproduces the original string. All
 enabled-glob rejection inputs and zero-error assertions remain intact. Runtime,
 archives, locks and workflows are unchanged. This fixture-only successor still
 requires its own fresh hosted results.
+
+## URL decoder quadratic-replacement follow-up (2026-10-30)
+
+The root [Dependabot update](https://github.com/bota-dev/examples/actions/runs/40928749746)
+failed because the existing exact `query-string@7.1.3` override retained
+decode-uri-component 0.5.0, while new High alert #142 requires 0.5.1 for
+[GHSA-qr28-fpjm-wq7f](https://github.com/SamVerschueren/decode-uri-component/security/advisories/GHSA-qr28-fpjm-wq7f).
+This is separate from the September exponential-decoding advisory and its
+historical 0.5.0 qualification above.
+
+The same scoped override now selects public MIT 0.5.1, with no new dependencies.
+Official npm metadata dates its publication to `2026-10-23T12:48:46.830Z`, more
+than seven full days before the October 30 review. Both original and candidate
+tarballs match npm SHA-512 integrity; the candidate archive SHA-256 is
+`68747a955bbb6a700d758155cf5ff15595c0dfa38504d385abdb249c688bfb15`.
+The normal npm lock-only operation changes only the decoder entry's version,
+tarball and integrity. Query-string and its exact-source ESM interop guard,
+all public SDK/Expo pins, other install roots and mandatory lifecycle hooks
+retain their existing identities.
+
+The new actual Expo Router 57.0.23 regression uses 64 distinct encoded runs and
+one malformed suffix. Before the update it scans 24,733 replacement-input
+characters for a 475-character path, failing the deterministic 7,600-character
+budget. React Navigation 7.22.1 already uses its own query parser and passes
+the same control. After a fresh candidate install both route paths pass, along
+with Unicode, repeated/empty values, malformed bytes, BOM, truncated-byte,
+escaped-percent and encode/decode controls. This budget characterizes the
+exercised route case; it is not a universal parser-resource proof.
+
+On Node 22.23.2/npm 11.17.0, a fresh frozen install with
+`--min-release-age=7` retains all existing postinstall guards. All eight focused
+decoder cases and the complete 113-case root suite pass, both workspace
+typechecks and the backend build pass, and catalog verification passes nine
+cases and 539 file links. Only the one generated decoder lock entry changes;
+the installed package and scoped override both resolve 0.5.1. These checks do
+not establish native/application or physical acceptance.
+
+| Requirement | Evidence and limit | Status |
+| --- | --- | --- |
+| Select the mature published fix within the existing scoped override | Verified registry age, MIT identity and public archive integrity; one lock entry changes | matched |
+| Preserve consumer compatibility and existing source guards | Actual route red/green regression and unchanged hash-guarded query-string adapter; normal frozen install retains every lifecycle guard | matched locally |
+| Confirm current-main scanner closure and native/application delivery | Fresh hosted checks, default-branch alert readback and installed-app qualification require separate evidence | pending |

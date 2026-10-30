@@ -30,7 +30,7 @@ test('lock retains one reviewed query-string copy and only patched decoders', ()
   assert.deepEqual(queryPaths, ['node_modules/query-string']);
   const decoders = Object.entries(lock.packages).filter(([path]) => path.endsWith('/decode-uri-component'));
   assert.ok(decoders.length > 0);
-  for (const [path, entry] of decoders) assert.equal(entry.version, '0.5.0', path);
+  for (const [path, entry] of decoders) assert.equal(entry.version, '0.5.1', path);
 });
 
 for (const [name, entry] of consumers) {
@@ -51,6 +51,25 @@ for (const [name, entry] of consumers) {
     }
   });
 
+  test(`${name}: distinct encoded runs do not repeatedly scan the complete malformed query`, () => {
+    const values = Array.from({ length: 64 }, (_, index) => String(index).padStart(2, '0'));
+    const encoded = values.map(value => [...value].map(digit => `%${digit.charCodeAt(0).toString(16)}`).join('') + 'x').join('') + '%zz';
+    const path = `/items/rec_example?text=${encoded}`;
+    const original = String.prototype.replace;
+    let characters = 0;
+    try {
+      String.prototype.replace = function (...args) {
+        characters += this.length;
+        return Reflect.apply(original, this, args);
+      };
+      const state = getStateFromPath(path, config);
+      assert.equal(state.routes[0].params.text, values.join('x') + 'x%zz');
+      assert.ok(characters <= 16 * path.length, `${characters} replacement-input characters for ${path.length} input characters`);
+    } finally {
+      String.prototype.replace = original;
+    }
+  });
+
   test(`${name}: decoded route IDs and Unicode/repeated/empty query values survive`, () => {
     const state = getStateFromPath('/items/rec_example?name=%E6%B5%8B%E8%AF%95&tag=one&tag=two&blank=&flag&space=a+b&plus=%2B', config);
     assert.deepEqual({ ...state.routes[0].params }, {
@@ -59,5 +78,6 @@ for (const [name, entry] of consumers) {
     assert.equal(query.stringify({ name: '测试', plus: '+' }), 'name=%E6%B5%8B%E8%AF%95&plus=%2B');
     assert.deepEqual({ ...query.parse('bad=%EA%41%G1&good=%F0%9F%8E%A7') }, { bad: '%EAA%G1', good: '🎧' });
     assert.deepEqual({ ...query.parse('raw=%EA', { decode: false }) }, { raw: '%EA' });
+    assert.deepEqual({ ...query.parse('bom=%FE%FF&tail=%C2&escaped=%25C2') }, { bom: '��', tail: '�', escaped: '%C2' });
   });
 }
