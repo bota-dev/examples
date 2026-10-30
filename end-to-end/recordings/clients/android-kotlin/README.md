@@ -133,6 +133,11 @@ which calls `jdk.net.Sockets.supportedOptions`, unavailable on Android 29. Keep 
 extended-keepalive tunables unchanged. Upgrades need actual Android runtime checks
 as well as JVM tests and an APK build.
 
+The October 30 compatibility repair restores this exact manifest/lock pin after
+the unqualified 5.4.4 update failed the provenance gate. The existing inventory,
+HTTP/1 parser limits and five-case API 29 runtime gate remain required; this
+restoration does not claim a patched upstream artifact.
+
 HttpCore5.3.6 remains within the affected artifact range for
 [CVE-2026-54399](https://github.com/advisories/GHSA-hf6x-8p5f-cgmf).
 This requester supplies explicit `Http1Config` limits of 100 headers and 8192

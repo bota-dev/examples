@@ -199,3 +199,34 @@ Replace the Kotlin transport pin with a patched, Android-compatible public
 release after its actual runtime checks pass. Its supported parser configuration
 mitigation does not close the affected package identity; see
 [dependency security](../../DEPENDENCY_SECURITY.md#native-reader-http-parser-limits).
+
+## October 30 Kotlin dependency compatibility repair
+
+Merged dependency PR #76 changed only the HttpCore manifest/lock selection to
+5.4.4, without replacing the reviewed 5.3.6 provenance. Exact main
+`ee766d9997ad0a741dc13d1e303d669a08ac2aa8`
+[failed the inventory gate](https://github.com/bota-dev/examples/actions/runs/40928565012/job/123640568780).
+The subsequent `5b49670e4fe4c13f716a080ab6ecd119d4684bce` main revision does
+not change the Kotlin source or workflow and supplies no replacement Kotlin run.
+
+The repair restores the previously qualified 5.3.6 coordinate in the manifest
+and existing locked configurations. All other lock entries, public provenance,
+license/age checks, transport parser limits and runtime assertions are retained.
+The 5.4.4 update was an ordinary minor-version update; its parser-defaults fix
+does not qualify its known Android-incompatible socket path. The existing
+explicit parser limits remain the bounded app-path mitigation for
+CVE-2026-54399; the restored upstream artifact remains affected.
+
+The lock/provenance comparison first reproduced the single 5.4.4/5.3.6 mismatch,
+then matched all 16 app/test module identities after restoration. Anonymous
+public Central reads matched the recorded HttpCore POM, JAR, SHA-1 and both
+bundled notice hashes. All 14 runtime-result receipt fixtures, nine catalog
+tests and 539 catalog file links pass locally. These are source/artifact and
+script checks; the complete frozen Gradle and API 29 jobs need fresh hosted
+execution, and no local native build or physical check was performed.
+
+| Requirement | Evidence and limit | Status |
+| --- | --- | --- |
+| Preserve the API 29 transport and reviewed dependency inventory | Restore the exact 5.3.6 coordinate and existing lock scopes; provenance and application source are unchanged | matched in source |
+| Preserve release and security gates | Existing frozen license, JVM, lint, APK and five-case API 29 jobs remain unchanged | matched in source; fresh hosted execution pending |
+| Avoid a false security or physical acceptance claim | No advisory dismissal, source patch, local native build, device operation or release | unverified beyond the stated configured-path mitigation |
