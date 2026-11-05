@@ -369,10 +369,10 @@ branch-push runs. Manual dispatch remains available.
 
 ## Security scanning
 
-Title/body-only PR edits skip runner allocation under a noncanonical check name
-and a separate concurrency group; they cannot replace or cancel the required
-source `Scan`. Base retargets and unknown edit payloads still scan. GitHub may
-display the unevaluated name expression for a skipped job.
+Every PR event, including title/body-only edits, runs the real required `Scan`.
+Title/body-only edits use a separate concurrency group so they cannot cancel
+an active source scan. Base retargets and unknown edit payloads retain the
+source concurrency group.
 
 The pinned `Semgrep` workflow runs the read-only `Scan` check on every PR,
 including drafts and any target branch, merge queues, pushes to `main`, manual
