@@ -345,7 +345,13 @@ physical-device acceptance.
 
 The all-PR and main-push `Integration tests` check runs these suites and retains
 `test-results/api-integration.xml` for 90 days. Existing path-filtered checks and
-platform-specific acceptance gates still apply to each changed example.
+platform-specific acceptance gates still apply to each changed example. The six
+Node API path workflows retain syntax checks and standalone manual tests; their
+PR/main test suites run once in the all-source integration job. The legacy CI
+checks mobile source types explicitly; its backend build owns the backend
+compiler check, so that same project is compiled once. The retained-journal
+activity-window fixture controls its clock so exclusion is stable on fast
+machines without changing production ordering.
 Catalog and integration checks use PR runs for feature branches, avoiding duplicate
 branch-push runs. Manual dispatch remains available.
 
@@ -362,6 +368,11 @@ branch-push runs. Manual dispatch remains available.
 - [Public Bota docs](https://docs.bota.dev): API and SDK contracts.
 
 ## Security scanning
+
+Title/body-only PR edits skip runner allocation under a noncanonical check name
+and a separate concurrency group; they cannot replace or cancel the required
+source `Scan`. Base retargets and unknown edit payloads still scan. GitHub may
+display the unevaluated name expression for a skipped job.
 
 The pinned `Semgrep` workflow runs the read-only `Scan` check on every PR,
 including drafts and any target branch, merge queues, pushes to `main`, manual
