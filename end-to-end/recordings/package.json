@@ -24,5 +24,19 @@
     "eslint": "10.13.0",
     "globals": "17.13.0",
     "prettier": "3.9.10"
+  },
+  "overrides": {
+    "eslint@10.13.0": {
+      "minimatch": {
+        ".": "11.0.1",
+        "@isaacs/nonrecursive-glob-match": "1.0.1"
+      }
+    },
+    "@eslint/config-array@0.23.5": {
+      "minimatch": {
+        ".": "11.0.1",
+        "@isaacs/nonrecursive-glob-match": "1.0.1"
+      }
+    }
   }
 }
