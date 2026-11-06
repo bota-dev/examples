@@ -16,7 +16,7 @@
     "check": "node --check backend/account.mjs && node --check backend/config.mjs && node --check backend/main.mjs && node --check backend/server.mjs && node --check backend/errors.mjs && node --check backend/http.mjs && node --check backend/features/upload.mjs && node --check backend/features/playback.mjs && node --check backend/features/recordings.mjs && node --check backend/features/processing.mjs && node --check backend/features/ask.mjs",
     "lint": "eslint backend contracts scripts eslint.config.mjs",
     "format:check": "prettier --check .",
-    "test": "node --test contracts/*.test.mjs scripts/test-licenses.mjs",
+    "test": "node --test contracts/*.test.mjs scripts/test-licenses.mjs scripts/test-eslint-globs.mjs",
     "license-check": "node scripts/check-licenses.mjs"
   },
   "devDependencies": {
@@ -24,5 +24,19 @@
     "eslint": "10.13.0",
     "globals": "17.13.0",
     "prettier": "3.9.10"
+  },
+  "overrides": {
+    "eslint@10.13.0": {
+      "minimatch": {
+        ".": "11.0.1",
+        "@isaacs/nonrecursive-glob-match": "1.0.1"
+      }
+    },
+    "@eslint/config-array@0.23.5": {
+      "minimatch": {
+        ".": "11.0.1",
+        "@isaacs/nonrecursive-glob-match": "1.0.1"
+      }
+    }
   }
 }

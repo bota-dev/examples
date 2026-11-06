@@ -23,6 +23,35 @@ request permits the beta.19 release younger than the usual seven-day age floor;
 it does not waive that floor for unrelated dependencies. Native builds and
 actual decoder behavior remain separate evidence.
 
+## Development lint matcher boundaries
+
+The independent `end-to-end/recordings` and `end-to-end/web-reference` install
+roots use parent-specific overrides for
+[minimatch globparts amplification](https://github.com/advisories/GHSA-g3hv-75wg-m249).
+Only `eslint@10.13.0`, `@eslint/config-array@0.23.5` and, in Web,
+`@typescript-eslint/typescript-estree@8.72.0` resolve minimatch **11.0.1** with
+`@isaacs/nonrecursive-glob-match` **1.0.1**. Both permissively licensed releases
+are older than seven days; their official npm archive integrities were verified.
+The helper pin prevents ordinary installs selecting a newer unreviewed release.
+
+These overrides deliberately cross the parents' declared 10.x matcher ranges.
+Each install root keeps its own mandatory regression suite in its existing test
+chain. Backend lint-tool fixtures live in `scripts/test-eslint-globs.mjs`, outside
+portable `contracts/` discovery; the all-source integration job needs only the Web
+install. Web lint-tool fixtures stay in its installed server-test graph. Tests cover
+actual parent resolution, bounded advisory expansion, ordinary glob/brace
+selection, ignores and re-inclusion, and real ESLint errors. Web also exercises
+TypeScript's public project-service allow/deny behavior. The existing compiler,
+license, integration, Windows and source workflow gates still apply. Remove an
+override when its owning parent admits a fixed matcher, then repeat the same
+frozen install and consumer checks.
+
+The override scope is development lint tooling. The separate Expo glob and
+minimatch findings in the legacy and React Native roots require their own parent
+compatibility review; these overrides establish no closure for those findings.
+Source checks, exact-head hosted results and default-branch scanner closure
+remain separate evidence.
+
 ## Native reader HTTP parser limits
 
 The [Kotlin cloud reader](end-to-end/recordings/clients/android-kotlin/README.md)
