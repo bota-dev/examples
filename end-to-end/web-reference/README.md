@@ -380,7 +380,12 @@ for platform coverage and evidence limits.
 Status and exact hosted checks are recorded in the
 [quality review](../../docs/independent-examples-review.md#general-example-quality-october-12).
 The [workflow](../../.github/workflows/web-reference.yml) uses frozen installs,
-format/lint/typecheck/tests/build/license checks on Linux and Windows without credentials.
+format/lint/tests/build/license checks on Linux and Windows without credentials.
+`npm run build` owns the source `typecheck` before Vite, so CI runs that compiler
+once per platform; `npm run typecheck` remains available for a standalone check. Linux
+PR/main server suites run in the all-source `Integration tests` job; the Web
+job runs UI tests there. Windows and standalone manual runs retain both server
+and UI tests.
 
 Public basis: [recordings](https://docs.bota.dev/api-reference/recordings/create),
 [transcription](https://docs.bota.dev/api-reference/ai/transcriptions/create),

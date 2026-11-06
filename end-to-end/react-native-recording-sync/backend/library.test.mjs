@@ -270,8 +270,10 @@ for (const kind of ['summary', 'ask']) test(`${kind} POST executes its complete 
 });
 
 test('peer intent assertions are opaque and include legacy Ask outside the activity window', t => {
+  t.mock.timers.enable({ apis: ['Date'], now: 0 });
   const f = fixture(t), principal = f.library.principal, store = f.library.store;
   const legacy = store.claim(principal, 'ask', 'rec_one:old-hash', { recordingId: 'rec_one', private: 'PRIVATE_PEER' }).operation;
+  t.mock.timers.tick(1);
   for (let index = 0; index < 51; index++) store.claim(principal, 'summary', `txn_other${index}:tmpl_general_notes`, {});
   assert(!store.list(principal).some(row => row.id === legacy.id));
   for (const [kind, anchor, recordingId] of [

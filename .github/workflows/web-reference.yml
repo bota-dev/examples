@@ -36,6 +36,9 @@ jobs:
       - run: npm run license-check
       - run: npm run format:check
       - run: npm run lint
-      - run: npm run typecheck
-      - run: npm test
+      # Integration tests owns the same Linux server suites on PR/main.
+      - if: runner.os == 'Linux' && github.event_name != 'workflow_dispatch'
+        run: npm run test:ui
+      - if: runner.os != 'Linux' || github.event_name == 'workflow_dispatch'
+        run: npm test
       - run: npm run build

@@ -27,4 +27,6 @@ jobs:
           node-version: '22.23.2'
       - run: npm ci
       - run: npm run check
-      - run: npm test
+      # PR/main tests run in the all-source Integration tests workflow.
+      - if: github.event_name == 'workflow_dispatch'
+        run: npm test
