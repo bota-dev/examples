@@ -36,7 +36,10 @@ The helper pin prevents ordinary installs selecting a newer unreviewed release.
 
 These overrides deliberately cross the parents' declared 10.x matcher ranges.
 Each install root keeps its own mandatory regression suite in its existing test
-chain: actual parent resolution, bounded advisory expansion, ordinary glob/brace
+chain. Backend lint-tool fixtures live in `scripts/test-eslint-globs.mjs`, outside
+portable `contracts/` discovery; the all-source integration job needs only the Web
+install. Web lint-tool fixtures stay in its installed server-test graph. Tests cover
+actual parent resolution, bounded advisory expansion, ordinary glob/brace
 selection, ignores and re-inclusion, and real ESLint errors. Web also exercises
 TypeScript's public project-service allow/deny behavior. The existing compiler,
 license, integration, Windows and source workflow gates still apply. Remove an
