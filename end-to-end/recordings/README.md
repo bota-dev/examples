@@ -50,6 +50,12 @@ new backend is required. SDK-only device starters remain linked from their READM
 Each client retains its own manifest, lock and native identity. Old
 [Flutter](../react-native-recording-sync/flutter/README.md) and
 [RN](../react-native-recording-sync/app/README.md) READMEs forward to their new setup.
+
+The [Mobile recording samples workflow](../../.github/workflows/react-native-recording-sync.yml)
+retains the React Native and Flutter Android debug APKs for seven days. For
+device testing after an artifact expires, build the matching source revision
+using the client README.
+
 Both clients retain `8787` input defaults, and RN native recovery retains its
 original host-origin identity. For retained native captures, keep that original
 origin: the combined host can use `PORT=8787` and
